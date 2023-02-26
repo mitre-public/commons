@@ -1,0 +1,42 @@
+/target/
+/mapTileCache/
+
+#Do not upload the mapbox token to git
+mapbox.token
+
+#Mac File Browsing Breadcrumb
+*.DS_Store
+
+target/
+.DS*
+.idea/
+*.iml
+/bin/
+.settings/
+.classpath
+.project
+test-output/
+.launch/
+.launch
+.pydevproject
+bin/
+*.jar
+*.crc
+*.secret
+.clover/
+dependency-reduced-pom.xml
+.nrepl-port
+.gorilla-port
+*.pyc
+.editorconfig
+archetype.properties
+goal.txt
+_SUCCESS
+logs
+*/docker/dist
+ ### Gradle ###
+.gradle
+**/src/test/resources/log4j.properties
+**/build/
+ # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle/wrapper/gradle-wrapper.jar

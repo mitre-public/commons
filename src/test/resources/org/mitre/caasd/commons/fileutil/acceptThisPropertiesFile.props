@@ -1,0 +1,4 @@
+#This file should load, key1 is listed three time - BUT key1 appears ONLY once in a non-comment line
+key1:goodValue
+!key1:badValue
+#key1:badValue

@@ -1,0 +1,3 @@
+#This file should not load because key1 is listed twice
+key1:goodValue
+key1:badValue
