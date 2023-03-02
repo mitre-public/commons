@@ -24,9 +24,12 @@ import static org.mitre.caasd.commons.util.Exceptions.stackTraceOf;
 
 import java.io.File;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.mitre.caasd.commons.Time;
 import org.mitre.caasd.commons.fileutil.FileUtils;
 
 /**
@@ -172,6 +175,12 @@ public class SequentialFileWriter implements ExceptionHandler {
     }
 
     private static String timestampStr() {
-        return "Time: " + Time.asString(Instant.now());
+
+        DateTimeFormatter formatter = DateTimeFormatter
+            .ofLocalizedDateTime(FormatStyle.SHORT)
+            .withLocale(Locale.US)
+            .withZone(ZoneId.systemDefault());
+
+        return "Time: " + formatter.format(Instant.now());
     }
 }

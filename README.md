@@ -26,7 +26,7 @@ contains:
 ### Early Open Sourcing checklist
 - [DONE] Move project to github
 - [DONE] Reconsider groupId -- **Decision** change from org.mitre.caasd to org.mitre
-- Delete any methods that have better alternatives in either java or guava
+- [DONE] Delete any methods that have better alternatives in either java or guava
 - Validate/change the existing package-to-class organization
   - Will probably remove caasd from package path
 - Add CI/CD in github repo (CI/CD after obvious code changes)
@@ -42,6 +42,12 @@ contains:
   - Adding new `DynamoMetricTree` (requires Java 17)
 - Reduce entire git history to 1 "Initial Commit"
 - Add CI/CD pipeline that publishes to maven central
+
+### Tasks
+- TranslatingConsumer needs a getter for each component
+- FilteredConsumer needs a getter for each component
+- TwoWayConsumer needs a getter foe each component
+- Interpolator needs to work across the international date line (e.g. where longitudes have a cliff)
 
 ### Points of Contact
 

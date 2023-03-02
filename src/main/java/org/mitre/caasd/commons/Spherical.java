@@ -174,7 +174,7 @@ public class Spherical {
      * @return The destination point
      * @throws IllegalArgumentException if either headingDegree or distNM is NaN
      */
-    public static LatLong project(Double latDeg, Double lonDeg, Double headingDegree, Double distNM) {
+    public static LatLong projectOut(Double latDeg, Double lonDeg, Double headingDegree, Double distNM) {
         checkArgument(!Double.isNaN(headingDegree));
         checkArgument(!Double.isNaN(distNM));
         double lat = toRadians(latDeg);
@@ -209,8 +209,8 @@ public class Spherical {
      *
      * @return The destination location
      */
-    public static LatLong project(LatLong start, Course direction, Distance distance) {
-        return Spherical.project(start.latitude(), start.longitude(), direction.inDegrees(), distance.inNauticalMiles());
+    public static LatLong projectOut(LatLong start, Course direction, Distance distance) {
+        return Spherical.projectOut(start.latitude(), start.longitude(), direction.inDegrees(), distance.inNauticalMiles());
     }
 
     /**
@@ -224,8 +224,8 @@ public class Spherical {
      *
      * @return The destination location
      */
-    public static LatLong project(LatLong start, Course direction, Distance distance, double curvature) {
-        return project(
+    public static LatLong projectOut(LatLong start, Course direction, Distance distance, double curvature) {
+        return projectOut(
             start.latitude(),
             start.longitude(),
             direction.inDegrees(),
@@ -246,18 +246,18 @@ public class Spherical {
      *
      * @return The destination point
      */
-    public static LatLong project(Double latDeg, Double lonDeg, double headingDegree, double distNM,
+    public static LatLong projectOut(Double latDeg, Double lonDeg, double headingDegree, double distNM,
         double curvature) {
         double rMax = EARTH_RADIUS_NM * Math.PI / 2.0;
         double radiusNM = Math.max(-rMax, Math.min(rMax, 1.0 / curvature));
-        LatLong pair = Spherical.project(latDeg, lonDeg, mod(headingDegree + 90.0, 360.0), radiusNM);
+        LatLong pair = Spherical.projectOut(latDeg, lonDeg, mod(headingDegree + 90.0, 360.0), radiusNM);
         double latCen = pair.latitude();
         double lonCen = pair.longitude();
         double crsDelta = Math.copySign(Math.toDegrees(distNM
                 / (EARTH_RADIUS_NM * Math.sin(Math.min(Math.PI / 2, Math.abs(radiusNM) / EARTH_RADIUS_NM)))),
             radiusNM);
         double crsCen = mod(courseInDegrees(latCen, lonCen, latDeg, lonDeg) + crsDelta, 360.0);
-        return Spherical.project(latCen, lonCen, crsCen, Math.abs(radiusNM));
+        return Spherical.projectOut(latCen, lonCen, crsCen, Math.abs(radiusNM));
     }
 
     /**
@@ -272,7 +272,7 @@ public class Spherical {
      * @return The ‘center' of the great circle to the right of the course for that lat/long.
      */
     public static LatLong greatCircleOrigin(Double latitude, Double longitude, Double course) {
-        return Spherical.project(latitude, longitude, Spherical.mod(course + 90.0, 360.0),
+        return Spherical.projectOut(latitude, longitude, Spherical.mod(course + 90.0, 360.0),
             oneQuarterCircumferenceOfEarthInNM());
     }
 

@@ -24,8 +24,10 @@ import static java.util.Collections.EMPTY_LIST;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mitre.caasd.commons.YyyyMmDd.newestOf;
 import static org.mitre.caasd.commons.YyyyMmDd.oldestOf;
+import static org.mitre.caasd.commons.YyyyMmDd.verifyYearMonthDayFormat;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -121,5 +123,46 @@ public class YyyyMmDdTest {
 
         //subtracting a tiny amount of time rolls back to the prior days
         assertThat(YyyyMmDd.from(time.minusMillis(1)), is(date.yesterday()));
+    }
+
+
+    @Test
+    public void verifyYearMonthDayFormat_requireDashes() {
+        assertThrows(IllegalArgumentException.class,
+            () -> verifyYearMonthDayFormat("19200131")
+        );
+    }
+
+    @Test
+    public void verifyYearMonthDayFormat_passing() {
+        verifyYearMonthDayFormat("1920-01-31");
+    }
+
+    @Test
+    public void verifyYearMonthDayFormat_badDay_low() {
+        assertThrows(IllegalArgumentException.class,
+            () -> verifyYearMonthDayFormat("2019-12-00")
+        );
+    }
+
+    @Test
+    public void verifyYearMonthDayFormat_badDay_high() {
+        assertThrows(IllegalArgumentException.class,
+            () -> verifyYearMonthDayFormat("2019-12-32")
+        );
+    }
+
+    @Test
+    public void verifyYearMonthDayFormat_badMonth_low() {
+        assertThrows(IllegalArgumentException.class,
+            () -> verifyYearMonthDayFormat("2019-00-02")
+        );
+    }
+
+    @Test
+    public void verifyYearMonthDayFormat_badMonth_high() {
+        assertThrows(IllegalArgumentException.class,
+            () -> verifyYearMonthDayFormat("2019-13-02")
+        );
     }
 }

@@ -347,9 +347,6 @@ public class MetricTree<K, V> implements Serializable {
         this.sphereCount = 0;
     }
 
-    /**
-     * @return
-     */
     public Set<Map.Entry<K, V>> entrySet() {
         return rootSphere.entrySet();
     }

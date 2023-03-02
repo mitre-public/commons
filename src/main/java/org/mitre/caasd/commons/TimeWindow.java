@@ -112,7 +112,7 @@ public class TimeWindow implements Serializable {
         return Duration.between(start, end);
     }
 
-    /** @returns True when Duration of this TimeWindow is zero. */
+    /** @return True when Duration of this TimeWindow is zero. */
     public boolean isEmpty() {
         return !start().isBefore(end());
     }

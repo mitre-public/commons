@@ -52,10 +52,10 @@ public class PrintStreamSink<T> implements OutputSink<T> {
     }
 
     /**
-     * Writes data records (received via {@link #accept(T)}) to {@code eventRecord.txt} in the
+     * Writes data records (received via {@code accept(T)}) to {@code eventRecord.txt} in the
      * specified directory. If the directory does not exist, it is created before writing.
      *
-     * <p>Remember to close the stream via {@link #close()} to free resources when finished.
+     * <p>Remember to close the stream to free resources when finished.
      */
     public static <T> PrintStreamSink<T> writeRecordToFlatFile(String outputDirectory, ToStringFunction<T> formatter) {
 
