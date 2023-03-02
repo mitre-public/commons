@@ -30,6 +30,8 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
 
+import org.apache.commons.math3.analysis.function.Add;
+
 import com.google.common.collect.Iterators;
 
 /**
@@ -55,10 +57,10 @@ import com.google.common.collect.Iterators;
  * <p>
  * Note: Despite the fact that HashedLinkedSequence implements Set the word "Set" is not include in
  * this classes name. The word "Set" is omitted to prevent confusion with java.util.LinkedHashSet.
- *
- * @Todo -- Add iterateForwardFrom(T element), iterateBackwardFrom(T), reverseIterator().
  */
 public class HashedLinkedSequence<T> implements Collection<T>, Set<T> {
+
+    //@Todo -- Add iterateForwardFrom(T element), iterateBackwardFrom(T), reverseIterator().
 
     private static final String DUPLICATE_ELEMENT_WARNING = "Cannot add the same element twice";
 
@@ -149,7 +151,7 @@ public class HashedLinkedSequence<T> implements Collection<T>, Set<T> {
         checkArgument(!nodes.containsKey(item), DUPLICATE_ELEMENT_WARNING);
 
         Node<T> oldFirst = firstNode;
-        Node<T> newNode = new Node(null, item, oldFirst);
+        Node<T> newNode = new Node<>(null, item, oldFirst);
         this.nodes.put(item, newNode);
         this.firstNode = newNode;
 
@@ -167,7 +169,7 @@ public class HashedLinkedSequence<T> implements Collection<T>, Set<T> {
         checkArgument(!nodes.containsKey(item), DUPLICATE_ELEMENT_WARNING);
 
         Node<T> oldLast = lastNode;
-        Node<T> newNode = new Node(oldLast, item, null);
+        Node<T> newNode = new Node<>(oldLast, item, null);
         this.nodes.put(item, newNode);
         this.lastNode = newNode;
 
@@ -202,7 +204,7 @@ public class HashedLinkedSequence<T> implements Collection<T>, Set<T> {
         checkArgument(anchorNode != null, ITEM_NOT_FOUND_WARNING);
         checkArgument(!nodes.containsKey(newItem), DUPLICATE_ELEMENT_WARNING);
 
-        Node<T> newNode = new Node(anchorNode, newItem, anchorNode.next);
+        Node<T> newNode = new Node<>(anchorNode, newItem, anchorNode.next);
         anchorNode.next = newNode;
         if (newNode.next != null) {
             newNode.next.previous = newNode;
@@ -222,7 +224,7 @@ public class HashedLinkedSequence<T> implements Collection<T>, Set<T> {
         checkArgument(anchorNode != null, ITEM_NOT_FOUND_WARNING);
         checkArgument(!nodes.containsKey(newItem), DUPLICATE_ELEMENT_WARNING);
 
-        Node<T> newNode = new Node(anchorNode.previous, newItem, anchorNode);
+        Node<T> newNode = new Node<>(anchorNode.previous, newItem, anchorNode);
         anchorNode.previous = newNode;
         if (newNode.previous != null) {
             newNode.previous.next = newNode;

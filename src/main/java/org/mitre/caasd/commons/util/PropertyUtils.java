@@ -106,7 +106,7 @@ public class PropertyUtils {
     public static ImmutableMap<String, String> asImmutableMap(Properties props) {
         checkNotNull(props, "The input properties cannot be null");
 
-        ImmutableMap.Builder builder = new ImmutableMap.Builder<>();
+        ImmutableMap.Builder<String, String> builder = new ImmutableMap.Builder<>();
 
         for (Map.Entry<Object, Object> entry : props.entrySet()) {
             String key = (String) entry.getKey();

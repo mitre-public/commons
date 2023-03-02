@@ -261,7 +261,7 @@ public class SphericalTest {
         Course direction = Spherical.courseBtw(start, end);
         Distance distance = Spherical.distanceBtw(start, end);
 
-        LatLong actual = Spherical.project(start, direction, distance);
+        LatLong actual = Spherical.projectOut(start, direction, distance);
         LatLong expected = end;
 
         double TOLERANCE = 0.01;  //some rounding is ok, this test is just for macro errors

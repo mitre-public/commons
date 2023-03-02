@@ -55,7 +55,7 @@ public interface HasPosition {
     }
 
     default HasPosition projectOut(Double course, Double distance) {
-        return () -> Spherical.project(latitude(), longitude(), course, distance);
+        return () -> Spherical.projectOut(latitude(), longitude(), course, distance);
     }
 
     default double distanceInRadians(HasPosition that) {

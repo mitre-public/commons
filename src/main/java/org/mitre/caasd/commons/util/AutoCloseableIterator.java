@@ -59,7 +59,7 @@ public interface AutoCloseableIterator<T> extends AutoCloseable, Iterator<T> {
     }
 
     /**
-     * Wraps a {@link CloseableIterator} as a new iterator with the supplied transform applied to
+     * Wraps a {@link AutoCloseableIterator} as a new iterator with the supplied transform applied to
      * elements as they are returned.
      */
     static <U, T> AutoCloseableIterator<T> transforming(AutoCloseableIterator<U> autoCloseableIterator, Function<U, T> transform) {

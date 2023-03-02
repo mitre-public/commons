@@ -82,7 +82,7 @@ public class XyDataset {
      *
      * @param splitter
      *
-     * @return
+     * @return An array of new XyDatasets that partition this data.
      */
     public XyDataset[] split(DataSplitter splitter) {
 

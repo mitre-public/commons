@@ -222,7 +222,7 @@ public class LatLong implements Comparable<LatLong>, Serializable {
      * @return The destination
      */
     public LatLong projectOut(Double direction, Double distance) {
-        return Spherical.project(latitude, longitude, direction, distance);
+        return Spherical.projectOut(latitude, longitude, direction, distance);
     }
 
     /**
@@ -235,7 +235,7 @@ public class LatLong implements Comparable<LatLong>, Serializable {
      * @return The destination
      */
     public LatLong project(Course direction, Distance distance) {
-        return Spherical.project(this, direction, distance);
+        return Spherical.projectOut(this, direction, distance);
     }
 
     /**
@@ -249,7 +249,7 @@ public class LatLong implements Comparable<LatLong>, Serializable {
      * @return The destination
      */
     public LatLong projectOut(Double direction, Double distance, Double curvature) {
-        return Spherical.project(latitude, longitude, direction, distance, curvature);
+        return Spherical.projectOut(latitude, longitude, direction, distance, curvature);
     }
 
     public LatLong greatCircleOrigin(Double course) {

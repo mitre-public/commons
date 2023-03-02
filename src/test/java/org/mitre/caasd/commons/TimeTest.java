@@ -34,7 +34,6 @@ import static org.mitre.caasd.commons.Time.min;
 import static org.mitre.caasd.commons.Time.theDuration;
 import static org.mitre.caasd.commons.Time.theDurationBtw;
 import static org.mitre.caasd.commons.Time.toMap;
-import static org.mitre.caasd.commons.Time.verifyYearMonthDayFormat;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -238,49 +237,6 @@ public class TimeTest {
             () -> confirmTimeOrdering(times)
         );
 
-    }
-
-    @Test
-    public void testDurationFormatting_1() {
-
-        //13 hours, 22 minutes, and 15 seconds
-        long numSeconds = 13 * 3600 + 22 * 60 + 15;
-
-        Duration dur = Duration.ofSeconds(numSeconds);
-
-        assertEquals(
-            "13:22:15",
-            Time.asString(dur)
-        );
-    }
-
-    @Test
-    public void testDurationFormatting_2() {
-
-        //2 days, 13 hours, 22 minutes, and 15 seconds
-        int SECONDS_PER_DAY = 24 * 60 * 60;
-        long numSeconds = 2 * SECONDS_PER_DAY + 13 * 3600 + 22 * 60 + 15;
-
-        Duration dur = Duration.ofSeconds(numSeconds);
-
-        assertEquals(
-            "2 days, 13:22:15",
-            Time.asString(dur)
-        );
-    }
-
-    @Test
-    public void testUtcDateAsString() {
-
-        assertEquals(
-            "1970-01-01",
-            Time.utcDateAsString(Instant.EPOCH)
-        );
-
-        assertEquals(
-            "1970-01-03",
-            Time.utcDateAsString(Instant.EPOCH.plus(2, ChronoUnit.DAYS))
-        );
     }
 
     @Test
@@ -494,46 +450,6 @@ public class TimeTest {
         assertThat(theDurationBtw(time2, time0, time4).isLessThanOrEqualTo(Duration.ofSeconds(4)), is(true));
         assertThat(theDurationBtw(time4, time0, time2).isGreaterThanOrEqualTo(Duration.ofSeconds(4)), is(true));
         assertThat(theDurationBtw(time4, time2, time0).isLessThanOrEqualTo(Duration.ofSeconds(4)), is(true));
-    }
-
-    @Test
-    public void verifyYearMonthDayFormat_requireDashes() {
-        assertThrows(IllegalArgumentException.class,
-            () -> verifyYearMonthDayFormat("19200131")
-        );
-    }
-
-    @Test
-    public void verifyYearMonthDayFormat_passing() {
-        verifyYearMonthDayFormat("1920-01-31");
-    }
-
-    @Test
-    public void verifyYearMonthDayFormat_badDay_low() {
-        assertThrows(IllegalArgumentException.class,
-            () -> verifyYearMonthDayFormat("2019-12-00")
-        );
-    }
-
-    @Test
-    public void verifyYearMonthDayFormat_badDay_high() {
-        assertThrows(IllegalArgumentException.class,
-            () -> verifyYearMonthDayFormat("2019-12-32")
-        );
-    }
-
-    @Test
-    public void verifyYearMonthDayFormat_badMonth_low() {
-        assertThrows(IllegalArgumentException.class,
-            () -> verifyYearMonthDayFormat("2019-00-02")
-        );
-    }
-
-    @Test
-    public void verifyYearMonthDayFormat_badMonth_high() {
-        assertThrows(IllegalArgumentException.class,
-            () -> verifyYearMonthDayFormat("2019-13-02")
-        );
     }
 
     @Test

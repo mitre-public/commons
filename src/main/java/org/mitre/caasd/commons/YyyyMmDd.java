@@ -16,14 +16,17 @@
 
 package org.mitre.caasd.commons;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.lang.Integer.parseInt;
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
-import static org.mitre.caasd.commons.Time.verifyYearMonthDayFormat;
 
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Objects;
@@ -49,6 +52,10 @@ public class YyyyMmDd implements Comparable<YyyyMmDd> {
     public YyyyMmDd(Instant time) {
         checkNotNull(time);
         this.date = ISO_LOCAL_DATE.withZone(ZoneOffset.UTC).format(time);
+    }
+
+    public static YyyyMmDd today() {
+        return new YyyyMmDd(Instant.now());
     }
 
     /**
@@ -135,5 +142,19 @@ public class YyyyMmDd implements Comparable<YyyyMmDd> {
     public static YyyyMmDd newestOf(Collection<YyyyMmDd> dates) {
         checkNotNull(dates);
         return dates.stream().max(Comparator.naturalOrder()).orElse(null);
+    }
+
+
+    private static final String DATE_FORMAT_ERROR = "Date not specified as YYYY-MM-DD format";
+
+    /** Throw an IllegalArgumentException if the input String is not in the YYYY-MM-DD format. */
+    public static void verifyYearMonthDayFormat(String date) {
+        checkNotNull(date);
+
+        try {
+            ISO_LOCAL_DATE.parse(date);
+        } catch(DateTimeParseException dtpe) {
+            throw new IllegalArgumentException("ISO_LOCAL_DATE cannot parse: " + date);
+        }
     }
 }

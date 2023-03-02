@@ -65,7 +65,7 @@ public class Partitioners {
      * @param data A list that will be split into multiple sub-lists
      * @param rule Adds a new output list whenever applying this predicate changes result.
      *
-     * @return
+     * @return a Partitioning of the input data
      */
     public static <T> List<List<T>> splitOnChange(List<T> data, Predicate<T> rule) {
         return data.stream().collect(newListCollector(rule));

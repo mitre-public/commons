@@ -50,9 +50,6 @@ import com.google.common.io.Resources;
 
 public class FileUtils {
 
-    private FileUtils() {
-    }
-
     /**
      * Create a BufferedReader for a given file. This method (1) provides a "normal" BufferedReader
      * for uncompressed .txt files OR (2) provides a BufferedReader that automatically decompressed
@@ -134,9 +131,12 @@ public class FileUtils {
      *
      * @param f sourceFile
      *
-     * @return
+     * @return All the lines in the input file (potentially a lot of data).
      */
     public static ArrayList<String> fileLines(File f) {
+        //Note:  This is not a mere replication of similarly name Java/Guava methods
+        //This method ALSO works with .gz files
+
         FileLineIterator fli = new FileLineIterator(f);
         return stream(fli).collect(toCollection(ArrayList::new));
     }

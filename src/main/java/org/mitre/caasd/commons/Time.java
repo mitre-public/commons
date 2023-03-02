@@ -147,29 +147,6 @@ public class Time {
     }
 
     /**
-     * Convert a duration of time to a String.
-     *
-     * @param duration A duration of time
-     *
-     * @return A String like "13:22:15" or "2 days, 13:22:15"
-     */
-    public static String asString(Duration duration) {
-
-        long numDays = duration.toDays();
-        long numHours = duration.toHours() % 24;
-        long numMinutes = duration.toMinutes() % 60;
-        long numSeconds = duration.getSeconds() % 60;
-
-        String output = String.format("%d:%02d:%02d", numHours, numMinutes, numSeconds);
-
-        if (numDays > 0L) {
-            return numDays + " days, " + output;
-        } else {
-            return output;
-        }
-    }
-
-    /**
      * Convert an Instant to a String with the format: HH:mm:ss.SSS
      *
      * @param instant A moment in time
@@ -183,77 +160,6 @@ public class Time {
             "HH:mm:ss.SSS").withZone(ZoneOffset.UTC);
 
         return Z_TIME_FORMATTER.format(instant);
-    }
-
-    /**
-     * Convert an Instant to a String that contains the date and time.
-     *
-     * @param instant A moment in time
-     *
-     * @return The above moment in 12/31/69 7:00 PM
-     */
-    public static String asString(Instant instant) {
-
-        DateTimeFormatter formatter = DateTimeFormatter
-            .ofLocalizedDateTime(FormatStyle.SHORT)
-            .withLocale(Locale.US)
-            .withZone(ZoneId.systemDefault());
-
-        return formatter.format(instant);
-    }
-
-    /**
-     * Generate the date for "right now". This date is set using the local system time.
-     *
-     * @return A String like "2017-03-27" (i.e. yyyy-mm-dd)
-     */
-    public static String todaysDateAsString() {
-        /*
-         * Note: I would have preferred to have this method accept an Instant as input. I was
-         * prevented from doing this because Instants do not have time-zones, thus they don't map
-         * cleanly into an exact Date. Consequently, I wrote the method that did exactly what I
-         * needed (got me today's date in the format I wanted for logging purposes)
-         */
-        return (LocalDateTime.now()).format(DateTimeFormatter.ISO_LOCAL_DATE);
-    }
-
-    private static final String DATE_FORMAT_ERROR = "Date not specified as YYYY-MM-DD format";
-
-    /** Throw an IllegalArgumentException if the input String is not in the YYYY-MM-DD format. */
-    public static void verifyYearMonthDayFormat(String date) {
-        checkNotNull(date);
-        checkArgument(date.length() == 10);
-        checkArgument(Character.isDigit(date.charAt(0)), DATE_FORMAT_ERROR);
-        checkArgument(Character.isDigit(date.charAt(1)), DATE_FORMAT_ERROR);
-        checkArgument(Character.isDigit(date.charAt(2)), DATE_FORMAT_ERROR);
-        checkArgument(Character.isDigit(date.charAt(3)), DATE_FORMAT_ERROR);
-        checkArgument(date.charAt(4) == '-', DATE_FORMAT_ERROR);
-        checkArgument(Character.isDigit(date.charAt(5)), DATE_FORMAT_ERROR);
-        checkArgument(Character.isDigit(date.charAt(6)), DATE_FORMAT_ERROR);
-        checkArgument(date.charAt(7) == '-', DATE_FORMAT_ERROR);
-        checkArgument(Character.isDigit(date.charAt(8)), DATE_FORMAT_ERROR);
-        checkArgument(Character.isDigit(date.charAt(9)), DATE_FORMAT_ERROR);
-
-        //require 01 through 12 for month
-        int month = parseInt(date.substring(5, 7));
-        checkArgument(1 <= month && month <= 12, "The month " + month + " is not valid");
-
-        //require 01 through 31 for day
-        int day = parseInt(date.substring(8, 10));
-        checkArgument(1 <= day && day <= 31, "The day " + day + " is not valid");
-    }
-
-    /**
-     * Generate the date for a specific instant in time (assuming the UTC timezone).
-     *
-     * @param instant An instant in time. The date of this instant, in the UTC timezone, is
-     *                provided.
-     *
-     * @return A String like "2017-03-27" (i.e. yyyy-mm-dd)
-     */
-    public static String utcDateAsString(Instant instant) {
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE.withZone(ZoneOffset.UTC);
-        return formatter.format(instant);
     }
 
     /**
