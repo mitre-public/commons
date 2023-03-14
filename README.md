@@ -44,9 +44,8 @@ contains:
 - Add CI/CD pipeline that publishes to maven central
 
 ### Tasks
-- TranslatingConsumer needs a getter for each component
-- FilteredConsumer needs a getter for each component
-- TwoWayConsumer needs a getter foe each component
+- [DONE] TranslatingConsumer needs a getter for each component
+- [DONE] FilteredConsumer needs a getter for each component
 - Interpolator needs to work across the international date line (e.g. where longitudes have a cliff)
 
 ### Points of Contact

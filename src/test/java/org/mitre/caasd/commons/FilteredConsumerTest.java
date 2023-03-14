@@ -18,33 +18,23 @@ package org.mitre.caasd.commons;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mitre.caasd.commons.Functions.ALWAYS_FALSE;
+import static org.mitre.caasd.commons.Functions.ALWAYS_TRUE;
+import static org.mitre.caasd.commons.Functions.NO_OP_CONSUMER;
 
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
 public class FilteredConsumerTest {
 
-    /* Counts calls to "accept" */
-    static class TestConsumer implements Consumer<String> {
-
-        int numCallsToAccept = 0;
-
-        @Override
-        public void accept(String t) {
-            numCallsToAccept++;
-        }
-    }
-
-    ;
-
-    /* Always returns the same value. Counts calls to "test". */
-    static class TestPredicate implements Predicate<String> {
+    //Counts calls to "test".
+    static class CountingPredicate implements Predicate<String> {
 
         boolean returnValue;
 
-        TestPredicate(boolean returnValue) {
+        CountingPredicate(boolean returnValue) {
             this.returnValue = returnValue;
         }
 
@@ -58,12 +48,11 @@ public class FilteredConsumerTest {
     }
 
     @Test
-    public void testItemsAreSubmittedToFilter() {
+    public void inputsAreSubmittedToFilter() {
 
-        TestConsumer testConsumer = new TestConsumer();
-        TestPredicate filter = new TestPredicate(true);
+        CountingPredicate filter = new CountingPredicate(true);
 
-        FilteredConsumer filterConsumer = new FilteredConsumer(filter, testConsumer);
+        FilteredConsumer<String> filterConsumer = new FilteredConsumer<>(filter, NO_OP_CONSUMER);
 
         assertThat(filter.numCallsToTest, is(0)); //"Not called yet"
 
@@ -75,26 +64,76 @@ public class FilteredConsumerTest {
     @Test
     public void testFailingFilterDoesntForwardToConsumer() {
 
-        TestConsumer testConsumer = new TestConsumer();
-        TestPredicate testFilter = new TestPredicate(false);
+        CountingConsumer<String> counter = new CountingConsumer<>(NO_OP_CONSUMER);
 
-        FilteredConsumer filteredConsumer = new FilteredConsumer(testFilter, testConsumer);
+        FilteredConsumer<String> filteredConsumer = new FilteredConsumer<>(ALWAYS_FALSE, counter);
 
-        assertThat("The consumer has not been called before any input", testConsumer.numCallsToAccept, is(0));
+        assertThat("The consumer has not been called before any input", counter.numCallsToAccept(), is(0));
         filteredConsumer.accept("testString");
-        assertThat("The consumer was not called after failing input", testConsumer.numCallsToAccept, is(0));
+        assertThat("The consumer was not called after failing input", counter.numCallsToAccept(), is(0));
     }
 
     @Test
     public void testPassingFilterForwardsToConsumer() {
 
-        TestConsumer testConsumer = new TestConsumer();
-        TestPredicate testFilter = new TestPredicate(true);
+        CountingConsumer<String> testConsumer = new CountingConsumer<>(NO_OP_CONSUMER);
 
-        FilteredConsumer filteredConsumer = new FilteredConsumer(testFilter, testConsumer);
+        FilteredConsumer<String> filteredConsumer = new FilteredConsumer<>(ALWAYS_TRUE, testConsumer);
 
-        assertThat("The consumer has not been called before any input", testConsumer.numCallsToAccept, is(0));
+        assertThat("The consumer has not been called before any input", testConsumer.numCallsToAccept(), is(0));
         filteredConsumer.accept("testString");
-        assertThat("The consumer was called after passing input", testConsumer.numCallsToAccept, is(1));
+        assertThat("The consumer was called after passing input", testConsumer.numCallsToAccept(), is(1));
+    }
+
+    @Test
+    public void whenTrueConsumerReceivesWhenTrue() {
+
+        FilteredConsumer<Integer> fc = new FilteredConsumer<>(
+            ALWAYS_TRUE,
+            new CountingConsumer(NO_OP_CONSUMER),
+            NO_OP_CONSUMER
+        );
+
+        fc.accept(12);
+
+        assertThat(((CountingConsumer<Integer>) fc.whenTrue()).numCallsToAccept(), is(1));
+    }
+
+    @Test
+    public void whenFalseConsumerReceivesWhenFalse() {
+
+        FilteredConsumer<Integer> fc = new FilteredConsumer<>(
+            ALWAYS_FALSE,
+            NO_OP_CONSUMER,
+            new CountingConsumer<>(NO_OP_CONSUMER)
+        );
+
+        fc.accept(12);
+
+        assertThat(((CountingConsumer<Integer>) fc.whenFalse()).numCallsToAccept(), is(1));
+    }
+
+    @Test
+    public void predicateIsRequired() {
+        assertThrows(
+            NullPointerException.class,
+            () -> new FilteredConsumer<>(null, NO_OP_CONSUMER, NO_OP_CONSUMER)
+        );
+    }
+
+    @Test
+    public void whenTrueConsumerIsRequired() {
+        assertThrows(
+            NullPointerException.class,
+            () -> new FilteredConsumer<>(ALWAYS_TRUE, null, NO_OP_CONSUMER)
+        );
+    }
+
+    @Test
+    public void whenFalseConsumerIsRequired() {
+        assertThrows(
+            NullPointerException.class, ()
+            -> new FilteredConsumer<>(ALWAYS_TRUE, NO_OP_CONSUMER, null)
+        );
     }
 }

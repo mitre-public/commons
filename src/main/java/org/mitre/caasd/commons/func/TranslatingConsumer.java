@@ -59,4 +59,14 @@ public class TranslatingConsumer<BEFORE, AFTER> implements Consumer<BEFORE> {
         AFTER item = translator.apply(input);
         downStream.accept(item);
     }
+
+    /** @return The "translating function" provided at construction time. */
+    public Function<BEFORE, AFTER> translator() {
+        return this.translator;
+    }
+
+    /** @return The "downstream consumer" provided at construction time. */
+    public Consumer<AFTER> consumer() {
+        return this.downStream;
+    }
 }
