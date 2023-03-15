@@ -19,6 +19,7 @@ package org.mitre.caasd.commons.ids;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.time.Instant.EPOCH;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.mitre.caasd.commons.ids.TimeId.newId;
@@ -47,7 +48,10 @@ class TimeIdTest {
         assertThat(id_1.time(), is(EPOCH.plusMillis(1L)));
         assertThat(id_1.timeAsEpochMs(), is(1L));
 
-        assertThat(idNow.time(), is(now));
+        //The Instant are not perfect copies because the nanosecond part of the Instant is not carried over
+        assertThat(idNow.time(), is(not(now)));
+
+        //But the "epochMilliSeconds" are the same
         assertThat(idNow.timeAsEpochMs(), is(now.toEpochMilli()));
     }
 

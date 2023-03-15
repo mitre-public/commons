@@ -83,7 +83,7 @@ public class Time {
         Duration timeDelta = Duration.between(referenceTime, futureTime);
 
         checkArgument(
-            timeDelta.toMillis() >= -maxInputLag.toMillis(),
+            !timeDelta.plus(maxInputLag).isNegative(),
             "The futureTime cannot occur \"far\" in the past."
                 + "\n  referenceTime: " + referenceTime.toEpochMilli()
                 + "\n  futureTime: " + futureTime.toEpochMilli()
