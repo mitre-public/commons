@@ -48,7 +48,7 @@ public class CompositeCleaner<T> implements DataCleaner<T> {
      * @return A new CompositeCleaner
      */
     public static <T> CompositeCleaner<T> of(DataCleaner<? super T>... cleaners) {
-        return new CompositeCleaner<>(newArrayList(cleaners));
+        return new CompositeCleaner(newArrayList(cleaners));
     }
 
     /**
