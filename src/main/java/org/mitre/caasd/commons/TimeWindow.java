@@ -19,6 +19,9 @@ package org.mitre.caasd.commons;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toCollection;
+
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
@@ -52,8 +55,8 @@ public class TimeWindow implements Serializable {
      * @param end   A ending instant in time (cannot be null)
      */
     public TimeWindow(Instant start, Instant end) {
-        this.start = checkNotNull(start, "The start of the time window cannot be null");
-        this.end = checkNotNull(end, "The end of the time window cannot be null");
+        this.start = requireNonNull(start, "The start of the time window cannot be null");
+        this.end = requireNonNull(end, "The end of the time window cannot be null");
         checkArgument(
             !start.isAfter(end),
             "The start of a TimeWindow cannot come after the end of a TimeWindow"
@@ -86,6 +89,48 @@ public class TimeWindow implements Serializable {
      */
     public TimeWindow pad(Duration duration) {
         return new TimeWindow(start.minus(duration), end.plus(duration));
+    }
+
+    /** Create a new TimeWindow shifted by the given duration. */
+    public TimeWindow shift(Duration duration) {
+        requireNonNull(duration, "The slide duration cannot be null");
+
+        return new TimeWindow(
+          start.plus(duration),
+          end.plus(duration)
+        );
+    }
+
+    /** Create a new TimeWindow shifted by the given number of milliseconds. */
+    public TimeWindow shiftMillis(long milliseconds) {
+        return new TimeWindow(
+            start.plusMillis(milliseconds),
+            end.plusMillis(milliseconds)
+        );
+    }
+
+    /** Applies the shift method in bulk. */
+    public static ArrayList<TimeWindow> shiftAll(Collection<TimeWindow>windows, Duration duration) {
+        requireNonNull(windows, "The List<TimeWindow> cannot be null");
+        requireNonNull(duration, "The slide duration cannot be null");
+
+        return windows.stream()
+            .map(w -> w.shift(duration))
+            .collect(toCollection(ArrayList::new));
+    }
+
+
+    /**
+     * Applies the shift method in bulk.
+     *
+     * @param millis The number of millisecond to shift
+     */
+    public static ArrayList<TimeWindow> shiftAll(Collection<TimeWindow>windows, long millis) {
+        requireNonNull(windows, "The List<TimeWindow> cannot be null");
+
+        return windows.stream()
+            .map(w -> w.shiftMillis(millis))
+            .collect(toCollection(ArrayList::new));
     }
 
     /**
