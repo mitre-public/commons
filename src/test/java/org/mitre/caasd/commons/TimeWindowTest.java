@@ -16,7 +16,9 @@
 
 package org.mitre.caasd.commons;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static java.time.Instant.EPOCH;
+import static java.util.Objects.requireNonNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -28,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.File;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 import org.mitre.caasd.commons.fileutil.FileUtils;
@@ -415,43 +418,59 @@ public class TimeWindowTest {
         assertThat(padded.duration(), is(Duration.ofSeconds(14)));
     }
 
-//	@Test
-//	public void startDay_hoursMinSec_allZero() {
-//
-//		//EPOCH-to-a bit after
-//		TimeWindow window = TimeWindow.of(EPOCH, EPOCH.plusSeconds(1000));
-//
-//		assertThat(window.startDay(), is(EPOCH));
-//
-//		//starts 1 second BEFORE January 2nd
-//		Instant jan2 = EPOCH.plus(1L, DAYS);
-//		TimeWindow window2 = TimeWindow.of(jan2.minus(1L, MILLIS), jan2.plusSeconds(30));
-//
-//		assertThat(window2.startDay(), is(EPOCH));
-//
-//		//starts 1 second AFTER January 2nd
-//		TimeWindow window3 = TimeWindow.of(jan2.plus(1L, MILLIS), jan2.plusSeconds(30));
-//
-//		assertThat(window3.startDay(), is(jan2));
-//	}
-//	
-//	
-//	@Test
-//	public void endDay_hoursMinSec_allZero() {
-//
-//		//ends exactly at EPOCH
-//		TimeWindow window = TimeWindow.of(EPOCH.minusSeconds(1), EPOCH);
-//		assertThat(window.endDay(), is(EPOCH));
-//
-//		//ends 1 second BEFORE January 2nd
-//		Instant jan2 = EPOCH.plus(1L, DAYS);
-//		TimeWindow window2 = TimeWindow.of(EPOCH, jan2.minus(1L, MILLIS));
-//
-//		assertThat(window2.endDay(), is(EPOCH));
-//
-//		//ends 1 second AFTER January 2nd
-//		TimeWindow window3 = TimeWindow.of(EPOCH, jan2.plus(1L, MILLIS));
-//
-//		assertThat(window3.endDay(), is(jan2));
-//	}
+    @Test
+    public void shiftSlides() {
+        TimeWindow window = TimeWindow.of(EPOCH, EPOCH.plusSeconds(11));
+        Duration shiftAmount = Duration.ofSeconds(3);
+
+        TimeWindow shifted = window.shift(shiftAmount);
+
+        assertThat(shifted.duration(), is(window.duration()));
+        assertThat(shifted.start(), is(window.start().plus(shiftAmount)));
+        assertThat(shifted.end(), is(window.end().plus(shiftAmount)));
+    }
+
+    @Test
+    public void bulkSlide() {
+        ArrayList<TimeWindow> list = newArrayList(
+            TimeWindow.of(EPOCH, EPOCH.plusSeconds(11)),
+            TimeWindow.of(EPOCH.plusSeconds(1), EPOCH.plusSeconds(12))
+        );
+
+        ArrayList<TimeWindow> shifted = TimeWindow.shiftAll(list, Duration.ofSeconds(1000));
+
+        assertThat(shifted.get(0).start(), is(EPOCH.plusSeconds(1000)));
+        assertThat(shifted.get(1).start(), is(EPOCH.plusSeconds(1001)));
+
+        assertThat(shifted.get(0).end(), is(EPOCH.plusSeconds(1011)));
+        assertThat(shifted.get(1).end(), is(EPOCH.plusSeconds(1012)));
+    }
+
+    @Test
+    public void shiftSlides_inMillis() {
+        TimeWindow window = TimeWindow.of(EPOCH, EPOCH.plusSeconds(11));
+        long shiftAmount = Duration.ofSeconds(3).toMillis();
+
+        TimeWindow shifted = window.shiftMillis(shiftAmount);
+
+        assertThat(shifted.duration(), is(window.duration()));
+        assertThat(shifted.start(), is(window.start().plusMillis(shiftAmount)));
+        assertThat(shifted.end(), is(window.end().plusMillis(shiftAmount)));
+    }
+
+    @Test
+    public void bulkSlide_inMillis() {
+        ArrayList<TimeWindow> list = newArrayList(
+            TimeWindow.of(EPOCH, EPOCH.plusSeconds(11)),
+            TimeWindow.of(EPOCH.plusSeconds(1), EPOCH.plusSeconds(12))
+        );
+
+        ArrayList<TimeWindow> shifted = TimeWindow.shiftAll(list, 1000);
+
+        assertThat(shifted.get(0).start(), is(EPOCH.plusSeconds(1)));
+        assertThat(shifted.get(1).start(), is(EPOCH.plusSeconds(2)));
+
+        assertThat(shifted.get(0).end(), is(EPOCH.plusSeconds(12)));
+        assertThat(shifted.get(1).end(), is(EPOCH.plusSeconds(13)));
+    }
 }
