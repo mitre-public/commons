@@ -10,16 +10,8 @@ plugins {
 
 repositories {
     maven {
-        name = "Maven Central (dali proxy)"
-        url = uri("https://dali.mitre.org/nexus/content/repositories/central")
-    }
-    maven {
-        name = "mitre-caasd-releases"
-        url = uri("https://dali.mitre.org/nexus/content/repositories/mitre-caasd-releases/")
-    }
-    maven {
-        name = "dali-mitre-caasd-releases"
-        url = uri("https://dali.mitre.org/nexus/content/groups/mitre-caasd")
+        name = "Maven Central"
+        url = uri("https://repo.maven.apache.org/maven2")
     }
 }
 

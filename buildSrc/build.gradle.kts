@@ -4,8 +4,7 @@ plugins {
 
 repositories {
     maven {
-        name = "Gradle Plugin Portal (dali proxy)"
-        url = uri("https://dali.mitre.org/nexus/content/repositories/proxy-gradle-plugin-portal/")
+        url = uri("https://plugins.gradle.org/m2/")
     }
 }
 
