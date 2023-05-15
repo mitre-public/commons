@@ -60,7 +60,7 @@ public class Partitioners {
      * Split a Collection anytime the output of applying the Predicate to an element produced a new
      * result (ie go from true-to-false OR false-to-true). For example, the input list {-2, -1, 0,
      * 1, 2, 1, 0, -1, -2} can be split into the sequence of Lists: {{-2, -1}, {0, 1, 2, 1, 0}, {-1,
-     * -2}} using the predicate (i -> i >= 0).
+     * -2}} using the predicate {@literal (i -> i >= 0)}.
      *
      * @param data A list that will be split into multiple sub-lists
      * @param rule Adds a new output list whenever applying this predicate changes result.
@@ -75,7 +75,7 @@ public class Partitioners {
      * This Streams API Collector will split a streamed Collection into a series of Lists where each
      * List contains the "span of elements" that all had the same predicate evaluation. For example,
      * the input list {-2, -1, 0, 1, 2, 1, 0, -1, -2} can be split into the sequence of Lists: {{-2,
-     * -1}, {0, 1, 2, 1, 0}, {-1, -2}} using the predicate (i -> i >= 0).
+     * -1}, {0, 1, 2, 1, 0}, {-1, -2}} using the predicate {@literal (i -> i >= 0)}.
      */
     public static <T> Collector<T, List<List<T>>, List<List<T>>> newListCollector(Predicate<T> pred) {
         return newListCollector(Function.identity(), pred);
@@ -88,7 +88,8 @@ public class Partitioners {
     /**
      * Split a Collection anytime the output of applying the BiPredicate to consecutive elements
      * yields false. For example, the input list {a, a, b, c, b, b} can be split into the sequence
-     * of Lists: {{a, a} {b}, {c}, {b, b}} using the predicate (list, e) -> e.equals(list.get(0))
+     * of Lists: {{a, a} {b}, {c}, {b, b}} using the predicate
+     * {@literal (list, e) -> e.equals(list.get(0))}
      *
      * @param data A list that will be split into multiple sub-lists
      * @param rule Creates a new output list whenever applying this predicate yields false.
@@ -101,7 +102,7 @@ public class Partitioners {
      * This Streams API Collector will split a streamed Collection into a series of Lists where each
      * new List is created when the pair of elements fed to the BiPredicate yield false. For
      * example, the input list {a, a, b, c, b, b} can be split into the sequence of Lists: {{a, a}
-     * {b}, {c}, {b, b}} using the predicate ((i,j) -> i == j).s
+     * {b}, {c}, {b, b}} using the predicate {@literal ((i,j) -> i == j).}
      */
     public static <T> Collector<T, List<List<T>>, List<List<T>>> newListCollector(BiPredicate<List<T>, T> pred) {
         return newListCollector(Function.identity(), pred);

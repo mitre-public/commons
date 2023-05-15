@@ -22,8 +22,8 @@ import java.util.Objects;
 /**
  * This is a general purpose convenience class that should be used exceedingly sparingly. Always
  * consider replacing uses of Triple with well-named classes. For example, replacing a
- * Triple<List<Person>,Instant, String> with a "MeetingInvite" class will dramatically improve the
- * readability of the code.
+ * {@code Triple<List<Person>,Instant, String>} with a "MeetingInvite" class will dramatically
+ * improve the readability of the code.
  * <p>
  * Note: Serializing a {@literal Triple<A,B,C>} will fail if either A, B, or C do not implement
  * Serializable. This implementation does not require Am B, or C to be Serializable because it is

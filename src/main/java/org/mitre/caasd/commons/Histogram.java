@@ -182,7 +182,7 @@ public class Histogram {
     /**
      * @param i                       The index of a column in this histogram
      * @param digitsAfterDecimalPlace How many significant figures are using when writing the floor
-     *                                & ceiling of a histogram bin.
+     *                                and ceiling of a histogram bin.
      *
      * @return A String like "[5.5-10.2] : 22" which contains the floor and ceiling of a particular
      *     column in the histogram as well as the count for that column.

@@ -73,6 +73,11 @@ Add this to your Maven dependency list:
 </dependency>
 ```
 
+
+### Build Instructions
+- On mac
+  - use `./gradlew build`
+
 ### Users
 
 This project is intended to assist anyone who codes in Java. However, this project was originally developed to "isolate"

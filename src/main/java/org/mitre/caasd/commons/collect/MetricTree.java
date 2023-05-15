@@ -42,9 +42,13 @@ import com.google.common.collect.Lists;
  * The DistanceMetric should define a Metric Space (in the strict algebraic sense) in which the
  * following four assumptions are true:
  * <p>
- * (1) d(x,y) >= 0 <BR> (2) d(x,y) = d(y,x) <BR> (3) d(x,z) <= d(x,y) + d(y,z) <BR> (4) d(x,y) = 0
- * if and only if x = y (optional) <BR>
- * <p>
+ * {@code
+ *    (1) d(x,y) >= 0
+ *    (2) d(x,y) = d(y,x)
+ *    (3) d(x,z) <= d(x,y) + d(y,z)
+ *    (4) d(x , y ) = 0 if and only
+ *    if x = y (optional)
+ * }
  * <p>
  * A MetricTree is loosely based on the MTree introduced by Paolo Ciaccia, Marco Patella, and Pavel
  * Zezula in 1997 in the paper "M-tree An Efficient Access Method for Similarity Search in Metric
