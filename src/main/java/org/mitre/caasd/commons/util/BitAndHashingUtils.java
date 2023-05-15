@@ -62,7 +62,7 @@ public class BitAndHashingUtils {
      * Generate n pseudo-random bits from an input String. The input string is pushed through a
      * hashing function, then the returned hash is truncated to n-bits.
      *
-     * @param n   The number of random bits you want (0 < n <= 64)
+     * @param n   The number of random bits you want {@literal (0 < n <= 64)}
      * @param str The source String
      *
      * @return A set of n pseudo-random bits (only the lowest-order n-bits may be set to 1)

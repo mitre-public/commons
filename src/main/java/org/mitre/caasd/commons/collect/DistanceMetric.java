@@ -21,9 +21,13 @@ import java.io.Serializable;
 /**
  * The DistanceMetric should define a true Metric Space (in the strict algebraic sense) for KEY
  * objects. This means the following should be true:
- * <p>
- * (1) d(x,y) >= 0 (2) d(x,y) = d(y,x) (3) d(x,z) <= d(x,y) + d(y,z) (4) d(x , y ) = 0 if and only
- * if x = y (optional)
+ * {@code
+ *    (1) d(x,y) >= 0
+ *    (2) d(x,y) = d(y,x)
+ *    (3) d(x,z) <= d(x,y) + d(y,z)
+ *    (4) d(x , y ) = 0 if and only
+ *    if x = y (optional)
+ * }
  */
 @FunctionalInterface
 public interface DistanceMetric<KEY> extends Serializable {

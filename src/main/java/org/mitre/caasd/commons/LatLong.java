@@ -113,7 +113,8 @@ public class LatLong implements Comparable<LatLong>, Serializable {
     /**
      * Create a new LatLong object.
      *
-     * @param base64Encoding The Base64 safe & URL safe (no padding) encoding of a LatLong's byte[]
+     * @param base64Encoding The Base64 safe and URL safe (no padding) encoding of a LatLong's
+     *                       byte[]
      *
      * @return A new LatLong object.
      */
@@ -179,7 +180,7 @@ public class LatLong implements Comparable<LatLong>, Serializable {
             .array();
     }
 
-    /** @return The Base64 file & url safe encoding of this LatLong's byte[] . */
+    /** @return The Base64 file and url safe encoding of this LatLong's byte[] . */
     public String toBase64() {
         return Base64.getUrlEncoder().withoutPadding().encodeToString(toBytes());
     }

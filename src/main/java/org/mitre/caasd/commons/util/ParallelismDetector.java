@@ -68,7 +68,7 @@ import java.util.concurrent.Callable;
  * <p> Here is an example of using two ParallelismDetectors to detect and prevent parallel
  * execution btw some methods but not others.
  *
- * <pre>
+ * <pre>{@code
  * public class ExampleUsage {
  *
  *     private final ParallelismDetector parallelismDetector_1and2 = new NoParallelism();
@@ -92,7 +92,7 @@ import java.util.concurrent.Callable;
  *         );
  *     }
  * }
- * </pre>
+ * }</pre>
  */
 public class ParallelismDetector {
 

@@ -34,8 +34,8 @@ public interface HasTime {
         return time().toEpochMilli();
     }
 
-    /** Verifies the input Instant is nonNull and >= 0ms from the epoch. */
-    public static void validate(Instant time) {
+    /** Verifies the input Instant is  {@code nonNull and>= 0ms} from the epoch. */
+    static void validate(Instant time) {
         checkState(nonNull(time), "time() cannot return null");
         checkState(time.toEpochMilli() > 0L, "time() must return positive epochMilli");
     }

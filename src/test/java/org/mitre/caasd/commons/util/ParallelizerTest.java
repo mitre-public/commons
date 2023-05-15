@@ -121,7 +121,7 @@ public class ParallelizerTest {
         para.doWorkInParallel(jobs);
 
         assertEquals(0, testHandler.numWarnCalls);
-        assertEquals(2, testHandler.numHandleCalls);
+        assertEquals(2, testHandler.numHandleCalls);  //@todo -- I can sometime fail non-deterministically with testHandler.numHandleCalls = 1)
     }
 
     /**

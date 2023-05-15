@@ -22,7 +22,7 @@ import java.util.Objects;
 /**
  * This is a general purpose convenience class that should be used sparingly. Always consider
  * replacing uses of Pair with well-named classes. For example, systematically using LatLong in
- * place of Pair<Double,Double> will dramatically improve the readability of a code-base.
+ * place of {@code Pair<Double,Double>} will dramatically improve the readability of a code-base.
  * <p>
  * Note: Serializing a {@literal Pair<L,R>} will fail if either L or R do not implement
  * Serializable. This implementation does not require L and R to be Serializable because it is more

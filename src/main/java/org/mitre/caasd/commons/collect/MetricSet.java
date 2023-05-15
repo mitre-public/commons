@@ -42,8 +42,13 @@ import org.mitre.caasd.commons.Pair;
  * DistanceMetric should define a Metric Space (in the strict algebraic sense) in which the
  * following four assumptions are true:
  * <p>
- * (1) d(x,y) >= 0 <BR> (2) d(x,y) = d(y,x) <BR> (3) d(x,z) <= d(x,y) + d(y,z) <BR> (4) d(x,y) = 0
- * if and only if x = y (optional) <BR>
+ * {@code
+ *    (1) d(x,y) >= 0
+ *    (2) d(x,y) = d(y,x)
+ *    (3) d(x,z) <= d(x,y) + d(y,z)
+ *    (4) d(x , y ) = 0 if and only
+ *    if x = y (optional)
+ * }
  * <p>
  * <p>
  * A MetricSet is loosely based on the MTree introduced by Paolo Ciaccia, Marco Patella, and Pavel

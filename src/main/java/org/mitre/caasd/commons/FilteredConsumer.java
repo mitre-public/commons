@@ -100,7 +100,7 @@ public class FilteredConsumer<T> implements Consumer<T>, Serializable {
 
     /**
      * @return The Consumer provided at construction for receiving "failing" inputs.  This will
-     *     be a "NO OP Lambda" (e.g. `x -> {}`) when a 2nd Consumer is not supplied
+     *     be a "NO OP Lambda" (e.g. {@code x -> {}}) when a 2nd Consumer is not supplied
      */
     public Consumer<T> whenFalse() {
         return this.whenFalse;
