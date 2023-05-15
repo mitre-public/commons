@@ -16,8 +16,6 @@
 
 package org.mitre.caasd.commons.util;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
 /**
  * This class represents the middle ground between (A) rethrowing checked exceptions as simple
  * RuntimeExceptions using {@code throw new RuntimeException(someCheckedException);} and (B) full
@@ -49,12 +47,12 @@ public class DemotedException extends RuntimeException {
 
     public DemotedException(Exception cause) {
         super(cause);
-        checkArgument(!(cause instanceof RuntimeException));
+        throwOnRuntimeException(cause);
     }
 
     public DemotedException(String message, Exception cause) {
         super(message, cause);
-        checkArgument(!(cause instanceof RuntimeException));
+        throwOnRuntimeException(cause);
     }
 
     /** A shortcut for new DemotedException(cause) */
@@ -65,5 +63,17 @@ public class DemotedException extends RuntimeException {
     /** A shortcut for new DemotedException(message, cause) */
     public static DemotedException demote(String message, Exception cause) {
         return new DemotedException(message, cause);
+    }
+
+    private static void throwOnRuntimeException(Exception cause) {
+
+        /*
+         * RuntimeException's should not be demoted, use this "preconditions" check to ensure:
+         * (1) RuntimeExceptions don't get demoted and
+         * (2) information about unexpected RuntimeExceptions get passed back to the caller
+         */
+        if (cause instanceof RuntimeException) {
+            throw new IllegalArgumentException("Illegal Use of DemotedException, cannot demote RuntimeExceptions but " + cause.getClass().getSimpleName() + " is an instance of RuntimeException", cause);
+        }
     }
 }

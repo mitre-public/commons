@@ -19,6 +19,7 @@ package org.mitre.caasd.commons.util;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mitre.caasd.commons.util.DemotedException.demote;
 
 import java.io.FileNotFoundException;
@@ -69,6 +70,18 @@ public class DemotedExceptionTest {
             IllegalArgumentException.class,
             () -> demote("message", new ArrayIndexOutOfBoundsException())
         );
+    }
+
+    @Test
+    public void whenARuntimeExceptionIsDemotedYouFailAndGetCause() {
+
+        try {
+            demote(new ArrayIndexOutOfBoundsException(5)); //This line SHOULD throw an IllegalArgumentException
+            fail(); //FAIL if this statement is ever reached
+        } catch (IllegalArgumentException iae) {
+            assertThat(iae.getMessage(), is("Illegal Use of DemotedException, cannot demote RuntimeExceptions but ArrayIndexOutOfBoundsException is an instance of RuntimeException"));
+            assertThat(iae.getCause().getMessage(), is("Array index out of range: 5"));
+        }
     }
 
     @Test
