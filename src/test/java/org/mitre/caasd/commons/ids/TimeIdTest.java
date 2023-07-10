@@ -94,10 +94,6 @@ class TimeIdTest {
         assertThat(idNow, is(fromBase64Str));
         assertThat(idNow.time(), is(fromBase64Str.time()));
         assertArrayEquals(idNow.bytes(), fromBase64Str.bytes());
-
-        for (int i = 0; i < 1000; i++) {
-            System.out.println(newId().asBase64());
-        }
     }
 
     @Test

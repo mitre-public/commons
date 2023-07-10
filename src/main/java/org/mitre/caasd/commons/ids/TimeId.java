@@ -70,6 +70,9 @@ public class TimeId implements Comparable<TimeId>, HasTime, Serializable {
         static final SecureRandom RNG = new SecureRandom();
     }
 
+    /** TimeIds are encoded as Base64 without padding (get the Encoder exactly once). */
+    private static Base64.Encoder BASE_64_ENCODER = Base64.getEncoder().withoutPadding();
+
     /** Number of bits extracted from a timestamp's epochMills long. */
     private static final int NUM_TIMESTAMP_BITS = 42;
 
@@ -156,10 +159,12 @@ public class TimeId implements Comparable<TimeId>, HasTime, Serializable {
             .array();
     }
 
-    /** @return The bytes() of this ID encoded in Base64. */
+    /**
+     * @return The {@code bytes()} of this ID encoded as unpadded Base64 String (e.g.
+     *     "YlAmUqw/L7n0P0wcMfG+zg"). The returned String will be 22 characters
+     */
     public String asBase64() {
-//        return Base64.getEncoder().withoutPadding().encodeToString(bytes());
-        return Base64.getEncoder().encodeToString(bytes());
+        return BASE_64_ENCODER.encodeToString(bytes());
     }
 
     /** @return A new TimeId by parsing the binary data represented within a Base64 String. */
@@ -171,7 +176,7 @@ public class TimeId implements Comparable<TimeId>, HasTime, Serializable {
 
     /**
      * @return A 32-character hex String embedding this 128-bit id (e.g.
-     * "609c2cf98dc9fa21d9633a14f800bbb6").
+     *     "609c2cf98dc9fa21d9633a14f800bbb6").
      */
     public String toString() {
         return String.format("%016x", leftBits) + String.format("%016x", rightBits);
