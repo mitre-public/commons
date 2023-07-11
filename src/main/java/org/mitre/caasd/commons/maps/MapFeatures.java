@@ -26,6 +26,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
+import java.util.Collection;
 import java.util.List;
 
 import org.mitre.caasd.commons.LatLong;
@@ -266,6 +267,22 @@ public class MapFeatures {
         }
     }
 
+
+    private static class CompositeFeature implements MapFeature {
+
+        List<MapFeature> features;
+
+        CompositeFeature(Collection<MapFeature> componentFeatures) {
+            requireNonNull(componentFeatures);
+            this.features = newArrayList(componentFeatures);
+        }
+
+        @Override
+        public void drawOn(Graphics2D g, PixelLatLong zeroPixel) {
+            features.forEach(feature -> feature.drawOn(g, zeroPixel));
+        }
+    }
+
     public static MapFeature filledCircle(LatLong loc, Color c, int diameterInPixels) {
         return new Circle(loc, c, diameterInPixels, true, 1.0f); //stroke width does not matter for filled circles
     }
@@ -316,6 +333,11 @@ public class MapFeatures {
 
     public static MapFeature path(List<LatLong> pts, Color c, float strokeWidth) {
         return new Path(pts, c, strokeWidth);
+    }
+
+    /** Combines multiple MapFeatures into a single MapFeature. */
+    public static MapFeature compose(Collection<MapFeature> features) {
+        return new CompositeFeature(features);
     }
 
     private static PixelLatLong toPixel(LatLong loc, PixelLatLong zero) {

@@ -138,6 +138,16 @@ public class MapBuilder {
         return this;
     }
 
+    /**
+     * Add a MapFeature to the fully rendered Map. This is equivalent to
+     * {@code addFeature(renderer.apply(obj));}
+     */
+    public <T> MapBuilder addFeature(T obj, Function<T, MapFeature> renderer) {
+        requireNonNull(obj, "The obj to render cannot be null");
+        requireNonNull(renderer, "The MapFeature renderer cannot be null");
+        return addFeature(renderer.apply(obj));
+    }
+
     /** Add one or more MapFeatures to the fully rendered Map. */
     public MapBuilder addFeatures(MapFeature... features) {
         requireNonNull(features, "The MapFeature varags cannot be null");

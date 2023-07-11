@@ -113,10 +113,17 @@ general purpose Java utilities from the Aviation Risk Identification and Assessm
 * Added 3 search methods to `HasTime` -- they are `floor`, `ceil`, and `closest`. These methods rely on the
   new `HasTime.binarySearch` method and efficiently find an item within a time-sorted List of items.
 * `PositionInterpolator` has been reworked
-  * The change simplifies some use cases because `PositionRecord<T>` objects can be replaced with mere `Position` objects. 
+  * The change simplifies some use cases because `PositionRecord<T>` objects can be replaced with mere `Position`
+    objects.
   * `PositionInterpolator` is no longer a generic class.
-  * The class's core method now takes in a `List<Position>` and produces an `Optional<KineticPosition>` (notice no generic here)
-  * A generic default method was added to replace the prior functionality (e.g., `List<PositionRecord<T>>` to `Optional<KineticRecord<T>>`)
+  * The class's core method now takes in a `List<Position>` and produces an `Optional<KineticPosition>` (notice no
+    generic here)
+  * A generic default method was added to replace the prior functionality (e.g., `List<PositionRecord<T>>`
+    to `Optional<KineticRecord<T>>`)
+* Added `MapFeatures.compose(Collection<MapFeature> many)` to improve support for creating maps with datasets. This
+  method allows us to render a "scatter plot of circles" as one `MapFeature` rather than a `List<MapFeature>`. This can
+  simplify drawing maps with multiple "layers"
+* `TimeId.asBase64()` now returns an unpadded encoding (this is **breaking change** as compared to the behavior in version 0.0.50) 
 
 ##### Version 0.0.53 (Released 2022-11-28)
 

@@ -19,12 +19,18 @@ package org.mitre.caasd.commons.maps;
 import static com.google.common.collect.Lists.newLinkedList;
 import static com.google.common.collect.Streams.stream;
 import static java.lang.System.getProperty;
+import static java.util.stream.Collectors.toList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mitre.caasd.commons.Course.EAST;
+import static org.mitre.caasd.commons.Course.NORTH;
 import static org.mitre.caasd.commons.TimeWindow.enclosingWindow;
 import static org.mitre.caasd.commons.maps.FeatureSetBuilder.newFeatureSetBuilder;
 import static org.mitre.caasd.commons.maps.MapBuilder.newMapBuilder;
+import static org.mitre.caasd.commons.maps.MapFeatures.circle;
+import static org.mitre.caasd.commons.maps.MapFeatures.filledCircle;
+
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -33,6 +39,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.imageio.ImageIO;
 
 import org.junit.jupiter.api.Disabled;
@@ -128,6 +135,60 @@ class MapBuilderTest {
         verifyImagesMatch(newMapImage, expectedMapImage);
     }
 
+    @Test
+    public void plotDotsOnSolidBackground() throws Exception {
+        /*
+         * This test shows how LatLong datasets can be drawn as a collection of many individual
+         * MapFeatures OR as one "composite" MapFeature
+         */
+
+        //render these LatLongs as separate MapFeatures
+        List<LatLong> blueDots = Stream.of(
+            LatLong.of(32.8968, -97.0380),
+            LatLong.of(32.8968, -97.0380).project(EAST, Distance.ofMiles(1)),
+            LatLong.of(32.8968, -97.0380).project(EAST, Distance.ofMiles(2)),
+            LatLong.of(32.8968, -97.0380).project(EAST, Distance.ofMiles(3)),
+            LatLong.of(32.8968, -97.0380).project(EAST, Distance.ofMiles(4))
+        ).collect(toList());
+
+        //render the LatLong as one group
+        List<LatLong> redDots = Stream.of(
+            LatLong.of(32.8968, -97.0380),
+            LatLong.of(32.8968, -97.0380).project(NORTH, Distance.ofMiles(1)),
+            LatLong.of(32.8968, -97.0380).project(NORTH, Distance.ofMiles(2)),
+            LatLong.of(32.8968, -97.0380).project(NORTH, Distance.ofMiles(3)),
+            LatLong.of(32.8968, -97.0380).project(NORTH, Distance.ofMiles(4))
+        ).collect(toList());
+
+        BufferedImage newMapImage = newMapBuilder()
+            .solidBackground(Color.BLACK)
+            .center(LatLong.of(32.8968, -97.0380))   //the center of the random distribution we are drawing LatLongs from
+            .width(800, 10)
+            //render each LatLong in this list separately
+            .addFeatures(blueDots, loc -> filledCircle(loc, Color.BLUE, 6))
+            //render this list of LatLongs as a single MapFeaure
+            .addFeature(toMapFeature(redDots))
+            .toImage();
+
+        BufferedImage expectedMapImage = ImageIO.read(
+            FileUtils.getResourceFile("blueAndRedDots.png")
+        );
+
+        verifyImagesMatch(newMapImage, expectedMapImage);
+    }
+
+    MapFeature toMapFeature(List<LatLong> locations) {
+
+        List<MapFeature> asManyFeatures = locations.stream()
+            .map(loc -> circle(loc, Color.RED, 6, 1.0f))
+            .collect(toList());
+
+        MapFeature asOneFeature = MapFeatures.compose(asManyFeatures);
+
+        return asOneFeature;
+    }
+
+
     @Disabled //may not work on Bamboo due to fonts???
     @Test
     public void plotMapOnDebugBackground() throws Exception {
@@ -203,11 +264,11 @@ class MapBuilderTest {
                     datum.altitude())
                 )
             )
-            .collect(Collectors.toList());
+            .collect(toList());
 
         List<MapFeature> circles = positions.stream()
-            .map(pr -> MapFeatures.filledCircle(pr.latLong(), Color.RED, 12))
-            .collect(Collectors.toList());
+            .map(pr -> filledCircle(pr.latLong(), Color.RED, 12))
+            .collect(toList());
 
         MapFeature smoothedTrackPath = MapFeatures.path(
             fitLatLongs(positions),
@@ -238,7 +299,7 @@ class MapBuilderTest {
         return stream(window.iterator(Duration.ofSeconds(2L)))
             .map(time -> fitter.floorInterpolate(rawData, time).get())
             .map(kr -> kr.latLong())
-            .collect(Collectors.toList());
+            .collect(toList());
     }
 
 }
