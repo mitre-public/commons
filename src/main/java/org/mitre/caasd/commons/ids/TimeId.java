@@ -71,7 +71,7 @@ public class TimeId implements Comparable<TimeId>, HasTime, Serializable {
     }
 
     /** TimeIds are encoded as Base64 without padding (get the Encoder exactly once). */
-    private static Base64.Encoder BASE_64_ENCODER = Base64.getEncoder().withoutPadding();
+    private static final Base64.Encoder BASE_64_ENCODER = Base64.getEncoder().withoutPadding();
 
     /** Number of bits extracted from a timestamp's epochMills long. */
     private static final int NUM_TIMESTAMP_BITS = 42;
