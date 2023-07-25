@@ -38,10 +38,11 @@ contains:
   - Releasing current Java 8 version.
   - The pivoting to Java 17, 
   - Removing pair and triple (only in Java 17+)
-  - Add `LatLongPath`
+  - [DONE] Add `LatLongPath`
   - Adding new `DynamoMetricTree` (requires Java 17)
 - Reduce entire git history to 1 "Initial Commit"
 - Add CI/CD pipeline that publishes to maven central
+- VERIFY guava doesn't leak into classpath
 
 ### Tasks
 - [DONE] TranslatingConsumer needs a getter for each component
