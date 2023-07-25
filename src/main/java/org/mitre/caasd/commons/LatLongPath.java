@@ -70,6 +70,27 @@ public class LatLongPath implements Iterable<LatLong> {
         return new LatLongPath(locations);
     }
 
+    /**
+     * Returns a LatLongPath that is a subset of this LatLongPath.  This method has the same
+     * semantics as {@code String.substring(int beginIndex, int endIndex)}
+     *
+     * @param beginIndex the beginning index, inclusive.
+     * @param endIndex   the ending index, exclusive.
+     *
+     * @return The specified LatLongPath.
+     */
+    public LatLongPath subpath(int beginIndex, int endIndex) {
+        checkArgument(beginIndex >= 0, "beginIndex cannot be negative");
+        checkArgument(endIndex <= size(), "endIndex cannot be greater than size()");
+        checkArgument(beginIndex <= endIndex, "endIndex must be >= beginIndex");
+
+        ArrayList<LatLong> data = new ArrayList<>();
+        for (int i = beginIndex; i < endIndex; i++) {
+            data.add(this.get(i));
+        }
+        return new LatLongPath(data);
+    }
+
     /** @return This LatLongPath as a byte[] containing "16 * size()" bytes */
     public byte[] toBytes() {
         ByteBuffer buffer = ByteBuffer.allocate(16 * size());

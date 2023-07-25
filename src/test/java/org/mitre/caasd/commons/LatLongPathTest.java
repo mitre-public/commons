@@ -384,4 +384,34 @@ class LatLongPathTest {
 
         assertThat(fullPath, is(manualFull));
     }
+
+    @Test
+    public void testSubpath() {
+
+        LatLong a = LatLong.of(0.0, 0.1);
+        LatLong b = LatLong.of(1.0, 1.1);
+        LatLong c = LatLong.of(2.0, 2.1);
+
+        LatLongPath fullPath = LatLongPath.from(a, b, c);
+
+        //full "copy subset" gives unique object with same data
+        LatLongPath abc = fullPath.subpath(0, 3);
+        assertThat(fullPath.equals(abc), is(true));
+        assertThat(fullPath == abc, is(false));
+
+        assertThat(fullPath.subpath(0, 0), is(LatLongPath.from()));
+        assertThat(fullPath.subpath(0, 1), is(LatLongPath.from(a)));
+        assertThat(fullPath.subpath(0, 2), is(LatLongPath.from(a, b)));
+        assertThat(fullPath.subpath(0, 3), is(LatLongPath.from(a, b, c)));
+
+        assertThat(fullPath.subpath(1, 1), is(LatLongPath.from()));
+        assertThat(fullPath.subpath(1, 2), is(LatLongPath.from(b)));
+        assertThat(fullPath.subpath(1, 3), is(LatLongPath.from(b, c)));
+
+        assertThat(fullPath.subpath(2, 3), is(LatLongPath.from(c)));
+
+        assertThrows(IllegalArgumentException.class, () -> fullPath.subpath(-1, 3));
+        assertThrows(IllegalArgumentException.class, () -> fullPath.subpath(3, 1));
+        assertThrows(IllegalArgumentException.class, () -> fullPath.subpath(0, 4));
+    }
 }
