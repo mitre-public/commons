@@ -16,6 +16,7 @@
 
 package org.mitre.caasd.commons;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
@@ -24,8 +25,10 @@ import static org.mitre.caasd.commons.LatLong.checkLongitude;
 import static org.mitre.caasd.commons.Speed.Unit.FEET_PER_MINUTE;
 import static org.mitre.caasd.commons.Speed.Unit.KNOTS;
 
+import java.nio.ByteBuffer;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Base64;
 
 /**
  * KineticPosition gives the 4d-location (time, latitude, longitude, altitude) of an object as well
@@ -35,6 +38,9 @@ import java.time.Instant;
  * will be easy to work with when working with other languages that cannot use the Java API
  */
 public class KineticPosition implements HasTime, HasPosition {
+
+    /** KineticPosition are encoded as Base64 without padding (get the Encoder exactly once). */
+    private static final Base64.Encoder BASE_64_ENCODER = Base64.getEncoder().withoutPadding();
 
     private final long epochTime;
 
@@ -88,6 +94,31 @@ public class KineticPosition implements HasTime, HasPosition {
         this.turnRateInDegreesPerSecond = turnRate;
     }
 
+    /**
+     * Directly build a KineticPosition from 72 bytes (useful when working with serialization
+     * layers).
+     *
+     * @param seventyTwoBytes The bytes used to encode a KineticPosition
+     */
+    public KineticPosition(byte[] seventyTwoBytes) {
+        requireNonNull(seventyTwoBytes);
+        checkArgument(seventyTwoBytes.length == 72, "Must use exactly 72 bytes");
+        ByteBuffer buffer = ByteBuffer.wrap(seventyTwoBytes);
+
+        this.epochTime = buffer.getLong();
+        this.latitude = buffer.getDouble();
+        this.longitude = buffer.getDouble();
+        this.altitudeInFeet = buffer.getDouble();
+        this.climbRateInFtPerMin = buffer.getDouble();
+        this.courseInDegrees = buffer.getDouble();
+        this.turnRateInDegreesPerSecond = buffer.getDouble();
+        this.speedInKnots = buffer.getDouble();
+        this.accelerationInKnotsPerSec = buffer.getDouble();
+
+        checkLatitude(latitude);
+        checkLongitude(longitude);
+    }
+
     @Override
     public Instant time() {
         return Instant.ofEpochMilli(epochTime);
@@ -120,7 +151,7 @@ public class KineticPosition implements HasTime, HasPosition {
 
     /**
      * @return The turn rate measured in degrees per second.  Positive value indicate clockwise
-     * rotation.  Negative values indicate counter-clockwise rotation
+     *     rotation.  Negative values indicate counter-clockwise rotation
      */
     public double turnRate() {
         return turnRateInDegreesPerSecond;
@@ -134,6 +165,7 @@ public class KineticPosition implements HasTime, HasPosition {
     /**
      * @param speed                      An instantaneous speed
      * @param turnRateInDegreesPerSecond An instantaneous turn rate
+     *
      * @return The radius of a circle that fits the provided speed * turn rate
      */
     public static Distance turnRadius(Speed speed, double turnRateInDegreesPerSecond) {
@@ -157,6 +189,53 @@ public class KineticPosition implements HasTime, HasPosition {
         return (turnRateInDegreesPerSecond > 0)
             ? radius //clockwise = positive radius
             : radius.times(-1); //counter-clockwise = negative radisu
+    }
+
+    /**
+     * Express the data inside this KineticPosition as a byte[] 72 bytes that encodes {epochTime,
+     * latitude, longitude, altitudeInFeet, climbRateInFtPerMin, courseInDegrees,
+     * turnRateInDegreesPerSecond, speedInKnots, and accelerationInKnotsPerSec}.
+     *
+     * @return The bytes in this KineticPosition.
+     */
+    public byte[] toBytes() {
+        return ByteBuffer.allocate(72) //72 bytes = 9 fields @ 8 bytes each
+            .putLong(epochTime)
+            .putDouble(latitude)
+            .putDouble(longitude)
+            .putDouble(altitudeInFeet)
+            .putDouble(climbRateInFtPerMin)
+            .putDouble(courseInDegrees)
+            .putDouble(turnRateInDegreesPerSecond)
+            .putDouble(speedInKnots)
+            .putDouble(accelerationInKnotsPerSec)
+            .array();
+    }
+
+    /**
+     * @return The bytes() of this KineticPosition encoded in Base64. The encoding String will be 96
+     *     characters long.
+     */
+    public String toBase64() {
+        return BASE_64_ENCODER.encodeToString(toBytes());
+    }
+
+    /** @return A new KineticPosition by parsing the binary data represented within a Base64 String. */
+    public static KineticPosition fromBase64(String str) {
+        byte[] bytes = Base64.getDecoder().decode(str);
+        return new KineticPosition(bytes);
+    }
+
+    /**
+     * Directly build a KineticPosition from 72 bytes (useful when working with serialization
+     * layers).
+     *
+     * @param seventyTwoBytes The bytes used to encode a KineticPosition
+     *
+     * @return A new KineticPosition by parsing these 72 bytes.
+     */
+    public static KineticPosition fromBytes(byte[] seventyTwoBytes) {
+        return new KineticPosition(seventyTwoBytes);
     }
 
     @Override

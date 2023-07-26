@@ -186,4 +186,68 @@ public class KineticPositionTest {
         assertThat(position1.turnRadius().isNegative(), is(true));
         assertThat(position1.turnRadius().abs(), is(position2.turnRadius()));
     }
+
+    @Test
+    public void toBytesFromBytes_doesNotChangeData() {
+
+        KineticPosition pos = new KineticPosition(
+            EPOCH,
+            LatLong.of(1.0, 20.0),
+            Distance.ofFeet(150.0),
+            Speed.of(7, FEET_PER_MINUTE),
+            Course.ofDegrees(12),
+            0.0, //TURN RATE IS ZERO
+            Speed.of(42, KNOTS),
+            Acceleration.of(Speed.ofKnots(22))
+        );
+
+        byte[] bytes = pos.toBytes();
+
+        KineticPosition pos_2 = KineticPosition.fromBytes(bytes);
+
+        assertThat(pos, is(pos_2));
+        assertThat(bytes, is(pos_2.toBytes()));
+    }
+
+    @Test
+    public void toBase64FromBase64_doesNotChangeData() {
+
+        KineticPosition pos = KineticPosition.builder()
+            .time(EPOCH)
+            .latLong(1.0, 20.0)
+            .altitude(Distance.ofFeet(150.0))
+            .climbRate(Speed.of(7, FEET_PER_MINUTE))
+            .course(Course.ofDegrees(12))
+            .turnRate(1.0)
+            .speed(Speed.of(42, KNOTS))
+            .acceleration(Acceleration.of(Speed.ofKnots(22)))
+            .build();
+
+        String base64 = pos.toBase64();
+
+        KineticPosition pos_2 = KineticPosition.fromBase64(base64);
+
+        assertThat(pos, is(pos_2));
+        assertThat(base64, is(pos_2.toBase64()));
+    }
+
+    @Test
+    public void toBase64_yields96CharString() {
+
+        KineticPosition pos = KineticPosition.builder()
+            .time(EPOCH)
+            .latLong(1.0, 20.0)
+            .altitude(Distance.ofFeet(150.0))
+            .climbRate(Speed.of(7, FEET_PER_MINUTE))
+            .course(Course.ofDegrees(12))
+            .turnRate(1.0)
+            .speed(Speed.of(42, KNOTS))
+            .acceleration(Acceleration.of(Speed.ofKnots(22)))
+            .build();
+
+        String base65Str = pos.toBase64();
+
+        assertThat(base65Str.length(), is(96));
+    }
+
 }
