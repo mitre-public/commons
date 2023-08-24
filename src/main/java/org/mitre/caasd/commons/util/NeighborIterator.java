@@ -60,6 +60,7 @@ public class NeighborIterator<T> implements Iterator<IterPair<T>> {
     private T current;
     private int elementCount = 0;
 
+    @SafeVarargs
     public NeighborIterator(T... array) {
         this(asList(array));
     }
@@ -82,16 +83,17 @@ public class NeighborIterator<T> implements Iterator<IterPair<T>> {
     }
 
 
-    public static <T> NeighborIterator newNeighborIterator(Iterator<T> iter) {
-        return new NeighborIterator(iter);
+    public static <T> NeighborIterator<T> newNeighborIterator(Iterator<T> iter) {
+        return new NeighborIterator<>(iter);
     }
 
-    public static <T> NeighborIterator newNeighborIterator(Collection<T> collection) {
-        return new NeighborIterator(collection);
+    public static <T> NeighborIterator<T> newNeighborIterator(Collection<T> collection) {
+        return new NeighborIterator<>(collection);
     }
 
-    public static <T> NeighborIterator newNeighborIterator(T... array) {
-        return new NeighborIterator(array);
+    @SafeVarargs
+    public static <T> NeighborIterator<T> newNeighborIterator(T... array) {
+        return new NeighborIterator<>(array);
     }
 
     @Override
