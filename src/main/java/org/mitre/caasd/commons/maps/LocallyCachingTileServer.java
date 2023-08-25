@@ -137,7 +137,7 @@ public class LocallyCachingTileServer implements TileServer {
 
                 //so first we look for an image file "cacheDir/tileAddress.dat"...
                 FileUtils.makeDirIfMissing(cacheDir);
-                File cachedImageFile = new File(cacheDir + File.separator + ta.toString() + ".png");
+                File cachedImageFile = new File(cacheDir + File.separator + ta + ".png");
 
                 if (cachedImageFile.exists() && fileIsRecent(cachedImageFile, maxAge)) {
                     return ImageIO.read(cachedImageFile);

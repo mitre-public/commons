@@ -43,7 +43,7 @@ public class PrintStreamOutputDestinationTest {
         PrintStream stream = new PrintStream(outContent, true);
 
         PrintStreamSink destination = new PrintStreamSink<DummyRecord>(
-            (record) -> "--" + Integer.toString(record.anImportantValue) + "--",
+            (record) -> "--" + record.anImportantValue + "--",
             stream
         );
 

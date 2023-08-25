@@ -126,7 +126,7 @@ public class FileUtilsTest {
     }
 
     @Test
-    public void getPropertiesRejectsFilesWithDuplicateKeys() throws Exception {
+    public void getPropertiesRejectsFilesWithDuplicateKeys() {
 
         File rejectFile = getResourceFile("org/mitre/caasd/commons/fileutil/rejectThisPropertiesFile.props");
 

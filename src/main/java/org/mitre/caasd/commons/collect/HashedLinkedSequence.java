@@ -30,7 +30,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
 
-import org.apache.commons.math3.analysis.function.Add;
+import javax.annotation.Nonnull;
 
 import com.google.common.collect.Iterators;
 
@@ -78,7 +78,7 @@ public class HashedLinkedSequence<T> implements Collection<T>, Set<T> {
 
     private int modCount; //used to detect concurrent modification
 
-    public <T> HashedLinkedSequence() {
+    public HashedLinkedSequence() {
         this.nodes = newHashMap();
         this.firstNode = null;
         this.lastNode = null;
@@ -94,6 +94,7 @@ public class HashedLinkedSequence<T> implements Collection<T>, Set<T> {
      *
      * @return A new HashedLinkedSequence containing these elements.
      */
+    @SafeVarargs
     public static <E> HashedLinkedSequence<E> newHashedLinkedSequence(E... elements) {
         HashedLinkedSequence<E> list = new HashedLinkedSequence<>();
         list.addAll(elements);
@@ -142,7 +143,8 @@ public class HashedLinkedSequence<T> implements Collection<T>, Set<T> {
         return modified;
     }
 
-    public boolean addAll(T... array) {
+    @SafeVarargs
+    public final boolean addAll(T... array) {
         return Collections.addAll(this, array);
     }
 
@@ -324,12 +326,12 @@ public class HashedLinkedSequence<T> implements Collection<T>, Set<T> {
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
+    public boolean containsAll(@Nonnull Collection<?> c) {
         return nodes.keySet().containsAll(c);
     }
 
     @Override
-    public boolean removeAll(Collection<?> c) {
+    public boolean removeAll(@Nonnull Collection<?> c) {
         //implementation copied from java.util.AbstractSet:
         Objects.requireNonNull(c);
         boolean modified = false;
@@ -350,7 +352,7 @@ public class HashedLinkedSequence<T> implements Collection<T>, Set<T> {
     }
 
     @Override
-    public boolean retainAll(Collection<?> c) {
+    public boolean retainAll(@Nonnull Collection<?> c) {
         //implementation copied from java.util.AbstractCollection:
         Objects.requireNonNull(c);
         boolean modified = false;

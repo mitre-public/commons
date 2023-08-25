@@ -48,8 +48,8 @@ public class ManyKeysWithSameLocationTest {
         @Override
         public double distanceBtw(Location item1, Location item2) {
             return Math.hypot(
-                (double) Math.abs(item1.x - item2.x),
-                (double) Math.abs(item1.y - item2.y)
+                Math.abs(item1.x - item2.x),
+                Math.abs(item1.y - item2.y)
             );
         }
     };
@@ -93,7 +93,7 @@ public class ManyKeysWithSameLocationTest {
 
         return new AbstractMap.SimpleEntry<>(
             new Location(rng.nextInt(1000), rng.nextInt(1000)),
-            "item_" + Integer.toString(itemCount++)
+            "item_" + itemCount++
         );
     }
 
@@ -101,7 +101,7 @@ public class ManyKeysWithSameLocationTest {
 
         return new AbstractMap.SimpleEntry<>(
             new Location(x, y),
-            "item_" + Integer.toString(itemCount++)
+            "item_" + itemCount++
         );
     }
 

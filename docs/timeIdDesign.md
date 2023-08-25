@@ -5,15 +5,15 @@ The package `org.mitre.caasd.commons.id` contains the `TimeId` and `SmallTimeId`
 ### Bottom Line Up Front
 
 1. Prefer using `TimeId`, it is simpler to use and more robust.
-1. Only use `SmallTimeId` when saving 8-bytes per ID size is important.
-1. Using `SmallTimeId` requires using a stateful `IdFactoryShard` to ensure the `SmallTimeIds` are unique.
+2. Only use `SmallTimeId` when saving 8-bytes per ID size is important.
+3. Using `SmallTimeId` requires using a stateful `IdFactoryShard` to ensure the `SmallTimeIds` are unique.
 
 ### Design Goals
 
 1. **Be unique**
-1. **Be sortable by embedded timestamp**
-1. **Allow retrieving the embedded timestamp**
-1. **Enable compact serialization**
+2. **Be sortable by embedded timestamp**
+3. **Allow retrieving the embedded timestamp**
+4. **Enable compact serialization**
 
 ### Purposefully Designed to Inhibit
 

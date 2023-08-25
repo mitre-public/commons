@@ -48,7 +48,7 @@ public class CombinedPredicateTest {
         GreaterThan20 greaterThan20 = new GreaterThan20();
         LessThan100 lessThan100 = new LessThan100();
 
-        Predicate<Integer> combined = new CombinedPredicate(
+        Predicate<Integer> combined = new CombinedPredicate<>(
             greaterThan20, lessThan100
         );
 
@@ -68,7 +68,7 @@ public class CombinedPredicateTest {
         GreaterThan20 greaterThan20 = new GreaterThan20();
         LessThan100 lessThan100 = new LessThan100();
 
-        Predicate<Integer> combined = new CombinedPredicate(
+        Predicate<Integer> combined = new CombinedPredicate<>(
             greaterThan20, lessThan100
         );
 
@@ -91,7 +91,7 @@ public class CombinedPredicateTest {
         GreaterThan20 greaterThan20 = new GreaterThan20();
         LessThan100 lessThan100 = new LessThan100();
 
-        CombinedPredicate<Integer> combined = new CombinedPredicate(
+        CombinedPredicate<Integer> combined = new CombinedPredicate<>(
             greaterThan20, lessThan100
         );
 
@@ -101,7 +101,7 @@ public class CombinedPredicateTest {
         assertThat(components.get(1), is(lessThan100));
     }
 
-    class GreaterThan20 implements Predicate<Integer> {
+    static class GreaterThan20 implements Predicate<Integer> {
 
         int counter = 0;
 
@@ -112,7 +112,7 @@ public class CombinedPredicateTest {
         }
     }
 
-    class LessThan100 implements Predicate<Integer> {
+    static class LessThan100 implements Predicate<Integer> {
 
         int counter = 0;
 

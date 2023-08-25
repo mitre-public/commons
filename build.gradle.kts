@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.google.guava:guava:23.0")
+    implementation("com.google.guava:guava:32.1.2-jre")
     implementation("org.apache.commons:commons-math3:3.6.1")
     implementation("com.google.code.gson:gson:2.8.9")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.5.2")

@@ -31,7 +31,7 @@ import org.mitre.caasd.commons.util.ErrorCatchingTask.ErrorHandlingPolicy;
 
 public class ErrorCatchingTaskTest {
 
-    class BasicErrorHandler implements ExceptionHandler {
+    static class BasicErrorHandler implements ExceptionHandler {
 
         Throwable caught = null;
 
@@ -128,7 +128,7 @@ public class ErrorCatchingTaskTest {
         );
     }
 
-    class NoticeError implements ErrorHandlingPolicy {
+    static class NoticeError implements ErrorHandlingPolicy {
 
         boolean gotError = false;
 

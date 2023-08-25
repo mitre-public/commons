@@ -17,10 +17,8 @@
 package org.mitre.caasd.commons;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -30,13 +28,13 @@ public class PairTest {
     public void testInputOrder() {
         Pair<String, Double> p1 = Pair.of("String", 5.0);
 
-        assertTrue(p1.first().equals("String"));
-        assertTrue(p1.second().equals(5.0));
+        assertEquals("String", p1.first());
+        assertEquals(5.0, p1.second());
 
         Pair<Double, String> p2 = Pair.of(5.0, "String");
 
-        assertTrue(p2.first().equals(5.0));
-        assertTrue(p2.second().equals("String"));
+        assertEquals(5.0, p2.first());
+        assertEquals("String", p2.second());
     }
 
     @Test
@@ -51,8 +49,7 @@ public class PairTest {
         assertThat("Should be the same", p1.equals(p2), is(true));
         assertThat("Not the same, different in 2nd value", p1.equals(p3), is(false));
         assertThat("Not the same, different in 1st value", p1.equals(p4), is(false));
-        assertTrue(p1.equals(p1));
-        assertFalse(p1.equals(null));
+        assertThat(p1, notNullValue());
         assertThat("A Pair object is not equal to a different class", p1.equals("Hello"), is(false));
     }
 

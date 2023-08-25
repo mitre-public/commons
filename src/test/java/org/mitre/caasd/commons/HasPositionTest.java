@@ -62,7 +62,7 @@ public class HasPositionTest {
         assertEquals(-73.9, maxLongitude(points), TOLERANCE);
     }
 
-    public class PositionHaver implements HasPosition {
+    public static class PositionHaver implements HasPosition {
 
         LatLong location;
 

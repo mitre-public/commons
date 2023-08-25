@@ -68,7 +68,7 @@ public class TileAddress {
      * @return "{zoomLevel}/{xIndex}/{yIndex}"
      */
     public String tileUrlComponent() {
-        return ("" + zoomLevel + "/" + xIndex + "/" + yIndex);
+        return (zoomLevel + "/" + xIndex + "/" + yIndex);
     }
 
     @Override

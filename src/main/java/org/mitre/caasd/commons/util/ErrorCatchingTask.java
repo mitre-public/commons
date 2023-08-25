@@ -109,6 +109,6 @@ public class ErrorCatchingTask implements Runnable {
     @FunctionalInterface
     public interface ErrorHandlingPolicy {
 
-        public void handleError(Error error);
+        void handleError(Error error);
     }
 }

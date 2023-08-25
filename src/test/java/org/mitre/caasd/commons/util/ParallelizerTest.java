@@ -134,7 +134,7 @@ public class ParallelizerTest {
 
         @Override
         public void warn(String message) {
-            numHandleCalls++;
+            numWarnCalls++;
         }
 
         @Override

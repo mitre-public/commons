@@ -94,7 +94,7 @@ public class JsonFileSinkTest {
     }
 
     @Test
-    public void showHowAPerRecordSubdirectoryCanBeSpecified() throws IOException {
+    public void showHowAPerRecordSubdirectoryCanBeSpecified() {
 
         File expectFile_A = new File(tempDir, new File("A", "A.json").toString());
         File expectFile_B = new File(tempDir, new File("B", "B.json").toString());
@@ -134,7 +134,7 @@ public class JsonFileSinkTest {
     }
 
     @Test
-    public void showHowFilesCanBeExtractedFromInputToFlatDirectory() throws IOException {
+    public void showHowFilesCanBeExtractedFromInputToFlatDirectory() {
 
         File expectFile_A = new File(tempDir, "A.json");
         File expectFile_B = new File(tempDir, "B.json");
@@ -178,7 +178,7 @@ public class JsonFileSinkTest {
      *     name
      * @throws IOException
      */
-    private File newNonExistentFileUnderTemporaryFolder() throws IOException {
+    private File newNonExistentFileUnderTemporaryFolder() {
         String outerMethod = new Throwable().getStackTrace()[1].getMethodName();
         return new File(tempDir, outerMethod);
     }
@@ -200,7 +200,7 @@ public class JsonFileSinkTest {
         }
     }
 
-    class NumericFileNamer implements ToStringFunction<SampleClassNamedUsingExternalRules> {
+    static class NumericFileNamer implements ToStringFunction<SampleClassNamedUsingExternalRules> {
 
         int nextNumber = 789; //
 

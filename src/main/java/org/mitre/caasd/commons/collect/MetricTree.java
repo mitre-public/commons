@@ -187,7 +187,7 @@ public class MetricTree<K, V> implements Serializable {
             return prior;
         }
 
-        V prior = (V) rootSphere.put(key, value);
+        V prior = rootSphere.put(key, value);
 
         assert (prior == null) : "The prior should always be null because globalMap.containsKey was false";
 
@@ -332,7 +332,7 @@ public class MetricTree<K, V> implements Serializable {
         SphereAssignment<K, V> sa = globalHashMap.remove(exactKey);
 
         if (sa != null) {
-            V priorValue = (V) sa.sphere().remove(exactKey);
+            V priorValue = sa.sphere().remove(exactKey);
 
             if (priorValue != sa.value()) {
                 throw new AssertionError("the value found in the globalMap should match "
@@ -415,7 +415,7 @@ public class MetricTree<K, V> implements Serializable {
          * A SPHERE_OF_SPHERES contains 2 other spheres. A SPHERE_OF_SPHERES is essentially an inner
          * node of a FastMetricTree.
          */
-        SPHERE_OF_SPHERES;
+        SPHERE_OF_SPHERES
     }
 
     /**

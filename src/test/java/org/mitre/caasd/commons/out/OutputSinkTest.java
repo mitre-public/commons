@@ -31,7 +31,7 @@ public class OutputSinkTest {
     static Map<String, String> MAP = newHashMap();
 
     //leave "bread crumbs" in the MAP when these methods are called
-    class EvntDest_1 implements OutputSink<JsonWritable> {
+    static class EvntDest_1 implements OutputSink<JsonWritable> {
 
         @Override
         public void accept(JsonWritable event) {
@@ -45,7 +45,7 @@ public class OutputSinkTest {
     }
 
     //leave "bread crumbs" in the MAP when these methods are called
-    class EvntDest_2 implements OutputSink<JsonWritable> {
+    static class EvntDest_2 implements OutputSink<JsonWritable> {
 
         @Override
         public void accept(JsonWritable event) {
@@ -61,10 +61,10 @@ public class OutputSinkTest {
     @Test
     public void andThenForwardsCallsToBothComponents() throws IOException {
 
-        OutputSink one = new EvntDest_1();
-        OutputSink two = new EvntDest_2();
+        OutputSink<JsonWritable> one = new EvntDest_1();
+        OutputSink<JsonWritable> two = new EvntDest_2();
 
-        OutputSink combination = one.andThen(two);
+        OutputSink<JsonWritable> combination = one.andThen(two);
 
         MAP.clear();
 
@@ -80,7 +80,7 @@ public class OutputSinkTest {
     @Test
     public void combine_forwardsCallsToBothComponents() throws IOException {
 
-        OutputSink combination = combine(
+        OutputSink<JsonWritable> combination = combine(
             new EvntDest_1(),
             new EvntDest_2()
         );

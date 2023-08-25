@@ -77,7 +77,7 @@ public class CompositeCleanerTest {
         cleaningSteps.add(new RemoveOddIntegers());
         cleaningSteps.add(new RemoveNegativeNumbers());
 
-        CompositeCleaner<Integer> cleaner = new CompositeCleaner(cleaningSteps);
+        CompositeCleaner<Integer> cleaner = new CompositeCleaner<>(cleaningSteps);
 
         assertThat(cleaner.clean(12).get(), is(12));
         assertThat(cleaner.clean(11), is(Optional.empty()));
@@ -143,6 +143,6 @@ public class CompositeCleanerTest {
         Optional<Integer> result = cleaner.clean(22);
 
         assertTrue(result.isPresent());
-        assertTrue(result.get().equals(22));
+        assertThat(result.get(), is(22));
     }
 }

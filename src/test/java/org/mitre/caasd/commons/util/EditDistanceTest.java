@@ -65,7 +65,7 @@ public class EditDistanceTest {
     @Test
     public void testSimilarity_2() {
         assertTrue(similarity("aa", "ab") >= similarity("aa", "bb"));
-        assertTrue(similarity("aa", "cc") == similarity("aa", "bb"));
+        assertEquals(similarity("aa", "cc"), similarity("aa", "bb"));
     }
 
     @Test

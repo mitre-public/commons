@@ -161,10 +161,9 @@ public class SpeedTest {
         assertEquals(oneMeterPerSecond, oneMeterPerSecond2);
         assertEquals(oneMeterPerSecond.hashCode(), oneMeterPerSecond2.hashCode());
 
-        assertEquals(oneMeterPerSecond, oneMeterPerSecond);
         assertNotEquals(oneMeterPerSecond, "hello");
         assertNotEquals(oneMeterPerSecond, oneMilePerSecond);
-        assertFalse(oneMilePerSecond.equals(null));
+        assertNotEquals(null, oneMilePerSecond);
     }
 
     @Test

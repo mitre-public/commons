@@ -19,19 +19,14 @@ package org.mitre.caasd.commons;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Maps.newTreeMap;
-import static java.lang.Integer.parseInt;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.time.temporal.TemporalUnit;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Locale;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
@@ -228,7 +223,7 @@ public class Time {
     static <H extends HasTime> NavigableMap<Instant, H> toMap(Collection<H> items) {
 
         TreeMap<Instant, H> map = newTreeMap();
-        items.stream().forEach(item -> map.put(item.time(), item));
+        items.forEach(item -> map.put(item.time(), item));
 
         checkArgument(
             items.size() == map.size(),

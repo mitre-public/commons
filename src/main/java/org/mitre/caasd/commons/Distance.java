@@ -87,7 +87,7 @@ public class Distance implements Serializable, Comparable<Distance> {
 
         private final String abbreviation;
 
-        private Unit(double unitsPerMeter, String suffix) {
+        Unit(double unitsPerMeter, String suffix) {
             this.unitsPerMeter = unitsPerMeter;
             this.abbreviation = suffix;
         }
@@ -226,11 +226,7 @@ public class Distance implements Serializable, Comparable<Distance> {
         return this.amount / otherDist.in(unit);
     }
 
-    /**
-     * @param lengthOfTime
-     *
-     * @return The Speed required to travel this distance in this amount of time.
-     */
+    /** @return The Speed required to travel this distance in this amount of time. */
     public Speed dividedBy(Duration lengthOfTime) {
         return new Speed(this, lengthOfTime);
     }
@@ -428,7 +424,7 @@ public class Distance implements Serializable, Comparable<Distance> {
     public static Distance max(Iterator<Distance> distances) {
         checkNotNull(distances);
 
-        if (distances.hasNext() == false) {
+        if (!distances.hasNext()) {
             return null;
         }
 

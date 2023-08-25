@@ -18,12 +18,8 @@ package org.mitre.caasd.commons.collect;
 
 import static java.lang.Math.hypot;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -134,7 +130,7 @@ public class MetricTreeTest {
             Math.abs(p1.getY() - p2.getY()));
 
         //We small usable maxSphereSize is 4
-        assertThrows(IllegalArgumentException.class, () -> new MetricTree(metric, 3));
+        assertThrows(IllegalArgumentException.class, () -> new MetricTree<>(metric, 3));
     }
 
     @Test
@@ -165,12 +161,12 @@ public class MetricTreeTest {
 
         Collection<SearchResult<Point, String>> knnResults = mTree.getNClosest(searchKey, 4);
 
-        assertTrue(knnResults != null);
+        assertThat(knnResults, notNullValue());
         assertTrue(knnResults.isEmpty());
 
         Collection<SearchResult<Point, String>> rangeResults = mTree.getAllWithinRange(searchKey, 10.0);
 
-        assertTrue(rangeResults != null);
+        assertThat(rangeResults, notNullValue());
         assertTrue(rangeResults.isEmpty());
     }
 
@@ -184,14 +180,11 @@ public class MetricTreeTest {
         mTree.put(searchKey, "aValue");
         String value = mTree.remove(aDifferentKey);
 
-        assertEquals(
-            null,
-            value
-        );
+        assertNull(value);
     }
 
     public MetricTree<Point, String> emptyMetricTree() {
-        return new MetricTree(new DistanceMetric<Point>() {
+        return new MetricTree<>(new DistanceMetric<Point>() {
 
             @Override
             public double distanceBtw(Point item1, Point item2) {
@@ -446,7 +439,7 @@ public class MetricTreeTest {
         DistanceMetric<K> metric = testTree.metric();
 
         for (Map.Entry<K, V> entry : testData.entrySet()) {
-            results.add(new SearchResult(
+            results.add(new SearchResult<>(
                 entry.getKey(),
                 entry.getValue(),
                 metric.distanceBtw(entry.getKey(), testKey))
@@ -478,7 +471,7 @@ public class MetricTreeTest {
 
         //find all the results that were excluded from "search results"
         ArrayList<SearchResult<K, V>> excluded = new ArrayList<>(allResults);
-        excluded.removeIf((result) -> searchResults.contains(result));
+        excluded.removeIf(result -> searchResults.contains(result));
 
         //confirm everything in the "excluded results" is further away
         for (SearchResult<K, V> result : excluded) {
@@ -492,8 +485,8 @@ public class MetricTreeTest {
 
         class Key {
 
-            int x;
-            int y;
+            final int x;
+            final int y;
 
             Key(int x, int y) {
                 this.x = x;

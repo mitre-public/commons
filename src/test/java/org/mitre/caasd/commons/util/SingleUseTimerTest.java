@@ -16,6 +16,8 @@
 
 package org.mitre.caasd.commons.util;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -109,8 +111,8 @@ public class SingleUseTimerTest {
         wasteTime(100);
         Duration time3 = timer.elapsedTime();
 
-        assertTrue(time1.toNanos() == time2.toNanos());
-        assertTrue(time2.toNanos() == time3.toNanos());
+        assertThat(time1.toNanos() == time2.toNanos(), is(true));
+        assertThat(time2.toNanos() == time3.toNanos(), is(true));
     }
 
     @Test

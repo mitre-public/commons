@@ -20,8 +20,7 @@ import static java.time.Instant.EPOCH;
 import static java.time.temporal.ChronoUnit.DAYS;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -43,13 +42,13 @@ public class IntervalTest {
 
     @Test
     public void testIntervalTruncation() {
-        Interval x = new Interval(LocalDate.of(2016, 01, 01), LocalDate.of(2016, 02, 01));
+        Interval x = new Interval(LocalDate.of(2016, 1, 1), LocalDate.of(2016, 2, 1));
 
-        Interval y = x.extend(new Interval(LocalDate.of(2016, 02, 01), LocalDate.of(2016, 03, 01)));
-        assertTrue(y.equals(new Interval(LocalDate.of(2016, 01, 01), LocalDate.of(2016, 03, 01))));
+        Interval y = x.extend(new Interval(LocalDate.of(2016, 2, 1), LocalDate.of(2016, 3, 1)));
+        assertEquals(y, new Interval(LocalDate.of(2016, 1, 1), LocalDate.of(2016, 3, 1)));
 
-        Interval z = y.truncateTo(new Interval(LocalDate.of(2016, 02, 15), LocalDate.MAX));
-        assertTrue(z.equals(new Interval(LocalDate.of(2016, 02, 15), LocalDate.of(2016, 03, 01))));
+        Interval z = y.truncateTo(new Interval(LocalDate.of(2016, 2, 15), LocalDate.MAX));
+        assertEquals(z, new Interval(LocalDate.of(2016, 2, 15), LocalDate.of(2016, 3, 1)));
     }
 
     @Test
@@ -58,16 +57,16 @@ public class IntervalTest {
         Interval fromInstant = new Interval(Instant.MIN, Instant.MAX);
 
         //long outputs are the same
-        assertTrue(fromLocal.startEpoch().equals(fromInstant.startEpoch()));
-        assertTrue(fromLocal.endEpoch().equals(fromInstant.endEpoch()));
+        assertEquals(fromLocal.startEpoch(), fromInstant.startEpoch());
+        assertEquals(fromLocal.endEpoch(), fromInstant.endEpoch());
 
         //Instant outputs are the same
-        assertTrue(fromLocal.start().equals(fromInstant.start()));
-        assertTrue(fromLocal.end().equals(fromInstant.end()));
+        assertEquals(fromLocal.start(), fromInstant.start());
+        assertEquals(fromLocal.end(), fromInstant.end());
 
         //values are correct
-        assertTrue(fromInstant.start().equals(Instant.MIN));
-        assertTrue(fromInstant.end().equals(Instant.MAX));
+        assertEquals(fromInstant.start(), Instant.MIN);
+        assertEquals(fromInstant.end(), Instant.MAX);
     }
 
     @Test
@@ -97,10 +96,10 @@ public class IntervalTest {
         Interval itv = new Interval(EPOCH.plus(2L, DAYS), EPOCH.plus(10L, DAYS));
         Set<Long> dates = LongStream.range(2L, 10L)
             .map(l -> l * Interval.DAY)
-            .mapToObj(l -> l)
+            .boxed()
             .collect(Collectors.toSet());
 
-        assertTrue(itv.listDates().size() == 8);
+        assertEquals(8, itv.listDates().size());
         assertTrue(Sets.difference(dates, Interval.datesBetween(itv.start(), itv.end()).map(Instant::toEpochMilli).collect(Collectors.toSet())).isEmpty());
     }
 
@@ -115,7 +114,7 @@ public class IntervalTest {
         Set<Instant> itvTimes = Interval.timesBetween(itv.start(), itv.end(), Duration.ofHours(12))
             .collect(Collectors.toSet());
 
-        assertTrue(Sets.intersection(times, itvTimes).size() == times.size());
+        assertEquals(Sets.intersection(times, itvTimes).size(), times.size());
     }
 
     @Test
@@ -135,8 +134,8 @@ public class IntervalTest {
 
         Collection<Interval> complement = Interval.complementOf(base, itvs);
 
-        assertTrue(complement.size() == 2);
-        assertTrue(Sets.intersection(cmpTrue, new HashSet<>(complement)).size() == 2);
+        assertEquals(2, complement.size());
+        assertEquals(2, Sets.intersection(cmpTrue, new HashSet<>(complement)).size());
     }
 
     @Test

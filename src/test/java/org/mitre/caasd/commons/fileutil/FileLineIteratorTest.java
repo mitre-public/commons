@@ -80,7 +80,7 @@ public class FileLineIteratorTest {
     }
 
     @Test
-    public void canCloseIterator() throws IOException {
+    public void canCloseIterator() {
         FileLineIterator iter = makeIterator();
         iter.next();
 

@@ -18,7 +18,6 @@ package org.mitre.caasd.commons;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static java.time.Instant.EPOCH;
-import static java.util.Objects.requireNonNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -39,7 +38,7 @@ public class TimeWindowTest {
 
     @Test
     public void testConstructor() {
-        /**
+        /*
          * Confirm the constructor and the data access methods are properly aligned.
          */
         TimeWindow sample = new TimeWindow(

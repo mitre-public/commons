@@ -69,6 +69,7 @@ public class SupplierChain<T> implements Supplier<T> {
      * @param <T>       The type of object being Supplied.
      * @return A new SupplierChain
      */
+    @SafeVarargs
     public static <T> SupplierChain<T> of(Supplier<? super T>... suppliers) {
         return new SupplierChain<T>(newArrayList(suppliers));
     }
@@ -85,7 +86,7 @@ public class SupplierChain<T> implements Supplier<T> {
             try {
                 T result = (T) aSupplier.get();
                 if (nonNull(result)) {
-                    this.highestPriorityWorkingSupplier = (Supplier<T>) aSupplier;
+                    this.highestPriorityWorkingSupplier =  aSupplier;
                     return result;
                 }
             } catch (Exception ex) {
