@@ -57,7 +57,7 @@ public class QuickPropertiesTest {
      * This class uses properties that are strictly required. Consequently, this class cannot be
      * created unless all required properties exist.
      */
-    class TestRequiredProperties extends QuickProperties {
+    static class TestRequiredProperties extends QuickProperties {
 
         TestRequiredProperties(String filePath) {
             super(filePath, requiredProps);
@@ -108,7 +108,7 @@ public class QuickPropertiesTest {
      * This class provides optional properties. Consequently, all "retrieval methods" return
      * Optionals.
      */
-    class TestOptionalProperties extends QuickProperties {
+    static class TestOptionalProperties extends QuickProperties {
 
         TestOptionalProperties(String filePath) {
             super(filePath, newArrayList());
@@ -207,7 +207,7 @@ public class QuickPropertiesTest {
         TestOptionalProperties goodProperties = newGoodOptionalProerties();
         TestOptionalProperties emptyProperties = newEmptyOptionalProerties();
 
-        assertTrue(goodProperties.byteProperty().get() == -12);
+        assertEquals(-12, (byte) goodProperties.byteProperty().get());
         assertFalse(emptyProperties.byteProperty().isPresent());
     }
 
@@ -223,7 +223,7 @@ public class QuickPropertiesTest {
         TestOptionalProperties goodProperties = newGoodOptionalProerties();
         TestOptionalProperties emptyProperties = newEmptyOptionalProerties();
 
-        assertTrue(goodProperties.shortProperty().get() == 145);
+        assertThat(goodProperties.shortProperty().get(), is( (short) 145));
         assertFalse(emptyProperties.shortProperty().isPresent());
     }
 
@@ -240,7 +240,7 @@ public class QuickPropertiesTest {
         TestOptionalProperties goodProperties = newGoodOptionalProerties();
         TestOptionalProperties emptyProperties = newEmptyOptionalProerties();
 
-        assertTrue(goodProperties.intProperty().get() == 5);
+        assertThat(goodProperties.intProperty().get() ,is(5));
         assertFalse(emptyProperties.intProperty().isPresent());
     }
 
@@ -256,7 +256,7 @@ public class QuickPropertiesTest {
         TestOptionalProperties goodProperties = newGoodOptionalProerties();
         TestOptionalProperties emptyProperties = newEmptyOptionalProerties();
 
-        assertTrue(goodProperties.longProperty().get() == 9999999999L);
+        assertEquals(9999999999L, (long) goodProperties.longProperty().get());
         assertFalse(emptyProperties.longProperty().isPresent());
     }
 
@@ -373,7 +373,7 @@ public class QuickPropertiesTest {
     /*
      * Define a QuickProperties class that requires exactly 1 property: maxValue
      */
-    class SimpleDemo extends QuickProperties {
+    static class SimpleDemo extends QuickProperties {
 
         SimpleDemo(Properties props) {
             super(props, newArrayList("maxValue"));
@@ -421,7 +421,7 @@ public class QuickPropertiesTest {
         assertEquals(out.getProperty("prop2"), "leadingAndTrailingSpacesAreDropped");
     }
 
-    class DemoPair1 extends QuickProperties {
+    static class DemoPair1 extends QuickProperties {
 
         DemoPair1(Properties props) {
             super(props, newArrayList("propRequiredBy1"));
@@ -432,7 +432,7 @@ public class QuickPropertiesTest {
         }
     }
 
-    class DemoPair2 extends QuickProperties {
+    static class DemoPair2 extends QuickProperties {
 
         DemoPair2(Properties props) {
             super(props, newArrayList("propRequiredBy2"));

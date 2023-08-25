@@ -134,12 +134,12 @@ public final class ImmutableConfig implements Serializable {
 
 
     /**
-     * Eagerly validate this config by confirming the existence of these required property keys.
+     * Eagerly validate this config by confirming the existence of these required property keys.
      *
-     * @param requiredProperyKeys
+     * @param requiredPropertyKeys keys this ImmutableConfig must contain
      */
-    public void verifyKeysExist(Collection<String> requiredProperyKeys) {
-        requiredProperyKeys.forEach(this::getRequired);
+    public void verifyKeysExist(Collection<String> requiredPropertyKeys) {
+        requiredPropertyKeys.forEach(this::getRequired);
     }
 
     /**

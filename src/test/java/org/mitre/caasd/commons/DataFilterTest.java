@@ -19,8 +19,7 @@ package org.mitre.caasd.commons;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mitre.caasd.commons.ConsumingCollections.newConsumingLinkedList;
 
 import java.util.Optional;
@@ -39,7 +38,7 @@ public class DataFilterTest {
         Optional<Integer> ouput2 = filter.clean(-10);
 
         assertTrue(ouput1.isPresent());
-        assertTrue(ouput1.get().equals(20));
+        assertEquals(20, (int) ouput1.get());
         assertFalse(ouput2.isPresent());
     }
 

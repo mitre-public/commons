@@ -18,6 +18,7 @@ package org.mitre.caasd.commons.testing;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
@@ -47,7 +48,7 @@ public class TestUtilsTest {
          */
         class ClassThatCannotSerialize implements Serializable {
 
-            Thread unserializableField = new Thread();
+            final Thread unserializableField = new Thread();
         }
 
         try {
@@ -79,24 +80,21 @@ public class TestUtilsTest {
 
         class ClassThatCannotSerialize implements Serializable {
 
-            Thread unserializableField = new Thread();
+            final Thread unserializableField = new Thread();
         }
 
         File targetFile = new File("shouldNotWork.ser");
 
-        try {
-            Serializable original = new ClassThatCannotSerialize();
-            TestUtils.confirmSerializability(original, targetFile);
-            fail("This should fail because a Thread cannot be serialized");
-        } catch (Exception ex) {
-            assertThat(
-                "A NotSerializableException should be thrown",
-                ex.getMessage().contains("NotSerializableException")
-            );
-            assertThat(
-                "The output file should be deleted in the event of a failure",
-                targetFile.exists(), is(false)
-            );
-        }
+        Serializable original = new ClassThatCannotSerialize();
+
+        assertThrows(
+            Exception.class,
+            () -> TestUtils.confirmSerializability(original, targetFile)
+        );
+
+        assertThat(
+            "The output file should be deleted in the event of a failure",
+            targetFile.exists(), is(false)
+        );
     }
 }

@@ -113,8 +113,8 @@ public class Spherical {
         double lon1 = toRadians(startLong);
         double lat2 = toRadians(endLat);
         double lon2 = toRadians(endLong);
-        Double y = sin(lon1 - lon2) * cos(lat2);
-        Double x = (cos(lat1) * sin(lat2)) - (sin(lat1) * cos(lat2) * cos(lon2 - lon1));
+        double y = sin(lon1 - lon2) * cos(lat2);
+        double x = (cos(lat1) * sin(lat2)) - (sin(lat1) * cos(lat2) * cos(lon2 - lon1));
         double crs = (2.0 * PI) - mod(atan2(y, x), (2.0 * PI));
         return toDegrees(crs);
     }
@@ -306,7 +306,7 @@ public class Spherical {
     }
 
     public static double mod(double x, double y) {
-        Double z = x % y;
+        double z = x % y;
         if (z < 0) {
             z += y;
         }

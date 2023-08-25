@@ -31,6 +31,7 @@ public class CombinedPredicate<T> implements Predicate<T> {
 
     private final Predicate<T> combination;
 
+    @SafeVarargs
     public CombinedPredicate(Predicate<T>... requirements) {
         checkNoNullElement(requirements);
         this.components = newArrayList(requirements);
@@ -46,6 +47,7 @@ public class CombinedPredicate<T> implements Predicate<T> {
         return Collections.unmodifiableList(components);
     }
 
+    @SafeVarargs
     public static <T> Predicate<T> combine(Predicate<T>... predicates) {
         checkNotNull(predicates);
         checkArgument(predicates.length > 0);

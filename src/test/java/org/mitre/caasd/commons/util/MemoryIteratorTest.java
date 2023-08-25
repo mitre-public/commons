@@ -33,7 +33,7 @@ public class MemoryIteratorTest {
     @Test
     public void hasNextWorks() {
         List<Integer> numbers = newArrayList(1, 2, 3);
-        MemoryIterator<Integer> memIter = new MemoryIterator(numbers.iterator());
+        MemoryIterator<Integer> memIter = new MemoryIterator<>(numbers.iterator());
 
         assertThat(memIter.hasNext(), is(true));
         memIter.next(); //1
@@ -47,7 +47,7 @@ public class MemoryIteratorTest {
     @Test
     public void hasNextWorks_emptyList() {
         List<Integer> numbers = newArrayList();
-        MemoryIterator<Integer> memIter = new MemoryIterator(numbers.iterator());
+        MemoryIterator<Integer> memIter = new MemoryIterator<>(numbers.iterator());
 
         assertThat(memIter.hasNext(), is(false));
     }
@@ -55,7 +55,7 @@ public class MemoryIteratorTest {
     @Test
     public void hasNextWorks_nullEntry() {
         List<Integer> numbers = newArrayList(1, null, 3);
-        MemoryIterator<Integer> memIter = new MemoryIterator(numbers.iterator());
+        MemoryIterator<Integer> memIter = new MemoryIterator<>(numbers.iterator());
 
         assertThat(memIter.hasNext(), is(true));
         memIter.next(); //1
@@ -69,7 +69,7 @@ public class MemoryIteratorTest {
     @Test
     public void hasPriorWorks() {
         List<Integer> numbers = newArrayList(1, 2, 3);
-        MemoryIterator<Integer> memIter = new MemoryIterator(numbers.iterator());
+        MemoryIterator<Integer> memIter = new MemoryIterator<>(numbers.iterator());
 
         assertThat(memIter.hasPrior(), is(false));
         memIter.next(); //1
@@ -105,7 +105,7 @@ public class MemoryIteratorTest {
     @Test
     public void nextGivesExpectedElement() {
         List<Integer> numbers = newArrayList(1, 2, 3);
-        MemoryIterator<Integer> memIter = new MemoryIterator(numbers.iterator());
+        MemoryIterator<Integer> memIter = new MemoryIterator<>(numbers.iterator());
 
         assertThat(memIter.next(), is(1));
         assertThat(memIter.next(), is(2));
@@ -115,7 +115,7 @@ public class MemoryIteratorTest {
     @Test
     public void nextGivesExpectedElement_nullEntry() {
         List<Integer> numbers = newArrayList(1, null, 3);
-        MemoryIterator<Integer> memIter = new MemoryIterator(numbers.iterator());
+        MemoryIterator<Integer> memIter = new MemoryIterator<>(numbers.iterator());
 
         assertThat(memIter.next(), is(1));
         assertNull(memIter.next());
@@ -125,7 +125,7 @@ public class MemoryIteratorTest {
     @Test
     public void noSuchElementExceptionIfNoNextElement() {
         List<Integer> numbers = newArrayList();
-        MemoryIterator<Integer> memIter = new MemoryIterator(numbers.iterator());
+        MemoryIterator<Integer> memIter = new MemoryIterator<>(numbers.iterator());
 
         assertThrows(NoSuchElementException.class, () -> memIter.next());
     }
@@ -133,7 +133,7 @@ public class MemoryIteratorTest {
     @Test
     public void priorGivesExpectedElement() {
         List<Integer> numbers = newArrayList(1, 2, 3);
-        MemoryIterator<Integer> memIter = new MemoryIterator(numbers.iterator());
+        MemoryIterator<Integer> memIter = new MemoryIterator<>(numbers.iterator());
 
         assertThat(memIter.next(), is(1));
         assertThat(memIter.prior(), is(1));
@@ -148,7 +148,7 @@ public class MemoryIteratorTest {
     @Test
     public void priorGivesExpectedElement_nullEntry() {
         List<Integer> numbers = newArrayList(1, null, 3);
-        MemoryIterator<Integer> memIter = new MemoryIterator(numbers.iterator());
+        MemoryIterator<Integer> memIter = new MemoryIterator<>(numbers.iterator());
 
         assertThat(memIter.next(), is(1));
         assertThat(memIter.prior(), is(1));
@@ -163,7 +163,7 @@ public class MemoryIteratorTest {
     @Test
     public void noSuchElementExceptionIfNoPriorElement() {
         List<Integer> numbers = newArrayList(1, 2, 3);
-        MemoryIterator<Integer> memIter = new MemoryIterator(numbers.iterator());
+        MemoryIterator<Integer> memIter = new MemoryIterator<>(numbers.iterator());
 
         assertThrows(NoSuchElementException.class, () -> memIter.prior());
     }
@@ -171,7 +171,7 @@ public class MemoryIteratorTest {
     @Test
     public void correctFirstMiddleLastStateAtConstruction() {
         List<Integer> numbers = newArrayList(1, 2, 3);
-        MemoryIterator<Integer> memIter = new MemoryIterator(numbers.iterator());
+        MemoryIterator<Integer> memIter = new MemoryIterator<>(numbers.iterator());
 
         assertThat(memIter.atFront(), is(true));
         assertThat(memIter.inMiddle(), is(false));
@@ -181,7 +181,7 @@ public class MemoryIteratorTest {
     @Test
     public void correctFirstMiddleLastStateAfterCallingNext() {
         List<Integer> numbers = newArrayList(1, 2, 3);
-        MemoryIterator<Integer> memIter = new MemoryIterator(numbers.iterator());
+        MemoryIterator<Integer> memIter = new MemoryIterator<>(numbers.iterator());
 
         memIter.next();
 
@@ -193,7 +193,7 @@ public class MemoryIteratorTest {
     @Test
     public void correctFirstMiddleLastStateAfterReachingEnd() {
         List<Integer> numbers = newArrayList(1, 2, 3);
-        MemoryIterator<Integer> memIter = new MemoryIterator(numbers.iterator());
+        MemoryIterator<Integer> memIter = new MemoryIterator<>(numbers.iterator());
 
         memIter.next();
         memIter.next();
@@ -207,7 +207,7 @@ public class MemoryIteratorTest {
     @Test
     public void isEmptyWorks_onEmptyDataset() {
         List<Integer> numbers = newArrayList();
-        MemoryIterator<Integer> memIter = new MemoryIterator(numbers.iterator());
+        MemoryIterator<Integer> memIter = new MemoryIterator<>(numbers.iterator());
 
         assertThat(memIter.isEmpty(), is(true));
     }
@@ -215,7 +215,7 @@ public class MemoryIteratorTest {
     @Test
     public void isEmptyWorks_whenThereIsData() {
         List<Integer> numbers = newArrayList(1, 2, 3);
-        MemoryIterator<Integer> memIter = new MemoryIterator(numbers.iterator());
+        MemoryIterator<Integer> memIter = new MemoryIterator<>(numbers.iterator());
 
         assertThat(memIter.isEmpty(), is(false));
     }

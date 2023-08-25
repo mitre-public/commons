@@ -358,9 +358,9 @@ public class LatLong implements Comparable<LatLong>, Serializable {
             y += vector.y;
             z += vector.z;
         }
-        x /= ((double) locations.length);
-        y /= ((double) locations.length);
-        z /= ((double) locations.length);
+        x /= locations.length;
+        y /= locations.length;
+        z /= locations.length;
 
         double avgLong = atan2(y, x);
         double avgSqareRoot = hypot(x, y);

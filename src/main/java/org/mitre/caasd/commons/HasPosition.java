@@ -62,7 +62,7 @@ public interface HasPosition {
         return Spherical.distanceInRadians(this.distanceInNmTo(that));
     }
 
-    public static Double maxLatitude(Collection<? extends HasPosition> locations) {
+    static Double maxLatitude(Collection<? extends HasPosition> locations) {
         checkInput(locations);
 
         return locations
@@ -71,7 +71,7 @@ public interface HasPosition {
             .reduce(-Double.MAX_VALUE, Math::max);
     }
 
-    public static Double minLatitude(Collection<? extends HasPosition> locations) {
+    static Double minLatitude(Collection<? extends HasPosition> locations) {
         checkInput(locations);
 
         return locations.stream()
@@ -79,7 +79,7 @@ public interface HasPosition {
             .reduce(Double.MAX_VALUE, Math::min);
     }
 
-    public static Double maxLongitude(Collection<? extends HasPosition> locations) {
+    static Double maxLongitude(Collection<? extends HasPosition> locations) {
         checkInput(locations);
 
         return locations.stream()
@@ -87,7 +87,7 @@ public interface HasPosition {
             .reduce(-Double.MAX_VALUE, Math::max);
     }
 
-    public static Double minLongitude(Collection<? extends HasPosition> locations) {
+    static Double minLongitude(Collection<? extends HasPosition> locations) {
         checkInput(locations);
 
         return locations.stream()
@@ -95,16 +95,16 @@ public interface HasPosition {
             .reduce(Double.MAX_VALUE, Math::min);
     }
 
-    public static void checkInput(Collection<? extends HasPosition> locations) {
+    static void checkInput(Collection<? extends HasPosition> locations) {
         checkNotNull(locations, "The Collection of HasPositions cannot be null");
         checkArgument(!locations.isEmpty(), "The Collection of HasPositions cannot be empty");
     }
 
-    public static HasPosition from(Double lat, Double lon) {
+    static HasPosition from(Double lat, Double lon) {
         return () -> new LatLong(lat, lon);
     }
 
-    public static HasPosition from(LatLong location) {
+    static HasPosition from(LatLong location) {
         return () -> location;
     }
 }

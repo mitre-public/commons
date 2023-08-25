@@ -46,7 +46,7 @@ class SinksTest {
         sink.accept(5);
         sink.accept(15);
 
-        List<Integer> col = (List) sink.collection();
+        List<Integer> col = (List<Integer>) sink.collection();
 
         assertThat(col.get(0), is(5));
         assertThat(col.get(1), is(15));

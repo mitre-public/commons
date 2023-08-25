@@ -422,7 +422,7 @@ public class TimeTest {
         Duration longDur = Duration.ofDays(12);
         Duration smallDur = Duration.ofMinutes(12);
 
-        assertTrue(max(longDur, smallDur) == longDur);
+        assertThat(max(longDur, smallDur), is(longDur));
     }
 
     @Test
@@ -430,7 +430,7 @@ public class TimeTest {
         Duration longDur = Duration.ofDays(12);
         Duration smallDur = Duration.ofMinutes(12);
 
-        assertTrue(min(longDur, smallDur) == smallDur);
+        assertThat(min(longDur, smallDur), is(smallDur));
     }
 
     @Test

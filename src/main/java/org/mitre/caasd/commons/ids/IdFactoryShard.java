@@ -186,7 +186,7 @@ public class IdFactoryShard implements IdFactory<SmallTimeId> {
             );
         } else {
             long shardBits = ((long) shardIndex) << this.numBitsForItemDistinction;
-            long itemBits = (long) count;
+            long itemBits = count;
             long comboBits = shardBits | itemBits;
             return TimeIds.directBitsetTimeId(time, comboBits);
         }

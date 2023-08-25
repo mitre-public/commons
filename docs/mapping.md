@@ -3,10 +3,10 @@
 The package `org.mitre.caasd.commons.maps` contains utilities for map making.
 
 1. `MapBuilder` is the easiest way to make maps. This is a standard Builder that provides fluent map making.
-1. You can manually create a map using `MapImage`. This class gets multiple map tiles from a `TileServer` and stitches
+2. You can manually create a map using `MapImage`. This class gets multiple map tiles from a `TileServer` and stitches
    them together into a single properly cropped image.
-1. `MapFeatures` and `FeatureSetBuilder` provide fluent apis for creating objects to be drawn on a map.
-1. The `PixelLatLong` class is an extremely useful class when trying to tie together real world `LatLong` location data
+3. `MapFeatures` and `FeatureSetBuilder` provide fluent apis for creating objects to be drawn on a map.
+4. The `PixelLatLong` class is an extremely useful class when trying to tie together real world `LatLong` location data
    with pixel coordinates system map tiles use.
 
 ### About TileServers
@@ -20,7 +20,7 @@ Commons project has a few built in TileServer implementation:
     1. **Important** - Using the MapBoxApi requires passing a valid Mapbox Access token into the JVM. This can be done
        one of three ways:  Setting an environment variable, setting a Java System property, or placing a file
        named `mapbox.token` in the user directory.
-    1. If you use the file-based approach then the `mapbox.token` file should look
+    2. If you use the file-based approach then the `mapbox.token` file should look
        like: `MAPBOX_ACCESS_TOKEN=this.IsNotAValidKey.EvenThoughILookLikeOne`
 
 
@@ -45,7 +45,7 @@ MapImage map = new MapImage(
 Once you have the `MapImage` you can:
 
 1. Export it as a BufferedImage using: `BufferedImage img = map.plot();`
-1. Write it to a File using: `map.plotToFile(new File("mapWithoutDecoration.jpg"));`
+2. Write it to a File using: `map.plotToFile(new File("mapWithoutDecoration.jpg"));`
 
 ![regular map](./mapWithoutDecoration.jpg)
 

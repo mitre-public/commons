@@ -32,7 +32,7 @@ import java.util.NoSuchElementException;
  */
 public class FileLineIterator implements Iterator<String>, AutoCloseable {
 
-    private BufferedReader reader;
+    private final BufferedReader reader;
 
     private String nextLine;
 

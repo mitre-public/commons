@@ -16,10 +16,8 @@
 
 package org.mitre.caasd.commons.out;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
-import static java.util.Objects.requireNonNull;
 import java.io.Closeable;
 import java.io.Flushable;
 import java.io.IOException;
@@ -75,19 +73,21 @@ public interface OutputSink<T> extends Consumer<T>, Closeable, Flushable {
         return new CompositeSink<>(this, after);
     }
 
-    public static <K> OutputSink<K> combine(OutputSink<K>... destinations) {
+    @SafeVarargs
+    static <K> OutputSink<K> combine(OutputSink<K>... destinations) {
         return new CompositeSink<>(destinations);
     }
 
-    public static <K> OutputSink<K> combine(List<OutputSink<K>> allSinks) {
+    static <K> OutputSink<K> combine(List<OutputSink<K>> allSinks) {
         return new CompositeSink<>(allSinks);
     }
 
     /* Combines multiple OutputSinks into a single chain */
-    static class CompositeSink<K> implements OutputSink<K> {
+    class CompositeSink<K> implements OutputSink<K> {
 
         private final ArrayList<OutputSink<K>> destinations;
 
+        @SafeVarargs
         private CompositeSink(OutputSink<K>... destinations) {
             checkNotNull(destinations);
             this.destinations = newArrayList(destinations);

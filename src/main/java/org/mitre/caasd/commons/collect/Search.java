@@ -40,7 +40,7 @@ class Search<KEY, VALUE> {
 
     private enum SearchType {
         K_NEAREST_NEIGHBORS,
-        RANGE;
+        RANGE
     }
 
     private final DistanceMetric<KEY> metric;
@@ -113,11 +113,11 @@ class Search<KEY, VALUE> {
 
                 double firstDist = metric.distanceBtw(
                     searchKey,
-                    (KEY) childSpheres.first().centerPoint);
+                    childSpheres.first().centerPoint);
 
                 double secondDist = metric.distanceBtw(
                     searchKey,
-                    (KEY) childSpheres.second().centerPoint);
+                    childSpheres.second().centerPoint);
 
                 /*
                  * Submit the closest sphere second to reduce work (because this increases the

@@ -372,7 +372,7 @@ public class MetricSet<K> implements Serializable {
          * A SPHERE_OF_SPHERES contains 2 other spheres. A SPHERE_OF_SPHERES is essentially an inner
          * node of a FastMetricTree.
          */
-        SPHERE_OF_SPHERES;
+        SPHERE_OF_SPHERES
 
     }
 

@@ -85,7 +85,7 @@ public class Course implements Comparable<Course> {
 
         private final String suffix;
 
-        private Unit(double unitsPerMeter, String suffix) {
+        Unit(double unitsPerMeter, String suffix) {
             this.unitsPerDegree = unitsPerMeter;
             this.suffix = suffix;
         }

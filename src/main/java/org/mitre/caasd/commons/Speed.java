@@ -108,7 +108,7 @@ public class Speed implements Serializable, Comparable<Speed> {
 
         final String abbreviation;
 
-        private Unit(Distance.Unit distUnit, double secPerTimeUnit, String suffix) {
+        Unit(Distance.Unit distUnit, double secPerTimeUnit, String suffix) {
             this.distUnit = distUnit;
             this.secondsPerTimeUnit = secPerTimeUnit;
             this.abbreviation = suffix;
@@ -244,7 +244,7 @@ public class Speed implements Serializable, Comparable<Speed> {
      *
      * @param digitsAfterDecimalPlace
      * @param unit                    Express the Speed in this unit (e.g. KNOTS, METERS_PER_SECOND,
-     *                                etc)
+     *                                etc.)
      *
      * @return A String that contains n digits after the decimal place (e.g. "42.00mps")
      */

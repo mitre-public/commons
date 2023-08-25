@@ -21,9 +21,7 @@ import static java.lang.Math.hypot;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -144,7 +142,7 @@ public class MetricSetTest {
 
         //We small usable maxSphereSize is 4
         assertThrows(IllegalArgumentException.class,
-            () -> new MetricTree(metric, 3)
+            () -> new MetricTree<>(metric, 3)
         );
     }
 
@@ -155,12 +153,12 @@ public class MetricSetTest {
 
         Collection<SetSearchResult<Point>> knnResults = mTree.getNClosest(searchKey, 4);
 
-        assertTrue(knnResults != null);
+        assertNotNull(knnResults);
         assertTrue(knnResults.isEmpty());
 
         Collection<SetSearchResult<Point>> rangeResults = mTree.getAllWithinRange(searchKey, 10.0);
 
-        assertTrue(rangeResults != null);
+        assertNotNull(rangeResults);
         assertTrue(rangeResults.isEmpty());
     }
 
@@ -178,7 +176,7 @@ public class MetricSetTest {
     }
 
     public MetricSet<Point> emptyMetricSet() {
-        return new MetricSet(new DistanceMetric<Point>() {
+        return new MetricSet<>(new DistanceMetric<Point>() {
 
             @Override
             public double distanceBtw(Point item1, Point item2) {
@@ -305,8 +303,6 @@ public class MetricSetTest {
 
         Set<Point> set = testSet();
 
-        Random rng = new Random(17L);
-
         for (Point point : set) {
 
             //"The test tree should contain this key"
@@ -393,7 +389,7 @@ public class MetricSetTest {
 
         for (K key : testData) {
             results.add(
-                new SetSearchResult(key, metric.distanceBtw(key, testKey))
+                new SetSearchResult<>(key, metric.distanceBtw(key, testKey))
             );
         }
 
@@ -435,8 +431,8 @@ public class MetricSetTest {
     public void cannotOverloadWithZeroDistanceKeys() {
 
         class Key {
-            int x;
-            int y;
+            final int x;
+            final int y;
 
             Key(int x, int y) {
                 this.x = x;
@@ -447,7 +443,7 @@ public class MetricSetTest {
         //This distance metric sucks...but it shouldn't break the data structure
         DistanceMetric<Key> metric = (Key item1, Key item2) -> 1;
 
-        MetricSet<Key> set = new MetricSet(metric);
+        MetricSet<Key> set = new MetricSet<>(metric);
 
         int n = 500;
 

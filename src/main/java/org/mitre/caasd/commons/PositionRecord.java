@@ -67,11 +67,11 @@ public class PositionRecord<T> implements HasTime, HasPosition {
     }
 
     public static <T> PositionRecord<T> of(T item, Position pos) {
-        return new PositionRecord<T>(item, pos);
+        return new PositionRecord<>(item, pos);
     }
 
     public static <T> PositionRecord<T> of(T item, Function<T, Position> positionExtractor) {
-        return new PositionRecord<T>(item, positionExtractor);
+        return new PositionRecord<>(item, positionExtractor);
     }
 
     public T datum() {

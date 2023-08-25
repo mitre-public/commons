@@ -41,7 +41,7 @@ public class Sinks {
      * also useful when the dataset being collected is small enough to fit in memory.
      */
     public static <T> CollectionSink<T> collectionSink(Collection<T> addToMe) {
-        return new CollectionSink(addToMe);
+        return new CollectionSink<>(addToMe);
     }
 
     public static class CollectionSink<T> implements OutputSink<T> {

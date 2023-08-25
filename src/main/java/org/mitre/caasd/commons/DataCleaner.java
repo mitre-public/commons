@@ -37,7 +37,7 @@ import java.util.Optional;
 public interface DataCleaner<T> {
 
     /** @return a DataCleaner that always returns an Empty Optional. */
-    public static DataCleaner suppressAll() {
+    static DataCleaner suppressAll() {
         return (obj) -> {
             return Optional.empty();
         };

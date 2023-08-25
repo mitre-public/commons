@@ -154,10 +154,7 @@ public class SequentialFileWriter implements ExceptionHandler {
             ? message
             : "NO WARNING MESSAGE";
 
-        return new StringBuilder()
-            .append(timestampStr() + "\n")
-            .append(msg + "\n")
-            .toString();
+        return timestampStr() + "\n" + msg + "\n";
     }
 
     /** Create the entire contents of a error message. */

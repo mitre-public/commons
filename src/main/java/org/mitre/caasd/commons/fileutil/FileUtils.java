@@ -19,6 +19,7 @@ package org.mitre.caasd.commons.fileutil;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Streams.stream;
+import static java.nio.file.Files.*;
 import static java.util.stream.Collectors.toCollection;
 import static org.mitre.caasd.commons.util.DemotedException.demote;
 
@@ -156,8 +157,8 @@ public class FileUtils {
         return new FileLineIterator(f);
     }
 
-    public static BufferedReader createReaderForGZipFile(File file) throws FileNotFoundException, IOException {
-        InputStream fileStream = new FileInputStream(file);
+    public static BufferedReader createReaderForGZipFile(File file) throws IOException {
+        InputStream fileStream = newInputStream(file.toPath());
         InputStream gzipStream = new GZIPInputStream(fileStream);
         Reader decoder = new InputStreamReader(gzipStream);
         return new BufferedReader(decoder);
@@ -300,11 +301,8 @@ public class FileUtils {
 
     public static void serialize(Serializable ser, File targetFile) {
 
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(targetFile))) {
-
+        try (ObjectOutputStream oos = new ObjectOutputStream(newOutputStream(targetFile.toPath()))) {
             oos.writeObject(ser);
-
-            oos.close();
         } catch (Exception ex) {
             throw demote(ex);
         }
@@ -333,7 +331,7 @@ public class FileUtils {
         checkNotNull(f, "Cannot deserialize a null file");
         checkArgument(f.exists(), "Cannot deserialize: " + f.getAbsolutePath() + " because the file does not exists");
 
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f))) {
+        try (ObjectInputStream ois = new ObjectInputStream(newInputStream(f.toPath()))) {
             Object obj = ois.readObject();
             ois.close();
             return obj;
@@ -404,14 +402,12 @@ public class FileUtils {
 
         PropertiesThatWontPutTwice props = new PropertiesThatWontPutTwice();
 
-        try (InputStream input = new FileInputStream(propertiesFile)) {
+        try (InputStream input = newInputStream(propertiesFile.toPath())) {
             props.load(input);
         }
 
         Properties output = new Properties();
-        props.entrySet().forEach(
-            entry -> output.put(entry.getKey(), entry.getValue())
-        );
+        output.putAll(props);
         return output;
     }
 

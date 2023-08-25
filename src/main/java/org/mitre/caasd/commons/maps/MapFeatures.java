@@ -44,11 +44,11 @@ public class MapFeatures {
 
     /** This class helps us draw a circle on a map. */
     private static class Circle implements MapFeature {
-        LatLong loc;
-        Color color;
-        int pixelWidth;
-        boolean isFilled;
-        float strokeWidth;
+        final LatLong loc;
+        final Color color;
+        final int pixelWidth;
+        final boolean isFilled;
+        final float strokeWidth;
 
         public Circle(LatLong loc, Color color, int widthInPixels, boolean isFilled, float strokeWidth) {
             this.loc = loc;
@@ -80,10 +80,10 @@ public class MapFeatures {
 
     /** This class helps us draw a line on a map. */
     private static class Line implements MapFeature {
-        LatLong from;
-        LatLong to;
-        Color color;
-        float strokeWidth;
+        final LatLong from;
+        final LatLong to;
+        final Color color;
+        final float strokeWidth;
 
         Line(LatLong from, LatLong to, Color color, float strokeWidth) {
             this.from = from;
@@ -107,10 +107,10 @@ public class MapFeatures {
 
     /** This class helps us draw a line on a map. */
     private static class Rect implements MapFeature {
-        LatLong topLeft;
-        LatLong bottomRight;
-        Color color;
-        float strokeWidth;
+        final LatLong topLeft;
+        final LatLong bottomRight;
+        final Color color;
+        final float strokeWidth;
 
         Rect(LatLong topLeft, LatLong bottomRight, Color color, float strokeWidth) {
             this.topLeft = topLeft;
@@ -177,9 +177,9 @@ public class MapFeatures {
 
     private static class Path implements MapFeature {
 
-        List<LatLong> vertices;
-        Color color;
-        Float strokeWidth;
+        final List<LatLong> vertices;
+        final Color color;
+        final Float strokeWidth;
 
         Path(List<LatLong> vertices, Color color, float strokeWidth) {
             requireNonNull(vertices);
@@ -219,10 +219,10 @@ public class MapFeatures {
 
     /** This class helps us draw a text on a map. */
     private static class TextLabel implements MapFeature {
-        String text;
-        LatLong anchor;
-        Color color;
-        Font font;
+        final String text;
+        final LatLong anchor;
+        final Color color;
+        final Font font;
 
         TextLabel(String text, LatLong anchor, Color color, Font font) {
             this.text = text;
@@ -244,11 +244,11 @@ public class MapFeatures {
 
     private static class InfoText implements MapFeature {
 
-        String text;
-        int xOffset;
-        int yOffset;
-        Color color;
-        Font font;
+        final String text;
+        final int xOffset;
+        final int yOffset;
+        final Color color;
+        final Font font;
 
         InfoText(String text, int xOffset, int yOffset, Color color, Font font) {
             this.text = text;

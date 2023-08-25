@@ -49,11 +49,6 @@ contains:
 - [DONE] FilteredConsumer needs a getter for each component
 - Interpolator needs to work across the international date line (e.g. where longitudes have a cliff)
 
-### Points of Contact
-
-- [Jon Parker](jiparker@mitre.org)
-- [Alex Cramer](acramer@mitre.org)
-
 ### Library Usage
 
 Add this to your Gradle dependency list:

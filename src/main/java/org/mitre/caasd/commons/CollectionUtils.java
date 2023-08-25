@@ -150,9 +150,9 @@ public class CollectionUtils {
 
     public static class PairIterator<A, B> implements Iterator<Pair<A, B>> {
 
-        Iterator<A> iterA;
+        final Iterator<A> iterA;
 
-        Iterator<B> iterB;
+        final Iterator<B> iterB;
 
         private Pair<A, B> next;
 
@@ -209,11 +209,11 @@ public class CollectionUtils {
 
     public static class TripleIterator<A, B, C> implements Iterator<Triple<A, B, C>> {
 
-        Iterator<A> iterA;
+        final Iterator<A> iterA;
 
-        Iterator<B> iterB;
+        final Iterator<B> iterB;
 
-        Iterator<C> iterC;
+        final Iterator<C> iterC;
 
         private Triple<A, B, C> next;
 

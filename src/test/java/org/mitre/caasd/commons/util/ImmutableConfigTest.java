@@ -58,7 +58,7 @@ public class ImmutableConfigTest {
      * This class uses asProperties that are strictly required. Consequently, this class cannot be
      * created unless all required asProperties exist.
      */
-    class TestConfigUsage {
+    static class TestConfigUsage {
 
         ImmutableConfig confg;
 
@@ -117,7 +117,7 @@ public class ImmutableConfigTest {
      * This class uses optional asProperties. Consequently, all "retrieval methods" return
      * Optionals.
      */
-    class TestConfigUsageWithOptional {
+    static class TestConfigUsageWithOptional {
 
         ImmutableConfig confg;
 
@@ -378,7 +378,7 @@ public class ImmutableConfigTest {
     }
 
     /* Define a ImmutableConfig class that requires exactly 1 property: maxValue  */
-    class SimpleDemo {
+    static class SimpleDemo {
 
         ImmutableConfig config;
 
@@ -426,7 +426,7 @@ public class ImmutableConfigTest {
         assertEquals(out.getProperty("prop2"), "leadingAndTrailingSpacesAreDropped");
     }
 
-    class DemoPair1 {
+    static class DemoPair1 {
 
         ImmutableConfig cfg;
 
@@ -439,7 +439,7 @@ public class ImmutableConfigTest {
         }
     }
 
-    class DemoPair2 {
+    static class DemoPair2 {
 
         ImmutableConfig cfg;
 

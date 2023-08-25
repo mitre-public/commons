@@ -37,15 +37,6 @@ public class JsonGzFileSinkTest {
     @TempDir
     public File tempDir;
 
-//	/**
-//	 * Get a new empty on local file system directory named {@code name}
-//	 * <p>
-//	 * Junit cleans it up
-//	 */
-//	private File newTemporaryFolder(String name) throws IOException {
-//		return folder.newFolder(JsonGzFileSinkTest.class.getSimpleName(), name);
-//	}
-
     @Test
     public void canWriteMultipleThingsToSameFile() throws Exception {
 

@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * This is a dangerous utility that allows you to forcibly change Immutable environment variables
  * using reflection magic.
- *
+ * <p>
  * Use this class with care, also be sure to reset the environment variables when finished testing
  */
 public class EnvironmentVariableForcer {

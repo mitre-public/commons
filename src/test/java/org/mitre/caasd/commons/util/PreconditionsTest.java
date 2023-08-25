@@ -126,7 +126,7 @@ public class PreconditionsTest {
         );
     }
 
-    class OverriddenEquals {
+    static class OverriddenEquals {
         String str;  //matters to overridden equals
         Color color; //DOES NOT matter to overridden equals
 

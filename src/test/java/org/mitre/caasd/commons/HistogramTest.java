@@ -259,7 +259,7 @@ public class HistogramTest {
         assertEquals(0, hist.counts()[0]);
         assertEquals(0, hist.counts()[39]);
         assertTrue(hist.counts()[19] + hist.counts()[20] > 100);
-        assertTrue(IntStream.of(hist.counts()).sum() == 1000);
+        assertEquals(1000, IntStream.of(hist.counts()).sum());
     }
 
     private Collection<Double> sampleShiftedNormalDistribution(Random rng, double mean) {

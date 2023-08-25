@@ -30,7 +30,7 @@ public class CachingCleanerTest {
 
         DataCleaner<String> stringCleaner = (String s) -> Optional.of(s.toLowerCase());
 
-        CachingCleaner<String> instance = new CachingCleaner(stringCleaner, 5);
+        CachingCleaner<String> instance = new CachingCleaner<>(stringCleaner, 5);
 
         assertEquals(stringCleaner, instance.cleaner());
     }
@@ -40,7 +40,7 @@ public class CachingCleanerTest {
 
         DataCleaner<String> cleaner = (String s) -> Optional.of(s.toLowerCase());
 
-        CachingCleaner<String> instance = new CachingCleaner(cleaner, 5);
+        CachingCleaner<String> instance = new CachingCleaner<>(cleaner, 5);
 
         Optional<String> result = instance.clean("ISLOWERCASE");
         assertTrue(result.isPresent());
@@ -52,7 +52,7 @@ public class CachingCleanerTest {
 
         DataCleaner<String> cleaner = (String s) -> Optional.of(s.toLowerCase());
 
-        CachingCleaner<String> instance = new CachingCleaner(cleaner, 1);
+        CachingCleaner<String> instance = new CachingCleaner<>(cleaner, 1);
 
         Optional<String> result = instance.clean("ISLOWERCASE");
 

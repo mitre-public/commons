@@ -37,8 +37,7 @@ class SetSearch<K> {
 
     private enum SearchType {
         K_NEAREST_NEIGHBORS,
-        RANGE;
-
+        RANGE
     }
 
     private final DistanceMetric<K> metric;
@@ -111,11 +110,11 @@ class SetSearch<K> {
 
                 double firstDist = metric.distanceBtw(
                     searchKey,
-                    (K) childSpheres.first().centerPoint);
+                    childSpheres.first().centerPoint);
 
                 double secondDist = metric.distanceBtw(
                     searchKey,
-                    (K) childSpheres.second().centerPoint);
+                    childSpheres.second().centerPoint);
 
                 /*
                  * Submit the closest sphere second to reduce work (because this increases the
@@ -156,7 +155,7 @@ class SetSearch<K> {
      */
     private boolean overlapsWith(MetricSet<K>.Sphere s) {
 
-        double distance = metric.distanceBtw((K) s.centerPoint, this.searchKey);
+        double distance = metric.distanceBtw(s.centerPoint, this.searchKey);
         double overlap = s.radius() + this.radius() - distance;
 
         return (overlap >= 0);

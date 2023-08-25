@@ -24,6 +24,6 @@ import java.awt.Graphics2D;
 public interface MapFeature {
 
     /** Draw this MapFeature onto the Graphics2D.  Use the zeroPixel to place to drawing. */
-    public void drawOn(Graphics2D g, PixelLatLong zeroPixel);
+    void drawOn(Graphics2D g, PixelLatLong zeroPixel);
 
 }

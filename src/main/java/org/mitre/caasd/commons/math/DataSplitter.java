@@ -30,13 +30,13 @@ import java.util.List;
 @FunctionalInterface
 public interface DataSplitter {
 
-    public int[] computeSplitsFor(List<Double> xData, List<Double> yData);
+    int[] computeSplitsFor(List<Double> xData, List<Double> yData);
 
-    public default int[] computeSplitsFor(XyDataset dataset) {
+    default int[] computeSplitsFor(XyDataset dataset) {
         return computeSplitsFor(dataset.xData(), dataset.yData());
     }
 
-    public default XyDataset[] split(XyDataset dataset) {
+    default XyDataset[] split(XyDataset dataset) {
         return dataset.split(this);
     }
 
@@ -47,7 +47,7 @@ public interface DataSplitter {
      * @param xData A strictly increasing sequence of x values
      * @param yData A y value for each x value
      */
-    public static void checkInputData(List<Double> xData, List<Double> yData) {
+    static void checkInputData(List<Double> xData, List<Double> yData) {
         checkNotNull(xData);
         checkNotNull(yData);
         checkArgument(xData.size() == yData.size(), "The xData and yData have different sizes");
@@ -59,7 +59,7 @@ public interface DataSplitter {
      *
      * @param xData A sequence of strictly increasing values.
      */
-    public static void checkOrdering(List<Double> xData) {
+    static void checkOrdering(List<Double> xData) {
 
         double last = Double.NEGATIVE_INFINITY;
         for (Double cur : xData) {

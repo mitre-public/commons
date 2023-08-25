@@ -28,7 +28,7 @@ import java.util.List;
 @FunctionalInterface
 public interface HasTime {
 
-    public Instant time();
+    Instant time();
 
     default long timeAsEpochMs() {
         return time().toEpochMilli();
@@ -58,7 +58,7 @@ public interface HasTime {
         return () -> time;
     }
 
-    public static <P extends HasTime> P nearest(P left, P right, Instant time) {
+    static <P extends HasTime> P nearest(P left, P right, Instant time) {
         Duration leftDelta = Duration.between(left.time(), time).abs();
         Duration rightDelta = Duration.between(right.time(), time).abs();
 

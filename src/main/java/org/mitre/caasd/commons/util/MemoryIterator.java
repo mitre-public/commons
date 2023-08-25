@@ -43,7 +43,7 @@ import java.util.NoSuchElementException;
  * to the next element via calls to "peek()". Whereas this class provides easy access to the last
  * element via calls to "prior()". This class also adds the methods "atFront()", "inMiddle()",
  * "atEnd()", and "isEmpty()".
- *
+ * <p>
  * This class is Deprecated in favor of NeighborIterator
  */
 @Deprecated
@@ -59,6 +59,7 @@ public class MemoryIterator<T> implements Iterator<T> {
     }
 
     /** The MemoryIterator created by this constructor does not support the remove() method. */
+    @SafeVarargs
     public MemoryIterator(T... array) {
         this(asList(array));
     }
@@ -69,17 +70,18 @@ public class MemoryIterator<T> implements Iterator<T> {
         this.hasPrior = false;
     }
 
-    public static <T> MemoryIterator newMemoryIterator(Iterator<T> iter) {
-        return new MemoryIterator(iter);
+    public static <T> MemoryIterator<T> newMemoryIterator(Iterator<T> iter) {
+        return new MemoryIterator<>(iter);
     }
 
-    public static <T> MemoryIterator newMemoryIterator(Collection<T> collection) {
-        return new MemoryIterator(collection);
+    public static <T> MemoryIterator<T> newMemoryIterator(Collection<T> collection) {
+        return new MemoryIterator<>(collection);
     }
 
     /** The MemoryIterator created by this factory method does not support the remove() method. */
-    public static <T> MemoryIterator newMemoryIterator(T... array) {
-        return new MemoryIterator(array);
+    @SafeVarargs
+    public static <T> MemoryIterator<T> newMemoryIterator(T... array) {
+        return new MemoryIterator<>(array);
     }
 
     @Override

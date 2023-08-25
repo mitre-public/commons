@@ -35,17 +35,6 @@ public class XyzPoint {
         return new XyzPoint(x, y, z);
     }
 
-//	public static Dataset asDataset(Collection<XyzPoint> xyData) {
-//		//re-package results as a Dataset and return
-//		ArrayList<Double> xData = new ArrayList<>(xyData.size());
-//		ArrayList<Double> yData = new ArrayList<>(xyData.size());
-//		for (XyPoint xyPoint : xyData) {
-//			xData.add(xyPoint.x());
-//			yData.add(xyPoint.y());
-//		}
-//		return new Dataset(xData, yData);
-//	}
-
     public double x() {
         return x;
     }

@@ -312,10 +312,10 @@ public class Interval implements Serializable, Comparable<Interval> {
         Collection<Interval> itvs = new HashSet<>();
         Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
 
-        Long startDay = startDate - (startDate % DAY);
-        Long endDay = endDate + (DAY - (endDate % DAY));
+        long startDay = startDate - (startDate % DAY);
+        long endDay = endDate + (DAY - (endDate % DAY));
 
-        for (Long day = startDay; day < endDay; day += DAY) {
+        for (long day = startDay; day < endDay; day += DAY) {
             c.setTime(Date.from(Instant.ofEpochMilli(day)));
             if (daysOfWeek.contains(c.get(Calendar.DAY_OF_WEEK))) {
 
@@ -351,7 +351,7 @@ public class Interval implements Serializable, Comparable<Interval> {
         long endTime = end.toEpochMilli();
         long step = width.toMillis();
 
-        for (Long time = startTime; time < endTime; time += step) {
+        for (long time = startTime; time < endTime; time += step) {
             if (time >= start.toEpochMilli()) {
                 times.add(Instant.ofEpochMilli(time));
             }

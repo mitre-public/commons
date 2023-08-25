@@ -27,6 +27,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.time.Duration;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -151,9 +152,7 @@ public class MapBuilder {
     /** Add one or more MapFeatures to the fully rendered Map. */
     public MapBuilder addFeatures(MapFeature... features) {
         requireNonNull(features, "The MapFeature varags cannot be null");
-        for (MapFeature feature : features) {
-            featureList.add(feature);
-        }
+        Collections.addAll(featureList, features);
         return this;
     }
 
@@ -173,7 +172,7 @@ public class MapBuilder {
     public <T> MapBuilder addFeatures(Collection<T> objects, Function<T, MapFeature> renderer) {
 
         List<MapFeature> asMapFeatures = objects.stream()
-            .map(obj -> renderer.apply(obj))
+            .map(renderer)
             .collect(Collectors.toList());
 
         return addFeatures(asMapFeatures);

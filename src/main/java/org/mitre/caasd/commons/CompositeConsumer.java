@@ -23,16 +23,17 @@ import java.util.function.Consumer;
 
 public class CompositeConsumer<T> implements Consumer<T> {
 
-    List<Consumer<T>> consumers;
+    final List<Consumer<T>> consumers;
 
     public CompositeConsumer(Consumer<T> oneConsumer) {
         this.consumers = new LinkedList<>();
         this.consumers.add(oneConsumer);
     }
 
-    public CompositeConsumer(Consumer<T>... arayOfConsumers) {
+    @SafeVarargs
+    public CompositeConsumer(Consumer<T>... arrayOfConsumers) {
         this.consumers = new LinkedList<>();
-        this.consumers.addAll(Arrays.asList(arayOfConsumers));
+        this.consumers.addAll(Arrays.asList(arrayOfConsumers));
     }
 
     @Override

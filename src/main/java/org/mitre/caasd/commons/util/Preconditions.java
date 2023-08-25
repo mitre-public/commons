@@ -39,7 +39,7 @@ public class Preconditions {
     /**
      * Verify that neither this Iterable, nor any of its elements, are null.
      *
-     * @param items
+     * @param items An iterable of items
      *
      * @throws NullPointerException if items is null or any specific element in items is null.
      */

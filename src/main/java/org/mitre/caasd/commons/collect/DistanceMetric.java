@@ -39,5 +39,5 @@ public interface DistanceMetric<KEY> extends Serializable {
      * @return The distance between the 2 objects in a Metric Space (this method must define a
      *     proper Metric Space in the strict algebraic sense).
      */
-    public double distanceBtw(KEY item1, KEY item2);
+    double distanceBtw(KEY item1, KEY item2);
 }
