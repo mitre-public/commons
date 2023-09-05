@@ -18,15 +18,20 @@ package org.mitre.caasd.commons.ids;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static java.time.Instant.EPOCH;
+import static java.time.Instant.now;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.mitre.caasd.commons.ids.TimeId.newId;
+import static org.mitre.caasd.commons.ids.TimeId.newIdFor;
+
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
@@ -36,7 +41,7 @@ class TimeIdTest {
 
     @Test
     public void constructorEmbedsTime() {
-        Instant now = Instant.now();
+        Instant now = now();
 
         TimeId id = new TimeId(EPOCH.minusMillis(1L));
         TimeId id_1 = new TimeId(EPOCH.plusMillis(1L));
@@ -58,7 +63,7 @@ class TimeIdTest {
     @Test
     public void fromStringParserYieldsEquivalentIds() {
 
-        Instant now = Instant.now();
+        Instant now = now();
 
         TimeId id = new TimeId(EPOCH);
         TimeId id_1 = new TimeId(EPOCH.plusMillis(1L));
@@ -72,7 +77,7 @@ class TimeIdTest {
     @Test
     public void bytesMethodAndConstructorAreConsistent() {
 
-        Instant now = Instant.now();
+        Instant now = now();
 
         TimeId idNow = new TimeId(now);  //use the most straight forward constructor
         byte[] byteEncoding = idNow.bytes();
@@ -85,7 +90,7 @@ class TimeIdTest {
     @Test
     public void base64Encoding() {
 
-        Instant now = Instant.now();
+        Instant now = now();
 
         TimeId idNow = new TimeId(now);  //use the most straight forward constructor
 
@@ -94,6 +99,24 @@ class TimeIdTest {
         assertThat(idNow, is(fromBase64Str));
         assertThat(idNow.time(), is(fromBase64Str.time()));
         assertArrayEquals(idNow.bytes(), fromBase64Str.bytes());
+    }
+
+    @Test
+    public void base64Encoding_22charsLong() {
+        TimeId id = TimeId.newId();
+        assertThat(id.asBase64().length(), is(22));
+    }
+
+    @Test
+    public void base64Encoding_first7CharAreTime() {
+        Instant time = now();
+        TimeId id1 = newIdFor(time);
+        TimeId id2 = newIdFor(time);
+        TimeId id3 = newIdFor(time);
+
+        //The 1st 7-char of each base64 encoding contain "Time info" THEREFORE, when the time is the same the chars are the same.
+        assertThat(id1.asBase64().substring(0, 7), is(id2.asBase64().substring(0, 7)));
+        assertThat(id2.asBase64().substring(0, 7), is(id3.asBase64().substring(0, 7)));
     }
 
     @Test
@@ -131,6 +154,72 @@ class TimeIdTest {
 
             assertThat(randomLong, is(decoding));
         }
+    }
+
+    @Test
+    public void randomBitsAndTimeBitsMakeAllBits() {
+        // Show that we can make "id.bytes()" from JUST the time data and JUST the random data
+        // e.g., the random bits are complete
+        // e.g., id.randomBytes() and id.timeAsEpochMs() contain 100% of the data in the TimeId
+
+        TimeId id = newId();
+
+        byte[] randomBits = id.randomBytes();
+        byte[] justTimeBits = ByteBuffer.allocate(8)
+            .putLong(id.timeAsEpochMs() << 22)
+            .array();
+
+        byte[] allBits = id.bytes();
+
+        byte[] manuallyConstructed = new byte[16];  //GOAL -- rebuild "allBits" from randomBits & justTimeBits
+
+        //The "time bits" match the bits we get from "timeId.bytes()"
+        for (int j = 0; j < 5; j++) {
+            //bits 0-8, 8-16, ... 32-40
+            assertThat(justTimeBits[j], is(allBits[j]));
+            manuallyConstructed[j] = justTimeBits[j];
+        }
+
+        //We can construct the 6th byte (bits 40-48) using timeBits "OR-ed together" with the randomBits
+        byte splitByte = (byte) (justTimeBits[5] | randomBits[5]);
+        assertThat(splitByte, is(allBits[5]));
+
+        manuallyConstructed[5] = splitByte;
+
+        //The "random bits" match the bits we get from "timeId.bytes()"
+        for (int j = 6; j < 16; j++) {
+            //bits 48-56, 56-64, ... 120-128
+            assertThat(randomBits[j], is(allBits[j]));
+            manuallyConstructed[j] = randomBits[j];
+        }
+
+        TimeId idFromManualBytes = new TimeId(manuallyConstructed);
+
+        assertThat(id, is(idFromManualBytes));
+    }
+
+    @Test
+    public void randomBitsAndEncodingMatch() {
+
+        TimeId id = newId();
+
+        //e.g. "YpmLwbo1MNma0swdxsojUQ"
+        String fullBase64Encoding = id.asBase64();
+
+        //e.g. "1MNma0swdxsojUQ"  (
+        String rngBase64Encoding = id.rngBitsAsBase64();
+
+        assertThat(fullBase64Encoding.length(), is(22));
+        assertThat(rngBase64Encoding.length(), is(15));
+        assertThat(rngBase64Encoding, is(id.asBase64().substring(7)));
+
+        //e.g. "AAAAAAA1MNma0swdxsojUQ"
+        //Manually create the base64 encoding of just the "randomBytes()"
+        String base64_fromJustRNG = Base64.getEncoder()
+            .withoutPadding()
+            .encodeToString(id.randomBytes());
+
+        assertThat(id.rngBitsAsBase64(), is(base64_fromJustRNG.substring(7)));
     }
 
 }
