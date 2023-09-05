@@ -97,7 +97,7 @@ public class TimeId implements Comparable<TimeId>, HasTime, Serializable {
      * and (B) ensure no two IDs are the same because there 86-bits of randomness will be
      * different.
      *
-     * @param time The epochMills of this Instant get embedded in the resulting BigTimeId
+     * @param time The epochMills of this Instant get embedded in the resulting TimeId
      */
     public TimeId(Instant time) {
         //Inspired by java.util.UUID's implementation of randomUUID()
@@ -123,8 +123,8 @@ public class TimeId implements Comparable<TimeId>, HasTime, Serializable {
     /**
      * Directly build a TimeId from 16 bytes (useful when working with serialization layers).
      *
-     * @param leftBits  The most significant bits of the {@code BigTimeId}
-     * @param rightBits The least significant bits of the {@code BigTimeId}
+     * @param leftBits  The most significant bits of the {@code TimeId}
+     * @param rightBits The least significant bits of the {@code TimeId}
      */
     private TimeId(long leftBits, long rightBits) {
         this.leftBits = leftBits;
@@ -151,7 +151,7 @@ public class TimeId implements Comparable<TimeId>, HasTime, Serializable {
         this.rightBits = smallBits;
     }
 
-    /** @return The bytes in this BigTimeId. */
+    /** @return The 16 bytes in this TimeId. */
     public byte[] bytes() {
         return ByteBuffer.allocate(16)
             .putLong(leftBits)
@@ -160,11 +160,54 @@ public class TimeId implements Comparable<TimeId>, HasTime, Serializable {
     }
 
     /**
+     * @return The 16 bytes of this TimeId THAT HAVE BEEN MASKED to only include the random bits.
+     *     Thus, the first 42 bits of the byte[] are ALWAYS zero and the last 86 bits in the byte[]
+     *     are random.  This means the first 5 bytes of the resulting byte[] can be "thrown out" or
+     *     "deleted" if saving 5 bytes per TimeId is worthwhile.
+     */
+    public byte[] randomBytes() {
+
+        /*
+         * Implementation note:  We choose to return 16 bytes, KNOWING 5 entire bytes will be empty.
+         * We made this choice because it means:
+         *
+         * (A) Now, the output of "bytes()" and "randomBytes()" are only different by a simple bit
+         * masking operation and
+         *
+         * (B) Now, the base-64 encoding of "bytes()" and "randomBytes()" yields two String that are
+         * obviously related (e.g., "YpmEcX3VEmPQ35Kic756OQ" and "AAAAAAAVEmPQ35Kic756OQ").  Notice,
+         * the first 7 chars of the 2nd String are all "A"s and the last 15 chars of these String
+         * are identical.  IF! we redacted the 5 empty bytes from this method's output then these
+         * base-64 encoded String would not be so similar.
+         */
+
+        //Isolate just the 22 pseudo-random bits within the "left bits" (drops 42 bits, or 5 full bytes)
+        long randomBits = leftBits & NON_TIME_BIT_MASK;
+
+        return ByteBuffer.allocate(16)
+            .putLong(randomBits)
+            .putLong(rightBits)
+            .array();
+    }
+
+    /**
      * @return The {@code bytes()} of this ID encoded as unpadded Base64 String (e.g.
-     *     "YlAmUqw/L7n0P0wcMfG+zg"). The returned String will be 22 characters
+     *     "YlAmUqw/L7n0P0wcMfG+zg"). The returned String will be 22 characters.  The first 7 chars
+     *     encode the epochMills of the source instant, the last 15 char encode the 86 bits of
+     *     randomness. Note: Base64 encodes 6 bits per char, so we get lucky that a "42 time bits"
+     *     can be isolated so cleanly to just the first 7 chars of this encoding.
      */
     public String asBase64() {
         return BASE_64_ENCODER.encodeToString(bytes());
+    }
+
+    /**
+     * @return The component of the "asBase64()" output that corresponds to the 86-bits of
+     *     randomness. This maps to characters 7-22 of the "asBase64()" output (i.e., the last 15
+     *     characters from the 22 character base-64 encoding)
+     */
+    public String rngBitsAsBase64() {
+        return asBase64().substring(7);
     }
 
     /** @return A new TimeId by parsing the binary data represented within a Base64 String. */
@@ -179,6 +222,9 @@ public class TimeId implements Comparable<TimeId>, HasTime, Serializable {
      *     "609c2cf98dc9fa21d9633a14f800bbb6").
      */
     public String toString() {
+
+        //@todo -- remove this!  it has too many chars AND we can't split the chars btw "random-y" and "time-y"
+
         return String.format("%016x", leftBits) + String.format("%016x", rightBits);
     }
 
@@ -213,7 +259,7 @@ public class TimeId implements Comparable<TimeId>, HasTime, Serializable {
         return leftBits >> NUM_RAND_BITS_ON_LEFT;
     }
 
-    /** @return A hash code value for this {@code BigTimeId} */
+    /** @return A hash code value for this {@code TimeId} */
     public int hashCode() {
         //implementation from java.util.UUID
         long hilo = leftBits ^ rightBits;
