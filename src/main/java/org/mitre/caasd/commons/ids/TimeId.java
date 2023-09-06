@@ -71,7 +71,7 @@ public class TimeId implements Comparable<TimeId>, HasTime, Serializable {
     }
 
     /** TimeIds are encoded as Base64 without padding (get the Encoder exactly once). */
-    private static final Base64.Encoder BASE_64_ENCODER = Base64.getEncoder().withoutPadding();
+    private static final Base64.Encoder BASE_64_ENCODER = Base64.getUrlEncoder().withoutPadding();
 
     /** Number of bits extracted from a timestamp's epochMills long. */
     private static final int NUM_TIMESTAMP_BITS = 42;
@@ -192,7 +192,7 @@ public class TimeId implements Comparable<TimeId>, HasTime, Serializable {
 
     /**
      * @return The {@code bytes()} of this ID encoded as unpadded Base64 String (e.g.
-     *     "YlAmUqw/L7n0P0wcMfG+zg"). The returned String will be 22 characters.  The first 7 chars
+     *     "YpnxRaZ-usc_8KDibYzccw"). The returned String will be 22 characters.  The first 7 chars
      *     encode the epochMills of the source instant, the last 15 char encode the 86 bits of
      *     randomness. Note: Base64 encodes 6 bits per char, so we get lucky that a "42 time bits"
      *     can be isolated so cleanly to just the first 7 chars of this encoding.
@@ -212,29 +212,55 @@ public class TimeId implements Comparable<TimeId>, HasTime, Serializable {
 
     /** @return A new TimeId by parsing the binary data represented within a Base64 String. */
     public static TimeId fromBase64(String str) {
-        return new TimeId(
-            Base64.getDecoder().decode(str)
-        );
+        requireNonNull(str);
+
+        byte[] exactly16Bytes = Base64.getUrlDecoder().decode(str);
+
+        return new TimeId(exactly16Bytes);
+    }
+
+    /**
+     * @return A 22-character String encoding of this 128-bit id (e.g. "YpnxRaZ-usc_8KDibYzccw").
+     *     This is the base-64 "unpadded", "url-safe" encoding of the 128-bit id. Note, base-64
+     *     encodes 6 bits per char. So we get lucky! The first 42 bits (i.e. all the time bits) of
+     *     this TimeId become the first 7 characters of this String.  The last 86 bits (i.e. all the
+     *     random bits) of this TimeId become the last 15 characters of this String.
+     */
+    public String toString() {
+
+        //some samples toStrings
+        // YpnxRaaF_h64-ogTLrRE_g
+        // YpnxRaaE500hOUgD4eO1dw
+        // YpnxRaaLGRd3W__ogPSekw
+
+        return asBase64();
+    }
+
+    /** @return A new TimeId by parsing the binary data represented within a Base64 String. */
+    public static TimeId fromString(String str) {
+        requireNonNull(str);
+        return fromBase64(str);
     }
 
     /**
      * @return A 32-character hex String embedding this 128-bit id (e.g.
-     *     "609c2cf98dc9fa21d9633a14f800bbb6").
+     *     "609c2cf98dc9fa21d9633a14f800bbb6").  Upside: This encoding only uses standard hex chars.
+     *      Downsides:  This encoding requires 32 chars AND the 11th char mixes bits from the
+     *     "time portion" and "random portion" of the TimeId (thus you can't split the String to
+     *     isolate JUST the random bits or JUST the time bits)
      */
-    public String toString() {
-
-        //@todo -- remove this!  it has too many chars AND we can't split the chars btw "random-y" and "time-y"
-
+    public String asHexString() {
         return String.format("%016x", leftBits) + String.format("%016x", rightBits);
     }
 
     /**
-     * Construct a TimeId from the hex string representation given by toString().
+     * Construct a TimeId from the hex string representation given by asHexString().
      *
      * @param hexStr A string that specifies a TimeId
+     *
      * @return A TimeId with the internal bits configured to match the input hex value
      */
-    public static TimeId fromString(String hexStr) {
+    public static TimeId fromHexString(String hexStr) {
         requireNonNull(hexStr);
         checkArgument(hexStr.length() == 32, "A 32 character hex string is expected");
 

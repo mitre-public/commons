@@ -102,6 +102,18 @@ class TimeIdTest {
     }
 
     @Test
+    public void bulkToStringFromStringCycles() {
+
+        int n = 100;
+        for (int i = 0; i < n; i++) {
+            TimeId id = newId();
+            TimeId rebuilt = TimeId.fromString(id.toString());
+
+            assertThat(id, is(rebuilt));
+        }
+    }
+
+    @Test
     public void base64Encoding_22charsLong() {
         TimeId id = TimeId.newId();
         assertThat(id.asBase64().length(), is(22));
@@ -140,7 +152,7 @@ class TimeIdTest {
     @Test
     public void cyclicalLongParsing() {
         /*
-         * This test isolates the hex parsing component of "toString()" and "fromString(String)"
+         * This test isolates the hex parsing component of "toHexString()" and "fromHexString(String)"
          * The implementation was harder than you'd expect because the java.lang.Long parser
          * wasn't working for 64 random bits (when those bits defined a negative long)
          */
@@ -153,6 +165,39 @@ class TimeIdTest {
             long decoding = (new BigInteger(encoding, 16)).longValue();
 
             assertThat(randomLong, is(decoding));
+        }
+    }
+
+    @Test
+    public void toHexStringEncodingAndParsing() {
+
+        Instant now = now();
+        TimeId id = new TimeId(now);
+
+        //e.g. "6299c83dbbf26ab8f01257782fb49a37"
+        String hexString = id.asHexString();
+
+        assertThat(hexString.length(), is(32));
+
+        TimeId rebuiltFromHexStr = TimeId.fromHexString(hexString);
+
+        assertThat(id, is(rebuiltFromHexStr));
+        assertThat(id.time(), is(rebuiltFromHexStr.time()));
+        assertArrayEquals(id.bytes(), rebuiltFromHexStr.bytes());
+    }
+
+    @Test
+    public void idsCanBeFileNames() {
+
+        //ALLOW ONLY THESE CHARS:  A-Z, a-z, 0-9, '.', '_', and '-'
+        // source  https://en.wikipedia.org/wiki/Filename#Comparison_of_filename_limitations
+        // section POSIX "Fully portable filenames
+
+        String REGEX_PATTERN = "^[A-Z a-z 0-9 \\- \\_ \\.]{1,255}$";
+
+        for (int i = 0; i < 100; i++) {
+            TimeId id = TimeId.newId();
+            assertThat(id.toString().matches(REGEX_PATTERN), is(true));
         }
     }
 
@@ -215,11 +260,10 @@ class TimeIdTest {
 
         //e.g. "AAAAAAA1MNma0swdxsojUQ"
         //Manually create the base64 encoding of just the "randomBytes()"
-        String base64_fromJustRNG = Base64.getEncoder()
+        String base64_fromJustRNG = Base64.getUrlEncoder()
             .withoutPadding()
             .encodeToString(id.randomBytes());
 
         assertThat(id.rngBitsAsBase64(), is(base64_fromJustRNG.substring(7)));
     }
-
 }
