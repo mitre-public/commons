@@ -127,27 +127,27 @@ public class Speed implements Serializable, Comparable<Speed> {
         }
     }
 
-    public static Speed ofMilesPerHour(double amount){
+    public static Speed ofMilesPerHour(double amount) {
         return of(amount, MILES_PER_HOUR);
     }
 
-    public static Speed ofKilometersPerHour(double amount){
+    public static Speed ofKilometersPerHour(double amount) {
         return of(amount, KILOMETERS_PER_HOUR);
     }
 
-    public static Speed ofMetersPerSecond(double amount){
+    public static Speed ofMetersPerSecond(double amount) {
         return of(amount, METERS_PER_SECOND);
     }
 
-    public static Speed ofFeetPerSecond(double amount){
+    public static Speed ofFeetPerSecond(double amount) {
         return of(amount, FEET_PER_SECOND);
     }
 
-    public static Speed ofFeetPerMinute(double amount){
+    public static Speed ofFeetPerMinute(double amount) {
         return of(amount, FEET_PER_MINUTE);
     }
 
-    public static Speed ofKnots(double amount){
+    public static Speed ofKnots(double amount) {
         return of(amount, KNOTS);
     }
 
@@ -242,7 +242,7 @@ public class Speed implements Serializable, Comparable<Speed> {
      * Force to "toString" output to be expressed in a particular Speed unit. This method can help
      * ensure that all "text output" uses a consistent formatting schema.
      *
-     * @param digitsAfterDecimalPlace
+     * @param digitsAfterDecimalPlace The number of digits after the decimal
      * @param unit                    Express the Speed in this unit (e.g. KNOTS, METERS_PER_SECOND,
      *                                etc.)
      *
