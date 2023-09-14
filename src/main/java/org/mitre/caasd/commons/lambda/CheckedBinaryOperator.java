@@ -35,6 +35,9 @@ public interface CheckedBinaryOperator<T> extends CheckedBiFunction<T, T, T> {
         return (t, u) -> {
             try {
                 return func.apply(t, u);
+            } catch (RuntimeException e) {
+                // pass runtime exceptions
+                throw e;
             } catch (Exception e) {
                 throw DemotedException.demote(e);
             }
