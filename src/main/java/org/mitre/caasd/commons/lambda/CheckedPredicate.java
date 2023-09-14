@@ -27,7 +27,7 @@ import org.mitre.caasd.commons.util.DemotedException;
 @FunctionalInterface
 public interface CheckedPredicate<T> {
 
-    boolean test(T t);
+    boolean test(T t) throws Exception;
 
     /**
      * Demote the {@link FunctionalInterface} that throws an {@link Exception} to a
@@ -37,6 +37,9 @@ public interface CheckedPredicate<T> {
         return x -> {
             try {
                 return pred.test(x);
+            } catch (RuntimeException e) {
+                // pass runtime exceptions
+                throw e;
             } catch (Exception e) {
                 throw DemotedException.demote(e);
             }

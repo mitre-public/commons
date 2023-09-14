@@ -37,6 +37,9 @@ public interface CheckedFunction<S, T> {
         return x -> {
             try {
                 return func.apply(x);
+            } catch (RuntimeException e) {
+                // pass runtime exceptions
+                throw e;
             } catch (Exception e) {
                 throw DemotedException.demote(e);
             }
