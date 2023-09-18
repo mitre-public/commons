@@ -30,6 +30,8 @@ import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.Base64;
 import java.util.Collection;
+import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 
 import com.google.common.collect.ComparisonChain;
 
@@ -340,14 +342,20 @@ public class LatLong implements Comparable<LatLong>, Serializable {
 
     /**
      * ACCURATELY compute the average LatLong positions of these locations. The underlying
-     * computation performs several somewhat expensive trig operations.
+     * computation performs several somewhat expensive trig operations when converting the LatLong
+     * data to Spherical Unit Vectors.
      *
      * @param locations An array of LatLong locations
      *
      * @return The average location
+     * @throws NoSuchElementException When locations is empty
      */
     public static LatLong avgLatLong(LatLong... locations) {
-        checkNotNull(locations);
+        requireNonNull(locations);
+
+        if (locations.length == 0) {
+            throw new NoSuchElementException("Average LatLong not defined when empty");
+        }
 
         double x = 0;
         double y = 0;
@@ -367,6 +375,103 @@ public class LatLong implements Comparable<LatLong>, Serializable {
         double avgLat = atan2(z, avgSqareRoot);
 
         return LatLong.of(toDegrees(avgLat), toDegrees(avgLong));
+    }
+
+    /**
+     * ACCURATELY compute the average LatLong positions of these locations. The underlying
+     * computation performs several somewhat expensive trig operations when converting the LatLong
+     * data to Spherical Unit Vectors.
+     *
+     * @param locations A collection of LatLong locations
+     *
+     * @return The average location
+     * @throws NoSuchElementException When locations is empty
+     */
+    public static LatLong avgLatLong(Collection<LatLong> locations) {
+        requireNonNull(locations);
+
+        LatLong[] asArray = locations.toArray(new LatLong[0]);
+        return avgLatLong(asArray);
+    }
+
+    /**
+     * QUICKLY compute the ARITHMETIC average of these LatLong positions. This computation does not
+     * reflect curvature of the earth, but it does correct for the international date line. The
+     * difference between the result computed by this method and the result computed by
+     * {@code avgLatLong()} grows as (1) the path distance grows and (2) the path locations move
+     * further and further away from the equator.
+     * <p>
+     * This method is FASTER and LESS ACCURATE because it utilizes simple arithmetic instead of
+     * accurate trigonometric functions.
+     *
+     * @param locations An array of locations
+     *
+     * @return The average location
+     * @throws NoSuchElementException When locations is empty
+     */
+    public static LatLong quickAvgLatLong(LatLong... locations) {
+        requireNonNull(locations);
+
+        if (locations.length == 0) {
+            throw new NoSuchElementException("The input array was empty");
+        }
+
+        if (locations.length == 1) {
+            return locations[0];
+        }
+
+        //just take the simple average of latitude values....
+        double avgLatitude = Stream.of(locations).mapToDouble(loc -> loc.latitude).average().getAsDouble();
+        //longitude cannot be simply averaged due to discontinuity when -180 abuts 180
+        // So, we are going to take several "weighted averages of TWO Longitude values"
+        // We can correct for the international date line with every subsequent avg.
+        double[] longitudes = Stream.of(locations).mapToDouble(loc -> loc.longitude()).toArray();
+
+        //average the first two entries, then average in the 3rd entry, then the 4th...
+        //increase the "weight" on the "curAverage" each time through the loop
+        double curAvgLongitude = longitudes[0];
+        for (int i = 1; i < longitudes.length; i++) {
+            curAvgLongitude = avgLong(curAvgLongitude, i, longitudes[i], 1);
+        }
+
+        return LatLong.of(avgLatitude, curAvgLongitude);
+    }
+
+    /**
+     * QUICKLY compute the ARITHMETIC average of these LatLong positions. This computation does not
+     * reflect curvature of the earth, but it does correct for the international date line. The
+     * difference between the result computed by this method and the result computed by
+     * {@code avgLatLong()} grows as (1) the path distance grows and (2) the path locations move
+     * further and further away from the equator.
+     * <p>
+     * This method is FASTER and LESS ACCURATE because it utilizes simple arithmetic instead of
+     * accurate trigonometric functions.
+     *
+     * @param locations A collection of LatLong locations
+     *
+     * @return The average location
+     * @throws NoSuchElementException When locations is empty
+     */
+    public static LatLong quickAvgLatLong(Collection<LatLong> locations) {
+        requireNonNull(locations);
+        LatLong[] asArray = locations.toArray(new LatLong[0]);
+        return quickAvgLatLong(asArray);
+    }
+
+    /**
+     * Naively compute the weighted average of two longitude values. Be careful, This method ignores
+     * curvature of the earth.
+     */
+    private static double avgLong(double longitudeA, int weightA, double longitudeB, int weightB) {
+
+        double w1 = (double) (weightA) / (double) (weightA + weightB);
+        double w2 = (double) (weightB) / (double) (weightA + weightB);
+
+        double averageLong = (abs(longitudeA - longitudeB) > 180.0)
+            ? w1 * (longitudeA + 180.0) + w2 * (longitudeB + 180.0)
+            : w1 * longitudeA + w2 * longitudeB;
+
+        return averageLong;
     }
 
     private static final String COLLECTION_CANNOT_BE_NULL = "The collection of LatLong locations cannot be null";
