@@ -31,7 +31,7 @@ package org.mitre.caasd.commons.util;
  * DemotedExceptions can ONLY be created from a checked Exceptions. Consequently, a {@code
  * catch(DemotedException de)} clause can only be used to handle checkedException.
  * <p>
- * This upside of using DemotedExceptions is that it cleanS up messy method signatures that must
+ * This upside of using DemotedExceptions is that it cleans up messy method signatures that must
  * otherwise throw checked Exceptions. This helps to address the problem that makes people abuse the
  * idiom from Option (A).
  * <p>

@@ -17,31 +17,46 @@
 package org.mitre.caasd.commons.lambda;
 
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import org.mitre.caasd.commons.util.DemotedException;
 
 /**
- * Extension of the {@link BiFunction} interface for a checked lambda function
+ * A CheckedBiFunction is similar to a {@link BiFunction} EXCEPT it throws a checked exception.
+ * <p>
+ * Unfortunately, CheckedBiFunctions obfuscate stream processing code because they require using
+ * try-catch blocks. This class and the convenience functions in {@link Uncheck}, allow you to
+ * improve the readability of stream processing pipelines (assuming you are willing to demote all
+ * checked exceptions to RuntimeExceptions)
+ * <p>
+ * For example:
+ *
+ * <pre>{@code
+ *     //code WITHOUT these utilities -- is harder to read and write.
+ *
+ *     List<String> dataSet = loadData();
+ *     List<String> subset = dataSet.stream()
+ *         .map(str -> {
+ *             try {
+ *                 return functionThatThrowsCheckedEx(str);
+ *             } catch (Exception ex) {
+ *                 throw DemotedException.demote(ex);
+ *             }})
+ *         .filter(str -> str.length() < 5)
+ *         .toList();
+ *
+ *
+ *     //code WITH these utilities -- is easier to read and write.
+ *
+ *     List<String> dataSet = loadData();
+ *     List<String> subset = dataSet.stream()
+ *         .map(Uncheck.func(str -> functionThatThrowsCheckedEx(str))
+ *         .filter(str -> str.length() < 5)
+ *         .toList();
+ * }</pre>
  */
 @FunctionalInterface
 public interface CheckedBiFunction<T, U, R> {
 
     R apply(T t, U u) throws Exception;
-
-    /**
-     * Demote the {@link FunctionalInterface} that throws an {@link Exception} to a
-     * {@link BiFunction}
-     */
-    static <T, U, R> BiFunction<T, U, R> demote(CheckedBiFunction<T, U, R> func) {
-        return (t, u) -> {
-            try {
-                return func.apply(t, u);
-            } catch (RuntimeException e) {
-                // pass runtime exceptions
-                throw e;
-            } catch (Exception e) {
-                throw DemotedException.demote(e);
-            }
-        };
-    }
 }
