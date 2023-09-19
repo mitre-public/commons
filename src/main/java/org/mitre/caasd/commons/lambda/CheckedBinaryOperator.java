@@ -16,31 +16,15 @@
 
 package org.mitre.caasd.commons.lambda;
 
+import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 
 import org.mitre.caasd.commons.util.DemotedException;
 
 /**
- * Extension of the {@link BinaryOperator} interface for a checked lambda
- * function
+ * {@link BinaryOperator} is to {@link BiFunction} as {@link CheckedBinaryOperator} is to
+ * {@link CheckedBiFunction}
  */
 @FunctionalInterface
 public interface CheckedBinaryOperator<T> extends CheckedBiFunction<T, T, T> {
-
-    /**
-     * Demote the {@link FunctionalInterface} that throws an {@link Exception} to a
-     * {@link BinaryOperator}
-     */
-    static <T> BinaryOperator<T> demote(CheckedBinaryOperator<T> func) {
-        return (t, u) -> {
-            try {
-                return func.apply(t, u);
-            } catch (RuntimeException e) {
-                // pass runtime exceptions
-                throw e;
-            } catch (Exception e) {
-                throw DemotedException.demote(e);
-            }
-        };
-    }
 }

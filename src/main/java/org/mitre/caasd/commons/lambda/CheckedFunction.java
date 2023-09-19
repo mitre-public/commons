@@ -18,31 +18,42 @@ package org.mitre.caasd.commons.lambda;
 
 import java.util.function.Function;
 
-import org.mitre.caasd.commons.util.DemotedException;
-
 /**
- * Extension of the {@link Function} interface for a checked lambda
- * function
+ * A CheckedFunction is similar to a {@link Function} EXCEPT it throws a checked exception.
+ * <p>
+ * Unfortunately, CheckedFunctions obfuscate stream processing code because they require using
+ * try-catch blocks. This class and the convenience functions in {@link Uncheck}, allow you to
+ * improve the readability of stream processing pipelines (assuming you are willing to demote all
+ * checked exceptions to RuntimeExceptions)
+ * <p>
+ * For example:
+ *
+ * <pre>{@code
+ *     //code WITHOUT these utilities -- is harder to read and write.
+ *
+ *     List<String> dataSet = loadData();
+ *     List<String> subset = dataSet.stream()
+ *         .map(str -> {
+ *             try {
+ *                 return functionThatThrowsCheckedEx(str);
+ *             } catch (Exception ex) {
+ *                 throw DemotedException.demote(ex);
+ *             }})
+ *         .filter(str -> str.length() < 5)
+ *         .toList();
+ *
+ *
+ *     //code WITH these utilities -- is easier to read and write.
+ *
+ *     List<String> dataSet = loadData();
+ *     List<String> subset = dataSet.stream()
+ *         .map(Uncheck.func(str -> functionThatThrowsCheckedEx(str))
+ *         .filter(str -> str.length() < 5)
+ *         .toList();
+ * }</pre>
  */
 @FunctionalInterface
 public interface CheckedFunction<S, T> {
 
-    T apply(S t) throws Exception;
-
-    /**
-     * Demote the {@link FunctionalInterface} that throws an {@link Exception} to a
-     * {@link Function}
-     */
-    static <S, T> Function<S, T> demote(CheckedFunction<S, T> func) {
-        return x -> {
-            try {
-                return func.apply(x);
-            } catch (RuntimeException e) {
-                // pass runtime exceptions
-                throw e;
-            } catch (Exception e) {
-                throw DemotedException.demote(e);
-            }
-        };
-    }
+    T apply(S s) throws Exception;
 }

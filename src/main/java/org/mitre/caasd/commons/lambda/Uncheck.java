@@ -22,6 +22,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.mitre.caasd.commons.util.DemotedException;
+
 /**
  * Collection of convenience methods to shorten the syntax when used in
  * {@link Stream} operators:
@@ -33,31 +35,97 @@ import java.util.stream.Stream;
 public class Uncheck {
 
     /**
-     * Demote the {@link CheckedFunction} to a {@link BiFunction}
+     * Demote a {@link CheckedFunction} that throws an {@link Exception} into a plain
+     * {@link Function}.  This method is for simplifying stream processing pipelines.
+     *
+     * @param func A function that throws a checked exception
+     * @param <S>  The input type
+     * @param <T>  The output type
+     *
+     * @return A plain Function that may emit DemotedExceptions
+     * @throws DemotedException when the original CheckedFunction would have thrown a checked
+     *                          Exception
      */
     public static <S, T> Function<S, T> func(CheckedFunction<S, T> func) {
-        return CheckedFunction.demote(func);
+        return x -> {
+            try {
+                return func.apply(x);
+            } catch (RuntimeException e) {
+                // pass runtime exceptions, they cannot be demoted
+                throw e;
+            } catch (Exception e) {
+                throw DemotedException.demote(e);
+            }
+        };
     }
 
     /**
-     * Demote the {@link CheckedPredicate} to a {@link Predicate}
+     * Demote a {@link CheckedPredicate} that throws an {@link Exception} into a plain
+     * {@link Predicate}.  This method is for simplifying stream processing pipelines.
+     *
+     * @param pred A predicate that throws a checked exception
+     * @param <T>  The generic type
+     *
+     * @return A plain Predicate that may emit DemotedExceptions
+     * @throws DemotedException when the original CheckedPredicate would have thrown a checked
+     *                          Exception
      */
-    public static <S, T> Predicate<T> pred(CheckedPredicate<T> func) {
-        return CheckedPredicate.demote(func);
+    public static <T> Predicate<T> pred(CheckedPredicate<T> pred) {
+        return x -> {
+            try {
+                return pred.test(x);
+            } catch (RuntimeException e) {
+                // pass runtime exceptions, they cannot be demoted
+                throw e;
+            } catch (Exception e) {
+                throw DemotedException.demote(e);
+            }
+        };
     }
 
     /**
-     * Demote the {@link CheckedBiFunction} to a {@link CheckedBiFunction}
+     * Demote a {@link CheckedBiFunction} that throws an {@link Exception} into a plain
+     * {@link BiFunction}.  This method is for simplifying stream processing pipelines.
+     *
+     * @param biFunc A BiFunction that throws a checked exception
+     *
+     * @return A plain BiFunction that may emit DemotedExceptions
+     * @throws DemotedException when the original CheckedPredicate would have thrown a checked
+     *                          Exception
      */
-    public static <T, U, R> BiFunction<T, U, R> bifunc(CheckedBiFunction<T, U, R> func) {
-        return CheckedBiFunction.demote(func);
+    public static <T, U, R> BiFunction<T, U, R> biFunc(CheckedBiFunction<T, U, R> biFunc) {
+        return (t, u) -> {
+            try {
+                return biFunc.apply(t, u);
+            } catch (RuntimeException e) {
+                // pass runtime exceptions, they cannot be demoted
+                throw e;
+            } catch (Exception e) {
+                throw DemotedException.demote(e);
+            }
+        };
     }
 
     /**
-     * Demote the {@link CheckedBinaryOperator} to a {@link BinaryOperator}
+     * Demote a {@link CheckedBinaryOperator} that throws an {@link Exception} into a plain
+     * {@link BinaryOperator}.  This method is for simplifying stream processing pipelines.
+     *
+     * @param binaryOperator A BinaryOperator that throws a checked exception
+     *
+     * @return A plain BinaryOperator that may emit DemotedExceptions
+     * @throws DemotedException when the original CheckedBinaryOperator would have thrown a checked
+     *                          Exception
      */
-    public static <T> BinaryOperator<T> biop(CheckedBinaryOperator<T> func) {
-        return CheckedBinaryOperator.demote(func);
+    public static <T> BinaryOperator<T> biOp(CheckedBinaryOperator<T> binaryOperator) {
+        return (t, u) -> {
+            try {
+                return binaryOperator.apply(t, u);
+            } catch (RuntimeException e) {
+                // pass runtime exceptions, they cannot be demoted
+                throw e;
+            } catch (Exception e) {
+                throw DemotedException.demote(e);
+            }
+        };
     }
-
 }
