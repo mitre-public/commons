@@ -21,7 +21,6 @@ import static java.time.Instant.now;
 import static java.util.Objects.requireNonNull;
 import static org.mitre.caasd.commons.util.BitAndHashingUtils.makeBitMask;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.SecureRandom;
