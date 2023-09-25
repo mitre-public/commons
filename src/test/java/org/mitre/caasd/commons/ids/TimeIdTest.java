@@ -26,7 +26,6 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.mitre.caasd.commons.ids.TimeId.newId;
 import static org.mitre.caasd.commons.ids.TimeId.newIdFor;
-import static org.mitre.caasd.commons.util.BitAndHashingUtils.makeBitMask;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -317,7 +316,7 @@ class TimeIdTest {
         //Make a dataset
         Map<TimeId, Integer> someKeyedData = new HashMap<>();
         IntStream.range(0, DATA_SET_SIZE).forEach(i -> someKeyedData.put(newId(), i));
-        
+
         //Take a random sample by sorting via the uniform random variable
         List<Integer> RANDOM_SAMPLE = someKeyedData.entrySet().stream()
             .sorted(Comparator.comparing(entry -> entry.getKey().asUniformRand()))
