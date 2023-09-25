@@ -21,6 +21,7 @@ import static java.time.Instant.now;
 import static java.util.Objects.requireNonNull;
 import static org.mitre.caasd.commons.util.BitAndHashingUtils.makeBitMask;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.SecureRandom;
@@ -188,6 +189,27 @@ public class TimeId implements Comparable<TimeId>, HasTime, Serializable {
             .putLong(randomBits)
             .putLong(rightBits)
             .array();
+    }
+
+    private static final long SIXTY_THREE_BIT_MASK = Long.parseLong("7fffffffffffffff", 16);
+
+    /**
+     * Converts 63 random bits in this TimeId to a uniform random variable. This method supports
+     * randomized data sampling algorithms for cases when every piece of data is labeled with a
+     * TimeId.
+     * <p>
+     * Warning: DO NOT rely on this value for hashing. The double returned here is derived from only
+     * 63 random bits. Thus, the probability of hash-collision will increase.
+     *
+     * @return A uniform random number between 0 and 1, based on 63 random bits
+     */
+    public double asUniformRand() {
+
+        //Isolate 63 pseudo-random bits within the "right bits"
+        long randomBits = rightBits & SIXTY_THREE_BIT_MASK;
+        long maxPossibleValue = SIXTY_THREE_BIT_MASK;
+
+        return (double) randomBits / (double) maxPossibleValue;
     }
 
     /**
