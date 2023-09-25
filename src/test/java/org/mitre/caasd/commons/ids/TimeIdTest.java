@@ -32,9 +32,8 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.SecureRandom;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Collections;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
@@ -308,19 +307,22 @@ class TimeIdTest {
     }
 
     @Test
-    public void asUniformIsLossy() {
+    public void demo_uniformRand_forRandomSampling() {
 
-        long bitMask = makeBitMask(63);
+        //NOT A UNIT TEST -- Demonstration only...
 
-        System.out.println(Long.toHexString(bitMask));
+        int DATA_SET_SIZE = 1000;
+        int SAMPLE_SIZE = 20;
 
-        System.out.println(Long.toBinaryString(bitMask));
-
-
-
-        long bitMask2 = Long.parseLong("7fffffffffffffff", 16);
-        System.out.println(Long.toBinaryString(bitMask2));
-
-
+        //Make a dataset
+        Map<TimeId, Integer> someKeyedData = new HashMap<>();
+        IntStream.range(0, DATA_SET_SIZE).forEach(i -> someKeyedData.put(newId(), i));
+        
+        //Take a random sample by sorting via the uniform random variable
+        List<Integer> RANDOM_SAMPLE = someKeyedData.entrySet().stream()
+            .sorted(Comparator.comparing(entry -> entry.getKey().asUniformRand()))
+            .limit(SAMPLE_SIZE)
+            .map(entry -> entry.getValue())
+            .collect(Collectors.toList());
     }
 }
