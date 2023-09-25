@@ -17,14 +17,16 @@
 package org.mitre.caasd.commons.ids;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static java.lang.Math.sqrt;
 import static java.time.Instant.EPOCH;
 import static java.time.Instant.now;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.mitre.caasd.commons.ids.TimeId.newId;
 import static org.mitre.caasd.commons.ids.TimeId.newIdFor;
+import static org.mitre.caasd.commons.util.BitAndHashingUtils.makeBitMask;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -33,9 +35,12 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 import org.mitre.caasd.commons.Time;
+
+import com.google.common.math.StatsAccumulator;
 
 class TimeIdTest {
 
@@ -265,5 +270,57 @@ class TimeIdTest {
             .encodeToString(id.randomBytes());
 
         assertThat(id.rngBitsAsBase64(), is(base64_fromJustRNG.substring(7)));
+    }
+
+    @Test
+    public void testAsUniformRand_range0to1_andDistributionIsUniform() {
+
+        // This test will RANDOMLY fail 1 in 15787 tries!
+
+        int SAMPLE_SIZE = 10_000;
+
+        StatsAccumulator accumulator = new StatsAccumulator();
+        IntStream.range(0, SAMPLE_SIZE)
+            .mapToObj(i -> newId())
+            .mapToDouble(id -> id.asUniformRand())
+            .forEach(rngSample -> accumulator.add(rngSample));
+
+        //Basic Truths, all sample 0-1, correct number of samples...
+        assertThat(accumulator.max(), lessThan(1.0));
+        assertThat(accumulator.min(), greaterThan(0.0));
+        assertThat((int) accumulator.count(), is(SAMPLE_SIZE));
+
+        Double standDev = accumulator.sampleStandardDeviation();
+
+        //SOURCE = https://en.wikipedia.org/wiki/Continuous_uniform_distribution
+        double expectedVariance = 1.0 / 12.0;
+        double expectedStdDev = sqrt(expectedVariance);
+        double expectedMean = .5;
+
+        double stdDev_of_xBar = expectedStdDev / sqrt(SAMPLE_SIZE);
+
+        double zScore = (accumulator.mean() - expectedMean) / stdDev_of_xBar;
+
+        //SOURCE = https://en.wikipedia.org/wiki/68%E2%80%9395%E2%80%9399.7_rule
+        // Allowing +- 4 standard deviations or 0.999936657516334 (pass prob)
+        //  This test will RANDOMLY fail 1 in 15787 tries
+        assertThat(zScore, closeTo(0, 4.0));
+    }
+
+    @Test
+    public void asUniformIsLossy() {
+
+        long bitMask = makeBitMask(63);
+
+        System.out.println(Long.toHexString(bitMask));
+
+        System.out.println(Long.toBinaryString(bitMask));
+
+
+
+        long bitMask2 = Long.parseLong("7fffffffffffffff", 16);
+        System.out.println(Long.toBinaryString(bitMask2));
+
+
     }
 }
