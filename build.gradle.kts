@@ -1,18 +1,11 @@
 plugins {
     `java-library`
-
-    id("commons.testing-conventions")
-    id("commons.checkstyle-conventions")
-    id("commons.reporting-conventions")
-    id("commons.javadoc-conventions")
-    id("commons.publishing-conventions")
+    `maven-publish`
 }
 
 repositories {
-    maven {
-        name = "Maven Central"
-        url = uri("https://repo.maven.apache.org/maven2")
-    }
+    mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
@@ -29,5 +22,17 @@ java {
     sourceCompatibility = javaVersion
     targetCompatibility = javaVersion
     withSourcesJar()
-    withJavadocJar()
+//    withJavadocJar()   //TODO -- FIX JAVA DOC, DON'T DISABLE!
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            //groupId does not need to be set here
+            artifactId = project.name
+            //version does not need to be set here
+
+            from(components["java"])
+        }
+    }
 }
