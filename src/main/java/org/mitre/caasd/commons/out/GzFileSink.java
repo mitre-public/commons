@@ -83,7 +83,7 @@ import com.google.common.collect.TreeMultiset;
  * }
  * }</pre>
  *
- * <p><pre>{@code
+ * <pre>{@code
  * //Divide a large collection into several gz files
  * GzFileSink sink = new GzFileSink(
  *     "archives",
@@ -158,6 +158,7 @@ public class GzFileSink<T> implements Consumer<T>, Closeable {
      *                       are generated you'll open too many file handles and kill performance or
      *                       just crash.
      * @param expirationTime How long between writing pieces of data until a .gz file is closed
+     * @throws Gibberish
      */
     public GzFileSink(String outputDir, Function<T, String> toString, Function<T, String> fileNamer,
                       Duration expirationTime) {

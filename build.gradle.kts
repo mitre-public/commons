@@ -17,12 +17,23 @@ dependencies {
     testImplementation("org.apache.avro:avro:1.11.0")
 }
 
+//  This idiom completely mutes the "javadoc" task from java-library.
+//  Javadoc is still produced, but you won't get warnings OR build failures due to javadoc
+//  I decided to turn warning off because the amount of javadoc required for builder was too much.
+tasks {
+    javadoc {
+        options {
+            (this as CoreJavadocOptions).addStringOption("Xdoclint:none", "-quiet")
+        }
+    }
+}
+
 java {
     val javaVersion = JavaVersion.VERSION_1_8
     sourceCompatibility = javaVersion
     targetCompatibility = javaVersion
     withSourcesJar()
-//    withJavadocJar()   //TODO -- FIX JAVA DOC, DON'T DISABLE!
+    withJavadocJar()
 }
 
 publishing {

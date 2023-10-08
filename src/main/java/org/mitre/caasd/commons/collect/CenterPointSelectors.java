@@ -36,7 +36,10 @@ public class CenterPointSelectors {
      * Provides a CenterPointSelector that immediately finds two sphere center points (because the
      * choice is purely random).
      *
-     * @return A CenterPointSelector<K>
+     * @param <K> The Key Type
+     * @param randomSeed The randomSeed used to initialize the RandomCenterSelector
+     *
+     * @return A {@code CenterPointSelector<K>}
      */
     public static <K> CenterPointSelector<K> singleRandomSample(long randomSeed) {
         return new RandomCenterSelector<>(randomSeed);

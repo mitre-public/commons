@@ -80,11 +80,11 @@ public class Preconditions {
      * verify that all the Shapes have the same color using "checkAllMatch(listOfShapes,
      * Shape::getColor)"
      * <p>
-     * BE AWARE: This method relies on <U>'s equals() method
+     * BE AWARE: This method relies on {@code<U>}'s equals() method
      *
      * @param <T>       The starting data type (e.g. Shape)
      * @param <U>       The type obtained by applying a function (e.g. Color)
-     * @param items     A collection of data (e.g. List<Shape>)
+     * @param items     A collection of data (e.g. {@code List<Shape>)}
      * @param extractor A value extractor (e.g. Shape::getColor)
      *
      * @throws IllegalArgumentException when the mapped values do not map to exactly 1 output

@@ -54,14 +54,12 @@ import com.google.common.collect.Lists;
  * Zezula in 1997 in the paper "M-tree An Efficient Access Method for Similarity Search in Metric
  * Spaces" from the Proceedings of the 23rd VLDB Conference.
  * <p>
- * <p>
  * A MetricTree is a binary search tree in which each node in the tree owns a multi-dimensional
  * sphere. That sphere's radius is large enough to ensure that every Key beneath that node is
  * located inside that node's sphere. Therefore, the root node of an MetricTree has a large radius
  * because every Key contained in the MetricTree must fit inside its sphere. Sub-trees are
  * associated with smaller spheres. Each sphere has a centerpoint and radius whose values are used
  * to route put/get requests, kNN searches, and range searches.
- * <p>
  * <p>
  * When Keys are first added to a MetricTree they are placed inside a "Sphere of Points".
  * Eventually, that Sphere will need to be split because it will have too many entries to search
@@ -71,7 +69,6 @@ import com.google.common.collect.Lists;
  * the 2 new "Sphere of Points" are selected to reduce the overlapping volume between the 2 new
  * spheres. Reducing this shared volume reduces the number of spheres a search must visit.
  * <p>
- * <p>
  * When Key+Value pairs are removed from a MetricTree they are removed, however, the fact that the
  * key was present in the MetricTree may leave a permanent imprint on the MetricTree. This occurs
  * when the Key was selected as the centerpoint for a "Sphere of Points". In this case the Key is
@@ -79,7 +76,6 @@ import com.google.common.collect.Lists;
  * pair. Any insertion of a Key can permanently reduce the query routing efficency of an MetricTree.
  * This occurs when the key insertion forces a Sphere to increase its radius (which will not shrink
  * upon key removal).
- * <p>
  * <p>
  * It is important to know that MetricTrees have no automatic balancing mechanism. Therefore
  * inserting Key+Value pairs where the Keys vary in some predictable way is likely to produce a tree
@@ -89,7 +85,6 @@ import com.google.common.collect.Lists;
  * should be used sparingly if possible. These methods rebuild the tree from scratch by adding the
  * existing Key + Value pairs (which may exhibit some amount of imbalance) back into the tree in a
  * random order (which will limit the tree's imbalance IMMEDIATELY AFTER the rebuild).
- * <p>
  * <p>
  * A MetricTree is "fast" because the Binary Tree structure discussed above is paired with a
  * standard HashMap that contains all of the Key + Value Pairs. This means replacing the value

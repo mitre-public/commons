@@ -59,7 +59,7 @@ public class FileUtils {
      * @param file A text file or a gzip compressed text file
      *
      * @return A BufferedReader that can provide the lines of the input file
-     * @throws Exception Any Exceptions thrown attempting to read the file
+     * @throws IOException Any Exceptions thrown attempting to read the file
      */
     public static BufferedReader createReaderFor(File file) throws IOException {
 
@@ -83,8 +83,8 @@ public class FileUtils {
      * @param file A File
      *
      * @return True if the provided file begins with a identifier provided by the .gz file format.
-     * @throws java.lang.Exception (Any Exceptions thrown while inspecting the provided file to see
-     *                             if it contains the "magic bytes" of the .gz format)
+     * @throws IOException (Any Exceptions thrown while inspecting the provided file to see if it
+     *                     contains the "magic bytes" of the .gz format)
      */
     public static boolean isGZipFile(File file) throws IOException {
 

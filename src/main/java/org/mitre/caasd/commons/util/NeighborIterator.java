@@ -42,7 +42,7 @@ import java.util.NoSuchElementException;
  * occluded with basic housekeeping code. A NeighborIterator improves code clarity, and reliability,
  * because the need for housekeeping is eliminated because the NeighborIterator always gives you
  * exactly two elements.
- * <p></p>
+ * <p>
  * Note: Inputs with 0 elements and 1 element BOTH begin with "hasNext() = false".  Use the
  * "wasEmpty()" and "hadExactlyOneElement()" methods to differentiate between these cases. Be aware
  * that when the input iteration contains exactly one element you won't be able to access that

@@ -50,7 +50,7 @@ import java.util.function.Function;
  *    sink.accept(source.get());
  * }
  * }</pre>
- * <p>
+ *
  * <pre>{@code
  * //Divide a large collection into several gz files
  * JsonGzFileSink sink = new JsonGzFileSink(

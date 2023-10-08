@@ -60,19 +60,22 @@ import com.google.common.collect.ImmutableSortedSet;
  * ImmutableConfig does not have methods that change property values. Consequently, ImmutableConfig
  * objects can be safely shared without worrying about concurrent state changes.
  * <p>
- * <B> This class cannot be extended.
+ * This class cannot be extended.
  * <p>
- * </B> New config classes should store data in an ImmutableConfig and then add well named methods
+ * New config classes should store data in an ImmutableConfig and then add well named methods
  * like:
- * <pre>public String propertyA() {...}</pre>
- * <pre>public boolean propertyB(){...}</pre>
- * <pre>public int propertyC(){...}</pre> Where the asProperties A, B, and C have useful names like
- * "username()", "removeDuplicates()", or "maxAllowableCount()". This convention encourages readable
- * code like:
- * <pre> if(config.shouldPublishResults()) {
+ * <pre>{@code
+ *     public String propertyA() {...}
+ *     public boolean propertyB(){...}
+ *     public int propertyC(){...}
+ * }</pre>
+ * Where these methods have useful names like "username()", "removeDuplicates()", or
+ * "maxAllowableCount()". This convention encourages readable code like:
+ * <pre>{@code
+ * if(config.shouldPublishResults()) {
  *   publishResults();
  * }
- * </pre>
+ * }</pre>
  * ImmutableConfig (which is designed for encapsulation) is preferable to QuickProperties (which is
  * designed for extension).
  */
