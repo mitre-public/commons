@@ -29,9 +29,9 @@ tasks {
 }
 
 java {
-    val javaVersion = JavaVersion.VERSION_1_8
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
     withSourcesJar()
     withJavadocJar()
 }
