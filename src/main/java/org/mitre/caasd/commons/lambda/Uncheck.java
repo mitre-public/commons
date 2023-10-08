@@ -27,10 +27,13 @@ import org.mitre.caasd.commons.util.DemotedException;
 /**
  * Collection of convenience methods to shorten the syntax when used in
  * {@link Stream} operators:
- * 
+ *
+ * <pre>{@code
  * stream
- * .filter(Uncheck.pred(x -> checkedTest(x)))
- * .map(Uncheck.func(x -> checkedFn(x)))
+ *    .filter(Uncheck.pred(x -> checkedTest(x)))
+ *    .map(Uncheck.func(x -> checkedFn(x)))
+ *    .toList();
+ * }</pre>
  */
 public class Uncheck {
 

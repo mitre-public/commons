@@ -91,6 +91,8 @@ public class Acceleration implements Serializable, Comparable<Acceleration> {
      *
      * @param changeInSpeed The change in a speed measurement
      * @param elapsedTime   The length of time over which the observed speedDelta occurred
+     *
+     * @return An Acceleration value object embedding this rate of change
      */
     public static Acceleration of(Speed changeInSpeed, Duration elapsedTime) {
         return new Acceleration(changeInSpeed, elapsedTime);
@@ -102,6 +104,8 @@ public class Acceleration implements Serializable, Comparable<Acceleration> {
      *
      * @param speedDeltaPerSecond The rate of change in a speed quantity. This rate of change is
      *                            pre-normalized to reflect "speedDelta/oneSecond"
+     *
+     * @return An Acceleration value object embedding this rate of change
      */
     public static Acceleration of(Speed speedDeltaPerSecond) {
         return new Acceleration(speedDeltaPerSecond);

@@ -135,7 +135,7 @@ public class Position implements HasTime, HasPosition {
         return (altitudeIsValid) ? Distance.ofFeet(altitudeInFeet) : null;
     }
 
-    /** Tantamount to Optional.ofNullable(this.altitude()); */
+    /** @return Equivalent to: {@code Optional.ofNullable(this.altitude());} */
     public Optional<Distance> altitudeAsOpt() {
         return Optional.ofNullable(altitude());
     }

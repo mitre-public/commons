@@ -36,7 +36,7 @@ import java.util.function.Consumer;
  * creates records should be cleanly separated from the code that publishes/archives those records.
  * <p>
  * The second goal is to make client code more readable. The term OutputSink is easier to understand
- * than a "Consumer<T>"
+ * than a {@code Consumer<T>}
  */
 public interface OutputSink<T> extends Consumer<T>, Closeable, Flushable {
 

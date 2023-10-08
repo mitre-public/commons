@@ -39,7 +39,7 @@ public class TranslatingConsumer<BEFORE, AFTER> implements Consumer<BEFORE> {
 
     /**
      * Wrap a downStream consumer with a preceding "type translation step".  This allows the
-     * downStream Consumer<AFTER> to masquerade as a Consumer<BEFORE>
+     * downStream {@code Consumer<AFTER>} to masquerade as a {@code Consumer<BEFORE>}
      *
      * @param translator Converts inputs from the "BEFORE" type to the "AFTER" type (and sends them
      *                   to the downStream consumer)

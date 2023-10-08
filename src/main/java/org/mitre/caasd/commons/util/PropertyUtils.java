@@ -63,7 +63,7 @@ import com.google.common.collect.ImmutableMap;
  * automatically trimmed of whitespace and missing properties throw MissingPropertyExceptions as
  * opposed to merely returning null.
  * <p>
- * <B> Together, these methods facilitate building a clean, facade API around a raw Properties
+ * Together, these methods facilitate building a clean, facade API around a raw Properties
  * object. For example, the goal is to make writing methods like "shouldPublishResults()" and
  * "maxAttempts()" simple one-line methods rather than nests of String parsing and error trapping.
  */

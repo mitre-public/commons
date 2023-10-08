@@ -50,11 +50,9 @@ import org.mitre.caasd.commons.Pair;
  *    if x = y (optional)
  * }
  * <p>
- * <p>
  * A MetricSet is loosely based on the MTree introduced by Paolo Ciaccia, Marco Patella, and Pavel
  * Zezula in 1997 in the paper "M-tree An Efficient Access Method for Similarity Search in Metric
  * Spaces" from the Proceedings of the 23rd VLDB Conference.
- * <p>
  * <p>
  * A MetricSet is a binary search tree in which each node in the tree owns a multi-dimensional
  * sphere. That sphere's radius is large enough to ensure that every Key beneath that node is
@@ -62,7 +60,6 @@ import org.mitre.caasd.commons.Pair;
  * because every Key contained in the MetricSet must fit inside its sphere. Sub-trees are associated
  * with smaller spheres. Each sphere has a centerpoint and radius whose values are used to route
  * adds, kNN searches, and range searches.
- * <p>
  * <p>
  * When Keys are first added to a MetricSet they are placed inside a "Sphere of Points". Eventually,
  * that Sphere will need to be split because it will have too many entries to search quickly. When
@@ -72,7 +69,6 @@ import org.mitre.caasd.commons.Pair;
  * "Sphere of Points" are selected to reduce the overlapping volume between the 2 new spheres.
  * Reducing this shared volume reduces the number of spheres a search must visit.
  * <p>
- * <p>
  * When Keys are removed from a MetricSet they are correctly removed, however, the fact that the key
  * was present in the MetricSet may leave a permanent imprint on the MetricSet. This occurs when the
  * Key was selected as the centerpoint for a "Sphere of Points". In this case the Key is still used
@@ -80,7 +76,6 @@ import org.mitre.caasd.commons.Pair;
  * insertion of a Key can permanently reduce the query routing efficency of an MetricSet. This
  * occurs when the key insertion forces a Sphere to increase its radius (which will not shrink upon
  * key removal).
- * <p>
  * <p>
  * It is important to know that MetricSets have no automatic balancing mechanism. Therefore
  * inserting Key pairs where the Keys vary in some predictable way is likely to produce a tree that

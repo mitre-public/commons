@@ -220,7 +220,11 @@ public class KineticPosition implements HasTime, HasPosition {
         return BASE_64_ENCODER.encodeToString(toBytes());
     }
 
-    /** @return A new KineticPosition by parsing the binary data represented within a Base64 String. */
+    /**
+     * @param str Usually the bytes() of a KineticPosition that were previously encoded in Base64.
+     *
+     * @return A new KineticPosition by parsing the binary data represented within a Base64 String.
+     */
     public static KineticPosition fromBase64(String str) {
         byte[] bytes = Base64.getDecoder().decode(str);
         return new KineticPosition(bytes);

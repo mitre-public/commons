@@ -144,8 +144,8 @@ public class TileAddress {
 
 
     /**
-     * @return a Comparator<TileAddress> That makes can sort TileAddress and easily identify the
-     * topLeft and bottomRight TileAddress.
+     * @return a {@code Comparator<TileAddress>} That makes can sort TileAddress and easily identify
+     *     the topLeft and bottomRight TileAddress.
      */
     public static Comparator<TileAddress> cornerFinder() {
         return (TileAddress o1, TileAddress o2) -> {
