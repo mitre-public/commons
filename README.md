@@ -1,3 +1,5 @@
+[![Java CI with Gradle](https://github.com/mitre-public/commons/actions/workflows/ci.yml/badge.svg)](https://github.com/mitre-public/commons/actions/workflows/ci.yml)
+
 # Introduction to this Commons Project
 
 This project contains general purpose Java utilities for common CAASD's project needs. For example, this project
