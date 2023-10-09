@@ -26,30 +26,31 @@ contains:
 
 
 ### Early Open Sourcing checklist
-- [DONE] Move project to github
-- [DONE] Reconsider groupId -- **Decision** change from org.mitre.caasd to org.mitre
-- [DONE] Delete any methods that have better alternatives in either java or guava
-- Validate/change the existing package-to-class organization
+
+- [x] Move project to GitHub
+- [x] Reconsider groupId -- **Decision** change from `org.mitre.caasd` to `org.mitre`
+- [x] Delete any methods that have better alternatives in either java or guava
+- [ ] Validate/change the existing package-to-class organization
   - Will probably remove caasd from package path
-- Add CI/CD in github repo (CI/CD after obvious code changes)
-  - Initially publish to github
+- [ ] Add CI/CD in GitHub repo (CI/CD after obvious code changes)
+  - Initially publish to GitHub
   - Add on maven central cloning of full releases (no SNAPSHOTS)
-- Add "CONTRIBUTION.md" rules
-- Decide how "top of file license" data will go.  Do we have one repo-wide license? Prefix every file with the license?  What is the correct license?
-- Add Roadmap
-  - Releasing current Java 8 version.
-  - The pivoting to Java 17, 
-  - Removing pair and triple (only in Java 17+)
-  - [DONE] Add `LatLongPath`
-  - Adding new `DynamoMetricTree` (requires Java 17)
-- Reduce entire git history to 1 "Initial Commit"
-- Add CI/CD pipeline that publishes to maven central
-- VERIFY guava doesn't leak into classpath
+- [ ] Add "CONTRIBUTION.md" rules
+- [ ] Decide how "top of file license" data will go.  Do we have one repo-wide license? Prefix every file with the license?  What is the correct license?
+- [ ] Add Roadmap
+  - [ ] Releasing current Java 8 version
+  - [ ] Then pivoting to Java 17
+  - [ ] Removing pair and triple (only in Java 17+)
+  - [x] Add `LatLongPath`
+  - [ ] Adding new `DynamoMetricTree` (requires Java 17)
+- [ ] Reduce entire git history to 1 "Initial Commit"
+- [ ] Add CI/CD pipeline that publishes to maven central
+- [ ] VERIFY Guava doesn't leak into classpath
 
 ### Tasks
-- [DONE] TranslatingConsumer needs a getter for each component
-- [DONE] FilteredConsumer needs a getter for each component
-- Interpolator needs to work across the international date line (e.g. where longitudes have a cliff)
+- [x] TranslatingConsumer needs a getter for each component
+- [x] FilteredConsumer needs a getter for each component
+- [ ] Interpolator needs to work across the international date line (e.g. where longitudes have a cliff)
 
 ### Library Usage
 
