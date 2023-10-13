@@ -32,7 +32,7 @@ contains:
 - [x] Delete any methods that have better alternatives in either java or guava
 - [ ] Validate/change the existing package-to-class organization
   - Will probably remove caasd from package path
-- [ ] Add CI/CD in GitHub repo (CI/CD after obvious code changes)
+- [X] Add CI/CD in GitHub repo (CI/CD after obvious code changes)
   - Initially publish to GitHub
   - Add on maven central cloning of full releases (no SNAPSHOTS)
 - [ ] Add "CONTRIBUTION.md" rules
@@ -44,7 +44,7 @@ contains:
   - [x] Add `LatLongPath`
   - [ ] Adding new `DynamoMetricTree` (requires Java 17)
 - [ ] Reduce entire git history to 1 "Initial Commit"
-- [ ] Add CI/CD pipeline that publishes to maven central
+- [ ] Document CI/CD pipeline & strategy for (manually) publishing to maven central
 - [ ] VERIFY Guava doesn't leak into classpath
 
 ### Tasks
@@ -58,7 +58,7 @@ Add this to your Gradle dependency list:
 
 ```
 dependencies {
-  implementation("org.mitre.caasd:commons:0.0.53")
+  implementation("org.mitre:commons:0.0.54")
 }
 ```
 
@@ -66,9 +66,9 @@ Add this to your Maven dependency list:
 
 ```
 <dependency>
-    <groupId>org.mitre.caasd</groupId>
+    <groupId>org.mitre</groupId>
     <artifactId>commons</artifactId>
-    <version>0.053/version>
+    <version>0.054/version>
 </dependency>
 ```
 
