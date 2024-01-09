@@ -41,7 +41,7 @@ general purpose Java utilities from the Aviation Risk Identification and Assessm
 ### Early Open Sourcing checklist
 
 - [x] Reconsider groupId -- **Decision** change from `org.mitre.caasd` to `org.mitre`
-    - [ ] Execute change!
+    - [x] Execute change!
 - [ ] Add "CONTRIBUTION.md" rules
 - [ ] Add Roadmap
     - [ ] Releasing current Java 8 version
