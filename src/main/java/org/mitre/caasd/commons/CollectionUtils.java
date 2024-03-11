@@ -27,7 +27,7 @@ import java.util.function.Function;
 public class CollectionUtils {
 
     private CollectionUtils() {
-        throw new IllegalStateException("Utility class should not be instatiated");
+        throw new IllegalStateException("Utility class should not be instantiated");
     }
 
     /**
