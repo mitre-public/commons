@@ -31,6 +31,17 @@ tasks {
     }
 }
 
+
+tasks.named<Test>("test") {
+    useJUnitPlatform()
+
+//    maxHeapSize = "1G"
+
+    testLogging {
+        events("PASSED", "SKIPPED", "FAILED")
+    }
+}
+
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(8))
