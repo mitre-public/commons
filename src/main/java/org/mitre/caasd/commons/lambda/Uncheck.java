@@ -16,10 +16,7 @@
 
 package org.mitre.caasd.commons.lambda;
 
-import java.util.function.BiFunction;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.function.*;
 import java.util.stream.Stream;
 
 import org.mitre.caasd.commons.util.DemotedException;
@@ -77,6 +74,30 @@ public class Uncheck {
         return x -> {
             try {
                 return pred.test(x);
+            } catch (RuntimeException e) {
+                // pass runtime exceptions, they cannot be demoted
+                throw e;
+            } catch (Exception e) {
+                throw DemotedException.demote(e);
+            }
+        };
+    }
+
+    /**
+     * Demote a {@link CheckedConsumer} that throws an {@link Exception} into a plain
+     * {@link Consumer}.  This method is for simplifying stream processing pipelines.
+     *
+     * @param consumer A consumer that throws a checked exception
+     * @param <T>  The generic type
+     *
+     * @return A plain Consumer that may emit DemotedExceptions
+     * @throws DemotedException when the original CheckedConsumer would have thrown a checked
+     *                          Exception
+     */
+    public static <T> Consumer<T> consumer(CheckedConsumer<T> consumer) {
+        return x -> {
+            try {
+                consumer.accept(x);
             } catch (RuntimeException e) {
                 // pass runtime exceptions, they cannot be demoted
                 throw e;
