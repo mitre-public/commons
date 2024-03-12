@@ -3,9 +3,7 @@ package org.mitre.caasd.commons.lambda;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -42,6 +40,41 @@ public class UncheckTest {
 
         assertEquals("red", color);
     }
+
+    @Test
+    public void testCheckedConsumer() {
+
+        //just a "Consumer" that throws an Exception...
+        CheckedConsumer<String> brokenConsumer = str -> {
+            throw new ParseException("I always fail", 0);
+        };
+
+        List<String> labels = Arrays.asList("red", "green", "yellow");
+
+        DemotedException ex = assertThrows(
+            DemotedException.class,
+            () -> labels.forEach(Uncheck.consumer(brokenConsumer))
+        );
+
+        assertInstanceOf(ParseException.class, ex.getCause());
+    }
+
+    @Test
+    public void testCheckedConsumer_noExceptionThrown() {
+
+        //just a "Consumer" that might throw an Exception...
+        CheckedConsumer<String> stringConsumer = str -> {
+            if (str.startsWith("e")) {
+                throw new IllegalArgumentException("Cannot start with e");
+            }
+        };
+
+        List<String> aList = Arrays.asList("red", "green", "yellow");
+
+        //aList.forEach(stringConsumer); //does not compile!, Hence the class
+        aList.forEach(Uncheck.consumer(stringConsumer));
+    }
+
 
     @Test
     public void testCheckedBiFunction() {
