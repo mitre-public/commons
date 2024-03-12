@@ -18,11 +18,16 @@ package org.mitre.caasd.commons.util;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 class ParallelismDetectorTest {
@@ -33,41 +38,58 @@ class ParallelismDetectorTest {
 
         ParallelismDetector parallelismDetector = new ParallelismDetector();
 
+        CountDownLatch innerLatch = new CountDownLatch(1);
+
         public void doSingleThreadedWork() {
             parallelismDetector.run(() -> theFragileWork());
         }
 
         private void theFragileWork() {
-            //waste some time doing something
-            long sum = 0;
-            for (int i = 0; i < 10_000_000; i++) {
-                sum += i;
+            //force a stall here
+            try {
+                innerLatch.await();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
     }
 
+    static class Catcher implements UncaughtExceptionHandler {
 
+        List<Thread> threads = new ArrayList<>();
+        List<Throwable> throwables = new ArrayList<>();
+
+        @Override
+        public void uncaughtException(Thread t, Throwable e) {
+            threads.add(t);
+            throwables.add(e);
+        }
+    }
+
+    @RepeatedTest(100)
     @Test
-    public void demonstrateParallelismDetectionAndExceptionThrowing() throws InterruptedException {
+    public void demonstrateParallelismDetectionAndExceptionThrowing() {
 
         SingleThreadedAccessOnly delicateFlower = new SingleThreadedAccessOnly();
-        CountDownLatch latch = new CountDownLatch(1);
 
-        //This thread will start a long-duration task that "has the lease" on delicateFlower
-        Thread t1 = new Thread(
-            () -> {
-                latch.countDown();
-                delicateFlower.doSingleThreadedWork();
-            }
-        );
+        //These threads start a never-ending task that "has the lease" on delicateFlower
+        Thread t1 = new Thread(() -> delicateFlower.doSingleThreadedWork());
+        Thread t2 = new Thread(() -> delicateFlower.doSingleThreadedWork());
+
+        Catcher errorHandler = new Catcher();
+        t1.setUncaughtExceptionHandler(errorHandler);
+        t2.setUncaughtExceptionHandler(errorHandler);
+
         t1.start();
-        latch.await();
+        t2.start();
 
-        //Now, when this 2nd thread begins operating on the same delicateFlower it gets a ConcurrentModificationException
-        assertThrows(
-            ConcurrentModificationException.class,
-            () -> delicateFlower.doSingleThreadedWork()
-        );
+        //waste time, give Threads a moment to run
+        while (errorHandler.throwables.isEmpty()) {
+            Thread.yield();
+        }
+
+        assertThat(errorHandler.throwables, hasSize(1));
+        assertInstanceOf(ConcurrentModificationException.class, errorHandler.throwables.get(0));
     }
 
     @Test

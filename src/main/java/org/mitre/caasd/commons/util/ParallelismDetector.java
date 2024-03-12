@@ -20,21 +20,21 @@ import java.util.ConcurrentModificationException;
 import java.util.concurrent.Callable;
 
 /**
- * ParallelismDetector verifies every Runnable or Callable task it executes is executed without
- * parallelism. Using a ParallelismDetector instance is a more performant and more informative
- * alternative to adding "synchronized" to a method signature.
+ * ParallelismDetector verifies every {@link Runnable} or {@link Callable} it executes is executed
+ * without parallelism. Using a ParallelismDetector instance is a more performant and more
+ * informative alternative to adding "synchronized" to a method signature.
  *
  * <p>Imagine you have a performance-critical method that is not thread-safe. You need to ensure
  * the method is never used unsafely in a multi-threaded setting BUT you do not want to absorb the
  * performance penalty of adding "synchronized" to the method's signature. Instead, you want to rely
- * on software design (and a correct implementation!) to guarantee ONLY single-threaded access every
+ * on software design (and a correct implementation!) to guarantee ONLY single-threaded access ever
  * occurs. In this case, using a ParallelismDetector can help verify the correctness of your design
  * and implementation.
  *
  * <p>Using a ParallelismDetector enables faster executing code because we know adding the
  * "synchronized" keyword to a method's signature comes with a significant performance penalty.
  *
- * <p>ParallelismDetector provides a much more information about single-threaded usage than just
+ * <p>ParallelismDetector provides MORE INFORMATION about single-threaded usage than just
  * adding the synchronized keyword on a method. ParallelismDetector detects parallel execution
  * attempts and throws Exceptions when they occur. This means a ParallelismDetector can help verify
  * the correctness of an implementation that relies on software design, and not the on
@@ -48,7 +48,7 @@ import java.util.concurrent.Callable;
  *
  * <p>Note: This class is generalizing the strategy from several Collection Iterator
  * implementations where unwanted multi-thread access is not "prevented with synchronized" but
- * "detected and flagged with Exception".
+ * "detected and flagged with an Exception".
  *
  * <p>Warning: This class is optimized for speed. It does not use Atomic variables, the volatile
  * keyword, or the synchronized keyword. Therefore, the "parallelism detection strategy" is not 100%
@@ -71,8 +71,8 @@ import java.util.concurrent.Callable;
  * <pre>{@code
  * public class ExampleUsage {
  *
- *     private final ParallelismDetector parallelismDetector_1and2 = new NoParallelism();
- *     private final ParallelismDetector parallelismDetector_3only = new NoParallelism();
+ *     private final ParallelismDetector parallelismDetector_1and2 = new ParallelismDetector();
+ *     private final ParallelismDetector parallelismDetector_3only = new ParallelismDetector();
  *
  *     public void method1() {
  *         parallelismDetector_1and2.run(
@@ -154,7 +154,7 @@ public class ParallelismDetector {
 
     /**
      * @return True if a thread is currently executing in this ParallelismDetector's "run(Runnable)"
-     * or "call(Callable)" methods.
+     *     or "call(Callable)" methods.
      */
     public boolean isMidExecution() {
         return isMidExecution;
