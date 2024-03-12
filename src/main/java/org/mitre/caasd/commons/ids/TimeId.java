@@ -39,7 +39,7 @@ import org.mitre.caasd.commons.HasTime;
  * and UUID (see https://en.wikipedia.org/wiki/Universally_unique_identifier). TimeId is similar to
  * Snowflake_ID because both systems embed a timestamp that ensures the id's are mostly sorted by
  * time. TimeId is similar to UUID because they both allocate enough bits to storing pseudo-random
- * hashes for the probability of a hash-collision is vanishingly small.
+ * bits for the probability of a hash-collision to be vanishingly small.
  *
  * <p>For example, if you create 100 Million TimeId's that all embed the same timestamp (to the
  * millisecond resolution) the probability of a hash collision is only 6.462e-11. This means there
@@ -50,7 +50,7 @@ import org.mitre.caasd.commons.HasTime;
  * 77,371,252,455,336,267,181,195,264 possible unique hashes.
  *
  * <p>Besides uniqueness, TimeId provides 2 additional features. They are Comparable and they
- * can by built while the data an ID will be used to identify is STILL changing. In other words,
+ * can be built while the data an ID will be used to identify is STILL changing. In other words,
  * using TimeId does NOT require capturing an entire data stream (like a completed flight track) AND
  * THEN building the identifying TimeId by hashing the contents of the completed data stream.
  * Rather, TimeId supports providing a unique id at the earliest possible moment (e.g. once a new

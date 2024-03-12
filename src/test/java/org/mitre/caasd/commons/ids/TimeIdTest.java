@@ -56,11 +56,12 @@ class TimeIdTest {
         assertThat(id_1.time(), is(EPOCH.plusMillis(1L)));
         assertThat(id_1.timeAsEpochMs(), is(1L));
 
-        //The Instant are not perfect copies because the nanosecond part of the Instant is not carried over
-        assertThat(idNow.time(), is(not(now)));
-
-        //But the "epochMilliSeconds" are the same
+        //The "epochMilliSeconds" are the same
         assertThat(idNow.timeAsEpochMs(), is(now.toEpochMilli()));
+
+        //But! We CANNOT correctly make this assertion because the nanoseconds may or may not be the same
+        //  It will depend on the system clock used within Instant.now()
+        //assertThat(idNow.time(), is(not(now)));
     }
 
     @Test
