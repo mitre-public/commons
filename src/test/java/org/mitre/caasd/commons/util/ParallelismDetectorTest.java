@@ -38,14 +38,16 @@ class ParallelismDetectorTest {
         }
 
         private void theFragileWork() {
-            //waste some time doing something
+            //waste some time doing something, encourage thread to pause midstep
             long sum = 0;
-            for (int i = 0; i < 10_000_000; i++) {
-                sum += i;
+            for (int i = 0; i < 10_000; i++) {
+                for (int j = 0; j < 10_000; j++) {
+                    sum += i;
+                }
+                Thread.yield();
             }
         }
     }
-
 
     @Test
     public void demonstrateParallelismDetectionAndExceptionThrowing() throws InterruptedException {
