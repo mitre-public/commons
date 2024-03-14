@@ -11,21 +11,18 @@ import org.junit.jupiter.api.Test;
 
 class TranslatingConsumerTest {
 
-
     @Test
     public void basicUsage() {
 
-        //Bundle a "String to Double" function and a downstream Consumer<Double>.
-        //Allows the "combined item" to be used as a Consumer<String>.
-        TranslatingConsumer<String, Double> stringConsumer = new TranslatingConsumer<>(
-            str -> sqrt(str.length()),
-            new AggregatingConsumer()
-        );
+        // Bundle a "String to Double" function and a downstream Consumer<Double>.
+        // Allows the "combined item" to be used as a Consumer<String>.
+        TranslatingConsumer<String, Double> stringConsumer =
+                new TranslatingConsumer<>(str -> sqrt(str.length()), new AggregatingConsumer());
 
-        stringConsumer.accept("a"); //sqrt(1)
-        stringConsumer.accept("bb");  //sqrt(2)
-        stringConsumer.accept("ccc");  //sqrt(3)
-        stringConsumer.accept("dddd");  //sqrt(4)
+        stringConsumer.accept("a"); // sqrt(1)
+        stringConsumer.accept("bb"); // sqrt(2)
+        stringConsumer.accept("ccc"); // sqrt(3)
+        stringConsumer.accept("dddd"); // sqrt(4)
 
         double actualSum = ((AggregatingConsumer) stringConsumer.consumer()).sum;
         double actualCount = ((AggregatingConsumer) stringConsumer.consumer()).count;
@@ -33,7 +30,6 @@ class TranslatingConsumerTest {
         assertThat(actualSum, closeTo(sqrt(1) + sqrt(2) + sqrt(3) + sqrt(4), 0.001));
         assertThat(actualCount, is(4.0));
     }
-
 
     static class AggregatingConsumer implements Consumer<Double> {
 
@@ -47,5 +43,4 @@ class TranslatingConsumerTest {
             count++;
         }
     }
-
 }

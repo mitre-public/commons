@@ -63,9 +63,7 @@ public class HashedLinkedSequenceTest {
     public void testAddFirst_null() {
         HashedLinkedSequence<Integer> list = new HashedLinkedSequence<>();
 
-        assertThrows(NullPointerException.class,
-            () -> list.addFirst(null)
-        );
+        assertThrows(NullPointerException.class, () -> list.addFirst(null));
     }
 
     @Test
@@ -73,10 +71,8 @@ public class HashedLinkedSequenceTest {
         HashedLinkedSequence<Integer> list = new HashedLinkedSequence<>();
         list.add(5);
 
-        //duplicate should fail
-        assertThrows(IllegalArgumentException.class,
-            () -> list.addFirst(5)
-        );
+        // duplicate should fail
+        assertThrows(IllegalArgumentException.class, () -> list.addFirst(5));
     }
 
     @Test
@@ -108,10 +104,8 @@ public class HashedLinkedSequenceTest {
         HashedLinkedSequence<Integer> list = new HashedLinkedSequence<>();
         list.add(5);
 
-        //12 is not in the list -- so this call is undefined
-        assertThrows(IllegalArgumentException.class,
-            () -> list.getElementAfter(12)
-        );
+        // 12 is not in the list -- so this call is undefined
+        assertThrows(IllegalArgumentException.class, () -> list.getElementAfter(12));
     }
 
     @Test
@@ -119,10 +113,8 @@ public class HashedLinkedSequenceTest {
         HashedLinkedSequence<Integer> list = new HashedLinkedSequence<>();
         list.add(5);
 
-        //at the end of the list, nothing to get
-        assertThrows(NoSuchElementException.class,
-            () -> list.getElementAfter(5)
-        );
+        // at the end of the list, nothing to get
+        assertThrows(NoSuchElementException.class, () -> list.getElementAfter(5));
     }
 
     @Test
@@ -139,10 +131,8 @@ public class HashedLinkedSequenceTest {
         HashedLinkedSequence<Integer> list = new HashedLinkedSequence<>();
         list.add(5);
 
-        //12 is not in the list -- so this call is undefined
-        assertThrows(IllegalArgumentException.class,
-            () -> list.getElementBefore(12)
-        );
+        // 12 is not in the list -- so this call is undefined
+        assertThrows(IllegalArgumentException.class, () -> list.getElementBefore(12));
     }
 
     @Test
@@ -150,10 +140,8 @@ public class HashedLinkedSequenceTest {
         HashedLinkedSequence<Integer> list = new HashedLinkedSequence<>();
         list.add(5);
 
-        //at the front of the list, nothing to get
-        assertThrows(NoSuchElementException.class,
-            () -> list.getElementBefore(5)
-        );
+        // at the front of the list, nothing to get
+        assertThrows(NoSuchElementException.class, () -> list.getElementBefore(5));
     }
 
     @Test
@@ -168,10 +156,8 @@ public class HashedLinkedSequenceTest {
     public void testInsertAfter_referenceDoesNotExist() {
         HashedLinkedSequence<Integer> list = new HashedLinkedSequence<>();
 
-        //12 does not exist
-        assertThrows(IllegalArgumentException.class,
-            () -> list.insertAfter(5, 12)
-        );
+        // 12 does not exist
+        assertThrows(IllegalArgumentException.class, () -> list.insertAfter(5, 12));
     }
 
     @Test
@@ -179,10 +165,8 @@ public class HashedLinkedSequenceTest {
         HashedLinkedSequence<Integer> list = new HashedLinkedSequence<>();
         list.add(5);
 
-        //5 already exists
-        assertThrows(IllegalArgumentException.class,
-            () -> list.insertAfter(5, 5)
-        );
+        // 5 already exists
+        assertThrows(IllegalArgumentException.class, () -> list.insertAfter(5, 5));
     }
 
     @Test
@@ -227,10 +211,8 @@ public class HashedLinkedSequenceTest {
     public void testInsertBefore_referenceDoesNotExist() {
         HashedLinkedSequence<Integer> list = new HashedLinkedSequence<>();
 
-        //12 does not exist
-        assertThrows(IllegalArgumentException.class,
-            () -> list.insertBefore(5, 12)
-        );
+        // 12 does not exist
+        assertThrows(IllegalArgumentException.class, () -> list.insertBefore(5, 12));
     }
 
     @Test
@@ -238,17 +220,15 @@ public class HashedLinkedSequenceTest {
         HashedLinkedSequence<Integer> list = new HashedLinkedSequence<>();
         list.add(5);
 
-        //5 already exists
-        assertThrows(IllegalArgumentException.class,
-            () -> list.insertBefore(5, 5)
-        );
+        // 5 already exists
+        assertThrows(IllegalArgumentException.class, () -> list.insertBefore(5, 5));
     }
 
     @Test
     public void insertBeforeFirstElementWorks() {
 
         HashedLinkedSequence<Integer> list = newHashedLinkedSequence(1, 2);
-        list.insertBefore(22, 1); //should get 22, 1, 2
+        list.insertBefore(22, 1); // should get 22, 1, 2
 
         assertThat(list.size(), is(3));
         assertThat(list.getFirst(), is(22));
@@ -264,7 +244,7 @@ public class HashedLinkedSequenceTest {
         HashedLinkedSequence<Integer> list = new HashedLinkedSequence<>();
         list.add(1);
         list.add(5);
-        list.insertBefore(12, 5); //put 12 in between 1 and 5
+        list.insertBefore(12, 5); // put 12 in between 1 and 5
 
         assertThat(list.getFirst(), is(1));
         assertThat(list.getLast(), is(5));
@@ -345,16 +325,16 @@ public class HashedLinkedSequenceTest {
         assertThat(list.isEmpty(), is(true));
 
         try {
-            list.getFirst(); //should throw NoSuchElementException
+            list.getFirst(); // should throw NoSuchElementException
             fail();
         } catch (NoSuchElementException ex) {
-            //exception is expected
+            // exception is expected
         }
         try {
-            list.getLast(); //should throw NoSuchElementException
+            list.getLast(); // should throw NoSuchElementException
             fail();
         } catch (NoSuchElementException ex) {
-            //exception is expected
+            // exception is expected
         }
     }
 
@@ -422,7 +402,7 @@ public class HashedLinkedSequenceTest {
 
         list.add(22);
 
-        //breaks because the list was editted after the iterator was made
+        // breaks because the list was editted after the iterator was made
         assertThrows(ConcurrentModificationException.class, () -> iter.next());
     }
 
@@ -436,7 +416,7 @@ public class HashedLinkedSequenceTest {
 
         list.addLast(22);
 
-        //breaks because the list was editted after the iterator was made
+        // breaks because the list was editted after the iterator was made
         assertThrows(ConcurrentModificationException.class, () -> iter.next());
     }
 
@@ -450,7 +430,7 @@ public class HashedLinkedSequenceTest {
 
         list.addFirst(22);
 
-        //breaks because the list was editted after the iterator was made
+        // breaks because the list was editted after the iterator was made
         assertThrows(ConcurrentModificationException.class, () -> iter.next());
     }
 
@@ -464,7 +444,7 @@ public class HashedLinkedSequenceTest {
 
         list.remove(1);
 
-        //breaks because the list was editted after the iterator was made
+        // breaks because the list was editted after the iterator was made
         assertThrows(ConcurrentModificationException.class, () -> iter.next());
     }
 
@@ -478,7 +458,7 @@ public class HashedLinkedSequenceTest {
 
         list.insertBefore(101, 1);
 
-        //breaks because the list was editted after the iterator was made
+        // breaks because the list was editted after the iterator was made
         assertThrows(ConcurrentModificationException.class, () -> iter.next());
     }
 
@@ -492,7 +472,7 @@ public class HashedLinkedSequenceTest {
 
         list.insertAfter(101, 1);
 
-        //breaks because the list was editted after the iterator was made
+        // breaks because the list was editted after the iterator was made
         assertThrows(ConcurrentModificationException.class, () -> iter.next());
     }
 
@@ -506,7 +486,7 @@ public class HashedLinkedSequenceTest {
 
         list.remove(22);
 
-        //remove did nothing, no ConcurrentModificationException should be thrown
+        // remove did nothing, no ConcurrentModificationException should be thrown
         assertDoesNotThrow(() -> iter.next());
     }
 
@@ -531,7 +511,7 @@ public class HashedLinkedSequenceTest {
         list.add(1);
         list.add(2);
         list.add(5);
-        Integer[] array = list.toArray(new Integer[]{});
+        Integer[] array = list.toArray(new Integer[] {});
         assertThat(array.length, is(3));
         assertThat(array[0], is(1));
         assertThat(array[1], is(2));
@@ -601,8 +581,8 @@ public class HashedLinkedSequenceTest {
     @Test
     public void iterableFactoryMethodWorks() {
         HashedLinkedSequence<Integer> list = newHashedLinkedSequence(
-            newArrayList(1, 6, 12, 22) //this an iterable
-        );
+                newArrayList(1, 6, 12, 22) // this an iterable
+                );
 
         assertThat(list.contains(1), is(true));
         assertThat(list.contains(6), is(true));
@@ -631,7 +611,7 @@ public class HashedLinkedSequenceTest {
         assertThat(list, hasSize(4));
         assertThat(list.isEmpty(), is(false));
 
-        list.clear(); //apply clear
+        list.clear(); // apply clear
 
         assertThat(list.contains(1), is(false));
         assertThat(list.contains(6), is(false));
@@ -644,14 +624,14 @@ public class HashedLinkedSequenceTest {
             list.getFirst();
             fail();
         } catch (NoSuchElementException ex) {
-            //this exception is expected
+            // this exception is expected
         }
 
         try {
             list.getLast();
             fail();
         } catch (NoSuchElementException ex) {
-            //this exception is expected
+            // this exception is expected
         }
     }
 

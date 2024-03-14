@@ -161,17 +161,17 @@ public class GzFileSink<T> implements Consumer<T>, Closeable {
      *                       just crash.
      * @param expirationTime How long between writing pieces of data until a .gz file is closed
      */
-    public GzFileSink(String outputDir, Function<T, String> toString, Function<T, String> fileNamer,
-                      Duration expirationTime) {
+    public GzFileSink(
+            String outputDir, Function<T, String> toString, Function<T, String> fileNamer, Duration expirationTime) {
         this.outputDir = requireNonNull(outputDir);
         this.toString = requireNonNull(toString);
         this.fileNamer = requireNonNull(fileNamer);
         this.expirationTime = requireNonNull(expirationTime);
-        //prevent writing to too many .gz files at once
+        // prevent writing to too many .gz files at once
         this.maxOpenWriters = 100;
         this.openWriters = new TreeMap<>();
         this.targetCounts = TreeMultiset.create();
-        //assume a backup of 5000 records means the data creation process is overwhelming the archival process
+        // assume a backup of 5000 records means the data creation process is overwhelming the archival process
         this.queue = new ArrayBlockingQueue<>(5000);
         this.executor = buildExecutor();
 
@@ -184,12 +184,7 @@ public class GzFileSink<T> implements Consumer<T>, Closeable {
      */
     private void scheduleStreamCloser() {
 
-        executor.scheduleWithFixedDelay(
-            this::closeStaleStreamTargets,
-            0,
-            1,
-            TimeUnit.SECONDS
-        );
+        executor.scheduleWithFixedDelay(this::closeStaleStreamTargets, 0, 1, TimeUnit.SECONDS);
     }
 
     /**
@@ -197,12 +192,7 @@ public class GzFileSink<T> implements Consumer<T>, Closeable {
      */
     private void scheduleDataWriting() {
 
-        executor.scheduleWithFixedDelay(
-            this::drainQueueAndWriteRecords,
-            0,
-            1,
-            TimeUnit.SECONDS
-        );
+        executor.scheduleWithFixedDelay(this::drainQueueAndWriteRecords, 0, 1, TimeUnit.SECONDS);
     }
 
     private void closeStaleStreamTargets() {
@@ -212,13 +202,12 @@ public class GzFileSink<T> implements Consumer<T>, Closeable {
     private List<String> staleOutputTargets() {
 
         List<String> staleStreamTargets = openWriters.entrySet().stream()
-            .filter(entry -> entry.getValue().isStale(expirationTime))
-            .map(Entry::getKey)
-            .collect(toList());
+                .filter(entry -> entry.getValue().isStale(expirationTime))
+                .map(Entry::getKey)
+                .collect(toList());
 
         return staleStreamTargets;
     }
-
 
     /**
      * Queue up an inputRecord for eventual emission to a gz file. This record will be used to
@@ -247,9 +236,8 @@ public class GzFileSink<T> implements Consumer<T>, Closeable {
         try {
             queue.put(inputRecord);
         } catch (InterruptedException ex) {
-            //A data-providing thread was Interupted while waiting to put an inputRecord into an overflowing queue.
-            throw demote("Thread interrupted while waiting to add item to maxxed out writeQueue",
-                ex);
+            // A data-providing thread was Interupted while waiting to put an inputRecord into an overflowing queue.
+            throw demote("Thread interrupted while waiting to add item to maxxed out writeQueue", ex);
         }
     }
 
@@ -269,8 +257,8 @@ public class GzFileSink<T> implements Consumer<T>, Closeable {
         String targetFilename = fileNamer.apply(inputRecord);
 
         TrackedPrintWriter targetStream = (openWriters.containsKey(targetFilename))
-            ? openWriters.get(targetFilename)
-            : newGzStreamFor(targetFilename);
+                ? openWriters.get(targetFilename)
+                : newGzStreamFor(targetFilename);
 
         targetStream.write(toString.apply(inputRecord) + "\n");
         targetStream.flush();
@@ -279,10 +267,9 @@ public class GzFileSink<T> implements Consumer<T>, Closeable {
     private TrackedPrintWriter newGzStreamFor(String filename) {
 
         checkState(
-            openWriters.size() <= maxOpenWriters,
-            "Cannot open new gz file because " + openWriters.size() +
-                " streams are already open.  Could calling flushAndCloseCurrentFiles() help?"
-        );
+                openWriters.size() <= maxOpenWriters,
+                "Cannot open new gz file because " + openWriters.size()
+                        + " streams are already open.  Could calling flushAndCloseCurrentFiles() help?");
 
         makeDirIfMissing(outputDir);
 
@@ -290,8 +277,8 @@ public class GzFileSink<T> implements Consumer<T>, Closeable {
             int count = targetCounts.count(filename);
 
             String actualFilename = (count > 0)
-                ? IN_PROGRESS_PREFIX + filename + "_" + count + ".gz"
-                : IN_PROGRESS_PREFIX + filename + ".gz";
+                    ? IN_PROGRESS_PREFIX + filename + "_" + count + ".gz"
+                    : IN_PROGRESS_PREFIX + filename + ".gz";
 
             File target = new File(outputDir + File.separator + actualFilename);
 
@@ -349,10 +336,10 @@ public class GzFileSink<T> implements Consumer<T>, Closeable {
             TrackedPrintWriter closeMe = openWriters.remove(targetFile);
             closeMe.close();
 
-            //rename file to let people know its done building...
+            // rename file to let people know its done building...
             File hasInProgressName = closeMe.targetFile();
-            File afterRename = new File(outputDir + File.separator +
-                hasInProgressName.getName().substring(IN_PROGRESS_PREFIX.length()));
+            File afterRename = new File(
+                    outputDir + File.separator + hasInProgressName.getName().substring(IN_PROGRESS_PREFIX.length()));
 
             move(hasInProgressName, afterRename);
 
@@ -363,7 +350,7 @@ public class GzFileSink<T> implements Consumer<T>, Closeable {
 
     private ScheduledExecutorService buildExecutor() {
 
-        ScheduledExecutorService ses = newScheduledThreadPool(1); //just 1 thread
+        ScheduledExecutorService ses = newScheduledThreadPool(1); // just 1 thread
 
         /*
          * An ExecutorService can prevent a process from shuting down properly. For example, if the
@@ -395,7 +382,7 @@ public class GzFileSink<T> implements Consumer<T>, Closeable {
             try {
                 archiver.close();
             } catch (IOException ex) {
-                //This class is only executed during the shutdown process, do nothing.
+                // This class is only executed during the shutdown process, do nothing.
             }
         }
     }
@@ -444,5 +431,4 @@ public class GzFileSink<T> implements Consumer<T>, Closeable {
             return targetFile;
         }
     }
-
 }

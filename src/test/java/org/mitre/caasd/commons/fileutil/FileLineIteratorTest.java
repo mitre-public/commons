@@ -73,9 +73,7 @@ public class FileLineIteratorTest {
         FileLineIterator iter = makeIterator();
         iter.next();
 
-        assertThrows(UnsupportedOperationException.class,
-            () -> iter.remove()
-        );
+        assertThrows(UnsupportedOperationException.class, () -> iter.remove());
     }
 
     @Test
@@ -99,9 +97,8 @@ public class FileLineIteratorTest {
     @Test
     public void handleEmptyFilesCorrectly() {
 
-        FileLineIterator iter = new FileLineIterator(
-            getResourceFile("org/mitre/caasd/commons/fileutil/emptyTextFile.txt")
-        );
+        FileLineIterator iter =
+                new FileLineIterator(getResourceFile("org/mitre/caasd/commons/fileutil/emptyTextFile.txt"));
 
         assertThat(iter.hasNext(), is(false));
     }
@@ -125,5 +122,4 @@ public class FileLineIteratorTest {
         assertThat(iter.next(), is("Goodbye"));
         assertThat(iter.hasNext(), is(false));
     }
-
 }

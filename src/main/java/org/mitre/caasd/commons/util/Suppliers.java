@@ -42,10 +42,9 @@ public class Suppliers {
     @SuppressWarnings("unchecked")
     public static SupplierChain<String> stringSupplierChain(String propertyKey, File flatFile) {
         return SupplierChain.of(
-            environmentVarSupplier(propertyKey),
-            systemPropertySupplier(propertyKey),
-            fileBasedSupplier(flatFile, propertyKey)
-        );
+                environmentVarSupplier(propertyKey),
+                systemPropertySupplier(propertyKey),
+                fileBasedSupplier(flatFile, propertyKey));
     }
 
     /** @return A Supplier that searches the environment variables for a specific key. */
@@ -66,7 +65,8 @@ public class Suppliers {
     /** Pulls a Key-Value pair from Environment Vars (e.g. System.getenv(key)). */
     public static class EnvironmentVarSupplier implements Supplier<String> {
 
-        // See https://github.com/aws/aws-sdk-java/blob/master/aws-java-sdk-core/src/main/java/com/amazonaws/auth/EnvironmentVariableCredentialsProvider.java
+        // See
+        // https://github.com/aws/aws-sdk-java/blob/master/aws-java-sdk-core/src/main/java/com/amazonaws/auth/EnvironmentVariableCredentialsProvider.java
         // That is a similar class that only provides AWSCredentials.
         // This is a more general solution
 
@@ -90,9 +90,7 @@ public class Suppliers {
             String val = System.getenv(propertyKey);
 
             this.queryWasRun = true;
-            this.propertyValue = nonNull(val)
-                ? val.trim()
-                : null;
+            this.propertyValue = nonNull(val) ? val.trim() : null;
 
             return propertyValue;
         }
@@ -101,7 +99,8 @@ public class Suppliers {
     /** Pulls a Key-Value pair from Java System Properties (e.g. System.getProperty(key)). */
     public static class SystemPropertiesSupplier implements Supplier<String> {
 
-        // See https://github.com/aws/aws-sdk-java/blob/master/aws-java-sdk-core/src/main/java/com/amazonaws/auth/SystemPropertiesCredentialsProvider.java
+        // See
+        // https://github.com/aws/aws-sdk-java/blob/master/aws-java-sdk-core/src/main/java/com/amazonaws/auth/SystemPropertiesCredentialsProvider.java
         // That is a similar class that only provides AWSCredentials,
         // This is a more general solution
 
@@ -122,18 +121,15 @@ public class Suppliers {
                 return propertyValue;
             }
 
-            //Do not throw an NPE if "value" is null.  We may rely on this behavior if we want to then
+            // Do not throw an NPE if "value" is null.  We may rely on this behavior if we want to then
             String val = System.getProperty(propertyKey);
 
             this.queryWasRun = true;
-            this.propertyValue = nonNull(val)
-                ? val.trim()
-                : null;
+            this.propertyValue = nonNull(val) ? val.trim() : null;
 
             return propertyValue;
         }
     }
-
 
     /** Pulls a Key-Value pair from a flat property File (see java.util.Properties). */
     public static class FileBasedSupplier implements Supplier<String> {
@@ -149,8 +145,8 @@ public class Suppliers {
              * if an earlier supplier in a SupplierChain has the asset we are looking for
              */
             requireNonNull(key);
-            this.sourceFile =
-                sourceFile;  //CAN BE NULL!  This allows saying "No" to File-Based support when building a SupplierChain
+            this.sourceFile = sourceFile; // CAN BE NULL!  This allows saying "No" to File-Based support when building a
+            // SupplierChain
             this.propertyKey = key;
             this.queryWasRun = false;
             this.propertyValue = null;
@@ -166,9 +162,7 @@ public class Suppliers {
             Optional<String> optValue = PropertyUtils.getOptionalString(propertyKey, props);
 
             this.queryWasRun = true;
-            this.propertyValue = optValue.isPresent()
-                ? optValue.get().trim()
-                : null;
+            this.propertyValue = optValue.isPresent() ? optValue.get().trim() : null;
 
             return propertyValue;
         }

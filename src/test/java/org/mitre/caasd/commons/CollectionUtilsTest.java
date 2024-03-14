@@ -34,18 +34,15 @@ import org.mitre.caasd.commons.HasTimeTest.PojoWithTime;
 
 import org.junit.jupiter.api.Test;
 
-
 public class CollectionUtilsTest {
-
 
     @Test
     public void binarySearchMatchesGiveCorrectIndex_arrayList() {
 
         ArrayList<PojoWithTime> list = newArrayList(
-            new PojoWithTime("a", EPOCH),
-            new PojoWithTime("b", EPOCH.plusSeconds(10)),
-            new PojoWithTime("c", EPOCH.plusSeconds(20))
-        );
+                new PojoWithTime("a", EPOCH),
+                new PojoWithTime("b", EPOCH.plusSeconds(10)),
+                new PojoWithTime("c", EPOCH.plusSeconds(20)));
 
         Function<PojoWithTime, Instant> timeGetter = PojoWithTime::time;
 
@@ -58,20 +55,22 @@ public class CollectionUtilsTest {
     public void binarySearchMissesGiveCorrectIndex_arrayList() {
 
         ArrayList<PojoWithTime> list = newArrayList(
-            new PojoWithTime("a", EPOCH),
-            new PojoWithTime("b", EPOCH.plusSeconds(10)),
-            new PojoWithTime("c", EPOCH.plusSeconds(20))
-        );
+                new PojoWithTime("a", EPOCH),
+                new PojoWithTime("b", EPOCH.plusSeconds(10)),
+                new PojoWithTime("c", EPOCH.plusSeconds(20)));
 
         Function<PojoWithTime, Instant> timeGetter = PojoWithTime::time;
 
-        //output int = (-(insertion point) -1)
-        assertThat(CollectionUtils.binarySearch(list, timeGetter, EPOCH.minusSeconds(1)), is(-1));  //insert before item 0
-        assertThat(CollectionUtils.binarySearch(list, timeGetter, EPOCH.plusSeconds(1)), is(-2)); //insert between 0 and 1
-        assertThat(CollectionUtils.binarySearch(list, timeGetter, EPOCH.plusSeconds(11)), is(-3)); //insert between 1 and 2
-        assertThat(CollectionUtils.binarySearch(list, timeGetter, EPOCH.plusSeconds(21)), is(-4)); //insert after 2
+        // output int = (-(insertion point) -1)
+        assertThat(
+                CollectionUtils.binarySearch(list, timeGetter, EPOCH.minusSeconds(1)), is(-1)); // insert before item 0
+        assertThat(
+                CollectionUtils.binarySearch(list, timeGetter, EPOCH.plusSeconds(1)), is(-2)); // insert between 0 and 1
+        assertThat(
+                CollectionUtils.binarySearch(list, timeGetter, EPOCH.plusSeconds(11)),
+                is(-3)); // insert between 1 and 2
+        assertThat(CollectionUtils.binarySearch(list, timeGetter, EPOCH.plusSeconds(21)), is(-4)); // insert after 2
     }
-
 
     @Test
     public void binarySearchMatchesGiveCorrectIndex_linkedList() {
@@ -98,13 +97,16 @@ public class CollectionUtilsTest {
 
         Function<PojoWithTime, Instant> timeGetter = PojoWithTime::time;
 
-        //output int = (-(insertion point) -1)
-        assertThat(CollectionUtils.binarySearch(list, timeGetter, EPOCH.minusSeconds(1)), is(-1));  //insert before item 0
-        assertThat(CollectionUtils.binarySearch(list, timeGetter, EPOCH.plusSeconds(1)), is(-2)); //insert between 0 and 1
-        assertThat(CollectionUtils.binarySearch(list, timeGetter, EPOCH.plusSeconds(11)), is(-3)); //insert between 1 and 2
-        assertThat(CollectionUtils.binarySearch(list, timeGetter, EPOCH.plusSeconds(21)), is(-4)); //insert after 2
+        // output int = (-(insertion point) -1)
+        assertThat(
+                CollectionUtils.binarySearch(list, timeGetter, EPOCH.minusSeconds(1)), is(-1)); // insert before item 0
+        assertThat(
+                CollectionUtils.binarySearch(list, timeGetter, EPOCH.plusSeconds(1)), is(-2)); // insert between 0 and 1
+        assertThat(
+                CollectionUtils.binarySearch(list, timeGetter, EPOCH.plusSeconds(11)),
+                is(-3)); // insert between 1 and 2
+        assertThat(CollectionUtils.binarySearch(list, timeGetter, EPOCH.plusSeconds(21)), is(-4)); // insert after 2
     }
-
 
     @Test
     public void zip_onPairs_happyPath() {
@@ -184,5 +186,4 @@ public class CollectionUtilsTest {
 
         assertThat(tripIter.hasNext(), is(false));
     }
-
 }

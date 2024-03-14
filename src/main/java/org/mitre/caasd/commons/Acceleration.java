@@ -22,7 +22,6 @@ import static java.util.Objects.requireNonNull;
 import java.io.Serializable;
 import java.time.Duration;
 
-
 /**
  * This Acceleration class is intended to make working with Accelerations less error prone because
  * (1) all Acceleration objects are immutable and (2) the unit is always required and always
@@ -134,9 +133,7 @@ public class Acceleration implements Serializable, Comparable<Acceleration> {
 
     /** @return The absolute value of this Acceleration. */
     public Acceleration abs() {
-        return (this.isNegative())
-            ? this.times(-1.0)
-            : this;
+        return (this.isNegative()) ? this.times(-1.0) : this;
     }
 
     /**

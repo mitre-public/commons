@@ -42,7 +42,7 @@ import org.mitre.caasd.commons.fileutil.FileUtils;
  */
 public class SequentialFileWriter implements ExceptionHandler {
 
-    //this threadsafe counter ensures files are logged in different files..
+    // this threadsafe counter ensures files are logged in different files..
     private final AtomicInteger fileCounter = new AtomicInteger(0);
 
     private final String targetDirectory;
@@ -61,9 +61,7 @@ public class SequentialFileWriter implements ExceptionHandler {
      */
     public SequentialFileWriter(String directory) {
         checkNotNull(directory);
-        this.targetDirectory = directory.endsWith(File.separator)
-            ? directory
-            : directory + File.separator;
+        this.targetDirectory = directory.endsWith(File.separator) ? directory : directory + File.separator;
     }
 
     /**
@@ -150,9 +148,7 @@ public class SequentialFileWriter implements ExceptionHandler {
     /** Create the entire contents of a warning message. */
     private String authorWarningMessage(String message) {
 
-        String msg = nonNull(message)
-            ? message
-            : "NO WARNING MESSAGE";
+        String msg = nonNull(message) ? message : "NO WARNING MESSAGE";
 
         return timestampStr() + "\n" + msg + "\n";
     }
@@ -160,23 +156,20 @@ public class SequentialFileWriter implements ExceptionHandler {
     /** Create the entire contents of a error message. */
     private String authorErrorMessage(String message, Throwable traceMe) {
 
-        String msg = nonNull(message)
-            ? message
-            : "NO ERROR MESSAGE";
+        String msg = nonNull(message) ? message : "NO ERROR MESSAGE";
 
         return new StringBuilder()
-            .append(timestampStr() + "\n")
-            .append(msg + "\n")
-            .append(stackTraceOf(traceMe) + "\n")
-            .toString();
+                .append(timestampStr() + "\n")
+                .append(msg + "\n")
+                .append(stackTraceOf(traceMe) + "\n")
+                .toString();
     }
 
     private static String timestampStr() {
 
-        DateTimeFormatter formatter = DateTimeFormatter
-            .ofLocalizedDateTime(FormatStyle.SHORT)
-            .withLocale(Locale.US)
-            .withZone(ZoneId.systemDefault());
+        DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
+                .withLocale(Locale.US)
+                .withZone(ZoneId.systemDefault());
 
         return "Time: " + formatter.format(Instant.now());
     }

@@ -68,24 +68,18 @@ class MapBuilderTest {
         int zoomLevel = 13;
 
         assertThrows(
-            IllegalStateException.class,
-            () -> newMapBuilder().width(dist).width(dist)
-        );
+                IllegalStateException.class, () -> newMapBuilder().width(dist).width(dist));
 
         assertThrows(
-            IllegalStateException.class,
-            () -> newMapBuilder().width(pixelWidth, zoomLevel).width(pixelWidth, zoomLevel)
-        );
+                IllegalStateException.class,
+                () -> newMapBuilder().width(pixelWidth, zoomLevel).width(pixelWidth, zoomLevel));
 
         assertThrows(
-            IllegalStateException.class,
-            () -> newMapBuilder().width(dist).width(pixelWidth, zoomLevel)
-        );
+                IllegalStateException.class, () -> newMapBuilder().width(dist).width(pixelWidth, zoomLevel));
 
         assertThrows(
-            IllegalStateException.class,
-            () -> newMapBuilder().width(pixelWidth, zoomLevel).width(dist)
-        );
+                IllegalStateException.class,
+                () -> newMapBuilder().width(pixelWidth, zoomLevel).width(dist));
     }
 
     @Test
@@ -94,11 +88,11 @@ class MapBuilderTest {
         LatLong home = LatLong.of(32.8968, -97.0380);
 
         BufferedImage newMapImage = newMapBuilder()
-            .solidBackground(Color.BLUE)
-            .center(home)
-            .width(600, 14)
-            .addFeatures(mapFeatures(home))
-            .toImage();  //use .toFile(someFile); to see the plot
+                .solidBackground(Color.BLUE)
+                .center(home)
+                .width(600, 14)
+                .addFeatures(mapFeatures(home))
+                .toImage(); // use .toFile(someFile); to see the plot
 
         assertThat(newMapImage.getWidth(), is(600));
         assertThat(newMapImage.getHeight(), is(600));
@@ -107,13 +101,10 @@ class MapBuilderTest {
     @Test
     public void widthMustBeSet() {
 
-        assertThrows(
-            NullPointerException.class,
-            () -> newMapBuilder()
+        assertThrows(NullPointerException.class, () -> newMapBuilder()
                 .solidBackground(Color.BLUE)
                 .center(LatLong.of(32.8968, -97.0380))
-                .toImage()
-        );
+                .toImage());
     }
 
     @Test
@@ -122,15 +113,13 @@ class MapBuilderTest {
         LatLong home = LatLong.of(32.8968, -97.0380);
 
         BufferedImage newMapImage = newMapBuilder()
-            .solidBackground(Color.BLUE)
-            .center(home)
-            .width(Distance.ofNauticalMiles(10))
-            .addFeatures(mapFeatures(home))
-            .toImage();  //use .toFile(someFile); to see the plot
+                .solidBackground(Color.BLUE)
+                .center(home)
+                .width(Distance.ofNauticalMiles(10))
+                .addFeatures(mapFeatures(home))
+                .toImage(); // use .toFile(someFile); to see the plot
 
-        BufferedImage expectedMapImage = ImageIO.read(
-            FileUtils.getResourceFile("randomWalkOnSolidBackground.png")
-        );
+        BufferedImage expectedMapImage = ImageIO.read(FileUtils.getResourceFile("randomWalkOnSolidBackground.png"));
 
         verifyImagesMatch(newMapImage, expectedMapImage);
     }
@@ -142,73 +131,67 @@ class MapBuilderTest {
          * MapFeatures OR as one "composite" MapFeature
          */
 
-        //render these LatLongs as separate MapFeatures
+        // render these LatLongs as separate MapFeatures
         List<LatLong> blueDots = Stream.of(
-            LatLong.of(32.8968, -97.0380),
-            LatLong.of(32.8968, -97.0380).project(EAST, Distance.ofMiles(1)),
-            LatLong.of(32.8968, -97.0380).project(EAST, Distance.ofMiles(2)),
-            LatLong.of(32.8968, -97.0380).project(EAST, Distance.ofMiles(3)),
-            LatLong.of(32.8968, -97.0380).project(EAST, Distance.ofMiles(4))
-        ).collect(toList());
+                        LatLong.of(32.8968, -97.0380),
+                        LatLong.of(32.8968, -97.0380).project(EAST, Distance.ofMiles(1)),
+                        LatLong.of(32.8968, -97.0380).project(EAST, Distance.ofMiles(2)),
+                        LatLong.of(32.8968, -97.0380).project(EAST, Distance.ofMiles(3)),
+                        LatLong.of(32.8968, -97.0380).project(EAST, Distance.ofMiles(4)))
+                .collect(toList());
 
-        //render the LatLong as one group
+        // render the LatLong as one group
         List<LatLong> redDots = Stream.of(
-            LatLong.of(32.8968, -97.0380),
-            LatLong.of(32.8968, -97.0380).project(NORTH, Distance.ofMiles(1)),
-            LatLong.of(32.8968, -97.0380).project(NORTH, Distance.ofMiles(2)),
-            LatLong.of(32.8968, -97.0380).project(NORTH, Distance.ofMiles(3)),
-            LatLong.of(32.8968, -97.0380).project(NORTH, Distance.ofMiles(4))
-        ).collect(toList());
+                        LatLong.of(32.8968, -97.0380),
+                        LatLong.of(32.8968, -97.0380).project(NORTH, Distance.ofMiles(1)),
+                        LatLong.of(32.8968, -97.0380).project(NORTH, Distance.ofMiles(2)),
+                        LatLong.of(32.8968, -97.0380).project(NORTH, Distance.ofMiles(3)),
+                        LatLong.of(32.8968, -97.0380).project(NORTH, Distance.ofMiles(4)))
+                .collect(toList());
 
         BufferedImage newMapImage = newMapBuilder()
-            .solidBackground(Color.BLACK)
-            .center(LatLong.of(32.8968, -97.0380))   //the center of the random distribution we are drawing LatLongs from
-            .width(800, 10)
-            //render each LatLong in this list separately
-            .addFeatures(blueDots, loc -> filledCircle(loc, Color.BLUE, 6))
-            //render this list of LatLongs as a single MapFeaure
-            .addFeature(toMapFeature(redDots))
-            .toImage();
+                .solidBackground(Color.BLACK)
+                .center(LatLong.of(
+                        32.8968, -97.0380)) // the center of the random distribution we are drawing LatLongs from
+                .width(800, 10)
+                // render each LatLong in this list separately
+                .addFeatures(blueDots, loc -> filledCircle(loc, Color.BLUE, 6))
+                // render this list of LatLongs as a single MapFeaure
+                .addFeature(toMapFeature(redDots))
+                .toImage();
 
-        BufferedImage expectedMapImage = ImageIO.read(
-            FileUtils.getResourceFile("blueAndRedDots.png")
-        );
+        BufferedImage expectedMapImage = ImageIO.read(FileUtils.getResourceFile("blueAndRedDots.png"));
 
         verifyImagesMatch(newMapImage, expectedMapImage);
     }
 
     MapFeature toMapFeature(List<LatLong> locations) {
 
-        List<MapFeature> asManyFeatures = locations.stream()
-            .map(loc -> circle(loc, Color.RED, 6, 1.0f))
-            .collect(toList());
+        List<MapFeature> asManyFeatures =
+                locations.stream().map(loc -> circle(loc, Color.RED, 6, 1.0f)).collect(toList());
 
         MapFeature asOneFeature = MapFeatures.compose(asManyFeatures);
 
         return asOneFeature;
     }
 
-
-    @Disabled //may not work on Bamboo due to fonts???
+    @Disabled // may not work on Bamboo due to fonts???
     @Test
     public void plotMapOnDebugBackground() throws Exception {
 
         LatLong home = LatLong.of(32.8968, -97.0380);
 
         BufferedImage newMapImage = newMapBuilder()
-            .debugTiles()
-            .center(home)
-            .width(Distance.ofNauticalMiles(10))
-            .addFeatures(mapFeatures(home))
-            .toImage();  //use .toFile(someFile); to see the plot
+                .debugTiles()
+                .center(home)
+                .width(Distance.ofNauticalMiles(10))
+                .addFeatures(mapFeatures(home))
+                .toImage(); // use .toFile(someFile); to see the plot
 
-        BufferedImage expectedMapImage = ImageIO.read(
-            FileUtils.getResourceFile("randomWalkOnDebugBackground.png")
-        );
+        BufferedImage expectedMapImage = ImageIO.read(FileUtils.getResourceFile("randomWalkOnDebugBackground.png"));
 
         verifyImagesMatch(newMapImage, expectedMapImage);
     }
-
 
     /* Ensure size equivalence and pixel equivalence. */
     private void verifyImagesMatch(BufferedImage img1, BufferedImage img2) {
@@ -225,12 +208,12 @@ class MapBuilderTest {
 
     private FeatureSet mapFeatures(LatLong center) {
         return newFeatureSetBuilder()
-            .addCircle(center, Color.RED, 30, 4.0f)
-            .addPath(randomWalk(center), Color.GREEN, 2.0f)
-            .build();
+                .addCircle(center, Color.RED, 30, 4.0f)
+                .addPath(randomWalk(center), Color.GREEN, 2.0f)
+                .build();
     }
 
-    //generate some LatLong data so we can show how to plot a general path..
+    // generate some LatLong data so we can show how to plot a general path..
     List<LatLong> randomWalk(LatLong start) {
 
         LinkedList<LatLong> list = newLinkedList();
@@ -247,7 +230,6 @@ class MapBuilderTest {
         return list;
     }
 
-
     @Test
     public void canBuildPlotOfTrack() {
 
@@ -256,38 +238,30 @@ class MapBuilderTest {
         Iterable<TestLocationDatum> dataSouce = TestLocationDatum.parseFile(new File(dataFile));
 
         List<PositionRecord<TestLocationDatum>> positions = stream(dataSouce)
-            .map(datum -> PositionRecord.of(
-                datum,
-                new Position(
-                    datum.time(),
-                    LatLong.of(datum.latitude(), datum.longitude()),
-                    datum.altitude())
-                )
-            )
-            .collect(toList());
+                .map(datum -> PositionRecord.of(
+                        datum,
+                        new Position(datum.time(), LatLong.of(datum.latitude(), datum.longitude()), datum.altitude())))
+                .collect(toList());
 
         List<MapFeature> circles = positions.stream()
-            .map(pr -> filledCircle(pr.latLong(), Color.RED, 12))
-            .collect(toList());
+                .map(pr -> filledCircle(pr.latLong(), Color.RED, 12))
+                .collect(toList());
 
-        MapFeature smoothedTrackPath = MapFeatures.path(
-            fitLatLongs(positions),
-            Color.cyan,
-            2.0f
-        );
+        MapFeature smoothedTrackPath = MapFeatures.path(fitLatLongs(positions), Color.cyan, 2.0f);
 
-//        LatLong home = LatLong.of(040.4827,-076.2183); //one bad point "in the loop"
-        LatLong home = LatLong.of(040.23077, -075.28107); //one bad point "in the track
+        //        LatLong home = LatLong.of(040.4827,-076.2183); //one bad point "in the loop"
+        LatLong home = LatLong.of(040.23077, -075.28107); // one bad point "in the track
 
         newMapBuilder()
-//            .mapBoxDarkMode()  //this requires having the Mapbox secret available (which might not work in CI)
-            .tileSource(new MonochromeTileServer(Color.BLACK))
-            .center(home)
-            .width(Distance.ofNauticalMiles(7.5))
-            .useLocalDiskCaching(Duration.ofDays(7))
-            .addFeatures(circles)
-            .addFeature(smoothedTrackPath)
-            .toFile(new File(tempDir, "trackWithGentleError.png"));
+                //            .mapBoxDarkMode()  //this requires having the Mapbox secret available (which might not
+                // work in CI)
+                .tileSource(new MonochromeTileServer(Color.BLACK))
+                .center(home)
+                .width(Distance.ofNauticalMiles(7.5))
+                .useLocalDiskCaching(Duration.ofDays(7))
+                .addFeatures(circles)
+                .addFeature(smoothedTrackPath)
+                .toFile(new File(tempDir, "trackWithGentleError.png"));
     }
 
     private List<LatLong> fitLatLongs(List<PositionRecord<TestLocationDatum>> rawData) {
@@ -297,9 +271,8 @@ class MapBuilderTest {
         TimeWindow window = enclosingWindow(rawData);
 
         return stream(window.iterator(Duration.ofSeconds(2L)))
-            .map(time -> fitter.floorInterpolate(rawData, time).get())
-            .map(kr -> kr.latLong())
-            .collect(toList());
+                .map(time -> fitter.floorInterpolate(rawData, time).get())
+                .map(kr -> kr.latLong())
+                .collect(toList());
     }
-
 }

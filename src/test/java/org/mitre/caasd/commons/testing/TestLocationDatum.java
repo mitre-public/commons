@@ -48,8 +48,7 @@ public class TestLocationDatum {
 
     private final Course course;
 
-    public TestLocationDatum(LatLong location, Instant time, Distance altitude, Speed speed,
-                             Course course) {
+    public TestLocationDatum(LatLong location, Instant time, Distance altitude, Speed speed, Course course) {
         this.location = location;
         this.time = time;
         this.altitude = altitude;
@@ -84,9 +83,8 @@ public class TestLocationDatum {
     public static Iterable<TestLocationDatum> parseFile(File f) {
 
         try {
-            List<TestLocationDatum> list = Files.lines(f.toPath())
-                .map(str -> parse(str))
-                .collect(Collectors.toList());
+            List<TestLocationDatum> list =
+                    Files.lines(f.toPath()).map(str -> parse(str)).collect(Collectors.toList());
 
             return list;
 
@@ -96,9 +94,9 @@ public class TestLocationDatum {
     }
 
     public static TestLocationDatum parse(String s) {
-        //sample row:
-        //03/29/2018 18:03:13.482 032.82810 -097.36291 010 070
-        //Date, Time, Lat, Long, Speed, Heading
+        // sample row:
+        // 03/29/2018 18:03:13.482 032.82810 -097.36291 010 070
+        // Date, Time, Lat, Long, Speed, Heading
         String[] tokens = s.split(" ");
 
         Instant time = extractInstant(tokens[0], tokens[1]);
@@ -109,24 +107,19 @@ public class TestLocationDatum {
         int headingInDegrees = Integer.parseInt(tokens[6]);
 
         return new TestLocationDatum(
-            LatLong.of(latitude, longitude),
-            time,
-            Distance.ofFeet(altitudeIn100Ft * 100),
-            Speed.ofKnots(speedInKnots),
-            Course.ofDegrees(headingInDegrees)
-        );
+                LatLong.of(latitude, longitude),
+                time,
+                Distance.ofFeet(altitudeIn100Ft * 100),
+                Speed.ofKnots(speedInKnots),
+                Course.ofDegrees(headingInDegrees));
     }
 
-    static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(
-        "MM/dd/yyyy HH:mm:ss.SSS X").withZone(ZoneOffset.UTC);
+    static final DateTimeFormatter FORMATTER =
+            DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss.SSS X").withZone(ZoneOffset.UTC);
 
     public static Instant extractInstant(String dateString, String timeString) {
 
-        ZonedDateTime zdt = ZonedDateTime.parse(
-            dateString.replace("-", "/") + " " + timeString + " Z",
-            FORMATTER
-        );
+        ZonedDateTime zdt = ZonedDateTime.parse(dateString.replace("-", "/") + " " + timeString + " Z", FORMATTER);
         return Instant.from(zdt);
     }
-
 }

@@ -36,7 +36,8 @@ public class ErrorCatchingTaskTest {
 
         @Override
         public void warn(String message) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            throw new UnsupportedOperationException(
+                    "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
@@ -46,9 +47,9 @@ public class ErrorCatchingTaskTest {
 
         @Override
         public void handle(String message, Exception ex) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            throw new UnsupportedOperationException(
+                    "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
         }
-
     }
 
     @Test
@@ -57,11 +58,10 @@ public class ErrorCatchingTaskTest {
         BasicErrorHandler errorHandler = new BasicErrorHandler();
 
         ErrorCatchingTask ect = new ErrorCatchingTask(
-            () -> {
-                throw new ArrayIndexOutOfBoundsException();
-            },
-            errorHandler
-        );
+                () -> {
+                    throw new ArrayIndexOutOfBoundsException();
+                },
+                errorHandler);
         ect.run();
 
         assertThat(errorHandler.caught, notNullValue());
@@ -71,17 +71,13 @@ public class ErrorCatchingTaskTest {
     public void errorsAreRethrown() {
 
         ErrorCatchingTask protectedTask = new ErrorCatchingTask(
-            () -> {
-                causeStackOverflowError();
-            },
-            new SequentialFileWriter(),
-            new NoticeError()
-        );
+                () -> {
+                    causeStackOverflowError();
+                },
+                new SequentialFileWriter(),
+                new NoticeError());
 
-        assertThrows(
-            StackOverflowError.class,
-            () -> protectedTask.run()
-        );
+        assertThrows(StackOverflowError.class, () -> protectedTask.run());
     }
 
     @Test
@@ -90,12 +86,11 @@ public class ErrorCatchingTaskTest {
         NoticeError errorHandler = new NoticeError();
 
         ErrorCatchingTask protectedTask = new ErrorCatchingTask(
-            () -> {
-                causeStackOverflowError();
-            },
-            new SequentialFileWriter(),
-            errorHandler
-        );
+                () -> {
+                    causeStackOverflowError();
+                },
+                new SequentialFileWriter(),
+                errorHandler);
 
         assertThat(errorHandler.gotError, is(false));
 
@@ -103,7 +98,7 @@ public class ErrorCatchingTaskTest {
             protectedTask.run();
             fail("Should not get here because the protectedTask should throw an Error");
         } catch (Error er) {
-            //the error did escape -- but the errorHandler saw it
+            // the error did escape -- but the errorHandler saw it
             assertThat(errorHandler.gotError, is(true));
         }
     }
@@ -112,19 +107,15 @@ public class ErrorCatchingTaskTest {
     public void ignoreAndRethrowPolicyIsAvailable() {
         ErrorHandlingPolicy policy = ignoreAndRethrow();
 
-        assertDoesNotThrow(
-            () -> policy.handleError(new StackOverflowError())
-        );
+        assertDoesNotThrow(() -> policy.handleError(new StackOverflowError()));
     }
 
-    @Disabled  //because killing the JVM can't be part of your standard test workflow
+    @Disabled // because killing the JVM can't be part of your standard test workflow
     @Test
     public void killJvmPolicyIsAvailable() {
         ErrorHandlingPolicy policy = killJvmOnError(17);
 
-        assertDoesNotThrow(
-            () -> policy.handleError(new StackOverflowError())
-        );
+        assertDoesNotThrow(() -> policy.handleError(new StackOverflowError()));
     }
 
     static class NoticeError implements ErrorHandlingPolicy {

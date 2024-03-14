@@ -54,7 +54,7 @@ public class FileLineIterator implements Iterator<String>, AutoCloseable {
      */
     public FileLineIterator(File file) {
         try {
-            this.reader = createReaderFor(file); //supports .gz files and regular files
+            this.reader = createReaderFor(file); // supports .gz files and regular files
             updateNext();
         } catch (IOException ioe) {
             throw demote(ioe);
@@ -87,7 +87,7 @@ public class FileLineIterator implements Iterator<String>, AutoCloseable {
 
         String returnMe = nextLine;
 
-        updateNext(); //overwrites nextLine;
+        updateNext(); // overwrites nextLine;
 
         return returnMe;
     }

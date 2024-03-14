@@ -27,7 +27,6 @@ import java.util.List;
 
 import org.mitre.caasd.commons.LatLong;
 
-
 /**
  * This Builder provides a fluent API to assemble a list of: {Circles, Lines, Polygons, and Text}
  * objects that should be added to a map.  One goal of the API is to remove all "map pixel location
@@ -37,12 +36,11 @@ public class FeatureSetBuilder {
 
     List<MapFeature> features = newArrayList();
 
-    //once set, these fields can make it easier to add multiple features that have the same "brush traits"
+    // once set, these fields can make it easier to add multiple features that have the same "brush traits"
     Color currentColor = null;
     Integer currentCircleDiameter = null;
     Float currentStrokeWidth = null;
     Font currentFont = new Font("Avenir", PLAIN, 32);
-
 
     public static FeatureSetBuilder newFeatureSetBuilder() {
         return new FeatureSetBuilder();
@@ -74,7 +72,6 @@ public class FeatureSetBuilder {
         features.add(feature);
         return this;
     }
-
 
     public FeatureSetBuilder addCircle(LatLong location, Color color, int diameterInPixels, float strokeWidth) {
         requireNonNull(location);

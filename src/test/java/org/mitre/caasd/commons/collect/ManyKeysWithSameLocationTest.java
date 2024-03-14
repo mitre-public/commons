@@ -46,10 +46,7 @@ public class ManyKeysWithSameLocationTest {
     DistanceMetric<Location> metric = new DistanceMetric<Location>() {
         @Override
         public double distanceBtw(Location item1, Location item2) {
-            return Math.hypot(
-                Math.abs(item1.x - item2.x),
-                Math.abs(item1.y - item2.y)
-            );
+            return Math.hypot(Math.abs(item1.x - item2.x), Math.abs(item1.y - item2.y));
         }
     };
 
@@ -58,7 +55,7 @@ public class ManyKeysWithSameLocationTest {
     @Test
     public void testTooManyIdenticalKeys() {
 
-        //PHASE 1 -- create a tree with some inital data
+        // PHASE 1 -- create a tree with some inital data
         MetricTree<Location, String> tree = emptyMetricTree();
         HashMap<Location, String> copyOfTreeContent = newHashMap();
 
@@ -70,10 +67,10 @@ public class ManyKeysWithSameLocationTest {
             copyOfTreeContent.put(entry.getKey(), entry.getValue());
         }
 
-        //confirm the tree is populated..
+        // confirm the tree is populated..
         assertThat(tree.size(), is(INITIAL_SIZE));
 
-        //PHASE 2 -- Break this tree by adding a bunch of items at coordinate (10,10);
+        // PHASE 2 -- Break this tree by adding a bunch of items at coordinate (10,10);
         int NUM_COPIES = 500;
         for (int i = 0; i < NUM_COPIES; i++) {
             Map.Entry<Location, String> entry = createEntryAt(10, 10);
@@ -90,59 +87,41 @@ public class ManyKeysWithSameLocationTest {
 
     private Map.Entry<Location, String> createEntry() {
 
-        return new AbstractMap.SimpleEntry<>(
-            new Location(rng.nextInt(1000), rng.nextInt(1000)),
-            "item_" + itemCount++
-        );
+        return new AbstractMap.SimpleEntry<>(new Location(rng.nextInt(1000), rng.nextInt(1000)), "item_" + itemCount++);
     }
 
     private Map.Entry<Location, String> createEntryAt(int x, int y) {
 
-        return new AbstractMap.SimpleEntry<>(
-            new Location(x, y),
-            "item_" + itemCount++
-        );
+        return new AbstractMap.SimpleEntry<>(new Location(x, y), "item_" + itemCount++);
     }
 
     private void confirmEqualContent(MetricTree<Location, String> tree, HashMap<Location, String> copyOfTreeContent) {
 
-        assertThat(
-            "Both the tree, and its copy, should have the same size",
-            tree.size(), is(copyOfTreeContent.size())
-        );
+        assertThat("Both the tree, and its copy, should have the same size", tree.size(), is(copyOfTreeContent.size()));
 
-        SetView<Location> keyIntersection = Sets.intersection(
-            tree.keySet(),
-            copyOfTreeContent.keySet()
-        );
+        SetView<Location> keyIntersection = Sets.intersection(tree.keySet(), copyOfTreeContent.keySet());
 
         assertThat(
-            "If the intersection between these two sets is the same size as one of the orginal sets then the sets are equal",
-            tree.size(), is(keyIntersection.size())
-        );
+                "If the intersection between these two sets is the same size as one of the orginal sets then the sets are equal",
+                tree.size(),
+                is(keyIntersection.size()));
 
         double range = 15.0;
 
         for (Location location : copyOfTreeContent.keySet()) {
-            List<Map.Entry<Location, String>> entriesInRange = findEntriesInRange(
-                location,
-                copyOfTreeContent,
-                range
-            );
+            List<Map.Entry<Location, String>> entriesInRange = findEntriesInRange(location, copyOfTreeContent, range);
 
-            List<SearchResult<Location, String>> treeResults = tree.getAllWithinRange(
-                location,
-                range
-            );
+            List<SearchResult<Location, String>> treeResults = tree.getAllWithinRange(location, range);
 
             assertThat(
-                "Brute force search in the copy should find the same number as efficient search using the metric tree",
-                entriesInRange.size(), is(treeResults.size())
-            );
+                    "Brute force search in the copy should find the same number as efficient search using the metric tree",
+                    entriesInRange.size(),
+                    is(treeResults.size()));
         }
     }
 
-    private List<Map.Entry<Location, String>> findEntriesInRange(Location loc, HashMap<Location, String> copyOfTreeContent, double range) {
+    private List<Map.Entry<Location, String>> findEntriesInRange(
+            Location loc, HashMap<Location, String> copyOfTreeContent, double range) {
 
         List<Map.Entry<Location, String>> output = newArrayList();
 

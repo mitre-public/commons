@@ -55,15 +55,15 @@ public class IntervalTest {
         Interval fromLocal = new Interval(LocalDate.MIN, LocalDate.MAX);
         Interval fromInstant = new Interval(Instant.MIN, Instant.MAX);
 
-        //long outputs are the same
+        // long outputs are the same
         assertEquals(fromLocal.startEpoch(), fromInstant.startEpoch());
         assertEquals(fromLocal.endEpoch(), fromInstant.endEpoch());
 
-        //Instant outputs are the same
+        // Instant outputs are the same
         assertEquals(fromLocal.start(), fromInstant.start());
         assertEquals(fromLocal.end(), fromInstant.end());
 
-        //values are correct
+        // values are correct
         assertEquals(fromInstant.start(), Instant.MIN);
         assertEquals(fromInstant.end(), Instant.MAX);
     }
@@ -93,13 +93,16 @@ public class IntervalTest {
     @Test
     public void testIntervalDates() {
         Interval itv = new Interval(EPOCH.plus(2L, DAYS), EPOCH.plus(10L, DAYS));
-        Set<Long> dates = LongStream.range(2L, 10L)
-            .map(l -> l * Interval.DAY)
-            .boxed()
-            .collect(Collectors.toSet());
+        Set<Long> dates =
+                LongStream.range(2L, 10L).map(l -> l * Interval.DAY).boxed().collect(Collectors.toSet());
 
         assertEquals(8, itv.listDates().size());
-        assertTrue(Sets.difference(dates, Interval.datesBetween(itv.start(), itv.end()).map(Instant::toEpochMilli).collect(Collectors.toSet())).isEmpty());
+        assertTrue(Sets.difference(
+                        dates,
+                        Interval.datesBetween(itv.start(), itv.end())
+                                .map(Instant::toEpochMilli)
+                                .collect(Collectors.toSet()))
+                .isEmpty());
     }
 
     @Test
@@ -107,11 +110,11 @@ public class IntervalTest {
         Interval itv = new Interval(EPOCH.plus(1, DAYS), EPOCH.plus(10, DAYS));
 
         Set<Instant> times = LongStream.range(0, 18)
-            .mapToObj(l -> EPOCH.plus(Duration.ofHours(12 * l + 24)))
-            .collect(Collectors.toSet());
+                .mapToObj(l -> EPOCH.plus(Duration.ofHours(12 * l + 24)))
+                .collect(Collectors.toSet());
 
         Set<Instant> itvTimes = Interval.timesBetween(itv.start(), itv.end(), Duration.ofHours(12))
-            .collect(Collectors.toSet());
+                .collect(Collectors.toSet());
 
         assertEquals(Sets.intersection(times, itvTimes).size(), times.size());
     }
@@ -121,15 +124,13 @@ public class IntervalTest {
         Interval base = new Interval(EPOCH.plusMillis(0L), EPOCH.plusMillis(10L));
 
         List<Interval> itvs = Arrays.asList(
-            new Interval(EPOCH.plusMillis(0L), EPOCH.plusMillis(2L)),
-            new Interval(EPOCH.plusMillis(2L), EPOCH.plusMillis(3L)),
-            new Interval(EPOCH.plusMillis(6L), EPOCH.plusMillis(8L))
-        );
+                new Interval(EPOCH.plusMillis(0L), EPOCH.plusMillis(2L)),
+                new Interval(EPOCH.plusMillis(2L), EPOCH.plusMillis(3L)),
+                new Interval(EPOCH.plusMillis(6L), EPOCH.plusMillis(8L)));
 
         Set<Interval> cmpTrue = new HashSet<>(Arrays.asList(
-            new Interval(EPOCH.plusMillis(3L), EPOCH.plusMillis(6L)),
-            new Interval(EPOCH.plusMillis(8L), EPOCH.plusMillis(10L))
-        ));
+                new Interval(EPOCH.plusMillis(3L), EPOCH.plusMillis(6L)),
+                new Interval(EPOCH.plusMillis(8L), EPOCH.plusMillis(10L))));
 
         Collection<Interval> complement = Interval.complementOf(base, itvs);
 
@@ -160,17 +161,17 @@ public class IntervalTest {
         Interval emptyInterval = Interval.empty();
         assertTrue(emptyInterval.isEmpty());
         assertThat(
-            "Extension of two empty intervals should still be empty",
-            emptyInterval.extend(new Interval(EPOCH.plusMillis(10L), EPOCH.plusMillis(10L))).isEmpty()
-        );
+                "Extension of two empty intervals should still be empty",
+                emptyInterval
+                        .extend(new Interval(EPOCH.plusMillis(10L), EPOCH.plusMillis(10L)))
+                        .isEmpty());
         assertTrue(emptyInterval.extend(null, null).isEmpty());
 
         Interval interval = new Interval(EPOCH.plusMillis(10L), EPOCH.plusMillis(11L));
         assertThat(
-            "Extending an interval to cover an empty interval should be a no op",
-            interval.extend(emptyInterval),
-            is(interval)
-        );
+                "Extending an interval to cover an empty interval should be a no op",
+                interval.extend(emptyInterval),
+                is(interval));
         assertThat(interval, is(emptyInterval.extend(interval)));
     }
 }

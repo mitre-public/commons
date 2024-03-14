@@ -48,7 +48,7 @@ public class QuasiOptimalSplitterTest {
         }
     }
 
-    //gives 0 to 999.9 in increments of 0.1
+    // gives 0 to 999.9 in increments of 0.1
     private List<Double> xData() {
 
         int n = 10_000;
@@ -60,22 +60,19 @@ public class QuasiOptimalSplitterTest {
         return x;
     }
 
-    //gives sin wave...
+    // gives sin wave...
     private List<Double> sinX(List<Double> xData) {
-        return xData.stream()
-            .map(x -> sin(x))
-            .collect(toCollection(ArrayList::new));
+        return xData.stream().map(x -> sin(x)).collect(toCollection(ArrayList::new));
     }
 
     @Disabled // not a rigorous test, just a demo
     @Test
     public void realSampleDataIsSplitWell() throws IOException {
 
-        //@todo -- This is more demo than test, add a couple assertions (say avg error is "small")
+        // @todo -- This is more demo than test, add a couple assertions (say avg error is "small")
 
-        Pair<List<Double>, List<Double>> allData = DataSplitterTest.loadTestXYData(
-            "org/mitre/caasd/commons/math/altitudes1.txt"
-        );
+        Pair<List<Double>, List<Double>> allData =
+                DataSplitterTest.loadTestXYData("org/mitre/caasd/commons/math/altitudes1.txt");
 
         XyDataset data = new XyDataset(allData.first(), allData.second());
 
@@ -84,9 +81,8 @@ public class QuasiOptimalSplitterTest {
         for (XyDataset split : splits) {
             int n = split.xData().size();
             System.out.println(
-                "From: (" + split.xData().get(0) + "," + split.yData().get(0) + ")"
-                    + " to: (" + split.xData().get(n - 1) + ", " + split.yData().get(n - 1) + ")"
-            );
+                    "From: (" + split.xData().get(0) + "," + split.yData().get(0) + ")" + " to: ("
+                            + split.xData().get(n - 1) + ", " + split.yData().get(n - 1) + ")");
             System.out.println("  length: " + split.length());
             System.out.println("  slope: " + split.slopeEstimate());
             System.out.println("  avgError: " + sqrt(split.avgSquaredErrorEstimate()));

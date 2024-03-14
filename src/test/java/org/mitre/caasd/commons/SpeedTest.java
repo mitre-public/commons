@@ -34,63 +34,44 @@ public class SpeedTest {
 
     @Test
     public void testSpeedZeroTimeDelta() {
-        //timeDelta must be positive
-        assertThrows(IllegalArgumentException.class,
-            () -> new Speed(
-                Distance.ofNauticalMiles(1),
-                Duration.ZERO
-            )
-        );
+        // timeDelta must be positive
+        assertThrows(IllegalArgumentException.class, () -> new Speed(Distance.ofNauticalMiles(1), Duration.ZERO));
     }
 
     @Test
     public void testSpeedNegativeTimeDelta() {
-        //timeDelta must be positive
-        assertThrows(IllegalArgumentException.class,
-            () -> new Speed(
-                Distance.ofNauticalMiles(1),
-                Duration.ofMinutes(1).negated()
-            )
-        );
+        // timeDelta must be positive
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Speed(
+                        Distance.ofNauticalMiles(1), Duration.ofMinutes(1).negated()));
     }
 
     @Test
     public void testInKnots() {
-        Speed speed = new Speed(
-            Distance.ofNauticalMiles(1),
-            Duration.ofHours(1)
-        );
+        Speed speed = new Speed(Distance.ofNauticalMiles(1), Duration.ofHours(1));
 
         assertEquals(1.0, speed.inKnots(), 0.00001);
     }
 
     @Test
     public void testInKnots_2() {
-        Speed speed = new Speed(
-            Distance.ofNauticalMiles(20),
-            Duration.ofHours(1)
-        );
+        Speed speed = new Speed(Distance.ofNauticalMiles(20), Duration.ofHours(1));
 
         assertEquals(20.0, speed.inKnots(), 0.00001);
     }
 
     @Test
     public void testInKnots_3() {
-        Speed speed = new Speed(
-            Distance.ofNauticalMiles(20),
-            Duration.ofMinutes(10)
-        );
+        Speed speed = new Speed(Distance.ofNauticalMiles(20), Duration.ofMinutes(10));
 
         assertEquals(120.0, speed.inKnots(), 0.00001);
     }
 
     @Test
     public void testConversion() {
-        //20 knots
-        Speed speed = new Speed(
-            Distance.ofNauticalMiles(20),
-            Duration.ofHours(1)
-        );
+        // 20 knots
+        Speed speed = new Speed(Distance.ofNauticalMiles(20), Duration.ofHours(1));
 
         double TOL = 0.00001;
         assertEquals(20.0, speed.inKnots(), 20.0 * TOL);
@@ -160,19 +141,10 @@ public class SpeedTest {
 
         Speed oneKnot = Speed.of(1.0, KNOTS);
 
-        assertThat(
-            oneKnot.times(Duration.ZERO),
-            is(Distance.ofNauticalMiles(0))
-        );
+        assertThat(oneKnot.times(Duration.ZERO), is(Distance.ofNauticalMiles(0)));
 
-        assertThat(
-            oneKnot.times(Duration.ofMinutes(30)),
-            is(Distance.ofNauticalMiles(0.5))
-        );
-        assertThat(
-            oneKnot.times(Duration.ofMinutes(60)),
-            is(Distance.ofNauticalMiles(1))
-        );
+        assertThat(oneKnot.times(Duration.ofMinutes(30)), is(Distance.ofNauticalMiles(0.5)));
+        assertThat(oneKnot.times(Duration.ofMinutes(60)), is(Distance.ofNauticalMiles(1)));
     }
 
     @Test
@@ -196,19 +168,19 @@ public class SpeedTest {
 
         double TOLERANCE = 0.0005;
 
-        //3fps = 1.7774514038876894 knots
+        // 3fps = 1.7774514038876894 knots
         assertThat(oneKnot.plus(threeFps).inKnots(), closeTo(2.7774514038876896, TOLERANCE));
         assertThat(threeFps.plus(oneKnot).inKnots(), closeTo(2.7774514038876896, TOLERANCE));
 
-        //3fps = 2.0454545454545454 mph
+        // 3fps = 2.0454545454545454 mph
         assertThat(fiveMph.plus(threeFps).inMilesPerHour(), closeTo(7.045454545454546, TOLERANCE));
         assertThat(threeFps.plus(fiveMph).inMilesPerHour(), closeTo(7.045454545454546, TOLERANCE));
 
-        //5pmh = 8.04672 kph
+        // 5pmh = 8.04672 kph
         assertThat(fiveMph.plus(sevenKph).inKilometersPerHour(), closeTo(15.046720000000002, TOLERANCE));
         assertThat(sevenKph.plus(fiveMph).inKilometersPerHour(), closeTo(15.046720000000002, TOLERANCE));
 
-        //7kph = 1.9444444444444444 mps
+        // 7kph = 1.9444444444444444 mps
         assertThat(elevenMps.plus(sevenKph).inMetersPerSecond(), closeTo(12.944444444444445, TOLERANCE));
         assertThat(sevenKph.plus(elevenMps).inMetersPerSecond(), closeTo(12.944444444444445, TOLERANCE));
     }
@@ -224,19 +196,19 @@ public class SpeedTest {
 
         double TOLERANCE = 0.0005;
 
-        //3fps = 1.7774514038876894 knots
+        // 3fps = 1.7774514038876894 knots
         assertThat(oneKnot.minus(threeFps).inKnots(), closeTo(-0.777451403887689, TOLERANCE));
         assertThat(threeFps.minus(oneKnot).inKnots(), closeTo(0.777451403887689, TOLERANCE));
 
-        //3fps = 2.0454545454545454 mph
+        // 3fps = 2.0454545454545454 mph
         assertThat(fiveMph.minus(threeFps).inMilesPerHour(), closeTo(2.9545454545454546, TOLERANCE));
         assertThat(threeFps.minus(fiveMph).inMilesPerHour(), closeTo(-2.954545454545455, TOLERANCE));
 
-        //5pmh = 8.04672 kph
+        // 5pmh = 8.04672 kph
         assertThat(fiveMph.minus(sevenKph).inKilometersPerHour(), closeTo(1.0467199999999997, TOLERANCE));
         assertThat(sevenKph.minus(fiveMph).inKilometersPerHour(), closeTo(-1.0467199999999997, TOLERANCE));
 
-        //7kph = 1.9444444444444444 mps
+        // 7kph = 1.9444444444444444 mps
         assertThat(elevenMps.minus(sevenKph).inMetersPerSecond(), closeTo(9.055555555555555, TOLERANCE));
         assertThat(sevenKph.minus(elevenMps).inMetersPerSecond(), closeTo(-9.055555555555555, TOLERANCE));
     }
@@ -245,10 +217,8 @@ public class SpeedTest {
     public void testDistanceCoveredIn_negativeDuration() {
         Speed oneKnot = Speed.of(1.0, KNOTS);
 
-        //negative duration is forbidden
-        assertThrows(IllegalArgumentException.class,
-            () -> oneKnot.times(Duration.ofHours(-1))
-        );
+        // negative duration is forbidden
+        assertThrows(IllegalArgumentException.class, () -> oneKnot.times(Duration.ofHours(-1)));
     }
 
     @Test
@@ -257,34 +227,34 @@ public class SpeedTest {
         Speed oneKnot = Speed.of(1.0, KNOTS);
 
         assertThat(
-            "It should take 1 hour to travel 1 NM at 1 knot",
-            Duration.ofHours(1), is(oneKnot.timeToTravel(Distance.ofNauticalMiles(1)))
-        );
+                "It should take 1 hour to travel 1 NM at 1 knot",
+                Duration.ofHours(1),
+                is(oneKnot.timeToTravel(Distance.ofNauticalMiles(1))));
 
         assertThat(
-            "It should take 2 hours to travel 2 NM at 1 knot",
-            Duration.ofHours(2), is(oneKnot.timeToTravel(Distance.ofNauticalMiles(2)))
-        );
+                "It should take 2 hours to travel 2 NM at 1 knot",
+                Duration.ofHours(2),
+                is(oneKnot.timeToTravel(Distance.ofNauticalMiles(2))));
 
         assertThat(
-            "It should take 30 minutes to go 1 NM at 2 knots",
-            Speed.of(2.0, KNOTS).timeToTravel(Distance.ofNauticalMiles(1)), is(Duration.ofMinutes(30))
-        );
+                "It should take 30 minutes to go 1 NM at 2 knots",
+                Speed.of(2.0, KNOTS).timeToTravel(Distance.ofNauticalMiles(1)),
+                is(Duration.ofMinutes(30)));
     }
 
     @Test
     public void testFeetPerSecondUnit() {
 
-        //20 feet per second
+        // 20 feet per second
         Speed speed = new Speed(Distance.ofFeet(20), Duration.ofSeconds(1));
 
         Duration travelTime = speed.timeToTravel(Distance.ofFeet(20));
 
         assertThat(Duration.ofSeconds(1), is(travelTime));
 
-        //20 fps = 6.096 mps = 20 ft * 0.3048 meters-per-foot
+        // 20 fps = 6.096 mps = 20 ft * 0.3048 meters-per-foot
         assertEquals(6.096, speed.inMetersPerSecond(), 0.0000001);
-        //convert ft to nm and seconds to hours
+        // convert ft to nm and seconds to hours
         assertEquals(20.0 / Spherical.feetPerNM() * 60.0 * 60.0, speed.inKnots(), 0.0000001);
     }
 
@@ -344,7 +314,7 @@ public class SpeedTest {
     @Test
     public void feetPerMinuteUnitAddedCorrectly() {
 
-        //same speed -- two ways
+        // same speed -- two ways
         Speed sixtyFpm = Speed.of(60, FEET_PER_MINUTE);
         Speed oneFps = Speed.of(1, FEET_PER_SECOND);
 
@@ -353,18 +323,16 @@ public class SpeedTest {
         Duration oneHour = Duration.ofHours(1);
 
         assertThat(
-            "You should go the same distance because you are going the same speed",
-            sixtyFpm.times(oneHour),
-            is(oneFps.times(oneHour))
-        );
+                "You should go the same distance because you are going the same speed",
+                sixtyFpm.times(oneHour),
+                is(oneFps.times(oneHour)));
 
         Distance oneNauticalMile = Distance.ofNauticalMiles(1);
 
         assertThat(
-            "It should take the same amount of time to travel 1 NM",
-            sixtyFpm.timeToTravel(oneNauticalMile),
-            is(oneFps.timeToTravel(oneNauticalMile))
-        );
+                "It should take the same amount of time to travel 1 NM",
+                sixtyFpm.timeToTravel(oneNauticalMile),
+                is(oneFps.timeToTravel(oneNauticalMile)));
 
         assertThat(sixtyFpm.inFeetPerMinutes(), is(60.0));
         assertThat(sixtyFpm.inFeetPerSecond(), is(1.0));
@@ -397,22 +365,18 @@ public class SpeedTest {
 
     @Test
     public void speedFromString_noUnitFound() {
-        assertThrows(IllegalArgumentException.class,
-            () -> Speed.fromString("notAUnit")
-        );
+        assertThrows(IllegalArgumentException.class, () -> Speed.fromString("notAUnit"));
     }
 
     @Test
     public void speedFromString_nullInput() {
-        assertThrows(NullPointerException.class,
-            () -> Speed.fromString(null)
-        );
+        assertThrows(NullPointerException.class, () -> Speed.fromString(null));
     }
 
     @Test
     public void speedFromString() {
 
-        //can parse when there is no space
+        // can parse when there is no space
         assertThat(Speed.fromString("5.0fpm"), is(Speed.of(5, FEET_PER_MINUTE)));
         assertThat(Speed.fromString("5.fps"), is(Speed.of(5, FEET_PER_SECOND)));
         assertThat(Speed.fromString("5.0kph"), is(Speed.of(5, KILOMETERS_PER_HOUR)));
@@ -420,7 +384,7 @@ public class SpeedTest {
         assertThat(Speed.fromString("5.0mps"), is(Speed.of(5, METERS_PER_SECOND)));
         assertThat(Speed.fromString("5.0mph"), is(Speed.of(5, MILES_PER_HOUR)));
 
-        //can parse when there is a space
+        // can parse when there is a space
         assertThat(Speed.fromString("5.0 fpm"), is(Speed.of(5, FEET_PER_MINUTE)));
         assertThat(Speed.fromString("5.0 fps"), is(Speed.of(5, FEET_PER_SECOND)));
         assertThat(Speed.fromString("5.0 kph"), is(Speed.of(5, KILOMETERS_PER_HOUR)));
@@ -428,14 +392,14 @@ public class SpeedTest {
         assertThat(Speed.fromString("5.0 mps"), is(Speed.of(5, METERS_PER_SECOND)));
         assertThat(Speed.fromString("5.0 mph"), is(Speed.of(5, MILES_PER_HOUR)));
 
-        //can parse different levels of accuracy
+        // can parse different levels of accuracy
         assertThat(Speed.fromString("5 fpm"), is(Speed.of(5, FEET_PER_MINUTE)));
         assertThat(Speed.fromString("5.01 fps"), is(Speed.of(5.01, FEET_PER_SECOND)));
         assertThat(Speed.fromString("5.12345 kph"), is(Speed.of(5.12345, KILOMETERS_PER_HOUR)));
         assertThat(Speed.fromString("5E5 kn"), is(Speed.of(5E5, KNOTS)));
         assertThat(Speed.fromString("5.000001 mph"), is(Speed.of(5.000001, MILES_PER_HOUR)));
 
-        //can parse zero and negative numbers
+        // can parse zero and negative numbers
         assertThat(Speed.fromString("-5 fpm"), is(Speed.of(-5, FEET_PER_MINUTE)));
         assertThat(Speed.fromString("-5.01 fps"), is(Speed.of(-5.01, FEET_PER_SECOND)));
         assertThat(Speed.fromString("-5.12345 kph"), is(Speed.of(-5.12345, KILOMETERS_PER_HOUR)));
@@ -459,7 +423,7 @@ public class SpeedTest {
         Speed oneKnot = Speed.of(1.0, KNOTS);
         Speed oneMeterPerSecond = Speed.of(1.0, METERS_PER_SECOND);
         Speed oneFootPerMinute = Speed.of(1.0, FEET_PER_MINUTE);
-        Speed oneFootPerSecond = Speed.of(1.0, FEET_PER_SECOND);  //will be reported in
+        Speed oneFootPerSecond = Speed.of(1.0, FEET_PER_SECOND); // will be reported in
 
         assertThat(oneKnot.toString(), is("1.000kn"));
         assertThat(oneMeterPerSecond.toString(), is("1.000mps"));
@@ -482,8 +446,8 @@ public class SpeedTest {
     public void testZeroConstant() {
 
         assertTrue(Speed.ZERO.isZero());
-        assertEquals(Speed.ZERO.inFeetPerSecond(),
-            Speed.of(0.0, FEET_PER_SECOND).inFeetPerSecond(), 1E-10);
+        assertEquals(
+                Speed.ZERO.inFeetPerSecond(), Speed.of(0.0, FEET_PER_SECOND).inFeetPerSecond(), 1E-10);
     }
 
     @Test
@@ -497,5 +461,4 @@ public class SpeedTest {
         assertThat(Speed.of(0, METERS_PER_SECOND), is(zeroSpeed.abs()));
         assertThat(Speed.of(12.3, FEET_PER_MINUTE), is(negativeSpeed.abs()));
     }
-
 }

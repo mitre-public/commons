@@ -27,7 +27,7 @@ import com.google.gson.JsonElement;
  */
 public interface JsonWritable {
 
-    //THIS METHOD MIGHT BE REMOVED -- WE NEED TO SEE IF GETTING ACCESS TO THE JsonElement IS BETTER
+    // THIS METHOD MIGHT BE REMOVED -- WE NEED TO SEE IF GETTING ACCESS TO THE JsonElement IS BETTER
     default JsonElement getJsonElement() {
         Gson gson = new GsonBuilder().create();
         return gson.toJsonTree(this, this.getClass());

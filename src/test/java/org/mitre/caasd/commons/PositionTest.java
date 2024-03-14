@@ -48,11 +48,7 @@ public class PositionTest {
 
     @Test
     public void constructionMakesWhatWeExpect_2() {
-        Position pos = new Position(
-            EPOCH,
-            LatLong.of(1.0, 20.0),
-            Distance.ofFeet(150.0)
-        );
+        Position pos = new Position(EPOCH, LatLong.of(1.0, 20.0), Distance.ofFeet(150.0));
 
         assertThat(pos.time(), is(EPOCH));
         assertThat(pos.latLong(), is(LatLong.of(1.0, 20.0)));
@@ -62,7 +58,7 @@ public class PositionTest {
 
     @Test
     public void altitudeCanBeMissing() {
-        Position pos = new Position(EPOCH,LatLong.of(1.0, 20.0));
+        Position pos = new Position(EPOCH, LatLong.of(1.0, 20.0));
 
         assertThat(pos.altitude(), nullValue());
         assertThat(pos.hasAltitude(), is(false));
@@ -71,10 +67,10 @@ public class PositionTest {
     @Test
     public void constructionThroughBuilderMakesWhatWeExpect() {
         Position pos = Position.builder()
-            .time(EPOCH)
-            .latLong(1.0, 20.0)
-            .altitude(Distance.ofFeet(150.0))
-            .build();
+                .time(EPOCH)
+                .latLong(1.0, 20.0)
+                .altitude(Distance.ofFeet(150.0))
+                .build();
 
         assertThat(pos.time(), is(EPOCH));
         assertThat(pos.latLong(), is(LatLong.of(1.0, 20.0)));
@@ -84,10 +80,7 @@ public class PositionTest {
 
     @Test
     public void constructionThroughBuilderMakesWhatWeExpect_noAltitude() {
-        Position pos = Position.builder()
-            .time(EPOCH)
-            .latLong(1.0, 20.0)
-            .build();
+        Position pos = Position.builder().time(EPOCH).latLong(1.0, 20.0).build();
 
         assertThat(pos.time(), is(EPOCH));
         assertThat(pos.latLong(), is(LatLong.of(1.0, 20.0)));
@@ -99,10 +92,10 @@ public class PositionTest {
     public void builderWithSeedClones() {
 
         Position pos = Position.builder()
-            .time(EPOCH)
-            .latLong(1.0, 20.0)
-            .altitude(Distance.ofFeet(150.0))
-            .build();
+                .time(EPOCH)
+                .latLong(1.0, 20.0)
+                .altitude(Distance.ofFeet(150.0))
+                .build();
 
         Position pos2 = Position.builder(pos).build();
 
@@ -113,14 +106,12 @@ public class PositionTest {
     public void builderWithSeedClones_removeAltitude() {
 
         Position pos = Position.builder()
-            .time(EPOCH)
-            .latLong(1.0, 20.0)
-            .altitude(Distance.ofFeet(150.0))
-            .build();
+                .time(EPOCH)
+                .latLong(1.0, 20.0)
+                .altitude(Distance.ofFeet(150.0))
+                .build();
 
-        Position pos2 = Position.builder(pos)
-            .butAltitude(null)
-            .build();
+        Position pos2 = Position.builder(pos).butAltitude(null).build();
 
         assertThat(pos.time(), is(pos2.time()));
         assertThat(pos.latLong(), is(pos2.latLong()));
@@ -131,40 +122,39 @@ public class PositionTest {
     @Test
     public void failWhenBuilderSetsLatLongTwice() {
         assertThrows(
-            IllegalStateException.class, () -> Position.builder().latLong(0.0, 0.0).latLong(1.0, 1.0)
-        );
+                IllegalStateException.class,
+                () -> Position.builder().latLong(0.0, 0.0).latLong(1.0, 1.0));
     }
 
     @Test
     public void failWhenBuilderSetsLatLongTwice_2() {
         assertThrows(
-            IllegalStateException.class,
-            () -> Position.builder().latLong(LatLong.of(0.0, 0.0)).latLong(LatLong.of(0.0, 0.0))
-        );
+                IllegalStateException.class,
+                () -> Position.builder().latLong(LatLong.of(0.0, 0.0)).latLong(LatLong.of(0.0, 0.0)));
     }
 
     @Test
     public void failWhenBuilderSetsTimeTwice() {
         assertThrows(
-            IllegalStateException.class, () -> Position.builder().time(EPOCH).time(EPOCH.plusSeconds(1L))
-        );
+                IllegalStateException.class,
+                () -> Position.builder().time(EPOCH).time(EPOCH.plusSeconds(1L)));
     }
 
     @Test
     public void failWhenBuilderSetsAltitudeTwice() {
         assertThrows(
-            IllegalStateException.class, () -> Position.builder().altitudeInFeet(150.0).altitudeInFeet(150.0)
-        );
+                IllegalStateException.class,
+                () -> Position.builder().altitudeInFeet(150.0).altitudeInFeet(150.0));
     }
 
     @Test
     public void builderCanOverrideUsingButMethods() {
 
         Position pos = Position.builder()
-            .time(EPOCH)
-            .latLong(1.0, 20.0)
-            .altitude(Distance.ofFeet(150.0))
-            .build();
+                .time(EPOCH)
+                .latLong(1.0, 20.0)
+                .altitude(Distance.ofFeet(150.0))
+                .build();
 
         Position pos2 = Position.builder(pos).butTime(EPOCH.plusSeconds(1L)).build();
 

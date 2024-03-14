@@ -63,9 +63,7 @@ public interface HasTime {
         Duration leftDelta = Duration.between(left.time(), time).abs();
         Duration rightDelta = Duration.between(right.time(), time).abs();
 
-        return (theDuration(leftDelta).isLessThanOrEqualTo(rightDelta))
-            ? left
-            : right;
+        return (theDuration(leftDelta).isLessThanOrEqualTo(rightDelta)) ? left : right;
     }
 
     /**
@@ -89,15 +87,13 @@ public interface HasTime {
      * "searchTime" would be inserted into the list. See Collections.binarySearch for a nearly
      * identical use-case.
      */
-    static <T extends HasTime> int binarySearch(List<? extends T> itemsSortedByTime,
-                                                Instant searchTime) {
+    static <T extends HasTime> int binarySearch(List<? extends T> itemsSortedByTime, Instant searchTime) {
 
         requireNonNull(itemsSortedByTime);
         requireNonNull(searchTime);
 
         return CollectionUtils.binarySearch(itemsSortedByTime, HasTime::time, searchTime);
     }
-
 
     /**
      * Find the newest item in the list that occurs at or before the searchTime.
@@ -119,9 +115,7 @@ public interface HasTime {
 
         int index = binarySearch(itemsSortedByTime, searchTime);
 
-        return (index >= 0)
-            ? itemsSortedByTime.get(index)
-            : itemsSortedByTime.get(-index - 2);
+        return (index >= 0) ? itemsSortedByTime.get(index) : itemsSortedByTime.get(-index - 2);
     }
 
     /**
@@ -145,11 +139,8 @@ public interface HasTime {
 
         int index = binarySearch(itemsSortedByTime, searchTime);
 
-        return (index >= 0)
-            ? itemsSortedByTime.get(index)
-            : itemsSortedByTime.get(-index - 1);
+        return (index >= 0) ? itemsSortedByTime.get(index) : itemsSortedByTime.get(-index - 1);
     }
-
 
     /**
      * Find the item in the list whose time is closest to the searchTime (tie goes to oldest item).

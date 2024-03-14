@@ -94,10 +94,7 @@ public final class ImmutableConfig implements Serializable {
      *                       asProperties)
      */
     public ImmutableConfig(File propertiesFile, Collection<String> requiredProps) {
-        this(
-            loadProperties(propertiesFile),
-            requireNonNull(requiredProps, "The requiredProps cannot be null")
-        );
+        this(loadProperties(propertiesFile), requireNonNull(requiredProps, "The requiredProps cannot be null"));
     }
 
     /**
@@ -134,7 +131,6 @@ public final class ImmutableConfig implements Serializable {
         this.propertyMap = ImmutableMap.copyOf(properties);
         verifyKeysExist(requiredPropertyKeys);
     }
-
 
     /**
      * Eagerly validate this config by confirming the existence of these required property keys.
@@ -288,13 +284,11 @@ public final class ImmutableConfig implements Serializable {
      */
     public ImmutableSortedSet<Entry<String, String>> entrySet() {
 
-        Comparator<Entry<String, String>> comparator
-            = Entry.comparingByKey();
+        Comparator<Entry<String, String>> comparator = Entry.comparingByKey();
 
-        return ImmutableSortedSet
-            .orderedBy(comparator)
-            .addAll(propertyMap.entrySet())
-            .build();
+        return ImmutableSortedSet.orderedBy(comparator)
+                .addAll(propertyMap.entrySet())
+                .build();
     }
 
     /** @return The Raw mapping of Keys to Values. */

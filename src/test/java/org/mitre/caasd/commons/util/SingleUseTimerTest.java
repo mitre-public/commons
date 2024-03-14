@@ -27,8 +27,7 @@ import org.junit.jupiter.api.Test;
 
 public class SingleUseTimerTest {
 
-    public SingleUseTimerTest() {
-    }
+    public SingleUseTimerTest() {}
 
     @Test
     public void testDidntCallTicException() {
@@ -38,7 +37,7 @@ public class SingleUseTimerTest {
             timer.toc();
             fail("calling toc with previously calling tic should throw an Exception");
         } catch (IllegalStateException ise) {
-            //caught an Exception
+            // caught an Exception
         }
     }
 
@@ -50,7 +49,7 @@ public class SingleUseTimerTest {
             timer.elapsedTime();
             fail("calling elapsedTime with previously calling tic should throw an Exception");
         } catch (IllegalStateException ise) {
-            //caught an Exception
+            // caught an Exception
         }
     }
 
@@ -63,10 +62,9 @@ public class SingleUseTimerTest {
             timer.tic();
             fail("Should not be able to call tic twice");
         } catch (IllegalStateException ise) {
-            //caught the correct exception
+            // caught the correct exception
         }
     }
-
 
     @Test
     public void testCallTocTwiceException() {
@@ -78,7 +76,7 @@ public class SingleUseTimerTest {
             timer.toc();
             fail("Should not be able to call toc twice");
         } catch (IllegalStateException ise) {
-            //caught the correct exception
+            // caught the correct exception
         }
     }
 
@@ -127,7 +125,7 @@ public class SingleUseTimerTest {
         Duration timeSpan = timer.elapsedTime();
 
         assertTrue(timeSpan.toNanos() > 0); // some time elapsed..
-        assertTrue(timeSpan.toMillis() < 2 * MIN_DURATION_IN_MILLISEC); //but not much
+        assertTrue(timeSpan.toMillis() < 2 * MIN_DURATION_IN_MILLISEC); // but not much
     }
 
     private void wasteTime(long millisec) {

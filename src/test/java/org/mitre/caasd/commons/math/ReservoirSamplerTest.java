@@ -27,7 +27,6 @@ import org.junit.jupiter.api.Test;
 
 public class ReservoirSamplerTest {
 
-
     @Test
     public void constructorWorks() {
 
@@ -48,28 +47,28 @@ public class ReservoirSamplerTest {
     @Test
     public void samplingIsCorrect() {
 
-        Random rng = new Random(17L); //use a single RNG for all 10k samples
+        Random rng = new Random(17L); // use a single RNG for all 10k samples
 
         int NUM_TRIALS = 10_000;
 
-        //for each trial: create a sample of size 10 from the stream the numbers 1 through 20
+        // for each trial: create a sample of size 10 from the stream the numbers 1 through 20
         int[] sampleCounts = new int[20];
 
         for (int i = 0; i < NUM_TRIALS; i++) {
             createSampleAndIncrementCounts(sampleCounts, rng);
         }
 
-        //each number 1 through 20 should be in approximately 1/2 the samples (if the sampling is statistically correct)
+        // each number 1 through 20 should be in approximately 1/2 the samples (if the sampling is statistically
+        // correct)
 
-        //each sampleCounts is a binomial random variable
-        //standard deviation = sqrt(n*p*q) = sqrt(10_000 * .5 * .5) = sqrt(2500) = 50
+        // each sampleCounts is a binomial random variable
+        // standard deviation = sqrt(n*p*q) = sqrt(10_000 * .5 * .5) = sqrt(2500) = 50
 
         for (int sampleCount : sampleCounts) {
-            //the actual sample count should be within 3 standard deviations (i.e. 150) of 5000
+            // the actual sample count should be within 3 standard deviations (i.e. 150) of 5000
             assertThat(abs(sampleCount - 5000), lessThan(3 * 50));
         }
     }
-
 
     private void createSampleAndIncrementCounts(int[] sampleCounts, Random rng) {
 

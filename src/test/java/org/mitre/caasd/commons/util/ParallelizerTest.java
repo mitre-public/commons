@@ -34,7 +34,7 @@ public class ParallelizerTest {
         Runnable r1 = new Runnable() {
             @Override
             public void run() {
-                //do nothing
+                // do nothing
             }
         };
         Runnable r2 = new Runnable() {
@@ -58,7 +58,7 @@ public class ParallelizerTest {
         Parallelizer para = new Parallelizer(2);
         para.doWorkInParallel(jobs);
 
-        //two error files should have been made
+        // two error files should have been made
         File errorFile0 = new File("error_0.txt");
         assertTrue(errorFile0.exists());
         errorFile0.delete();
@@ -74,13 +74,13 @@ public class ParallelizerTest {
         Runnable task1 = new Runnable() {
             @Override
             public void run() {
-                //do nothing;
+                // do nothing;
             }
         };
         Runnable task2 = new Runnable() {
             @Override
             public void run() {
-                //do nothing;
+                // do nothing;
             }
         };
 
@@ -103,7 +103,7 @@ public class ParallelizerTest {
     public void testUsingCustomExceptionHandler() {
 
         Runnable r1 = () -> {
-            //do nothing
+            // do nothing
         };
         Runnable r2 = () -> {
             throw new RuntimeException("Catch me");
@@ -118,7 +118,8 @@ public class ParallelizerTest {
         para.doWorkInParallel(jobs);
 
         assertEquals(0, testHandler.numWarnCalls);
-        assertEquals(2, testHandler.numHandleCalls);  //@todo -- I can sometime fail non-deterministically with testHandler.numHandleCalls = 1)
+        assertEquals(2, testHandler.numHandleCalls); // @todo -- I can sometime fail non-deterministically with
+        // testHandler.numHandleCalls = 1)
     }
 
     /**
@@ -139,5 +140,4 @@ public class ParallelizerTest {
             numHandleCalls++;
         }
     }
-
 }

@@ -90,25 +90,23 @@ public class CachingCleaner<T> implements DataCleaner<T> {
         try {
             return cache.get(data);
         } catch (ExecutionException ex) {
-            throw demote(ex); //rethrow as DemotedException
+            throw demote(ex); // rethrow as DemotedException
         }
     }
 
     private static <T> LoadingCache<T, Optional<T>> makeCacheFor(DataCleaner<T> cleaner, int cacheSize) {
 
-        return CacheBuilder.newBuilder().
-            maximumSize(cacheSize).
-            recordStats().
-            build(makeCacheLoaderFrom(cleaner));
+        return CacheBuilder.newBuilder().maximumSize(cacheSize).recordStats().build(makeCacheLoaderFrom(cleaner));
     }
 
-    private static <T> LoadingCache<T, Optional<T>> makeExpiringCacheFor(DataCleaner<T> cleaner, int cacheSize, Duration expiration) {
+    private static <T> LoadingCache<T, Optional<T>> makeExpiringCacheFor(
+            DataCleaner<T> cleaner, int cacheSize, Duration expiration) {
 
         return CacheBuilder.newBuilder()
-            .maximumSize(cacheSize)
-            .expireAfterAccess(expiration.toMillis(), TimeUnit.MILLISECONDS)
-            .recordStats()
-            .build(makeCacheLoaderFrom(cleaner));
+                .maximumSize(cacheSize)
+                .expireAfterAccess(expiration.toMillis(), TimeUnit.MILLISECONDS)
+                .recordStats()
+                .build(makeCacheLoaderFrom(cleaner));
     }
 
     /**

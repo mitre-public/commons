@@ -105,10 +105,7 @@ public class Parallelizer {
          */
         for (Runnable job : jobs) {
 
-            Runnable wrappedJob = new AwaitableTask(
-                latch,
-                new ErrorCatchingTask(job, errorHandler)
-            );
+            Runnable wrappedJob = new AwaitableTask(latch, new ErrorCatchingTask(job, errorHandler));
 
             service.submit(wrappedJob);
         }

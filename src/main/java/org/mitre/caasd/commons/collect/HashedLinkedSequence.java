@@ -59,7 +59,7 @@ import com.google.common.collect.Iterators;
  */
 public class HashedLinkedSequence<T> implements Collection<T>, Set<T> {
 
-    //@Todo -- Add iterateForwardFrom(T element), iterateBackwardFrom(T), reverseIterator().
+    // @Todo -- Add iterateForwardFrom(T element), iterateBackwardFrom(T), reverseIterator().
 
     private static final String DUPLICATE_ELEMENT_WARNING = "Cannot add the same element twice";
 
@@ -75,7 +75,7 @@ public class HashedLinkedSequence<T> implements Collection<T>, Set<T> {
 
     private Node<T> lastNode;
 
-    private int modCount; //used to detect concurrent modification
+    private int modCount; // used to detect concurrent modification
 
     public HashedLinkedSequence() {
         this.nodes = newHashMap();
@@ -166,7 +166,7 @@ public class HashedLinkedSequence<T> implements Collection<T>, Set<T> {
 
     public void addLast(T item) {
         checkNotNull(item);
-        //adding the same element twice is illegal because it make "iterate from" operations unclear
+        // adding the same element twice is illegal because it make "iterate from" operations unclear
         checkArgument(!nodes.containsKey(item), DUPLICATE_ELEMENT_WARNING);
 
         Node<T> oldLast = lastNode;
@@ -293,7 +293,7 @@ public class HashedLinkedSequence<T> implements Collection<T>, Set<T> {
 
     @Override
     public <E> E[] toArray(E[] a) {
-        //implementation copied from java.util.LinkedList:
+        // implementation copied from java.util.LinkedList:
         if (a.length < size()) {
             a = (E[]) Array.newInstance(a.getClass().getComponentType(), size());
         }
@@ -331,7 +331,7 @@ public class HashedLinkedSequence<T> implements Collection<T>, Set<T> {
 
     @Override
     public boolean removeAll(@Nonnull Collection<?> c) {
-        //implementation copied from java.util.AbstractSet:
+        // implementation copied from java.util.AbstractSet:
         Objects.requireNonNull(c);
         boolean modified = false;
 
@@ -352,7 +352,7 @@ public class HashedLinkedSequence<T> implements Collection<T>, Set<T> {
 
     @Override
     public boolean retainAll(@Nonnull Collection<?> c) {
-        //implementation copied from java.util.AbstractCollection:
+        // implementation copied from java.util.AbstractCollection:
         Objects.requireNonNull(c);
         boolean modified = false;
         Iterator<T> it = iterator();
@@ -430,7 +430,7 @@ public class HashedLinkedSequence<T> implements Collection<T>, Set<T> {
                 throw new NoSuchElementException();
             }
             T returnMe = currentNode.item;
-            lastNodeReturned = currentNode; //save for possible removal
+            lastNodeReturned = currentNode; // save for possible removal
             currentNode = currentNode.next;
             return returnMe;
         }
@@ -446,14 +446,14 @@ public class HashedLinkedSequence<T> implements Collection<T>, Set<T> {
             if (lastNodeReturned == null) {
                 throw new IllegalStateException();
             }
-            //call the parent HashedLinkedSequence's remove method (not the Iterator's remove)
+            // call the parent HashedLinkedSequence's remove method (not the Iterator's remove)
             HashedLinkedSequence.this.remove(lastNodeReturned.item);
             /*
              * it would be just slightly faster to manually remove this node here (but it is more
              * robust to reuse the remove method which already addresses all the corner cases).
              */
 
-            lastNodeReturned = null; //an iterator's remove() method only works once per "next()"
+            lastNodeReturned = null; // an iterator's remove() method only works once per "next()"
 
             expectedModCount++;
         }

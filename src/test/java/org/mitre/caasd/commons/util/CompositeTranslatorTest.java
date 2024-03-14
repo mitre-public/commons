@@ -68,17 +68,10 @@ public class CompositeTranslatorTest {
 
         double forwardOutput = translator.to(10.0);
 
-        assertThat(
-            (10.0 * 2) + 5.0,
-            closeTo(forwardOutput, 0.00005)
-        );
+        assertThat((10.0 * 2) + 5.0, closeTo(forwardOutput, 0.00005));
 
         double backwardOutput = translator.from(10.0);
 
-        assertThat(
-            (10 - 5.0) / 2.0,
-            closeTo(backwardOutput, 0.00005)
-        );
+        assertThat((10 - 5.0) / 2.0, closeTo(backwardOutput, 0.00005));
     }
-
 }

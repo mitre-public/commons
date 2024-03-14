@@ -154,8 +154,8 @@ public class DistanceTest {
 
         Distance a = Distance.of(5, FEET);
         Distance b = Distance.of(5, FEET);
-        Distance c = Distance.of(12, FEET);  //same unit, different amount
-        Distance d = Distance.of(5, NAUTICAL_MILES); //same amount, different unit
+        Distance c = Distance.of(12, FEET); // same unit, different amount
+        Distance d = Distance.of(5, NAUTICAL_MILES); // same amount, different unit
         Integer i = 12;
 
         assertTrue(a.equals(b));
@@ -182,9 +182,8 @@ public class DistanceTest {
         Distance oneKm = Distance.ofKiloMeters(1.0);
         Distance fiveFeet = Distance.of(5.0, FEET);
 
-        List<Distance> distances = newArrayList(
-            oneMeter, zero, oneKm, negative1Feet, oneFoot, oneNm, fourFeet, fiveFeet
-        );
+        List<Distance> distances =
+                newArrayList(oneMeter, zero, oneKm, negative1Feet, oneFoot, oneNm, fourFeet, fiveFeet);
 
         Collections.sort(distances);
         assertEquals(distances.get(0), negative1Feet);
@@ -199,7 +198,7 @@ public class DistanceTest {
 
     @Test
     public void testToStringWithCustomLength() {
-        //confirm the number of digits is reflected
+        // confirm the number of digits is reflected
         assertEquals("1m", Distance.ofMeters(1).toString(0));
         assertEquals("1.0m", Distance.ofMeters(1).toString(1));
         assertEquals("1.00m", Distance.ofMeters(1).toString(2));
@@ -325,10 +324,7 @@ public class DistanceTest {
 
     @Test
     public void meanWorksWhenAllUnitsAreTheSame() {
-        Distance average = mean(
-            Distance.ofFeet(22),
-            Distance.ofFeet(12)
-        );
+        Distance average = mean(Distance.ofFeet(22), Distance.ofFeet(12));
 
         assertThat(average, is(Distance.ofFeet(17)));
     }
@@ -336,10 +332,8 @@ public class DistanceTest {
     @Test
     public void meanWorkWhenUnitsAreDifferent() {
         Distance average = mean(
-            Distance.ofFeet(22),
-            Distance.ofFeet(12),
-            Distance.ofMeters(1) //3.28084 ft
-        );
+                Distance.ofFeet(22), Distance.ofFeet(12), Distance.ofMeters(1) // 3.28084 ft
+                );
 
         assertThat(average.nativeUnit(), is(Distance.Unit.FEET));
         assertThat(average.inFeet(), closeTo(12.4269, 0.0001));
@@ -360,10 +354,7 @@ public class DistanceTest {
 
     @Test
     public void sumWorksWhenAllUnitsAreTheSame() {
-        Distance sum = sum(
-            Distance.ofFeet(22),
-            Distance.ofFeet(12)
-        );
+        Distance sum = sum(Distance.ofFeet(22), Distance.ofFeet(12));
 
         assertThat(sum, is(Distance.ofFeet(34)));
     }
@@ -371,10 +362,8 @@ public class DistanceTest {
     @Test
     public void sumWorkWhenUnitsAreDifferent() {
         Distance average = sum(
-            Distance.ofFeet(22),
-            Distance.ofFeet(12),
-            Distance.ofMeters(1) //3.28084 ft
-        );
+                Distance.ofFeet(22), Distance.ofFeet(12), Distance.ofMeters(1) // 3.28084 ft
+                );
 
         assertThat(average.nativeUnit(), is(Distance.Unit.FEET));
         assertThat(average.inFeet(), closeTo(37.28084, 0.0001));
@@ -383,10 +372,7 @@ public class DistanceTest {
     @Test
     public void creatingSpeedByDividingByTime() {
 
-        assertThat(
-            Distance.ofMiles(1.0).dividedBy(Duration.ofHours(2)),
-            is(Speed.of(0.5, MILES_PER_HOUR))
-        );
+        assertThat(Distance.ofMiles(1.0).dividedBy(Duration.ofHours(2)), is(Speed.of(0.5, MILES_PER_HOUR)));
     }
 
     @Test
@@ -424,28 +410,28 @@ public class DistanceTest {
     @Test
     public void distanceFromString() {
 
-        //can parse when there is no space
+        // can parse when there is no space
         assertThat(Distance.fromString("5.0ft"), is(Distance.of(5, FEET)));
         assertThat(Distance.fromString("5.0km"), is(Distance.of(5, KILOMETERS)));
         assertThat(Distance.fromString("5.0m"), is(Distance.of(5, METERS)));
         assertThat(Distance.fromString("5.0mi"), is(Distance.of(5, MILES)));
         assertThat(Distance.fromString("5.0NM"), is(Distance.of(5, NAUTICAL_MILES)));
 
-        //can parse when there is a space
+        // can parse when there is a space
         assertThat(Distance.fromString("5.0 ft"), is(Distance.of(5, FEET)));
         assertThat(Distance.fromString("5.0 km"), is(Distance.of(5, KILOMETERS)));
         assertThat(Distance.fromString("5.0 m"), is(Distance.of(5, METERS)));
         assertThat(Distance.fromString("5.0 mi"), is(Distance.of(5, MILES)));
         assertThat(Distance.fromString("5.0 NM"), is(Distance.of(5, NAUTICAL_MILES)));
 
-        //can parse different levels of accuracy
+        // can parse different levels of accuracy
         assertThat(Distance.fromString("5 ft"), is(Distance.of(5, FEET)));
         assertThat(Distance.fromString("5.01 km"), is(Distance.of(5.01, KILOMETERS)));
         assertThat(Distance.fromString("5.12345 m"), is(Distance.of(5.12345, METERS)));
         assertThat(Distance.fromString("5E5 mi"), is(Distance.of(5E5, MILES)));
         assertThat(Distance.fromString("5.000001 NM"), is(Distance.of(5.000001, NAUTICAL_MILES)));
 
-        //can parse zero and negative numbers
+        // can parse zero and negative numbers
         assertThat(Distance.fromString("-5 ft"), is(Distance.of(-5, FEET)));
         assertThat(Distance.fromString("-5.01 km"), is(Distance.of(-5.01, KILOMETERS)));
         assertThat(Distance.fromString("-5.12345 m"), is(Distance.of(-5.12345, METERS)));
@@ -477,25 +463,21 @@ public class DistanceTest {
 
     @Test
     public void min_minOfEmptyArrayIsNull() {
-        assertThat(min(new Distance[]{}), nullValue());
+        assertThat(min(new Distance[] {}), nullValue());
     }
 
     @Test
     public void min_minOfSingletonArrayIsFound() {
-        assertThat(min(new Distance[]{Distance.ofFeet(100)}), is(Distance.ofFeet(100)));
+        assertThat(min(new Distance[] {Distance.ofFeet(100)}), is(Distance.ofFeet(100)));
     }
 
     @Test
     public void min_minOfLongArrayIsFound() {
-        Distance[] testData_1 = new Distance[]{
-            Distance.ofFeet(1000.0),
-            Distance.ofMeters(1),
-            Distance.ofNauticalMiles(1.0)
+        Distance[] testData_1 =
+                new Distance[] {Distance.ofFeet(1000.0), Distance.ofMeters(1), Distance.ofNauticalMiles(1.0)};
+        Distance[] testData_2 = new Distance[] {
+            Distance.ofMeters(1), Distance.ofNauticalMiles(1.0), Distance.ofFeet(1000.0),
         };
-        Distance[] testData_2 = new Distance[]{
-            Distance.ofMeters(1),
-            Distance.ofNauticalMiles(1.0),
-            Distance.ofFeet(1000.0),};
 
         assertThat(min(testData_1), is(Distance.ofMeters(1)));
         assertThat(min(testData_2), is(Distance.ofMeters(1)));
@@ -525,25 +507,21 @@ public class DistanceTest {
 
     @Test
     public void max_maxOfEmptyArrayIsNull() {
-        assertThat(max(new Distance[]{}), nullValue());
+        assertThat(max(new Distance[] {}), nullValue());
     }
 
     @Test
     public void max_maxOfSingletonArrayIsFound() {
-        assertThat(max(new Distance[]{Distance.ofFeet(100)}), is(Distance.ofFeet(100)));
+        assertThat(max(new Distance[] {Distance.ofFeet(100)}), is(Distance.ofFeet(100)));
     }
 
     @Test
     public void max_maxOfLongArrayIsFound() {
-        Distance[] testData_1 = new Distance[]{
-            Distance.ofFeet(1000.0),
-            Distance.ofMeters(1),
-            Distance.ofNauticalMiles(1.0)
+        Distance[] testData_1 =
+                new Distance[] {Distance.ofFeet(1000.0), Distance.ofMeters(1), Distance.ofNauticalMiles(1.0)};
+        Distance[] testData_2 = new Distance[] {
+            Distance.ofMeters(1), Distance.ofNauticalMiles(1.0), Distance.ofFeet(1000.0),
         };
-        Distance[] testData_2 = new Distance[]{
-            Distance.ofMeters(1),
-            Distance.ofNauticalMiles(1.0),
-            Distance.ofFeet(1000.0),};
 
         assertThat(max(testData_1), is(Distance.ofNauticalMiles(1)));
         assertThat(max(testData_2), is(Distance.ofNauticalMiles(1)));
@@ -553,7 +531,6 @@ public class DistanceTest {
     public void testZeroConstant() {
 
         assertTrue(Distance.ZERO.isZero());
-        assertThat(Distance.ZERO.inFeet(),
-            closeTo(Distance.of(0.0, FEET).inFeet(), 1E-10));
+        assertThat(Distance.ZERO.inFeet(), closeTo(Distance.of(0.0, FEET).inFeet(), 1E-10));
     }
 }

@@ -127,5 +127,4 @@ class AccelerationTest {
         assertThat(accel0.equals(accel1), is(true));
         assertThat(accel0.hashCode(), is(accel1.hashCode()));
     }
-
 }

@@ -79,7 +79,7 @@ public class TestUtils {
 
             assertThat(targetFile.exists(), is(true));
         } catch (Exception ex) {
-            //in the event of a serialization error delete the target file and return the exception.
+            // in the event of a serialization error delete the target file and return the exception.
             targetFile.delete();
             throw ex;
         }

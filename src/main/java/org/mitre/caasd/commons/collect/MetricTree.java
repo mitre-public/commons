@@ -164,21 +164,21 @@ public class MetricTree<K, V> implements Serializable {
     public V put(K key, V value) {
 
         if (key == null) {
-            throw new NullPointerException("Null Keys are not permited because they cannot be "
-                + "placed in the metric space");
+            throw new NullPointerException(
+                    "Null Keys are not permited because they cannot be " + "placed in the metric space");
         }
 
-        //delay building root until now because we don't have a key for the centerPoint until
-        //the first use of put(K key)
+        // delay building root until now because we don't have a key for the centerPoint until
+        // the first use of put(K key)
         if (this.rootSphere == null) {
             this.rootSphere = new Sphere(key);
         }
 
-        //do a "short-circuit" put when our global HashMap has already seen the Key provided
+        // do a "short-circuit" put when our global HashMap has already seen the Key provided
         if (globalHashMap.containsKey(key)) {
             SphereAssignment<K, V> sa = globalHashMap.get(key);
-            sa.sphere().entries.put(key, value); //update the "local" entry
-            V prior = sa.updateValue(value); //update the "global" entry
+            sa.sphere().entries.put(key, value); // update the "local" entry
+            V prior = sa.updateValue(value); // update the "global" entry
             return prior;
         }
 
@@ -227,9 +227,7 @@ public class MetricTree<K, V> implements Serializable {
 
         SphereAssignment<K, V> sa = globalHashMap.get(exactKey);
 
-        return (sa != null)
-            ? sa.value()
-            : null;
+        return (sa != null) ? sa.value() : null;
     }
 
     /**
@@ -243,7 +241,8 @@ public class MetricTree<K, V> implements Serializable {
 
         if (globalHashMap.containsKey(searchKey)) {
             SphereAssignment<K, V> sa = globalHashMap.get(searchKey);
-            return new SearchResult<>(searchKey, sa.value(), 0.0); //distance must be zero because we have an exact key match
+            return new SearchResult<>(
+                    searchKey, sa.value(), 0.0); // distance must be zero because we have an exact key match
         }
 
         Collection<SearchResult<K, V>> results = getNClosest(searchKey, 1);
@@ -268,7 +267,7 @@ public class MetricTree<K, V> implements Serializable {
             throw new IllegalArgumentException("n must be at least 1");
         }
 
-        //nothing to retrieve...
+        // nothing to retrieve...
         if (this.isEmpty()) {
             return Collections.emptyList();
         }
@@ -296,7 +295,7 @@ public class MetricTree<K, V> implements Serializable {
             throw new IllegalArgumentException("The range must be strictly positive " + range);
         }
 
-        //nothing to retrieve...
+        // nothing to retrieve...
         if (this.isEmpty()) {
             return Collections.emptyList();
         }
@@ -330,8 +329,8 @@ public class MetricTree<K, V> implements Serializable {
             V priorValue = sa.sphere().remove(exactKey);
 
             if (priorValue != sa.value()) {
-                throw new AssertionError("the value found in the globalMap should match "
-                    + "the value found in the tree structure");
+                throw new AssertionError(
+                        "the value found in the globalMap should match " + "the value found in the tree structure");
             }
 
             return priorValue;
@@ -474,10 +473,8 @@ public class MetricTree<K, V> implements Serializable {
                 split();
             }
 
-            //update radius if necessary
-            this.radius = Math.max(
-                radius,
-                verifiedDistance(this.centerPoint, key));
+            // update radius if necessary
+            this.radius = Math.max(radius, verifiedDistance(this.centerPoint, key));
 
             if (isSphereOfPoints()) {
                 globalHashMap.put(key, new SphereAssignment<>(this, value));
@@ -493,9 +490,9 @@ public class MetricTree<K, V> implements Serializable {
         private void split() {
             Pair<Sphere, Sphere> newNodes = this.splitSphereOfPoints();
 
-            //"promote" this SPHERE_OF_POINTS to a SPHERE_OF_SPHERES
-            //null out the list of entries
-            //use the a pair of Spheres in its place
+            // "promote" this SPHERE_OF_POINTS to a SPHERE_OF_SPHERES
+            // null out the list of entries
+            // use the a pair of Spheres in its place
             this.type = SphereState.SPHERE_OF_SPHERES;
             this.entries = null;
             this.childSpheres = newNodes;
@@ -506,8 +503,7 @@ public class MetricTree<K, V> implements Serializable {
                 return this.entries.remove(key);
             } else {
                 throw new AssertionError(
-                    "Should never get here.  "
-                        + "This should only be called on \"Sphere of Points\"");
+                        "Should never get here.  " + "This should only be called on \"Sphere of Points\"");
             }
         }
 
@@ -550,21 +546,19 @@ public class MetricTree<K, V> implements Serializable {
         }
 
         private Pair<K, K> pickCentersForNewSpheres() {
-            return centerPointSelector.selectNewCenterPoints(
-                new ArrayList<>(entries.keySet()),
-                metric);
+            return centerPointSelector.selectNewCenterPoints(new ArrayList<>(entries.keySet()), metric);
         }
 
         /**
          * Move the entries from this Sphere to the new Sphere.
          */
         private void moveEntriesToChildren(Sphere part1, Sphere part2) {
-            //push the contents of this.children to either part1 or part2
+            // push the contents of this.children to either part1 or part2
 
             boolean tieBreaker = false;
             for (Map.Entry<K, V> entry : entries.entrySet()) {
                 addToBestOf(part1, part2, entry, tieBreaker);
-                tieBreaker = !tieBreaker; //alternate the tiebreaker
+                tieBreaker = !tieBreaker; // alternate the tiebreaker
             }
         }
 
@@ -586,7 +580,7 @@ public class MetricTree<K, V> implements Serializable {
             Sphere bestSphere = null;
 
             if (distanceTo1 == distanceTo2) {
-                //use the tiebreaker when distances are equal
+                // use the tiebreaker when distances are equal
                 bestSphere = (tieBreaker) ? node1 : node2;
             } else if (distanceTo1 < distanceTo2) {
                 bestSphere = node1;

@@ -40,7 +40,7 @@ public class PreconditionsTest {
 
     @Test
     public void checkNoNullElement_accepts_array() {
-        Integer[] array = new Integer[]{1, 2, 3};
+        Integer[] array = new Integer[] {1, 2, 3};
         checkNoNullElement(array);
     }
 
@@ -53,7 +53,7 @@ public class PreconditionsTest {
 
     @Test
     public void checkNoNullElement_throwsNpeFromArray() {
-        Integer[] array = new Integer[]{1, null, 3};
+        Integer[] array = new Integer[] {1, null, 3};
 
         assertThrows(NullPointerException.class, () -> checkNoNullElement(array));
     }
@@ -63,9 +63,7 @@ public class PreconditionsTest {
 
         ArrayList<Integer> list = newArrayList(1, 2, 3);
 
-        assertDoesNotThrow(
-            () -> checkAllTrue(list, i -> i > -1)
-        );
+        assertDoesNotThrow(() -> checkAllTrue(list, i -> i > -1));
     }
 
     @Test
@@ -80,9 +78,7 @@ public class PreconditionsTest {
     public void checkAllFalse_accepts_iterable() {
         ArrayList<Integer> list = newArrayList(1, 2, 3);
 
-        assertDoesNotThrow(
-            () -> checkAllFalse(list, i -> i < -1)
-        );
+        assertDoesNotThrow(() -> checkAllFalse(list, i -> i < -1));
     }
 
     @Test
@@ -98,34 +94,28 @@ public class PreconditionsTest {
 
         ArrayList<String> list = newArrayList("A", "A", "A");
 
-        assertDoesNotThrow(
-            () -> checkAllMatch(list, str -> str)
-        );
-
+        assertDoesNotThrow(() -> checkAllMatch(list, str -> str));
     }
 
     @Test
     public void checkAllMatch_mappedTypeOverrideEquals() {
 
         List<OverriddenEquals> trickyItems = newArrayList(
-            new OverriddenEquals("A", Color.RED),
-            new OverriddenEquals("A", Color.BLUE),
-            new OverriddenEquals("A", Color.YELLOW)
-        );
+                new OverriddenEquals("A", Color.RED),
+                new OverriddenEquals("A", Color.BLUE),
+                new OverriddenEquals("A", Color.YELLOW));
 
-        //Notice, these items are all "equal"
+        // Notice, these items are all "equal"
         assertThat(trickyItems.get(0), is(trickyItems.get(1)));
         assertThat(trickyItems.get(1), is(trickyItems.get(2)));
 
         // checkAllMatch should reflect the mapped class's equals method
-        assertDoesNotThrow(
-            () -> checkAllMatch(trickyItems, tricky -> tricky)
-        );
+        assertDoesNotThrow(() -> checkAllMatch(trickyItems, tricky -> tricky));
     }
 
     static class OverriddenEquals {
-        String str;  //matters to overridden equals
-        Color color; //DOES NOT matter to overridden equals
+        String str; // matters to overridden equals
+        Color color; // DOES NOT matter to overridden equals
 
         @Override
         public int hashCode() {

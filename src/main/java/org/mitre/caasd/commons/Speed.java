@@ -70,9 +70,9 @@ public class Speed implements Serializable, Comparable<Speed> {
 
     private Speed(Distance dist, double msElapsed) {
         this(
-            dist.nativeUnit(),
-            dist.in(dist.nativeUnit()) / (msElapsed / 1_000.0) //compute distance units PerSecond
-        );
+                dist.nativeUnit(),
+                dist.in(dist.nativeUnit()) / (msElapsed / 1_000.0) // compute distance units PerSecond
+                );
     }
 
     private Speed(Distance.Unit distUnit, double amountPerSecond) {
@@ -143,10 +143,7 @@ public class Speed implements Serializable, Comparable<Speed> {
     }
 
     public static Speed of(double amount, Unit unit) {
-        return new Speed(
-            Distance.of(amount, unit.distUnit),
-            unit.secondsPerTimeUnit * 1000.0
-        );
+        return new Speed(Distance.of(amount, unit.distUnit), unit.secondsPerTimeUnit * 1000.0);
     }
 
     /**
@@ -208,7 +205,7 @@ public class Speed implements Serializable, Comparable<Speed> {
     }
 
     public double in(Unit unit) {
-        //e.g. find factor needed to convert Feet to Kilometers
+        // e.g. find factor needed to convert Feet to Kilometers
         double conversionFactor = unit.distUnit.unitsPerMeter() / this.distanceUnit.unitsPerMeter();
 
         return this.amountPerSecond * unit.secondsPerTimeUnit * conversionFactor;
@@ -293,7 +290,7 @@ public class Speed implements Serializable, Comparable<Speed> {
             throw new IllegalArgumentException("Could not parse Speed Unit from: " + parseMe);
         }
 
-        //store "23.0" instead of "23.0 mph"
+        // store "23.0" instead of "23.0 mph"
         String parseMeWithoutUnitsSuffix = parseMe.substring(0, parseMe.length() - speedUnit.abbreviation.length());
 
         double amount = Double.parseDouble(parseMeWithoutUnitsSuffix);
@@ -310,7 +307,7 @@ public class Speed implements Serializable, Comparable<Speed> {
      * @return The correct Speed.Unit or null if no match can be found.
      */
     public static Speed.Unit unitFromString(String parseMe) {
-        //given a String like: "23 fpm" or "23"
+        // given a String like: "23 fpm" or "23"
 
         for (Unit unit : Speed.Unit.values()) {
             if (parseMe.endsWith(unit.abbreviation)) {
@@ -360,9 +357,7 @@ public class Speed implements Serializable, Comparable<Speed> {
 
     /** @return The absolute value of this speed. */
     public Speed abs() {
-        return (this.isNegative())
-            ? this.times(-1.0)
-            : this;
+        return (this.isNegative()) ? this.times(-1.0) : this;
     }
 
     /**
@@ -383,7 +378,9 @@ public class Speed implements Serializable, Comparable<Speed> {
     public int hashCode() {
         int hash = 7;
         hash = 67 * hash + Objects.hashCode(this.distanceUnit);
-        hash = 67 * hash + (int) (Double.doubleToLongBits(this.amountPerSecond) ^ (Double.doubleToLongBits(this.amountPerSecond) >>> 32));
+        hash = 67 * hash
+                + (int) (Double.doubleToLongBits(this.amountPerSecond)
+                        ^ (Double.doubleToLongBits(this.amountPerSecond) >>> 32));
         return hash;
     }
 

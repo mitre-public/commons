@@ -46,9 +46,9 @@ class SetSearch<K> {
 
     private final K searchKey;
 
-    private final int maxNumResults; //only used for kNN searches
+    private final int maxNumResults; // only used for kNN searches
 
-    private final double fixedRadius; //only used for range searches
+    private final double fixedRadius; // only used for range searches
 
     private final PriorityQueue<SetSearchResult<K>> queue;
 
@@ -97,7 +97,7 @@ class SetSearch<K> {
 
             MetricSet<K>.Sphere current = stack.pop();
 
-            //ignore this node (and all its sub-trees) because it cannot improve the current result
+            // ignore this node (and all its sub-trees) because it cannot improve the current result
             if (!this.overlapsWith(current)) {
                 continue;
             }
@@ -108,13 +108,9 @@ class SetSearch<K> {
 
                 Pair<MetricSet<K>.Sphere, MetricSet<K>.Sphere> childSpheres = current.children();
 
-                double firstDist = metric.distanceBtw(
-                    searchKey,
-                    childSpheres.first().centerPoint);
+                double firstDist = metric.distanceBtw(searchKey, childSpheres.first().centerPoint);
 
-                double secondDist = metric.distanceBtw(
-                    searchKey,
-                    childSpheres.second().centerPoint);
+                double secondDist = metric.distanceBtw(searchKey, childSpheres.second().centerPoint);
 
                 /*
                  * Submit the closest sphere second to reduce work (because this increases the
@@ -122,10 +118,10 @@ class SetSearch<K> {
                  */
                 if (firstDist < secondDist) {
                     stack.push(childSpheres.second());
-                    stack.push(childSpheres.first()); //will be popped first
+                    stack.push(childSpheres.first()); // will be popped first
                 } else {
                     stack.push(childSpheres.first());
-                    stack.push(childSpheres.second()); //will be popped second
+                    stack.push(childSpheres.second()); // will be popped second
                 }
             }
         }
@@ -141,9 +137,9 @@ class SetSearch<K> {
 
                 this.queue.offer(r);
 
-                //enforce the "k" in kNN search
+                // enforce the "k" in kNN search
                 if (queue.size() > this.maxNumResults) {
-                    //if too big, remove the worst result
+                    // if too big, remove the worst result
                     queue.poll();
                 }
             }
@@ -170,13 +166,13 @@ class SetSearch<K> {
 
         if (type == SearchType.K_NEAREST_NEIGHBORS) {
             if (queue.size() < maxNumResults) {
-                //radius is still large because we haven't found "k" results yet
+                // radius is still large because we haven't found "k" results yet
                 return Double.POSITIVE_INFINITY;
             } else {
-                return queue.peek().distance; //must beat this to improve
+                return queue.peek().distance; // must beat this to improve
             }
         } else if (type == SearchType.RANGE) {
-            return this.fixedRadius;  //includes everything within this radius
+            return this.fixedRadius; // includes everything within this radius
         } else {
             throw new AssertionError("Should never get here");
         }

@@ -73,7 +73,10 @@ public class DemotedException extends RuntimeException {
          * (2) information about unexpected RuntimeExceptions get passed back to the caller
          */
         if (cause instanceof RuntimeException) {
-            throw new IllegalArgumentException("Illegal Use of DemotedException, cannot demote RuntimeExceptions but " + cause.getClass().getSimpleName() + " is an instance of RuntimeException", cause);
+            throw new IllegalArgumentException(
+                    "Illegal Use of DemotedException, cannot demote RuntimeExceptions but "
+                            + cause.getClass().getSimpleName() + " is an instance of RuntimeException",
+                    cause);
         }
     }
 }

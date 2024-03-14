@@ -48,11 +48,9 @@ public class CombinedPredicateTest {
         GreaterThan20 greaterThan20 = new GreaterThan20();
         LessThan100 lessThan100 = new LessThan100();
 
-        Predicate<Integer> combined = new CombinedPredicate<>(
-            greaterThan20, lessThan100
-        );
+        Predicate<Integer> combined = new CombinedPredicate<>(greaterThan20, lessThan100);
 
-        //want 20 < x < 100
+        // want 20 < x < 100
         assertThat(combined.test(19), is(false));
         assertThat(combined.test(20), is(false));
         assertThat(combined.test(21), is(true));
@@ -68,19 +66,17 @@ public class CombinedPredicateTest {
         GreaterThan20 greaterThan20 = new GreaterThan20();
         LessThan100 lessThan100 = new LessThan100();
 
-        Predicate<Integer> combined = new CombinedPredicate<>(
-            greaterThan20, lessThan100
-        );
+        Predicate<Integer> combined = new CombinedPredicate<>(greaterThan20, lessThan100);
 
         assertThat(combined.test(0), is(false));
 
-        //testing 0 SHOULD NOT require accessing the 2nd predicate because the 1st predicate fails
+        // testing 0 SHOULD NOT require accessing the 2nd predicate because the 1st predicate fails
         assertThat(greaterThan20.counter, is(1));
         assertThat(lessThan100.counter, is(0));
 
         assertThat(combined.test(50), is(true));
 
-        //testing 50 SHOULD require accessing the 2nd predicate because the 1st predicate passes
+        // testing 50 SHOULD require accessing the 2nd predicate because the 1st predicate passes
         assertThat(greaterThan20.counter, is(2));
         assertThat(lessThan100.counter, is(1));
     }
@@ -91,9 +87,7 @@ public class CombinedPredicateTest {
         GreaterThan20 greaterThan20 = new GreaterThan20();
         LessThan100 lessThan100 = new LessThan100();
 
-        CombinedPredicate<Integer> combined = new CombinedPredicate<>(
-            greaterThan20, lessThan100
-        );
+        CombinedPredicate<Integer> combined = new CombinedPredicate<>(greaterThan20, lessThan100);
 
         List<Predicate<Integer>> components = combined.components();
 
@@ -122,5 +116,4 @@ public class CombinedPredicateTest {
             return t < 100;
         }
     }
-
 }

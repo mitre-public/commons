@@ -119,7 +119,7 @@ public class LatLongPath implements Iterable<LatLong> {
         for (int i = 0; i < latLongData.length; i++) {
             latLongData[i] = buffer.getDouble();
         }
-        //verify the latLongData...
+        // verify the latLongData...
         for (int i = 0; i < latLongData.length; i += 2) {
             checkLatitude(latLongData[i]);
             checkLongitude(latLongData[i + 1]);
@@ -142,9 +142,7 @@ public class LatLongPath implements Iterable<LatLong> {
      * @return A new LatLongPath object.
      */
     public static LatLongPath fromBase64Str(String base64Encoding) {
-        return LatLongPath.fromBytes(
-            Base64.getUrlDecoder().decode(base64Encoding)
-        );
+        return LatLongPath.fromBytes(Base64.getUrlDecoder().decode(base64Encoding));
     }
 
     public Stream<LatLong> stream() {
@@ -173,7 +171,7 @@ public class LatLongPath implements Iterable<LatLong> {
      *     longitudes.
      */
     public double[][] toMatrix() {
-        return new double[][]{latitudes(), longitudes()};
+        return new double[][] {latitudes(), longitudes()};
     }
 
     /** @return An array filled with the latitudes from this LatLongPath. */
@@ -238,7 +236,6 @@ public class LatLongPath implements Iterable<LatLong> {
     public Iterator<IterPair<LatLong>> legIterator() {
         return new NeighborIterator<>(iterator());
     }
-
 
     /** @return A new LatLongPath with these additional locations appended to this path. */
     public LatLongPath append(LatLong... locations) {
@@ -306,7 +303,6 @@ public class LatLongPath implements Iterable<LatLong> {
         return new LatLongPath(allLatLongs);
     }
 
-
     /**
      * ACCURATELY compute the average LatLong positions of these locations. The underlying
      * computation performs trigonometric operations, so this method call can become computationally
@@ -335,16 +331,16 @@ public class LatLongPath implements Iterable<LatLong> {
             return toArray()[0];
         }
 
-        //just take the simple average of latitude values....
+        // just take the simple average of latitude values....
         double avgLatitude = DoubleStream.of(this.latitudes()).average().getAsDouble();
 
-        //longitude cannot be simply averaged due to discontinuity when -180 abuts 180
+        // longitude cannot be simply averaged due to discontinuity when -180 abuts 180
         // So, we are going to take several "weighted averages of TWO Longitude values"
         // We can correct for the international date line with every subsequent avg.
         double[] longitudes = this.longitudes();
 
-        //average the first two entries, then average in the 3rd entry, then the 4th...
-        //increase the "weight" on the "curAverage" each time through the loop
+        // average the first two entries, then average in the 3rd entry, then the 4th...
+        // increase the "weight" on the "curAverage" each time through the loop
         double curAvgLongitude = longitudes[0];
         for (int i = 1; i < longitudes.length; i++) {
             curAvgLongitude = avgLong(curAvgLongitude, i, longitudes[i], 1);
@@ -363,18 +359,16 @@ public class LatLongPath implements Iterable<LatLong> {
         double w2 = (double) (weightB) / (double) (weightA + weightB);
 
         double averageLong = (abs(longitudeA - longitudeB) > 180.0)
-            ? w1 * (longitudeA + 180.0) + w2 * (longitudeB + 180.0)
-            : w1 * longitudeA + w2 * longitudeB;
+                ? w1 * (longitudeA + 180.0) + w2 * (longitudeB + 180.0)
+                : w1 * longitudeA + w2 * longitudeB;
 
         return averageLong;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         LatLongPath latLongs = (LatLongPath) o;
         return Arrays.equals(latLongData, latLongs.latLongData);
     }

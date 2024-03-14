@@ -18,7 +18,6 @@ package org.mitre.caasd.commons.lambda;
 
 import java.util.function.Predicate;
 
-
 /**
  * A CheckedPredicate is similar to a {@link Predicate} EXCEPT it throws a checked exception.
  * <p>
@@ -57,5 +56,4 @@ import java.util.function.Predicate;
 public interface CheckedPredicate<T> {
 
     boolean test(T t) throws Exception;
-
 }

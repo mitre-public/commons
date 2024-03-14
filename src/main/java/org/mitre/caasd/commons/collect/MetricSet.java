@@ -158,13 +158,13 @@ public class MetricSet<K> implements Serializable {
     public boolean add(K key) {
         checkNotNull(key);
 
-        //delay building root until now because we don't have a key for the centerPoint until
-        //the first use of put(K key)
+        // delay building root until now because we don't have a key for the centerPoint until
+        // the first use of put(K key)
         if (this.rootSphere == null) {
             this.rootSphere = new Sphere(key);
         }
 
-        //do a "short-circuit" put when our global HashMap has already seen the Key provided
+        // do a "short-circuit" put when our global HashMap has already seen the Key provided
         if (globalHashMap.containsKey(key)) {
             return false;
         } else {
@@ -207,7 +207,7 @@ public class MetricSet<K> implements Serializable {
 
         if (globalHashMap.containsKey(searchKey)) {
             Sphere sa = globalHashMap.get(searchKey);
-            return new SetSearchResult<>(searchKey, 0.0); //distance must be zero because we have an exact key match
+            return new SetSearchResult<>(searchKey, 0.0); // distance must be zero because we have an exact key match
         }
 
         Collection<SetSearchResult<K>> results = getNClosest(searchKey, 1);
@@ -232,7 +232,7 @@ public class MetricSet<K> implements Serializable {
             throw new IllegalArgumentException("n must be at least 1");
         }
 
-        //nothing to retrieve...
+        // nothing to retrieve...
         if (this.isEmpty()) {
             return Collections.emptyList();
         }
@@ -260,7 +260,7 @@ public class MetricSet<K> implements Serializable {
             throw new IllegalArgumentException("The range must be strictly positive " + range);
         }
 
-        //nothing to retrieve...
+        // nothing to retrieve...
         if (this.isEmpty()) {
             return Collections.emptyList();
         }
@@ -294,7 +294,8 @@ public class MetricSet<K> implements Serializable {
             boolean hadImpact = sa.remove(exactKey);
 
             if (!hadImpact) {
-                throw new AssertionError("Unexpected state, hadImpact should always be true here becuase the key was found in the global map");
+                throw new AssertionError(
+                        "Unexpected state, hadImpact should always be true here becuase the key was found in the global map");
             }
 
             return hadImpact;
@@ -366,7 +367,6 @@ public class MetricSet<K> implements Serializable {
          * node of a FastMetricTree.
          */
         SPHERE_OF_SPHERES
-
     }
 
     /**
@@ -424,10 +424,8 @@ public class MetricSet<K> implements Serializable {
                 split();
             }
 
-            //update radius if necessary
-            this.radius = Math.max(
-                radius,
-                verifiedDistance(this.centerPoint, key));
+            // update radius if necessary
+            this.radius = Math.max(radius, verifiedDistance(this.centerPoint, key));
 
             if (isSphereOfPoints()) {
                 globalHashMap.put(key, this);
@@ -443,9 +441,9 @@ public class MetricSet<K> implements Serializable {
         private void split() {
             Pair<Sphere, Sphere> newNodes = this.splitSphereOfPoints();
 
-            //"promote" this SPHERE_OF_POINTS to a SPHERE_OF_SPHERES
-            //null out the list of entries
-            //use the a pair of Spheres in its place
+            // "promote" this SPHERE_OF_POINTS to a SPHERE_OF_SPHERES
+            // null out the list of entries
+            // use the a pair of Spheres in its place
             this.type = SphereType.SPHERE_OF_SPHERES;
             this.entries = null;
             this.childSpheres = newNodes;
@@ -456,8 +454,7 @@ public class MetricSet<K> implements Serializable {
                 return this.entries.remove(key);
             } else {
                 throw new AssertionError(
-                    "Should never get here.  "
-                        + "This should only be called on \"Sphere of Points\"");
+                        "Should never get here.  " + "This should only be called on \"Sphere of Points\"");
             }
         }
 
@@ -500,12 +497,12 @@ public class MetricSet<K> implements Serializable {
 
         /** Move the entries from this Sphere to the new Sphere. */
         private void moveEntriesToChildren(Sphere part1, Sphere part2) {
-            //push the contents of this.children to either part1 or part2
+            // push the contents of this.children to either part1 or part2
 
             boolean tieBreaker = false;
             for (K key : entries) {
                 addToBestOf(part1, part2, key, tieBreaker);
-                tieBreaker = !tieBreaker; //alternate the tiebreaker
+                tieBreaker = !tieBreaker; // alternate the tiebreaker
             }
         }
 
@@ -527,7 +524,7 @@ public class MetricSet<K> implements Serializable {
             Sphere bestSphere = null;
 
             if (distanceTo1 == distanceTo2) {
-                //use the tiebreaker when distances are equal
+                // use the tiebreaker when distances are equal
                 bestSphere = (tieBreaker) ? node1 : node2;
             } else if (distanceTo1 < distanceTo2) {
                 bestSphere = node1;

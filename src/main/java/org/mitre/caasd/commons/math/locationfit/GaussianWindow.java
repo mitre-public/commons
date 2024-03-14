@@ -84,10 +84,7 @@ public class GaussianWindow {
     public TimeWindow windowCenteredAt(Instant center) {
         long halfWidth = windowSize.toMillis() / 2;
 
-        return TimeWindow.of(
-            center.minusMillis(halfWidth),
-            center.plusMillis(halfWidth)
-        );
+        return TimeWindow.of(center.minusMillis(halfWidth), center.plusMillis(halfWidth));
     }
 
     public Duration sigma() {

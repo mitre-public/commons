@@ -131,5 +131,4 @@ public class QuickTimer {
 
         System.out.println(msg + ": " + timeInSeconds + " (sec)");
     }
-
 }

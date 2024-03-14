@@ -78,7 +78,7 @@ public class BitAndHashingUtils {
     public static long truncateBits(long bits, int n) {
         checkArgument(0 < n && n <= 64);
 
-        //make and then apply bitMask using the bitwise AND operation --> return the result
+        // make and then apply bitMask using the bitwise AND operation --> return the result
         return makeBitMask(n) & bits;
     }
 

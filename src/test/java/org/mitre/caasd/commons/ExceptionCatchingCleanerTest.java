@@ -67,11 +67,8 @@ public class ExceptionCatchingCleanerTest {
 
         TestExceptionHandler errorHandler = new TestExceptionHandler();
 
-        ExceptionCatchingCleaner<Double> instance = new ExceptionCatchingCleaner(
-            new TestDataCleaner(),
-            d -> d.toString(),
-            errorHandler
-        );
+        ExceptionCatchingCleaner<Double> instance =
+                new ExceptionCatchingCleaner(new TestDataCleaner(), d -> d.toString(), errorHandler);
 
         Double input1 = 5.0;
         Optional<Double> output1 = instance.clean(input1);
@@ -83,7 +80,7 @@ public class ExceptionCatchingCleanerTest {
         Optional<Double> output2 = instance.clean(input2);
         assertThat("The TestDataCleaner should remove zeros", output2.isPresent(), is(false));
         assertThat("We have a history of the failing input", errorHandler.lastMessage, is("0.0"));
-        assertThat("We have the exact exception", errorHandler.lastException, instanceOf(IllegalArgumentException.class));
+        assertThat(
+                "We have the exact exception", errorHandler.lastException, instanceOf(IllegalArgumentException.class));
     }
-
 }

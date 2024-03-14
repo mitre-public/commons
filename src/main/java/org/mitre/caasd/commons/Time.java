@@ -36,7 +36,7 @@ import java.util.TreeMap;
 public class Time {
 
     private Time() {
-        //Time Objects are not allowed
+        // Time Objects are not allowed
     }
 
     public static <H extends HasTime> Comparator<H> compareByTime() {
@@ -78,13 +78,12 @@ public class Time {
         Duration timeDelta = Duration.between(referenceTime, futureTime);
 
         checkArgument(
-            !timeDelta.plus(maxInputLag).isNegative(),
-            "The futureTime cannot occur \"far\" in the past."
-                + "\n  referenceTime: " + referenceTime.toEpochMilli()
-                + "\n  futureTime: " + futureTime.toEpochMilli()
-                + "\n  timeDelta: " + timeDelta.toMillis() + " milliseconds"
-                + "\n  maxInputLag: " + maxInputLag.toMillis() + " milliseconds"
-        );
+                !timeDelta.plus(maxInputLag).isNegative(),
+                "The futureTime cannot occur \"far\" in the past."
+                        + "\n  referenceTime: " + referenceTime.toEpochMilli()
+                        + "\n  futureTime: " + futureTime.toEpochMilli()
+                        + "\n  timeDelta: " + timeDelta.toMillis() + " milliseconds"
+                        + "\n  maxInputLag: " + maxInputLag.toMillis() + " milliseconds");
     }
 
     /**
@@ -106,7 +105,7 @@ public class Time {
      * @param times An array of times.
      */
     public static void confirmTimeOrdering(Instant[] times) {
-        //cannot be out of order with 0 or 1 entry
+        // cannot be out of order with 0 or 1 entry
         if (times.length < 2) {
             return;
         }
@@ -125,10 +124,7 @@ public class Time {
      */
     public static TimeWindow enclosingTimeWindow(Instant... times) {
 
-        return TimeWindow.of(
-            earliest(times),
-            latest(times)
-        );
+        return TimeWindow.of(earliest(times), latest(times));
     }
 
     /**
@@ -151,8 +147,8 @@ public class Time {
      */
     public static String asZTimeString(Instant instant) {
 
-        DateTimeFormatter Z_TIME_FORMATTER = DateTimeFormatter.ofPattern(
-            "HH:mm:ss.SSS").withZone(ZoneOffset.UTC);
+        DateTimeFormatter Z_TIME_FORMATTER =
+                DateTimeFormatter.ofPattern("HH:mm:ss.SSS").withZone(ZoneOffset.UTC);
 
         return Z_TIME_FORMATTER.format(instant);
     }
@@ -164,9 +160,7 @@ public class Time {
      * @return The earliest of these two times (the 1st argument is returned in the event of a tie)
      */
     public static Instant earliest(Instant time0, Instant time1) {
-        return (time0.isBefore(time1))
-            ? time0
-            : time1;
+        return (time0.isBefore(time1)) ? time0 : time1;
     }
 
     /**
@@ -189,9 +183,7 @@ public class Time {
      * @return The latest of these two times (the 1st argument is returned in the event of a tie)
      */
     public static Instant latest(Instant time0, Instant time1) {
-        return (time0.isAfter(time1))
-            ? time0
-            : time1;
+        return (time0.isAfter(time1)) ? time0 : time1;
     }
 
     /**
@@ -215,9 +207,7 @@ public class Time {
      *     of a tie)
      */
     public static HasTime latest(HasTime h1, HasTime h2) {
-        return (h1.time().isAfter(h2.time()))
-            ? h1
-            : h2;
+        return (h1.time().isAfter(h2.time())) ? h1 : h2;
     }
 
     static <H extends HasTime> NavigableMap<Instant, H> toMap(Collection<H> items) {
@@ -225,24 +215,17 @@ public class Time {
         TreeMap<Instant, H> map = newTreeMap();
         items.forEach(item -> map.put(item.time(), item));
 
-        checkArgument(
-            items.size() == map.size(),
-            "Two items in the input collection had the same time() value"
-        );
+        checkArgument(items.size() == map.size(), "Two items in the input collection had the same time() value");
 
         return map;
     }
 
     public static Duration max(Duration duration1, Duration duration2) {
-        return (theDuration(duration1).isGreaterThanOrEqualTo(duration2))
-            ? duration1
-            : duration2;
+        return (theDuration(duration1).isGreaterThanOrEqualTo(duration2)) ? duration1 : duration2;
     }
 
     public static Duration min(Duration duration1, Duration duration2) {
-        return (theDuration(duration1).isGreaterThanOrEqualTo(duration2))
-            ? duration2
-            : duration1;
+        return (theDuration(duration1).isGreaterThanOrEqualTo(duration2)) ? duration2 : duration1;
     }
 
     /**

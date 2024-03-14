@@ -35,10 +35,7 @@ public class TestUtilsTest {
 
         Integer result = (Integer) TestUtils.serializeAndDeserialize(original);
 
-        assertThat(
-            "When we serialize 5 we can retrieve 5 from the serialized form",
-            result == 5
-        );
+        assertThat("When we serialize 5 we can retrieve 5 from the serialized form", result == 5);
     }
 
     @Test
@@ -87,14 +84,8 @@ public class TestUtilsTest {
 
         Serializable original = new ClassThatCannotSerialize();
 
-        assertThrows(
-            Exception.class,
-            () -> TestUtils.confirmSerializability(original, targetFile)
-        );
+        assertThrows(Exception.class, () -> TestUtils.confirmSerializability(original, targetFile));
 
-        assertThat(
-            "The output file should be deleted in the event of a failure",
-            targetFile.exists(), is(false)
-        );
+        assertThat("The output file should be deleted in the event of a failure", targetFile.exists(), is(false));
     }
 }

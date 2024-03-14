@@ -87,7 +87,7 @@ public class SupplierChain<T> implements Supplier<T> {
             try {
                 T result = (T) aSupplier.get();
                 if (nonNull(result)) {
-                    this.highestPriorityWorkingSupplier =  aSupplier;
+                    this.highestPriorityWorkingSupplier = aSupplier;
                     return result;
                 }
             } catch (Exception ex) {
@@ -98,7 +98,6 @@ public class SupplierChain<T> implements Supplier<T> {
         }
 
         throw new IllegalStateException(
-            "No Supplier in the SupplierChain provided a non-null result: " + exceptionMessages
-        );
+                "No Supplier in the SupplierChain provided a non-null result: " + exceptionMessages);
     }
 }

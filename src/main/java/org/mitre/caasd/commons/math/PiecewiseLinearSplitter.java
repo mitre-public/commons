@@ -38,7 +38,7 @@ import com.google.common.primitives.Ints;
  */
 public class PiecewiseLinearSplitter implements DataSplitter {
 
-    //this index value means the dataset should not be split
+    // this index value means the dataset should not be split
     private static final int NO_MORE_SPLITS = -1;
 
     private final double maxFinalError;
@@ -81,20 +81,20 @@ public class PiecewiseLinearSplitter implements DataSplitter {
      * @param chops    The set of all "data set chops" found so far (i.e a Set of list index
      *                 values)
      */
-    private void recursivelySplitDataset(List<Double> xData, List<Double> yData, int minIndex, int maxIndex, TreeSet<Integer> chops) {
+    private void recursivelySplitDataset(
+            List<Double> xData, List<Double> yData, int minIndex, int maxIndex, TreeSet<Integer> chops) {
 
         int splitIndex = determineSplitFor(xData, yData, minIndex, maxIndex);
 
-        //end the recursion
+        // end the recursion
         if (splitIndex == NO_MORE_SPLITS) {
             return;
         }
 
-        //save the chop, and recurse into the left and right side
+        // save the chop, and recurse into the left and right side
         chops.add(splitIndex);
         recursivelySplitDataset(xData, yData, minIndex, splitIndex, chops);
         recursivelySplitDataset(xData, yData, splitIndex, maxIndex, chops);
-
     }
 
     /**
@@ -113,7 +113,7 @@ public class PiecewiseLinearSplitter implements DataSplitter {
     private int determineSplitFor(List<Double> xData, List<Double> yData, int minIndex, int maxIndex) {
         checkArgument(minIndex < maxIndex);
 
-        //need at least 4 to split (2 values for left side and 2 values for right side)
+        // need at least 4 to split (2 values for left side and 2 values for right side)
         if (maxIndex - minIndex < 4) {
             return NO_MORE_SPLITS;
         }
@@ -129,7 +129,8 @@ public class PiecewiseLinearSplitter implements DataSplitter {
         double maxError = Double.NEGATIVE_INFINITY;
         int indexOfMaxError = -1;
 
-        //minIndex + 1 because the earliest "chop" has to leave at least 2 values for the left side (and chops have AFTER the index)
+        // minIndex + 1 because the earliest "chop" has to leave at least 2 values for the left side (and chops have
+        // AFTER the index)
         for (int i = minIndex + 1; i < maxIndex - 2; i++) {
             double prediction = y0 + (xData.get(i) - x0) * slope;
             double actualY = yData.get(i);
@@ -143,7 +144,7 @@ public class PiecewiseLinearSplitter implements DataSplitter {
         }
 
         return maxError > maxFinalError
-            ? indexOfMaxError + 1 //split AFTER the maxError
-            : NO_MORE_SPLITS;
+                ? indexOfMaxError + 1 // split AFTER the maxError
+                : NO_MORE_SPLITS;
     }
 }

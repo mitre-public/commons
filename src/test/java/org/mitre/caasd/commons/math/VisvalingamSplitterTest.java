@@ -32,29 +32,28 @@ public class VisvalingamSplitterTest {
 
     @Test
     public void realSampleDataIsSplitWell() throws IOException {
-        Pair<List<Double>, List<Double>> allData = loadTestXYData(
-            "org/mitre/caasd/commons/math/altitudes1.txt"
-        );
+        Pair<List<Double>, List<Double>> allData = loadTestXYData("org/mitre/caasd/commons/math/altitudes1.txt");
 
         XyDataset inputData = new XyDataset(allData.first(), allData.second());
 
-        XyDataset[] outputDatasets = (new VisvalingamSplitter(300 * 20)).split(inputData); //300 feet of error over 20 seconds
+        XyDataset[] outputDatasets =
+                (new VisvalingamSplitter(300 * 20)).split(inputData); // 300 feet of error over 20 seconds
 
         XyDataset directSimplification = (new VisvalingamSimplifier()).simplify(inputData, 300 * 20);
 
-        int totalOutputSize = Stream.of(outputDatasets)
-            .mapToInt(dataset -> dataset.size())
-            .sum();
+        int totalOutputSize =
+                Stream.of(outputDatasets).mapToInt(dataset -> dataset.size()).sum();
 
         assertThat(inputData.size(), is(totalOutputSize));
 
-        //the first point in each output partition is found in the results from directly applying a VisvalingamSimplifier
+        // the first point in each output partition is found in the results from directly applying a
+        // VisvalingamSimplifier
         for (XyDataset outputDataset : outputDatasets) {
             Double firstX = outputDataset.xData().get(0);
             assertThat(directSimplification.xData().contains(firstX), is(true));
         }
 
-        //There is one output partition for each point identied by the VisvalingamSimplifier
+        // There is one output partition for each point identied by the VisvalingamSimplifier
         assertThat(directSimplification.size(), is(outputDatasets.length + 1));
     }
 }

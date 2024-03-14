@@ -38,11 +38,14 @@ public class QuickPropertiesTest {
 
     /* All of these properties must exist for a TestRequiredProperties to get created. */
     static List<String> requiredProps = newArrayList(
-        "stringProperty",
-        "byteProperty", "shortProperty", "intProperty", "longProperty",
-        "floatProperty", "doubleProperty",
-        "booleanProperty"
-    );
+            "stringProperty",
+            "byteProperty",
+            "shortProperty",
+            "intProperty",
+            "longProperty",
+            "floatProperty",
+            "doubleProperty",
+            "booleanProperty");
 
     /**
      * This is a test class that reflects the "design idea" of the QuickProperties class. Notice how
@@ -148,30 +151,22 @@ public class QuickPropertiesTest {
     }
 
     private TestRequiredProperties newGoodProperties() {
-        Optional<File> resource = getResourceAsFile(QuickPropertiesTest.class,
-            "goodProperties.properties"
-        );
+        Optional<File> resource = getResourceAsFile(QuickPropertiesTest.class, "goodProperties.properties");
         return new TestRequiredProperties(resource.get());
     }
 
     private TestRequiredProperties newEmptyProperties() {
-        Optional<File> resource = getResourceAsFile(QuickPropertiesTest.class,
-            "emptyProperties.properties"
-        );
+        Optional<File> resource = getResourceAsFile(QuickPropertiesTest.class, "emptyProperties.properties");
         return new TestRequiredProperties(resource.get());
     }
 
     private TestOptionalProperties newGoodOptionalProerties() {
-        Optional<File> resource = getResourceAsFile(QuickPropertiesTest.class,
-            "goodProperties.properties"
-        );
+        Optional<File> resource = getResourceAsFile(QuickPropertiesTest.class, "goodProperties.properties");
         return new TestOptionalProperties(resource.get());
     }
 
     private TestOptionalProperties newEmptyOptionalProerties() {
-        Optional<File> resource = getResourceAsFile(QuickPropertiesTest.class,
-            "emptyProperties.properties"
-        );
+        Optional<File> resource = getResourceAsFile(QuickPropertiesTest.class, "emptyProperties.properties");
         return new TestOptionalProperties(resource.get());
     }
 
@@ -219,7 +214,7 @@ public class QuickPropertiesTest {
         TestOptionalProperties goodProperties = newGoodOptionalProerties();
         TestOptionalProperties emptyProperties = newEmptyOptionalProerties();
 
-        assertThat(goodProperties.shortProperty().get(), is( (short) 145));
+        assertThat(goodProperties.shortProperty().get(), is((short) 145));
         assertFalse(emptyProperties.shortProperty().isPresent());
     }
 
@@ -236,7 +231,7 @@ public class QuickPropertiesTest {
         TestOptionalProperties goodProperties = newGoodOptionalProerties();
         TestOptionalProperties emptyProperties = newEmptyOptionalProerties();
 
-        assertThat(goodProperties.intProperty().get() ,is(5));
+        assertThat(goodProperties.intProperty().get(), is(5));
         assertFalse(emptyProperties.intProperty().isPresent());
     }
 
@@ -306,31 +301,22 @@ public class QuickPropertiesTest {
 
     @Test
     public void testFailingCreation() {
-        //The command above should fail because that file doesn't exist
-        assertThrows(IllegalArgumentException.class,
-            () -> new TestRequiredProperties("missingFile.txt")
-        );
+        // The command above should fail because that file doesn't exist
+        assertThrows(IllegalArgumentException.class, () -> new TestRequiredProperties("missingFile.txt"));
     }
 
     @Test
     public void testFailingCreation2() {
-        //The command above should fail because that file doesn't exist
-        assertThrows(IllegalArgumentException.class,
-            () -> new TestRequiredProperties(new File("missingFile.txt"))
-        );
+        // The command above should fail because that file doesn't exist
+        assertThrows(IllegalArgumentException.class, () -> new TestRequiredProperties(new File("missingFile.txt")));
     }
 
     @Test
     public void testAlternateConstructor() {
-        Optional<File> resource = getResourceAsFile(
-            QuickPropertiesTest.class,
-            "goodProperties.properties"
-        );
+        Optional<File> resource = getResourceAsFile(QuickPropertiesTest.class, "goodProperties.properties");
 
-        //QuickProperties created from a String (path) are properly loaded.
-        assertDoesNotThrow(
-            () -> new TestRequiredProperties(resource.get().getAbsolutePath())
-        );
+        // QuickProperties created from a String (path) are properly loaded.
+        assertDoesNotThrow(() -> new TestRequiredProperties(resource.get().getAbsolutePath()));
     }
 
     @Test
@@ -339,7 +325,7 @@ public class QuickPropertiesTest {
 
         assertEquals(entries.size(), 8);
 
-        //notice, this list is in a different order than the original properties file
+        // notice, this list is in a different order than the original properties file
         List<Entry<String, String>> list = newArrayList(entries.iterator());
         assertEquals(list.get(0).getKey(), "booleanProperty");
         assertEquals(list.get(0).getValue(), "true");
@@ -396,10 +382,8 @@ public class QuickPropertiesTest {
 
     @Test
     public void testCreationFailsWhenRequirePropsAreMissing() {
-        //fails because a new Properties object does not contain maxValue
-        assertThrows(MissingPropertyException.class,
-            () -> new SimpleDemo(new Properties())
-        );
+        // fails because a new Properties object does not contain maxValue
+        assertThrows(MissingPropertyException.class, () -> new SimpleDemo(new Properties()));
     }
 
     @Test
@@ -445,19 +429,19 @@ public class QuickPropertiesTest {
         combinedSource.setProperty("propRequiredBy1", "1");
         combinedSource.setProperty("propRequiredBy2", "2");
 
-        //direct creation works
+        // direct creation works
         DemoPair1 pair1 = new DemoPair1(combinedSource);
         assertEquals(pair1.requiredBy1(), 1);
 
-        //direct creation works
+        // direct creation works
         DemoPair2 pair2 = new DemoPair2(combinedSource);
         assertEquals(pair2.requiredBy2(), 2);
 
-        //indirect creation works too
+        // indirect creation works too
         DemoPair1 indirect1 = new DemoPair1(pair2.properties());
         assertEquals(indirect1.requiredBy1(), 1);
 
-        //indirect creation works too
+        // indirect creation works too
         DemoPair2 indirect2 = new DemoPair2(pair1.properties());
         assertEquals(indirect2.requiredBy2(), 2);
     }
@@ -469,26 +453,20 @@ public class QuickPropertiesTest {
          * properties alphabetically
          */
         String fileContents = new StringBuilder()
-            .append("prop3 : 22\n")
-            .append("prop2 : hello\n")
-            .append("prop1 : value")
-            .toString();
+                .append("prop3 : 22\n")
+                .append("prop2 : hello\n")
+                .append("prop1 : value")
+                .toString();
 
-        QuickProperties props = new QuickProperties(
-            PropertyUtils.parseProperties(fileContents),
-            newArrayList("prop1")
-        );
+        QuickProperties props = new QuickProperties(PropertyUtils.parseProperties(fileContents), newArrayList("prop1"));
 
         String expected = new StringBuilder()
-            .append("prop1 : value\n")
-            .append("prop2 : hello\n")
-            .append("prop3 : 22\n")
-            .toString();
+                .append("prop1 : value\n")
+                .append("prop2 : hello\n")
+                .append("prop3 : 22\n")
+                .toString();
 
-        assertEquals(
-            expected,
-            props.toString()
-        );
+        assertEquals(expected, props.toString());
     }
 
     @Test
@@ -502,9 +480,7 @@ public class QuickPropertiesTest {
 
         assertTrue(rejectFile.exists());
 
-        assertThrows(IllegalArgumentException.class,
-            () -> new QuickProperties(rejectFile, newArrayList())
-        );
+        assertThrows(IllegalArgumentException.class, () -> new QuickProperties(rejectFile, newArrayList()));
     }
 
     @Test

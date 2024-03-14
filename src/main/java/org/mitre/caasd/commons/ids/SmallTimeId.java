@@ -92,12 +92,10 @@ public class SmallTimeId implements Comparable<SmallTimeId>, HasTime, Serializab
     /** Number of bits available to distinguish different TimeIds that encode the same timestamp. */
     static final int NUM_BITS_FOR_DISTINGUISHING_ITEMS = 21;
 
-    private static final long BIT_MASK_FOR_DISTINGUISHING_BITS =
-        makeBitMask(NUM_BITS_FOR_DISTINGUISHING_ITEMS);
+    private static final long BIT_MASK_FOR_DISTINGUISHING_BITS = makeBitMask(NUM_BITS_FOR_DISTINGUISHING_ITEMS);
 
     /** bitset = {{bits from epochMills}} + {{bits to distinguish IDs with same timestamp}} */
     private final long idBits;
-
 
     /**
      * A SmallTimeId is a stable GLOBALLY unique identifier for a piece of data. There are important
@@ -118,7 +116,7 @@ public class SmallTimeId implements Comparable<SmallTimeId>, HasTime, Serializab
         long timeBasedBits = truncateBits(time.toEpochMilli(), NUM_BITS_FOR_TIMESTAMP);
         long distinguishingBits = truncateBits(twentyOneBits, NUM_BITS_FOR_DISTINGUISHING_ITEMS);
 
-        //shift the 42 bits...of time value... then add in 21 bits pseudo randomness
+        // shift the 42 bits...of time value... then add in 21 bits pseudo randomness
         this.idBits = (timeBasedBits << NUM_BITS_FOR_DISTINGUISHING_ITEMS) | distinguishingBits;
     }
 
@@ -128,7 +126,7 @@ public class SmallTimeId implements Comparable<SmallTimeId>, HasTime, Serializab
 
     @Override
     public long timeAsEpochMs() {
-        //override because it's wasteful to construct the Instant object we don't need.
+        // override because it's wasteful to construct the Instant object we don't need.
         return idBits >> NUM_BITS_FOR_DISTINGUISHING_ITEMS;
     }
 
@@ -185,7 +183,7 @@ public class SmallTimeId implements Comparable<SmallTimeId>, HasTime, Serializab
         return idBits == timeId.idBits;
     }
 
-    //longs are 64-bits, but hashcodes are only 32-bit ints...so we'll need a mask.
+    // longs are 64-bits, but hashcodes are only 32-bit ints...so we'll need a mask.
     private static final long HASH_MASK = makeBitMask(32);
 
     @Override

@@ -67,7 +67,8 @@ public class SearchResult<K, V> implements Comparable<SearchResult<K, V>> {
         int hash = 5;
         hash = 79 * hash + Objects.hashCode(this.key);
         hash = 79 * hash + Objects.hashCode(this.value);
-        hash = 79 * hash + (int) (Double.doubleToLongBits(this.distance) ^ (Double.doubleToLongBits(this.distance) >>> 32));
+        hash = 79 * hash
+                + (int) (Double.doubleToLongBits(this.distance) ^ (Double.doubleToLongBits(this.distance) >>> 32));
         return hash;
     }
 

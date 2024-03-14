@@ -43,7 +43,8 @@ public class DebugTileServer implements TileServer {
 
     @Override
     public URL getUrlFor(TileAddress ta) {
-        throw new UnsupportedOperationException("URLs are not provided because single color tiles can be created directly");
+        throw new UnsupportedOperationException(
+                "URLs are not provided because single color tiles can be created directly");
     }
 
     /**
@@ -54,18 +55,17 @@ public class DebugTileServer implements TileServer {
     @Override
     public BufferedImage downloadMap(TileAddress ta) {
 
-        //return a black tile with a white outline...
+        // return a black tile with a white outline...
         BufferedImage img = new BufferedImage(tileSize, tileSize, BufferedImage.TYPE_3BYTE_BGR);
         Graphics2D g = (Graphics2D) img.getGraphics();
         g.setColor(Color.WHITE);
         g.drawRect(0, 0, tileSize, tileSize);
 
-        //draw "x=943  y=1651  zoom=12" on the top of the image
+        // draw "x=943  y=1651  zoom=12" on the top of the image
         String msg = "x=" + ta.xIndex() + "  y=" + ta.yIndex() + "  zoom=" + ta.zoomLevel();
         g.setFont(new Font("Avenir", PLAIN, 32));
         g.drawString(msg, 30, 30);
 
         return img;
     }
-
 }

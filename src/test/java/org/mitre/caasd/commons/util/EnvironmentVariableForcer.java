@@ -26,7 +26,8 @@ import java.util.Map;
  * Use this class with care, also be sure to reset the environment variables when finished testing
  */
 public class EnvironmentVariableForcer {
-    //see: https://github.com/aws/aws-sdk-java/blob/master/aws-java-sdk-core/src/test/java/utils/EnvironmentVariableHelper.java
+    // see:
+    // https://github.com/aws/aws-sdk-java/blob/master/aws-java-sdk-core/src/test/java/utils/EnvironmentVariableHelper.java
 
     private final Map<String, String> originalEnvironmentVariables;
     private final Map<String, String> modifiableMap;

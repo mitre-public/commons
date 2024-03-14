@@ -29,16 +29,18 @@ import org.junit.jupiter.api.Test;
 
 class SmallTimeIdsTest {
 
-
-
     @Test
     public void verifyDirectBitsetTimeId() {
 
         long manyRandomBits_1 = compute64BitHash("hello");
         long manyRandomBits_2 = compute64BitHash("goodbye");
 
-        assertThat(toBinaryString(manyRandomBits_1), is("1011010010001011111001011010100100110001001110000000110011101000"));
-        assertThat(toBinaryString(manyRandomBits_2), is("1000010111100111110001101110100010011101011101001111111011001111"));
+        assertThat(
+                toBinaryString(manyRandomBits_1),
+                is("1011010010001011111001011010100100110001001110000000110011101000"));
+        assertThat(
+                toBinaryString(manyRandomBits_2),
+                is("1000010111100111110001101110100010011101011101001111111011001111"));
 
         Instant baseTime = Instant.EPOCH;
         Instant nextTime = baseTime.plusMillis(100);
@@ -53,18 +55,16 @@ class SmallTimeIdsTest {
         assertThat(id_3.time(), is(nextTime));
         assertThat(id_4.time(), is(nextTime));
 
-        //aka the last 21 bits of the "manyRandomBits_N" values...
+        // aka the last 21 bits of the "manyRandomBits_N" values...
         assertThat(id_1.nonTimeBits(), is(truncateBits(manyRandomBits_1, 21)));
         assertThat(id_2.nonTimeBits(), is(truncateBits(manyRandomBits_2, 21)));
         assertThat(id_3.nonTimeBits(), is(truncateBits(manyRandomBits_1, 21)));
         assertThat(id_4.nonTimeBits(), is(truncateBits(manyRandomBits_2, 21)));
 
-        //aka the last 21 bits of the "manyRandomBits_N" values (but this test is for human readability)
+        // aka the last 21 bits of the "manyRandomBits_N" values (but this test is for human readability)
         assertThat(toBinaryString(id_1.nonTimeBits()), is("110000000110011101000"));
         assertThat(toBinaryString(id_2.nonTimeBits()), is("101001111111011001111"));
         assertThat(toBinaryString(id_3.nonTimeBits()), is("110000000110011101000"));
         assertThat(toBinaryString(id_4.nonTimeBits()), is("101001111111011001111"));
     }
-
-
 }

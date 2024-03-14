@@ -95,10 +95,7 @@ public class EditDistance {
         int incrementCost = startString.charAt(i - 1) == endString.charAt(j - 1) ? 0 : 1;
 
         return Ints.min(
-            editDistance(i - 1, j) + 1,
-            editDistance(i, j - 1) + 1,
-            editDistance(i - 1, j - 1) + incrementCost
-        );
+                editDistance(i - 1, j) + 1, editDistance(i, j - 1) + 1, editDistance(i - 1, j - 1) + incrementCost);
     }
 
     public int computeEditDistance() {

@@ -50,13 +50,13 @@ public class ReservoirSampler<T> {
 
         numItemsSeen++;
 
-        //keep every sample until we have at least k observations...
+        // keep every sample until we have at least k observations...
         if (sample.size() < k) {
             sample.add(item);
             return;
         }
 
-        //the chance "this" item is in the sample is k / numItemsSeen
+        // the chance "this" item is in the sample is k / numItemsSeen
         int randomDraw = rng.nextInt(numItemsSeen);
         if (randomDraw < k) {
             sample.set(randomDraw, item);
@@ -64,7 +64,7 @@ public class ReservoirSampler<T> {
     }
 
     public List<T> currentSample() {
-        //return a defensive copy of the sample.
+        // return a defensive copy of the sample.
         return newArrayList(sample);
     }
 

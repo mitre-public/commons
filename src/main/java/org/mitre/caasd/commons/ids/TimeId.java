@@ -101,14 +101,14 @@ public class TimeId implements Comparable<TimeId>, HasTime, Serializable {
      * @param time The epochMills of this Instant get embedded in the resulting TimeId
      */
     public TimeId(Instant time) {
-        //Inspired by java.util.UUID's implementation of randomUUID()
+        // Inspired by java.util.UUID's implementation of randomUUID()
         SecureRandom ng = Holder.RNG;
 
-        long timeBasedBits = TIME_BIT_MASK & time.toEpochMilli(); //isolate 42 bits from epochMills
-        long nonTimeBits = NON_TIME_BIT_MASK & ng.nextLong(); //isolate 22 pseudo-random bits
+        long timeBasedBits = TIME_BIT_MASK & time.toEpochMilli(); // isolate 42 bits from epochMills
+        long nonTimeBits = NON_TIME_BIT_MASK & ng.nextLong(); // isolate 22 pseudo-random bits
         this.leftBits = timeBasedBits << NUM_RAND_BITS_ON_LEFT | nonTimeBits;
 
-        this.rightBits = ng.nextLong(); //64 pseudo-random bits
+        this.rightBits = ng.nextLong(); // 64 pseudo-random bits
     }
 
     /** @return a unique TimeId that references the provided timestamp. */
@@ -140,8 +140,8 @@ public class TimeId implements Comparable<TimeId>, HasTime, Serializable {
     public TimeId(byte[] exactly16Bytes) {
         requireNonNull(exactly16Bytes);
         checkArgument(exactly16Bytes.length == 16, "Must use exactly 16 bytes");
-        long bigBits = 0;  //e.g. most significant bits
-        long smallBits = 0;  //e.g. least significant bits
+        long bigBits = 0; // e.g. most significant bits
+        long smallBits = 0; // e.g. least significant bits
         for (int i = 0; i < 8; i++) {
             bigBits = (bigBits << 8) | (exactly16Bytes[i] & 0xff);
         }
@@ -154,10 +154,7 @@ public class TimeId implements Comparable<TimeId>, HasTime, Serializable {
 
     /** @return The 16 bytes in this TimeId. */
     public byte[] bytes() {
-        return ByteBuffer.allocate(16)
-            .putLong(leftBits)
-            .putLong(rightBits)
-            .array();
+        return ByteBuffer.allocate(16).putLong(leftBits).putLong(rightBits).array();
     }
 
     /**
@@ -182,13 +179,10 @@ public class TimeId implements Comparable<TimeId>, HasTime, Serializable {
          * base-64 encoded String would not be so similar.
          */
 
-        //Isolate just the 22 pseudo-random bits within the "left bits" (drops 42 bits, or 5 full bytes)
+        // Isolate just the 22 pseudo-random bits within the "left bits" (drops 42 bits, or 5 full bytes)
         long randomBits = leftBits & NON_TIME_BIT_MASK;
 
-        return ByteBuffer.allocate(16)
-            .putLong(randomBits)
-            .putLong(rightBits)
-            .array();
+        return ByteBuffer.allocate(16).putLong(randomBits).putLong(rightBits).array();
     }
 
     private static final long SIXTY_THREE_BIT_MASK = Long.parseLong("7fffffffffffffff", 16);
@@ -205,7 +199,7 @@ public class TimeId implements Comparable<TimeId>, HasTime, Serializable {
      */
     public double asUniformRand() {
 
-        //Isolate 63 pseudo-random bits within the "right bits"
+        // Isolate 63 pseudo-random bits within the "right bits"
         long randomBits = rightBits & SIXTY_THREE_BIT_MASK;
         long maxPossibleValue = SIXTY_THREE_BIT_MASK;
 
@@ -250,7 +244,7 @@ public class TimeId implements Comparable<TimeId>, HasTime, Serializable {
      */
     public String toString() {
 
-        //some samples toStrings
+        // some samples toStrings
         // YpnxRaaF_h64-ogTLrRE_g
         // YpnxRaaE500hOUgD4eO1dw
         // YpnxRaaLGRd3W__ogPSekw
@@ -303,25 +297,24 @@ public class TimeId implements Comparable<TimeId>, HasTime, Serializable {
 
     @Override
     public long timeAsEpochMs() {
-        //override because it's wasteful to construct the Instant object we don't need.
+        // override because it's wasteful to construct the Instant object we don't need.
         return leftBits >> NUM_RAND_BITS_ON_LEFT;
     }
 
     /** @return A hash code value for this {@code TimeId} */
     public int hashCode() {
-        //implementation from java.util.UUID
+        // implementation from java.util.UUID
         long hilo = leftBits ^ rightBits;
         return ((int) (hilo >> 32)) ^ (int) hilo;
     }
 
     public boolean equals(Object obj) {
-        //implementation from java.util.UUID
+        // implementation from java.util.UUID
         if ((null == obj) || (obj.getClass() != TimeId.class)) {
             return false;
         }
         TimeId id = (TimeId) obj;
-        return (leftBits == id.leftBits &&
-            rightBits == id.rightBits);
+        return (leftBits == id.leftBits && rightBits == id.rightBits);
     }
 
     public int compareTo(TimeId val) {
@@ -329,10 +322,10 @@ public class TimeId implements Comparable<TimeId>, HasTime, Serializable {
 
         // The ordering is intentionally set up so that the ids
         // can simply be numerically compared as two numbers
-        return (this.leftBits < val.leftBits ? -1 :
-            (this.leftBits > val.leftBits ? 1 :
-                (this.rightBits < val.rightBits ? -1 :
-                    (this.rightBits > val.rightBits ? 1 :
-                        0))));
+        return (this.leftBits < val.leftBits
+                ? -1
+                : (this.leftBits > val.leftBits
+                        ? 1
+                        : (this.rightBits < val.rightBits ? -1 : (this.rightBits > val.rightBits ? 1 : 0))));
     }
 }

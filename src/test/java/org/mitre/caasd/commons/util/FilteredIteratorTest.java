@@ -34,10 +34,7 @@ public class FilteredIteratorTest {
 
         ArrayList<Integer> list = newArrayList(10, 200, 201, 5, -1, 8);
 
-        FilteredIterator<Integer> iter = new FilteredIterator<>(
-            list.iterator(),
-            number -> number < 20
-        );
+        FilteredIterator<Integer> iter = new FilteredIterator<>(list.iterator(), number -> number < 20);
 
         assertThat(iter.hasNext(), is(true));
         assertThat(iter.next(), is(10));
@@ -56,29 +53,17 @@ public class FilteredIteratorTest {
 
         ArrayList<Integer> list = newArrayList();
 
-        FilteredIterator<Integer> iter = new FilteredIterator(
-            list.iterator(),
-            ALWAYS_TRUE
-        );
+        FilteredIterator<Integer> iter = new FilteredIterator(list.iterator(), ALWAYS_TRUE);
 
-        assertThrows(
-            NoSuchElementException.class,
-            () -> iter.next()
-        );
+        assertThrows(NoSuchElementException.class, () -> iter.next());
     }
 
     @Test
     public void removeIsNotSupported() {
         ArrayList<Integer> list = newArrayList();
 
-        FilteredIterator<Integer> iter = new FilteredIterator(
-            list.iterator(),
-            ALWAYS_TRUE
-        );
+        FilteredIterator<Integer> iter = new FilteredIterator(list.iterator(), ALWAYS_TRUE);
 
-        assertThrows(
-            UnsupportedOperationException.class,
-            () -> iter.remove()
-        );
+        assertThrows(UnsupportedOperationException.class, () -> iter.remove());
     }
 }

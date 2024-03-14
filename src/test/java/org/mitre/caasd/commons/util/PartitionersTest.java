@@ -59,8 +59,7 @@ public class PartitionersTest {
     public void testPartitioners_List1() {
         List<Integer> ls = Arrays.asList(1, 1, 6, 6, 2, 4);
 
-        List<List<Integer>> result = ls.stream()
-            .collect(newListCollector(i -> i > 5));
+        List<List<Integer>> result = ls.stream().collect(newListCollector(i -> i > 5));
 
         assertThat(result, hasSize(3));
         assertEquals(1, result.get(0).get(0).intValue());
@@ -96,8 +95,7 @@ public class PartitionersTest {
     public void testPartitioners_List2() {
         List<String> ls = Arrays.asList("a", "a", "b", "c", "b", "b");
 
-        List<List<String>> res = ls.stream()
-            .collect(newListCollector((l, s2) -> s2.equals(l.get(0))));
+        List<List<String>> res = ls.stream().collect(newListCollector((l, s2) -> s2.equals(l.get(0))));
 
         assertEquals(4, res.size());
         assertEquals("a", res.get(0).get(0));
@@ -111,7 +109,7 @@ public class PartitionersTest {
         List<String> ls = Arrays.asList("a", "aa", "aaa", "b", "bb", "bbb");
 
         List<List<String>> res = ls.stream()
-            .collect(newListCollector((s1, s2) -> EditDistance.similarity(s1.get(s1.size() - 1), s2) < 2));
+                .collect(newListCollector((s1, s2) -> EditDistance.similarity(s1.get(s1.size() - 1), s2) < 2));
 
         assertEquals(1, res.size());
         assertEquals(6, res.get(0).size());
@@ -121,8 +119,7 @@ public class PartitionersTest {
     public void testPartitioners_Navigable1() {
         TreeSet<Integer> ts = new TreeSet<>(Arrays.asList(2, 4, 5, 7, 8));
 
-        TreeSet<TreeSet<Integer>> res = ts.stream()
-            .collect(newTreeSetCollector(i -> i % 2 == 0));
+        TreeSet<TreeSet<Integer>> res = ts.stream().collect(newTreeSetCollector(i -> i % 2 == 0));
 
         assertEquals(3, res.size());
         assertEquals(2, res.first().first().intValue());
@@ -134,8 +131,7 @@ public class PartitionersTest {
     public void testPartitioners_Navigable2() {
         TreeSet<Integer> ts = new TreeSet<>(Arrays.asList(1, 2, 4, 5, 8, 9));
 
-        TreeSet<TreeSet<Integer>> res = ts.stream()
-            .collect(newTreeSetCollector((x, y) -> y - x.last() < 2));
+        TreeSet<TreeSet<Integer>> res = ts.stream().collect(newTreeSetCollector((x, y) -> y - x.last() < 2));
 
         assertEquals(3, res.size());
         assertEquals(1, res.first().first().intValue());
@@ -147,13 +143,11 @@ public class PartitionersTest {
     public void testPartitioners_Navigable3() {
         TreeSet<Integer> ts = new TreeSet<>(Arrays.asList(1, 2, 5, 6, 7, 9));
 
-        TreeSet<TreeSet<Integer>> res = ts.stream()
-            .collect(newTreeSetCollector((x, y) -> y - x.first() < 5));
+        TreeSet<TreeSet<Integer>> res = ts.stream().collect(newTreeSetCollector((x, y) -> y - x.first() < 5));
 
         assertEquals(2, res.size());
         assertEquals(1, res.first().first().intValue());
         assertEquals(5, res.first().last().intValue());
         assertEquals(6, res.last().first().intValue());
     }
-
 }
