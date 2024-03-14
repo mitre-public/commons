@@ -37,12 +37,11 @@ public class ExceptionsTest {
 
         IndexOutOfBoundsException someException = new IndexOutOfBoundsException("hello");
 
-        //catch the result of `someException.printStackTrace()` so we
+        // catch the result of `someException.printStackTrace()` so we
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         someException.printStackTrace(new PrintStream(os));
         String actualTrace = os.toString();
 
         assertThat(stackTraceOf(someException), is(actualTrace));
     }
-
 }

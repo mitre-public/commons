@@ -89,11 +89,10 @@ public class JsonFileSink<T extends JsonWritable> implements OutputSink<T> {
      * @param exceptionHandler Captures and handles exceptions that occur when writing JSON output
      */
     JsonFileSink(
-        String outputDirectory,
-        ToStringFunction<T> fileNamer,
-        Function<T, Path> subDir,
-        ExceptionHandler exceptionHandler
-    ) {
+            String outputDirectory,
+            ToStringFunction<T> fileNamer,
+            Function<T, Path> subDir,
+            ExceptionHandler exceptionHandler) {
         this.outputDirectory = outputDirectory;
         this.exceptionHandler = checkNotNull(exceptionHandler);
         this.fileNamer = checkNotNull(fileNamer, "The file-naming function cannot be null");
@@ -111,20 +110,23 @@ public class JsonFileSink<T extends JsonWritable> implements OutputSink<T> {
         Path subdirectory = this.subdirectoryStrategy.apply(event);
 
         writeRecordToFile(
-            event.asJson() + "\n",  //Every record gets sent to a new line (just like System.out)
-            subdirectory,
-            fileNamer.apply(event)
-        );
+                event.asJson() + "\n", // Every record gets sent to a new line (just like System.out)
+                subdirectory,
+                fileNamer.apply(event));
     }
 
     private void writeRecordToFile(String json, Path subdirectory, String filePrefix) {
         try {
             Path targetDirectory = Paths.get(outputDirectory).resolve(subdirectory);
             makeDirs(targetDirectory.toFile());
-            String fullPath = targetDirectory.resolve(filePrefix + ".json").normalize().toAbsolutePath().toString();
+            String fullPath = targetDirectory
+                    .resolve(filePrefix + ".json")
+                    .normalize()
+                    .toAbsolutePath()
+                    .toString();
 
-            //we MUST retain the ability to write multiple JsonWritable objects to the same file
-            //If you want to support additional behavior add another field to the class that toggles this behavior.
+            // we MUST retain the ability to write multiple JsonWritable objects to the same file
+            // If you want to support additional behavior add another field to the class that toggles this behavior.
             FileUtils.appendToFile(fullPath, json);
 
         } catch (Exception ex) {

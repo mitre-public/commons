@@ -51,11 +51,14 @@ class SmallTimeIdTest {
         long mask_41 = makeBitMask(41);
         long mask_42 = makeBitMask(42);
 
-        //these 2 assertions use bitwise AND
-        assertThat(epochMillsInFuture, is(not(mask_41 &
-            epochMillsInFuture))); //41 bits CANNOT store an epochMillis for the semi-distant future
-        assertThat(epochMillsInFuture, is(mask_42 &
-            epochMillsInFuture)); //42 bits CAN store an epochMillis for the semi-distant future
+        // these 2 assertions use bitwise AND
+        assertThat(
+                epochMillsInFuture,
+                is(not(mask_41
+                        & epochMillsInFuture))); // 41 bits CANNOT store an epochMillis for the semi-distant future
+        assertThat(
+                epochMillsInFuture,
+                is(mask_42 & epochMillsInFuture)); // 42 bits CAN store an epochMillis for the semi-distant future
     }
 
     @Test
@@ -69,9 +72,9 @@ class SmallTimeIdTest {
         assertThat(timeId.nonTimeBits(), is(someNonTimeBits));
         assertThat(timeId.timeAsEpochMs(), is(baseTime.toEpochMilli()));
 
-        //the "base timestamp" is encoded in bits [63-22]
-        //the "non time bits" are encoded in bits [21-1]
-        //Therefore, a bit shift operation and a bitwise OR should generate our id
+        // the "base timestamp" is encoded in bits [63-22]
+        // the "non time bits" are encoded in bits [21-1]
+        // Therefore, a bit shift operation and a bitwise OR should generate our id
         long expectedID = (timeId.timeAsEpochMs() << 21) | someNonTimeBits;
 
         assertThat(timeId.id(), is(expectedID));
@@ -84,22 +87,22 @@ class SmallTimeIdTest {
         Instant baseTime = Instant.now();
         int N = 100;
 
-        //Build this list and immediately sort it...
+        // Build this list and immediately sort it...
         List<SmallTimeId> ids = IntStream.range(0, N)
-            .mapToObj(i -> new SmallTimeId(baseTime, compute64BitHash(Integer.toString(i))))
-            .sorted()
-            .collect(Collectors.toList());
+                .mapToObj(i -> new SmallTimeId(baseTime, compute64BitHash(Integer.toString(i))))
+                .sorted()
+                .collect(Collectors.toList());
 
-        //this time we don't sort the list at build time...
+        // this time we don't sort the list at build time...
         List<SmallTimeId> ids_round2 = IntStream.range(0, N)
-            .mapToObj(i -> new SmallTimeId(baseTime, compute64BitHash(Integer.toString(i))))
-            .collect(Collectors.toList());
+                .mapToObj(i -> new SmallTimeId(baseTime, compute64BitHash(Integer.toString(i))))
+                .collect(Collectors.toList());
 
-        //Instead we will throw in an extra shuffle just for fun and then sort...
+        // Instead we will throw in an extra shuffle just for fun and then sort...
         Collections.shuffle(ids_round2);
         Collections.sort(ids_round2);
 
-        //Since both Lists encode the same source data their post-sort order should be identical
+        // Since both Lists encode the same source data their post-sort order should be identical
         for (int i = 0; i < N; i++) {
             assertThat(ids.get(i), is(ids_round2.get(i)));
             assertThat(ids.get(i).id(), is(ids_round2.get(i).id()));

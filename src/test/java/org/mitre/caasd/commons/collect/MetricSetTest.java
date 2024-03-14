@@ -46,7 +46,7 @@ public class MetricSetTest {
         SetSearchResult<Point> result = mTree.getClosest(searchKey);
         DistanceMetric<Point> metric = mTree.metric();
 
-        //confirm all Points in the tree are at least this far away..
+        // confirm all Points in the tree are at least this far away..
         for (Point point : mTree.keySet()) {
             double dist = metric.distanceBtw(searchKey, point);
             assertTrue(dist >= result.distance());
@@ -58,10 +58,8 @@ public class MetricSetTest {
 
         MetricSet<Point> mTree = emptyMetricSet();
 
-        //null keys are not allowed
-        assertThrows(IllegalArgumentException.class,
-            () -> mTree.getClosest(null)
-        );
+        // null keys are not allowed
+        assertThrows(IllegalArgumentException.class, () -> mTree.getClosest(null));
     }
 
     @Test
@@ -69,10 +67,8 @@ public class MetricSetTest {
 
         MetricSet<Point> mTree = emptyMetricSet();
 
-        //null keys are not allowed
-        assertThrows(IllegalArgumentException.class,
-            () -> mTree.getNClosest(null, 5)
-        );
+        // null keys are not allowed
+        assertThrows(IllegalArgumentException.class, () -> mTree.getNClosest(null, 5));
     }
 
     @Test
@@ -80,10 +76,8 @@ public class MetricSetTest {
 
         MetricSet<Point> mTree = emptyMetricSet();
 
-        //null keys are not allowed
-        assertThrows(IllegalArgumentException.class,
-            () -> mTree.remove(null)
-        );
+        // null keys are not allowed
+        assertThrows(IllegalArgumentException.class, () -> mTree.remove(null));
     }
 
     @Test
@@ -91,10 +85,8 @@ public class MetricSetTest {
 
         MetricSet<Point> mTree = emptyMetricSet();
 
-        //null keys are not allowed
-        assertThrows(IllegalArgumentException.class,
-            () -> mTree.getAllWithinRange(null, 5.0)
-        );
+        // null keys are not allowed
+        assertThrows(IllegalArgumentException.class, () -> mTree.getAllWithinRange(null, 5.0));
     }
 
     @Test
@@ -103,10 +95,8 @@ public class MetricSetTest {
         MetricSet<Point> mTree = emptyMetricSet();
         Point p = new Point(0, 0);
 
-        //k cannot be negative
-        assertThrows(IllegalArgumentException.class,
-            () -> mTree.getNClosest(p, -5)
-        );
+        // k cannot be negative
+        assertThrows(IllegalArgumentException.class, () -> mTree.getNClosest(p, -5));
     }
 
     @Test
@@ -115,10 +105,8 @@ public class MetricSetTest {
         MetricSet<Point> mTree = emptyMetricSet();
         Point p = new Point(0, 0);
 
-        //k cannot be 0
-        assertThrows(IllegalArgumentException.class,
-            () -> mTree.getNClosest(p, 0)
-        );
+        // k cannot be 0
+        assertThrows(IllegalArgumentException.class, () -> mTree.getNClosest(p, 0));
     }
 
     @Test
@@ -127,23 +115,17 @@ public class MetricSetTest {
         MetricSet<Point> mTree = emptyMetricSet();
         Point p = new Point(0, 0);
 
-        //range cannot be negative
-        assertThrows(IllegalArgumentException.class,
-            () -> mTree.getAllWithinRange(p, -0.1)
-        );
+        // range cannot be negative
+        assertThrows(IllegalArgumentException.class, () -> mTree.getAllWithinRange(p, -0.1));
     }
 
     @Test
     public void testTreeConstructionWithTooSmallSpheres() {
-        DistanceMetric<Point> metric
-            = (Point p1, Point p2) -> hypot(Math.abs(p1.getX() - p2.getX()),
-            Math.abs(p1.getY() - p2.getY())
-        );
+        DistanceMetric<Point> metric =
+                (Point p1, Point p2) -> hypot(Math.abs(p1.getX() - p2.getX()), Math.abs(p1.getY() - p2.getY()));
 
-        //We small usable maxSphereSize is 4
-        assertThrows(IllegalArgumentException.class,
-            () -> new MetricTree<>(metric, 3)
-        );
+        // We small usable maxSphereSize is 4
+        assertThrows(IllegalArgumentException.class, () -> new MetricTree<>(metric, 3));
     }
 
     @Test
@@ -180,8 +162,7 @@ public class MetricSetTest {
 
             @Override
             public double distanceBtw(Point item1, Point item2) {
-                return Math.hypot(Math.abs(item1.getX() - item2.getX()),
-                    Math.abs(item1.getY() - item2.getY()));
+                return Math.hypot(Math.abs(item1.getX() - item2.getX()), Math.abs(item1.getY() - item2.getY()));
             }
         });
     }
@@ -220,8 +201,7 @@ public class MetricSetTest {
         Random rng = new Random(17L);
 
         while (points.size() < SIZE_OF_TEST_COLLECTION) {
-            points.add(new Point(rng.nextInt(1000),
-                rng.nextInt(1000)));
+            points.add(new Point(rng.nextInt(1000), rng.nextInt(1000)));
         }
 
         return new ArrayList<>(points);
@@ -230,17 +210,15 @@ public class MetricSetTest {
     @Test
     public void constructorRequiresADistanceMetric() {
 
-        //Should not be able to build a MetricSet with a null DistanceMetric
-        assertThrows(NullPointerException.class,
-            () -> new MetricSet<>(null)
-        );
+        // Should not be able to build a MetricSet with a null DistanceMetric
+        assertThrows(NullPointerException.class, () -> new MetricSet<>(null));
     }
 
     @Test
     public void addingNullIsNotAllowed() {
         MetricSet<Point> tree = emptyMetricSet();
 
-        //Should not be able to put using \"null\" as a key
+        // Should not be able to put using \"null\" as a key
         assertThrows(NullPointerException.class, () -> tree.add(null));
     }
 
@@ -305,7 +283,7 @@ public class MetricSetTest {
 
         for (Point point : set) {
 
-            //"The test tree should contain this key"
+            // "The test tree should contain this key"
             assertThat(tree.contains(point), is(true));
 
             boolean hadImpact = tree.remove(point);
@@ -344,8 +322,7 @@ public class MetricSetTest {
 
         for (Point point : set) {
 
-            assertThat("the testTree should contain all keys from the testMap",
-                metricSet.contains(point), is(true));
+            assertThat("the testTree should contain all keys from the testMap", metricSet.contains(point), is(true));
 
             boolean hadImpact = metricSet.remove(point);
 
@@ -365,9 +342,9 @@ public class MetricSetTest {
         Point testKey = new Point(1, 2);
 
         assertThat(
-            "The input tree, and data it should contain, must have the same size",
-            testTree.size(), is(testData.size())
-        );
+                "The input tree, and data it should contain, must have the same size",
+                testTree.size(),
+                is(testData.size()));
 
         ArrayList<SetSearchResult<Point>> allResults = exhautivelySearch(testTree, testData, testKey);
 
@@ -388,9 +365,7 @@ public class MetricSetTest {
         DistanceMetric<K> metric = testTree.metric();
 
         for (K key : testData) {
-            results.add(
-                new SetSearchResult<>(key, metric.distanceBtw(key, testKey))
-            );
+            results.add(new SetSearchResult<>(key, metric.distanceBtw(key, testKey)));
         }
 
         Collections.sort(results);
@@ -398,35 +373,36 @@ public class MetricSetTest {
         return results;
     }
 
-    private <K> void verifySearchResults(ArrayList<SetSearchResult<K>> allResults, List<SetSearchResult<K>> searchResults, double maxDist) {
+    private <K> void verifySearchResults(
+            ArrayList<SetSearchResult<K>> allResults, List<SetSearchResult<K>> searchResults, double maxDist) {
 
-        //confirm everything in "search results" is within "all results"
+        // confirm everything in "search results" is within "all results"
         for (SetSearchResult<K> searchResult : searchResults) {
             assertTrue(allResults.contains(searchResult));
         }
 
-        //confirm everything in "search results" has a distance less than "maxDistance"
+        // confirm everything in "search results" has a distance less than "maxDistance"
         for (SetSearchResult<K> searchResult : searchResults) {
             assertTrue(searchResult.distance() <= maxDist);
         }
 
-        //compute the furthest item in the search results
+        // compute the furthest item in the search results
         double maxSearchDist = 0;
         for (SetSearchResult<K> result : searchResults) {
             maxSearchDist = Math.max(maxSearchDist, result.distance());
         }
 
-        //find all the results that were excluded from "search results"
+        // find all the results that were excluded from "search results"
         ArrayList<SetSearchResult<K>> excluded = new ArrayList<>(allResults);
         excluded.removeIf((result) -> searchResults.contains(result));
 
-        //confirm everything in the "excluded results" is further away
+        // confirm everything in the "excluded results" is further away
         for (SetSearchResult<K> result : excluded) {
             assertTrue(result.distance() > maxSearchDist);
         }
     }
 
-    @Disabled //because building a MetricSet with 250_000 entries takes too long (about 42 seconds)
+    @Disabled // because building a MetricSet with 250_000 entries takes too long (about 42 seconds)
     @Test
     public void cannotOverloadWithZeroDistanceKeys() {
 
@@ -440,7 +416,7 @@ public class MetricSetTest {
             }
         }
 
-        //This distance metric sucks...but it shouldn't break the data structure
+        // This distance metric sucks...but it shouldn't break the data structure
         DistanceMetric<Key> metric = (Key item1, Key item2) -> 1;
 
         MetricSet<Key> set = new MetricSet<>(metric);

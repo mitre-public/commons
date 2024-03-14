@@ -37,36 +37,25 @@ public class PiecewiseLinearSplitterTest {
     public void datasetsWithUnequalSizesAreRejected() {
         PiecewiseLinearSplitter splitter = new PiecewiseLinearSplitter(5.0);
 
-        assertThrows(IllegalArgumentException.class,
-            () -> splitter.computeSplitsFor(
-                newArrayList(1.0, 2.0, 3.0),
-                newArrayList(1.0, 2.0)
-            )
-        );
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> splitter.computeSplitsFor(newArrayList(1.0, 2.0, 3.0), newArrayList(1.0, 2.0)));
     }
 
     @Test
     public void outOfOrderXdataIsRejected() {
         PiecewiseLinearSplitter splitter = new PiecewiseLinearSplitter(5.0);
 
-        assertThrows(IllegalArgumentException.class,
-            () -> splitter.computeSplitsFor(
-                newArrayList(3.0, 2.0, 1.0),
-                newArrayList(1.0, 2.0, 3.0)
-            )
-        );
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> splitter.computeSplitsFor(newArrayList(3.0, 2.0, 1.0), newArrayList(1.0, 2.0, 3.0)));
     }
 
     @Test
     public void inOrderXdataIsAccepted() {
         PiecewiseLinearSplitter splitter = new PiecewiseLinearSplitter(5.0);
 
-        assertDoesNotThrow(
-            () -> splitter.computeSplitsFor(
-                newArrayList(1.0, 2.0, 3.0),
-                newArrayList(1.0, 2.0, 3.0)
-            )
-        );
+        assertDoesNotThrow(() -> splitter.computeSplitsFor(newArrayList(1.0, 2.0, 3.0), newArrayList(1.0, 2.0, 3.0)));
     }
 
     @Test
@@ -74,14 +63,14 @@ public class PiecewiseLinearSplitterTest {
 
         PiecewiseLinearSplitter splitter = new PiecewiseLinearSplitter(1.0);
 
-        //2 saw teeth pattern
-        Double[] xData = new Double[]{1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
-        Double[] yData = new Double[]{2.0, 4.0, 6.0, 8.0, 10.0, 1.0, 2.0, 3.0, 4.0, 5.0};
+        // 2 saw teeth pattern
+        Double[] xData = new Double[] {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
+        Double[] yData = new Double[] {2.0, 4.0, 6.0, 8.0, 10.0, 1.0, 2.0, 3.0, 4.0, 5.0};
 
         List<Double> xDataList = newArrayList(xData);
         List<Double> yDataList = newArrayList(yData);
 
-        //1 saw tooth pattern
+        // 1 saw tooth pattern
         int[] splits = splitter.computeSplitsFor(xDataList, yDataList);
 
         assertThat(splits[0], is(0));
@@ -100,8 +89,8 @@ public class PiecewiseLinearSplitterTest {
 
         PiecewiseLinearSplitter splitter = new PiecewiseLinearSplitter(1.0);
 
-        Double[] xData = new Double[]{1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
-        Double[] yData = new Double[]{0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0};
+        Double[] xData = new Double[] {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
+        Double[] yData = new Double[] {0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0};
 
         List<Double> xDataList = newArrayList(xData);
         List<Double> yDataList = newArrayList(yData);
@@ -116,8 +105,8 @@ public class PiecewiseLinearSplitterTest {
     @Test
     public void canSplitDatasetWith4Entries() {
 
-        Double[] xData = new Double[]{1.0, 2.0, 3.0, 4.0};
-        Double[] yData = new Double[]{0.0, -10.0, 90.0, 80.0};
+        Double[] xData = new Double[] {1.0, 2.0, 3.0, 4.0};
+        Double[] yData = new Double[] {0.0, -10.0, 90.0, 80.0};
 
         List<Double> xDataList = newArrayList(xData);
         List<Double> yDataList = newArrayList(yData);
@@ -145,9 +134,8 @@ public class PiecewiseLinearSplitterTest {
          * This "tes" is ignored because it does not VERIFY anything. It leaves it for the reader to
          * determine if the input and output are "good"
          */
-        Pair<List<Double>, List<Double>> allData = DataSplitterTest.loadTestXYData(
-            "org/mitre/caasd/commons/math/altitudes1.txt"
-        );
+        Pair<List<Double>, List<Double>> allData =
+                DataSplitterTest.loadTestXYData("org/mitre/caasd/commons/math/altitudes1.txt");
         List<Double> xData = allData.first();
         List<Double> yData = allData.second();
 
@@ -163,20 +151,17 @@ public class PiecewiseLinearSplitterTest {
             int startIndex = splits[i];
             int endIndex = splits[i + 1] - 1;
 
-            System.out.println(
-                "Split: " + i
+            System.out.println("Split: " + i
                     + " from: (" + xData.get(startIndex) + "," + yData.get(startIndex) + ")"
-                    + " to: ( " + xData.get(endIndex) + ", " + yData.get(endIndex) + ")"
-            );
+                    + " to: ( " + xData.get(endIndex) + ", " + yData.get(endIndex) + ")");
         }
     }
 
     @Disabled
     @Test
     public void demoPiecewiseLinearSplitting_example2() throws IOException {
-        Pair<List<Double>, List<Double>> allData = DataSplitterTest.loadTestXYData(
-            "org/mitre/caasd/commons/math/altitudes2.txt"
-        );
+        Pair<List<Double>, List<Double>> allData =
+                DataSplitterTest.loadTestXYData("org/mitre/caasd/commons/math/altitudes2.txt");
         List<Double> xData = allData.first();
         List<Double> yData = allData.second();
 
@@ -192,11 +177,9 @@ public class PiecewiseLinearSplitterTest {
             int startIndex = splits[i];
             int endIndex = splits[i + 1] - 1;
 
-            System.out.println(
-                "Split: " + i
+            System.out.println("Split: " + i
                     + " from: (" + xData.get(startIndex) + "," + yData.get(startIndex) + ")"
-                    + " to: ( " + xData.get(endIndex) + ", " + yData.get(endIndex) + ")"
-            );
+                    + " to: ( " + xData.get(endIndex) + ", " + yData.get(endIndex) + ")");
         }
     }
 }

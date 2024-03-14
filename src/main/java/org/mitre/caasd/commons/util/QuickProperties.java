@@ -126,10 +126,7 @@ public class QuickProperties implements Serializable {
      *                      properly defined (i.e. it is an error to miss one of these properties)
      */
     public QuickProperties(Properties properties, Collection<String> requiredProps) {
-        this(
-            asImmutableMap(properties),
-            checkNotNull(requiredProps, "The requiredProps cannot be null")
-        );
+        this(asImmutableMap(properties), checkNotNull(requiredProps, "The requiredProps cannot be null"));
     }
 
     /**
@@ -227,57 +224,43 @@ public class QuickProperties implements Serializable {
     protected Optional<Byte> getOptionalByte(String propertyName) {
         Optional<String> prop = getOptionalProperty(propertyName);
 
-        return prop.isPresent()
-            ? Optional.of(Byte.parseByte(prop.get()))
-            : Optional.empty();
+        return prop.isPresent() ? Optional.of(Byte.parseByte(prop.get())) : Optional.empty();
     }
 
     protected Optional<Short> getOptionalShort(String propertyName) {
         Optional<String> prop = getOptionalProperty(propertyName);
 
-        return prop.isPresent()
-            ? Optional.of(Short.parseShort(prop.get()))
-            : Optional.empty();
+        return prop.isPresent() ? Optional.of(Short.parseShort(prop.get())) : Optional.empty();
     }
 
     protected Optional<Integer> getOptionalInt(String propertyName) {
         Optional<String> prop = getOptionalProperty(propertyName);
 
-        return prop.isPresent()
-            ? Optional.of(Integer.parseInt(prop.get()))
-            : Optional.empty();
+        return prop.isPresent() ? Optional.of(Integer.parseInt(prop.get())) : Optional.empty();
     }
 
     protected Optional<Long> getOptionalLong(String propertyName) {
         Optional<String> prop = getOptionalProperty(propertyName);
 
-        return prop.isPresent()
-            ? Optional.of(Long.parseLong(prop.get()))
-            : Optional.empty();
+        return prop.isPresent() ? Optional.of(Long.parseLong(prop.get())) : Optional.empty();
     }
 
     protected Optional<Float> getOptionalFloat(String propertyName) {
         Optional<String> prop = getOptionalProperty(propertyName);
 
-        return prop.isPresent()
-            ? Optional.of(Float.parseFloat(prop.get()))
-            : Optional.empty();
+        return prop.isPresent() ? Optional.of(Float.parseFloat(prop.get())) : Optional.empty();
     }
 
     protected Optional<Double> getOptionalDouble(String propertyName) {
         Optional<String> prop = getOptionalProperty(propertyName);
 
-        return prop.isPresent()
-            ? Optional.of(Double.parseDouble(prop.get()))
-            : Optional.empty();
+        return prop.isPresent() ? Optional.of(Double.parseDouble(prop.get())) : Optional.empty();
     }
 
     protected Optional<Boolean> getOptionalBoolean(String propertyName) {
         Optional<String> prop = getOptionalProperty(propertyName);
 
-        return prop.isPresent()
-            ? Optional.of(Boolean.parseBoolean(prop.get()))
-            : Optional.empty();
+        return prop.isPresent() ? Optional.of(Boolean.parseBoolean(prop.get())) : Optional.empty();
     }
 
     /**
@@ -287,13 +270,11 @@ public class QuickProperties implements Serializable {
      */
     public ImmutableSortedSet<Entry<String, String>> entrySet() {
 
-        Comparator<Entry<String, String>> comparator
-            = (o1, o2) -> o1.getKey().compareTo(o2.getKey());
+        Comparator<Entry<String, String>> comparator = (o1, o2) -> o1.getKey().compareTo(o2.getKey());
 
-        return ImmutableSortedSet
-            .orderedBy(comparator)
-            .addAll(properties.entrySet())
-            .build();
+        return ImmutableSortedSet.orderedBy(comparator)
+                .addAll(properties.entrySet())
+                .build();
     }
 
     /** @return The Raw mapping of Keys to Values. */

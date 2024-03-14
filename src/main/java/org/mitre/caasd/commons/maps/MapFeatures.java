@@ -38,10 +38,10 @@ import org.mitre.caasd.commons.LatLong;
  */
 public class MapFeatures {
 
-    //@todo -- Add Multiline text option e.g. (String[] {"line 1", "line 2", "line 3"})
-    //@todo -- Add Gradient option
-    //@todo -- Consider putting all "stroke/color/font" features behind a "brush" interface (which will use the Composite pattern and frequently contain UnsupportedOperations)
-
+    // @todo -- Add Multiline text option e.g. (String[] {"line 1", "line 2", "line 3"})
+    // @todo -- Add Gradient option
+    // @todo -- Consider putting all "stroke/color/font" features behind a "brush" interface (which will use the
+    // Composite pattern and frequently contain UnsupportedOperations)
 
     /** This class helps us draw a circle on a map. */
     private static class Circle implements MapFeature {
@@ -67,7 +67,8 @@ public class MapFeatures {
             g.setColor(color);
             g.setStroke(new BasicStroke(strokeWidth, CAP_ROUND, JOIN_ROUND));
 
-            //The draw operations start on the top-left, if we want the circle centered around the location we must shift the pixels
+            // The draw operations start on the top-left, if we want the circle centered around the location we must
+            // shift the pixels
             int x = center.x(zeroPixel) - pixelWidth / 2;
             int y = center.y(zeroPixel) - pixelWidth / 2;
 
@@ -123,8 +124,8 @@ public class MapFeatures {
         @Override
         public void drawOn(Graphics2D g, PixelLatLong zeroPixel) {
 
-            PixelLatLong topLeftPixel =  new PixelLatLong(topLeft, zeroPixel.zoom(), zeroPixel.tileSize());
-            PixelLatLong bottomRightPixel =  new PixelLatLong(bottomRight, zeroPixel.zoom(), zeroPixel.tileSize());
+            PixelLatLong topLeftPixel = new PixelLatLong(topLeft, zeroPixel.zoom(), zeroPixel.tileSize());
+            PixelLatLong bottomRightPixel = new PixelLatLong(bottomRight, zeroPixel.zoom(), zeroPixel.tileSize());
 
             int width = (int) (bottomRightPixel.x() - topLeftPixel.x());
             int height = (int) (bottomRightPixel.y() - topLeftPixel.y());
@@ -135,7 +136,6 @@ public class MapFeatures {
             g.drawRect(topLeftPixel.x(zeroPixel), topLeftPixel.y(zeroPixel), width, height);
         }
     }
-
 
     private static class Polygon implements MapFeature {
 
@@ -167,14 +167,13 @@ public class MapFeatures {
 
             java.awt.Polygon shape = new java.awt.Polygon(xArray, yArray, xArray.length);
 
-            if(isFilled) {
+            if (isFilled) {
                 g.fill(shape);
             } else {
                 g.draw(shape);
             }
         }
     }
-
 
     private static class Path implements MapFeature {
 
@@ -205,7 +204,7 @@ public class MapFeatures {
                 yArray[i] = (int) pixel.y(zeroPixel);
             }
 
-            //See also: https://docs.oracle.com/javase/tutorial/2d/geometry/examples/ShapesDemo2D.java
+            // See also: https://docs.oracle.com/javase/tutorial/2d/geometry/examples/ShapesDemo2D.java
 
             GeneralPath polyline = new GeneralPath(GeneralPath.WIND_EVEN_ODD, n);
             polyline.moveTo(xArray[0], yArray[0]);
@@ -216,7 +215,6 @@ public class MapFeatures {
             g.draw(polyline);
         }
     }
-
 
     /** This class helps us draw a text on a map. */
     private static class TextLabel implements MapFeature {
@@ -268,7 +266,6 @@ public class MapFeatures {
         }
     }
 
-
     private static class CompositeFeature implements MapFeature {
 
         List<MapFeature> features;
@@ -285,7 +282,7 @@ public class MapFeatures {
     }
 
     public static MapFeature filledCircle(LatLong loc, Color c, int diameterInPixels) {
-        return new Circle(loc, c, diameterInPixels, true, 1.0f); //stroke width does not matter for filled circles
+        return new Circle(loc, c, diameterInPixels, true, 1.0f); // stroke width does not matter for filled circles
     }
 
     public static MapFeature circle(LatLong loc, Color c, int diameterInPixels, float strokeLineWidth) {
@@ -326,10 +323,7 @@ public class MapFeatures {
 
     /** Create a filled shape and a shape (i.e. outline) where each may have a different color. */
     public static List<MapFeature> shapeWithOutline(List<LatLong> points, Color fillColor, Color borderColor) {
-        return newArrayList(
-            filledShape(points, fillColor),
-            shape(points, borderColor)
-        );
+        return newArrayList(filledShape(points, fillColor), shape(points, borderColor));
     }
 
     public static MapFeature path(List<LatLong> pts, Color c, float strokeWidth) {

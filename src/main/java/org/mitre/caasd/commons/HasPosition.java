@@ -45,9 +45,8 @@ public interface HasPosition {
 
     default double courseInDegrees(HasPosition that) {
         return Spherical.courseInDegrees(
-            this.latitude(), this.longitude(),
-            that.latitude(), that.longitude()
-        );
+                this.latitude(), this.longitude(),
+                that.latitude(), that.longitude());
     }
 
     default Course courseTo(HasPosition that) {
@@ -65,34 +64,25 @@ public interface HasPosition {
     static Double maxLatitude(Collection<? extends HasPosition> locations) {
         checkInput(locations);
 
-        return locations
-            .stream()
-            .map(hasPosition -> hasPosition.latitude())
-            .reduce(-Double.MAX_VALUE, Math::max);
+        return locations.stream().map(hasPosition -> hasPosition.latitude()).reduce(-Double.MAX_VALUE, Math::max);
     }
 
     static Double minLatitude(Collection<? extends HasPosition> locations) {
         checkInput(locations);
 
-        return locations.stream()
-            .map(hasPosition -> hasPosition.latitude())
-            .reduce(Double.MAX_VALUE, Math::min);
+        return locations.stream().map(hasPosition -> hasPosition.latitude()).reduce(Double.MAX_VALUE, Math::min);
     }
 
     static Double maxLongitude(Collection<? extends HasPosition> locations) {
         checkInput(locations);
 
-        return locations.stream()
-            .map(hasPosition -> hasPosition.longitude())
-            .reduce(-Double.MAX_VALUE, Math::max);
+        return locations.stream().map(hasPosition -> hasPosition.longitude()).reduce(-Double.MAX_VALUE, Math::max);
     }
 
     static Double minLongitude(Collection<? extends HasPosition> locations) {
         checkInput(locations);
 
-        return locations.stream()
-            .map(hasPosition -> hasPosition.longitude())
-            .reduce(Double.MAX_VALUE, Math::min);
+        return locations.stream().map(hasPosition -> hasPosition.longitude()).reduce(Double.MAX_VALUE, Math::min);
     }
 
     static void checkInput(Collection<? extends HasPosition> locations) {

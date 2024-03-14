@@ -66,9 +66,7 @@ public class SequentialfileWriterTest {
 
         File wasThisfileMade = new File(directory + File.separator + "error_0.txt");
 
-        assertTrue(
-            wasThisfileMade.exists()
-        );
+        assertTrue(wasThisfileMade.exists());
 
         wasThisfileMade.delete();
         File dirAsFile = new File(directory);

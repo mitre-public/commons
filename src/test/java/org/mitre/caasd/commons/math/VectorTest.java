@@ -28,24 +28,20 @@ public class VectorTest {
     @Test
     public void cannotBuildVectorWithNoComponents() {
 
-        //Vector must have at least one component
-        assertThrows(IllegalArgumentException.class,
-            () -> new Vector(new double[0])
-        );
+        // Vector must have at least one component
+        assertThrows(IllegalArgumentException.class, () -> new Vector(new double[0]));
     }
 
     @Test
     public void cannotBuildVectorWithNoComponents_factory() {
 
-        //Vector must have at least one component
-        assertThrows(IllegalArgumentException.class,
-            () -> Vector.of()
-        );
+        // Vector must have at least one component
+        assertThrows(IllegalArgumentException.class, () -> Vector.of());
     }
 
     @Test
     public void testBothConstructors() {
-        Vector vector1 = new Vector(new double[]{3.0, 2.2, -1.9});
+        Vector vector1 = new Vector(new double[] {3.0, 2.2, -1.9});
         Vector vector2 = Vector.of(3.0, 2.2, -1.9);
         assertArrayEquals(vector1.components(), vector2.components(), 0.001);
     }
@@ -67,11 +63,7 @@ public class VectorTest {
     public void testPlus() {
         Vector vector1 = Vector.of(0.0, 1.0);
         Vector vector2 = Vector.of(-1.0, -1.0);
-        assertArrayEquals(
-            new double[]{-1.0, 0.0},
-            vector1.plus(vector2).components(),
-            0.001
-        );
+        assertArrayEquals(new double[] {-1.0, 0.0}, vector1.plus(vector2).components(), 0.001);
     }
 
     @Test
@@ -79,21 +71,15 @@ public class VectorTest {
         Vector vector1 = Vector.of(0.0, 1.0);
         Vector vector2 = Vector.of(-1.0, -1.0, 33.5);
 
-        //Cannot add vectors of different dimensions.
-        assertThrows(IllegalArgumentException.class,
-            () -> vector1.plus(vector2)
-        );
+        // Cannot add vectors of different dimensions.
+        assertThrows(IllegalArgumentException.class, () -> vector1.plus(vector2));
     }
 
     @Test
     public void testMinus() {
         Vector vector1 = Vector.of(0.0, 1.0);
         Vector vector2 = Vector.of(-1.0, -1.0);
-        assertArrayEquals(
-            new double[]{1.0, 2.0},
-            vector1.minus(vector2).components(),
-            0.001
-        );
+        assertArrayEquals(new double[] {1.0, 2.0}, vector1.minus(vector2).components(), 0.001);
     }
 
     @Test
@@ -102,10 +88,7 @@ public class VectorTest {
         Vector vector2 = Vector.of(1.0, 1.0);
         Vector vector3 = Vector.of(2.0, 2.0);
         assertArrayEquals(
-            new double[]{-3.0, -3.0},
-            vector1.minus(vector2).minus(vector3).components(),
-            0.001
-        );
+                new double[] {-3.0, -3.0}, vector1.minus(vector2).minus(vector3).components(), 0.001);
     }
 
     @Test
@@ -113,20 +96,14 @@ public class VectorTest {
         Vector vector1 = Vector.of(0.0, 1.0);
         Vector vector2 = Vector.of(-1.0, -1.0, 33.5);
 
-        //Cannot subtract vectors of different dimensions.
-        assertThrows(IllegalArgumentException.class,
-            () -> vector1.minus(vector2)
-        );
+        // Cannot subtract vectors of different dimensions.
+        assertThrows(IllegalArgumentException.class, () -> vector1.minus(vector2));
     }
 
     @Test
     public void testScaledBy() {
         Vector vector = Vector.of(1.0, 2.0, -3.0);
-        assertArrayEquals(
-            new double[]{-2.0, -4.0, 6.0},
-            vector.times(-2.0).components(),
-            0.001
-        );
+        assertArrayEquals(new double[] {-2.0, -4.0, 6.0}, vector.times(-2.0).components(), 0.001);
     }
 
     @Test
@@ -141,10 +118,8 @@ public class VectorTest {
         Vector vector1 = Vector.of(0.0, 1.0);
         Vector vector2 = Vector.of(-1.0, -1.0, 33.5);
 
-        //Cannot take dot product of vectors of different dimensions.
-        assertThrows(IllegalArgumentException.class,
-            () -> vector1.dot(vector2)
-        );
+        // Cannot take dot product of vectors of different dimensions.
+        assertThrows(IllegalArgumentException.class, () -> vector1.dot(vector2));
     }
 
     @Test
@@ -160,7 +135,7 @@ public class VectorTest {
 
         double[] data = vec.components();
 
-        double originalValue = data[1]; //this operation should do nothing to original vec
+        double originalValue = data[1]; // this operation should do nothing to original vec
         data[1] = 66.0;
 
         double[] dataAfterChange = vec.components();
@@ -179,17 +154,13 @@ public class VectorTest {
     public void invalidComponentAccessFails_under() {
         Vector vec = Vector.of(1.0, 2.0, 3.0);
 
-        assertThrows(IndexOutOfBoundsException.class,
-            () -> vec.component(-1)
-        );
+        assertThrows(IndexOutOfBoundsException.class, () -> vec.component(-1));
     }
 
     @Test
     public void invalidComponentAccessFails_over() {
         Vector vec = Vector.of(1.0, 2.0, 3.0);
 
-        assertThrows(IndexOutOfBoundsException.class,
-            () -> vec.component(4)
-        );
+        assertThrows(IndexOutOfBoundsException.class, () -> vec.component(4));
     }
 }

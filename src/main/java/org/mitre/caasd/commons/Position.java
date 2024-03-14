@@ -35,10 +35,10 @@ public class Position implements HasTime, HasPosition {
 
     private final long epochTime;
 
-    //latitude kept independently for serialized form (i.e. not nested inside a LatLong instance)
+    // latitude kept independently for serialized form (i.e. not nested inside a LatLong instance)
     private final double latitude;
 
-    //longitude kept independently for serialized form (i.e. not nested inside a LatLong instance)
+    // longitude kept independently for serialized form (i.e. not nested inside a LatLong instance)
     private final double longitude;
 
     private final double altitudeInFeet;
@@ -64,11 +64,10 @@ public class Position implements HasTime, HasPosition {
      */
     public Position(Instant time, LatLong location, Distance altitude) {
         this(
-            time.toEpochMilli(),
-            location.latitude(),
-            location.longitude(),
-            nonNull(altitude) ? altitude.inFeet() : null
-        );
+                time.toEpochMilli(),
+                location.latitude(),
+                location.longitude(),
+                nonNull(altitude) ? altitude.inFeet() : null);
     }
 
     /**
@@ -146,9 +145,13 @@ public class Position implements HasTime, HasPosition {
     public int hashCode() {
         int hash = 3;
         hash = 23 * hash + (int) (this.epochTime ^ (this.epochTime >>> 32));
-        hash = 23 * hash + (int) (Double.doubleToLongBits(this.latitude) ^ (Double.doubleToLongBits(this.latitude) >>> 32));
-        hash = 23 * hash + (int) (Double.doubleToLongBits(this.longitude) ^ (Double.doubleToLongBits(this.longitude) >>> 32));
-        hash = 23 * hash + (int) (Double.doubleToLongBits(this.altitudeInFeet) ^ (Double.doubleToLongBits(this.altitudeInFeet) >>> 32));
+        hash = 23 * hash
+                + (int) (Double.doubleToLongBits(this.latitude) ^ (Double.doubleToLongBits(this.latitude) >>> 32));
+        hash = 23 * hash
+                + (int) (Double.doubleToLongBits(this.longitude) ^ (Double.doubleToLongBits(this.longitude) >>> 32));
+        hash = 23 * hash
+                + (int) (Double.doubleToLongBits(this.altitudeInFeet)
+                        ^ (Double.doubleToLongBits(this.altitudeInFeet) >>> 32));
         return hash;
     }
 
@@ -184,10 +187,7 @@ public class Position implements HasTime, HasPosition {
     }
 
     public static Builder builder(Position seed) {
-        return builder()
-            .time(seed.time())
-            .latLong(seed.latLong())
-            .altitude(seed.altitude());
+        return builder().time(seed.time()).latLong(seed.latLong()).altitude(seed.altitude());
     }
 
     public static class Builder {

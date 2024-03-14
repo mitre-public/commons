@@ -37,11 +37,10 @@ public class FunctionsTest {
 
     @Test
     public void testNoOpConsumer() {
-        //the NO_OP_CONSUMER should compile no matter where we use it
+        // the NO_OP_CONSUMER should compile no matter where we use it
         assertDoesNotThrow(() -> consumerMethod1(NO_OP_CONSUMER));
         assertDoesNotThrow(() -> consumerMethod2(NO_OP_CONSUMER));
     }
-
 
     public static boolean predicateMethod1(Predicate<Integer> filter) {
         return filter.test(5);

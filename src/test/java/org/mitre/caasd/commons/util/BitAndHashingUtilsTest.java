@@ -23,7 +23,6 @@ import static org.mitre.caasd.commons.util.BitAndHashingUtils.*;
 
 import org.junit.jupiter.api.Test;
 
-
 class BitAndHashingUtilsTest {
 
     private static String showHashInBinary(String str) {
@@ -31,14 +30,14 @@ class BitAndHashingUtilsTest {
         return Long.toBinaryString(hash);
     }
 
-    //exists to make tests more readable...
+    // exists to make tests more readable...
     private static String inBinary(long val) {
         return Long.toBinaryString(val);
     }
 
     @Test
     public void hashingToLongWorksAsExpected() {
-        //notice, we have good bit dispersion because we are working with a decent hash function
+        // notice, we have good bit dispersion because we are working with a decent hash function
         assertThat(showHashInBinary("a"), is("1011001101000101010000100110010110110110110111110111010111100011"));
         assertThat(showHashInBinary("aa"), is("1001111010000111111111111011101000010101100000000110010111000"));
         assertThat(showHashInBinary("b"), is("1010001110110010011000000010000101011110110010001111000100010110"));
@@ -62,7 +61,7 @@ class BitAndHashingUtilsTest {
         assertThat(inBinary(mask), is("11111"));
         assertThat(inBinary(nBits), is("10100"));
 
-        assertThat(mask, is(31L)); //1111 in binary = 15
+        assertThat(mask, is(31L)); // 1111 in binary = 15
         assertThat(allBits, is(not(nBits)));
         assertThat(nBits, is(allBits & mask));
     }
@@ -78,5 +77,4 @@ class BitAndHashingUtilsTest {
         assertThat(inBinary(twoBits), is("11"));
         assertThat(inBinary(threeBits), is("111"));
     }
-
 }

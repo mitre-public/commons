@@ -55,7 +55,7 @@ public interface OutputSink<T> extends Consumer<T>, Closeable, Flushable {
      */
     @Override
     default void flush() throws IOException {
-        //by default do nothing.
+        // by default do nothing.
     }
 
     /**
@@ -67,7 +67,7 @@ public interface OutputSink<T> extends Consumer<T>, Closeable, Flushable {
      */
     @Override
     default void close() throws IOException {
-        //by default do nothing.
+        // by default do nothing.
     }
 
     default OutputSink<T> andThen(OutputSink<T> after) {

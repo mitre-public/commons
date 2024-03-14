@@ -55,12 +55,11 @@ public class VisvalingamSplitter implements DataSplitter {
 
         XyDataset data = new XyDataset(xData, yData);
 
-        //identifies the most "visually important" points in the graph
+        // identifies the most "visually important" points in the graph
         XyDataset keyPoints = simplifier.simplify(data, IMPORTANT_TRIANGLE_THRESHOLD);
 
-        ArrayList<Integer> indicesOfKeyPoints = keyPoints.xData().stream()
-            .map(xValue -> xData.indexOf(xValue))
-            .collect(toCollection(ArrayList::new));
+        ArrayList<Integer> indicesOfKeyPoints =
+                keyPoints.xData().stream().map(xValue -> xData.indexOf(xValue)).collect(toCollection(ArrayList::new));
 
         /*
          * Increment the very last index value so you don't drop the very last piece of data.

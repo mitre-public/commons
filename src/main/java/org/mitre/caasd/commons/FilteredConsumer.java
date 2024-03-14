@@ -50,10 +50,8 @@ public class FilteredConsumer<T> implements Consumer<T>, Serializable {
      */
     public FilteredConsumer(Predicate<T> filter, Consumer<T> whenTrue) {
         this(
-            filter,
-            whenTrue,
-            inputItem -> {}  //discard items that fail the filter, basically /dev/null.
-        );
+                filter, whenTrue, inputItem -> {} // discard items that fail the filter, basically /dev/null.
+                );
     }
 
     /**

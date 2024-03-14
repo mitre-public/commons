@@ -55,18 +55,15 @@ class SuppliersTest {
 
         String randomFileName = UUID.randomUUID() + ".txt";
 
-        Supplier<String> fbs = Suppliers.fileBasedSupplier(
-            new File(randomFileName),
-            "thisIsAPropertyKey"
-        );
+        Supplier<String> fbs = Suppliers.fileBasedSupplier(new File(randomFileName), "thisIsAPropertyKey");
 
-        //this IllegalArgumentException is thrown because the "File parser" notices the File does not exist
+        // this IllegalArgumentException is thrown because the "File parser" notices the File does not exist
         assertThrows(IllegalArgumentException.class, () -> fbs.get());
     }
 
     @Test
     public void fileBasedSupplier_canBeBuildWithNullFile() {
-        //we don't want this to fail AT CONSTRUCTION...it can fail during use though
+        // we don't want this to fail AT CONSTRUCTION...it can fail during use though
         assertDoesNotThrow(() -> Suppliers.fileBasedSupplier(null, "propertyKey"));
     }
 
@@ -93,7 +90,7 @@ class SuppliersTest {
     @Test
     public void canPullFromSystemProps_noValueComesBackNull() {
 
-        //make a random key -- it obviously won't be in the system properties...so it should come back null
+        // make a random key -- it obviously won't be in the system properties...so it should come back null
         String key = UUID.randomUUID().toString();
         Supplier<String> sysPropSup = systemPropertySupplier(key);
         assertThat(sysPropSup.get(), nullValue());
@@ -118,7 +115,7 @@ class SuppliersTest {
     @Test
     public void canPullFromEnvironmentVars_noValueComesBackNull() {
 
-        //make a random key -- it obviously won't be in the system properties...so it should come back null
+        // make a random key -- it obviously won't be in the system properties...so it should come back null
         String key = UUID.randomUUID().toString();
         Supplier<String> environmentVarSup = environmentVarSupplier(key);
         assertThat(environmentVarSup.get(), nullValue());

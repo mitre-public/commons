@@ -49,9 +49,9 @@ class Search<KEY, VALUE> {
 
     private final KEY searchKey;
 
-    private final int maxNumResults; //only used for kNN searches
+    private final int maxNumResults; // only used for kNN searches
 
-    private final double fixedRadius; //only used for range searches
+    private final double fixedRadius; // only used for range searches
 
     private final PriorityQueue<SearchResult<KEY, VALUE>> queue;
 
@@ -100,7 +100,7 @@ class Search<KEY, VALUE> {
 
             MetricTree<KEY, VALUE>.Sphere currentNode = stackOfNodesToSearch.pop();
 
-            //ignore this node (and all its sub-trees) when it cannot improve the current result
+            // ignore this node (and all its sub-trees) when it cannot improve the current result
             if (!this.overlapsWith(currentNode)) {
                 continue;
             }
@@ -109,15 +109,12 @@ class Search<KEY, VALUE> {
                 ingestSphereOfPoints(currentNode);
             } else {
 
-                Pair<MetricTree<KEY, VALUE>.Sphere, MetricTree<KEY, VALUE>.Sphere> childSpheres = currentNode.children();
+                Pair<MetricTree<KEY, VALUE>.Sphere, MetricTree<KEY, VALUE>.Sphere> childSpheres =
+                        currentNode.children();
 
-                double firstDist = metric.distanceBtw(
-                    searchKey,
-                    childSpheres.first().centerPoint);
+                double firstDist = metric.distanceBtw(searchKey, childSpheres.first().centerPoint);
 
-                double secondDist = metric.distanceBtw(
-                    searchKey,
-                    childSpheres.second().centerPoint);
+                double secondDist = metric.distanceBtw(searchKey, childSpheres.second().centerPoint);
 
                 /*
                  * Submit the closest sphere second to reduce work (because this increases the
@@ -125,10 +122,10 @@ class Search<KEY, VALUE> {
                  */
                 if (firstDist < secondDist) {
                     stackOfNodesToSearch.push(childSpheres.second());
-                    stackOfNodesToSearch.push(childSpheres.first()); //will be popped first
+                    stackOfNodesToSearch.push(childSpheres.first()); // will be popped first
                 } else {
                     stackOfNodesToSearch.push(childSpheres.first());
-                    stackOfNodesToSearch.push(childSpheres.second()); //will be popped second
+                    stackOfNodesToSearch.push(childSpheres.second()); // will be popped second
                 }
             }
         }
@@ -138,17 +135,16 @@ class Search<KEY, VALUE> {
 
         for (Map.Entry<KEY, VALUE> entry : inputSphere.points()) {
 
-            SearchResult<KEY, VALUE> r = new SearchResult<>(entry.getKey(),
-                entry.getValue(),
-                metric.distanceBtw(searchKey, entry.getKey()));
+            SearchResult<KEY, VALUE> r =
+                    new SearchResult<>(entry.getKey(), entry.getValue(), metric.distanceBtw(searchKey, entry.getKey()));
 
             if (r.distance <= this.radius()) {
 
                 this.queue.offer(r);
 
-                //enforce the "k" in kNN search
+                // enforce the "k" in kNN search
                 if (queue.size() > this.maxNumResults) {
-                    //if too big, remove the worst result
+                    // if too big, remove the worst result
                     queue.poll();
                 }
             }
@@ -173,13 +169,13 @@ class Search<KEY, VALUE> {
 
         if (type == SearchType.K_NEAREST_NEIGHBORS) {
             if (queue.size() < maxNumResults) {
-                //radius is still large because we haven't found "k" results yet
+                // radius is still large because we haven't found "k" results yet
                 return Double.POSITIVE_INFINITY;
             } else {
-                return queue.peek().distance; //must beat this to improve
+                return queue.peek().distance; // must beat this to improve
             }
         } else if (type == SearchType.RANGE) {
-            return this.fixedRadius;  //includes everything within this radius
+            return this.fixedRadius; // includes everything within this radius
         } else {
             throw new AssertionError("Should never get here");
         }

@@ -48,7 +48,8 @@ public class ExceptionCatchingCleaner<T> implements DataCleaner<T> {
      *                     useful error messages given what type of data is being cleaned.
      * @param errorHandler Catches any exceptions thrown during data cleaning.
      */
-    public ExceptionCatchingCleaner(DataCleaner<T> cleaner, ToStringFunction<T> toString, ExceptionHandler errorHandler) {
+    public ExceptionCatchingCleaner(
+            DataCleaner<T> cleaner, ToStringFunction<T> toString, ExceptionHandler errorHandler) {
         this.cleaner = checkNotNull(cleaner);
         this.messageMaker = checkNotNull(toString);
         this.errorHandler = checkNotNull(errorHandler);
@@ -63,11 +64,7 @@ public class ExceptionCatchingCleaner<T> implements DataCleaner<T> {
      * @param cleaner An existing DataCleaner
      */
     public ExceptionCatchingCleaner(DataCleaner<T> cleaner) {
-        this(
-            cleaner,
-            (T item) -> item.toString(),
-            new SequentialFileWriter("caughtInDataCleaning")
-        );
+        this(cleaner, (T item) -> item.toString(), new SequentialFileWriter("caughtInDataCleaning"));
     }
 
     /**

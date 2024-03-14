@@ -104,10 +104,7 @@ public class IdFactoryShard implements IdFactory<SmallTimeId> {
         checkArgument(shardIndex >= 0, "The shardIndex cannot be negative");
         checkArgument(totalShardCount >= 1, "The totalShardCount must be at least 1");
         checkArgument(numBitsRequiredFor(totalShardCount) < NUM_BITS_FOR_DISTINGUISHING_ITEMS);
-        checkArgument(
-            shardIndex < totalShardCount,
-            "The shardIndex must be smaller than totalShardCount"
-        );
+        checkArgument(shardIndex < totalShardCount, "The shardIndex must be smaller than totalShardCount");
         requireNonNull(countKeeper);
 
         this.shardIndex = shardIndex;
@@ -180,11 +177,10 @@ public class IdFactoryShard implements IdFactory<SmallTimeId> {
 
         if (count >= limitTimeIdsPerEpochMills) {
             throw new NoSuchElementException(
-                "Too many requests (" + count + ") for a TimeId at: " + time.toString() + " have "
-                    + "been made. Only" + numBitsForItemDistinction + " bits are allocated to "
-                    + " store the counter therefore a limit of " + limitTimeIdsPerEpochMills
-                    + " is imposed"
-            );
+                    "Too many requests (" + count + ") for a TimeId at: " + time.toString() + " have "
+                            + "been made. Only" + numBitsForItemDistinction + " bits are allocated to "
+                            + " store the counter therefore a limit of " + limitTimeIdsPerEpochMills
+                            + " is imposed");
         } else {
             long shardBits = ((long) shardIndex) << this.numBitsForItemDistinction;
             long itemBits = count;
@@ -255,9 +251,11 @@ public class IdFactoryShard implements IdFactory<SmallTimeId> {
         @Override
         public int nextCountFor(Instant timestamp) {
             return timeCounts.merge(
-                timestamp.toEpochMilli(), 1,  //when not set:  seed with these values
-                Integer::sum    //otherwise:     update existing count with this func
-            ) - 1;
+                            timestamp.toEpochMilli(),
+                            1, // when not set:  seed with these values
+                            Integer::sum // otherwise:     update existing count with this func
+                            )
+                    - 1;
         }
     }
 
@@ -290,8 +288,7 @@ public class IdFactoryShard implements IdFactory<SmallTimeId> {
 
             if (timestamp.toEpochMilli() <= lastEvictedTime) {
                 throw new IllegalStateException(
-                    "Cannot generate count for: " + timestamp + ", it occurs too far in the past"
-                );
+                        "Cannot generate count for: " + timestamp + ", it occurs too far in the past");
             }
 
             int count = timeCounts.merge(timestamp.toEpochMilli(), 1, Integer::sum);

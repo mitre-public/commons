@@ -76,8 +76,6 @@ public class DataFilter<T> implements DataCleaner<T> {
             onRemoval.accept(input);
         }
 
-        return (filterAccepts)
-            ? Optional.of(input)
-            : Optional.empty();
+        return (filterAccepts) ? Optional.of(input) : Optional.empty();
     }
 }

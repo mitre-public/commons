@@ -35,9 +35,9 @@ public class NeighborIteratorTest {
         NeighborIterator<Integer> neighborIterator = new NeighborIterator(numbers.iterator());
 
         assertThat(neighborIterator.hasNext(), is(true));
-        neighborIterator.next(); //1 & 2
+        neighborIterator.next(); // 1 & 2
         assertThat(neighborIterator.hasNext(), is(true));
-        neighborIterator.next(); //2 & 3
+        neighborIterator.next(); // 2 & 3
         assertThat(neighborIterator.hasNext(), is(false));
     }
 
@@ -71,12 +71,11 @@ public class NeighborIteratorTest {
         NeighborIterator<Integer> neighborIterator = new NeighborIterator(numbers.iterator());
 
         assertThat(neighborIterator.hasNext(), is(true));
-        neighborIterator.next(); //1 & null
+        neighborIterator.next(); // 1 & null
         assertThat(neighborIterator.hasNext(), is(true));
-        neighborIterator.next(); //null & 3
+        neighborIterator.next(); // null & 3
         assertThat(neighborIterator.hasNext(), is(false));
     }
-
 
     @Test
     public void nextGivesExpectedElement() {

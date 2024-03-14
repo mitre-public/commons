@@ -90,8 +90,8 @@ public class Histogram {
         for (double score : dataInput) {
             double fraction = (score - min) / (max - min);
             int bucket = (int) (numColumns * fraction);
-            bucket = Math.min(numColumns - 1, bucket); //correct data that is above the max
-            bucket = Math.max(0, bucket); //correct data that is below the min
+            bucket = Math.min(numColumns - 1, bucket); // correct data that is above the max
+            bucket = Math.max(0, bucket); // correct data that is below the min
             columnCounts[bucket]++;
         }
 
@@ -135,14 +135,12 @@ public class Histogram {
         for (int i = 0; i < numColumns; i++) {
             currentExcessOrDearth += percentages1[i] - percentages2[i];
             totalEarthMoved += Math.abs(currentExcessOrDearth);
-
         }
-        //use remaining excessOrDeath to check if the input arrays had equal sums
+        // use remaining excessOrDeath to check if the input arrays had equal sums
         checkArgument(
-            fuzzyEquals(currentExcessOrDearth, 0.0, 0.0005),
-            "FAILURE: Earth Mover Distance does not work when the input arrays have different sums, "
-                + "the difference was: " + currentExcessOrDearth
-        );
+                fuzzyEquals(currentExcessOrDearth, 0.0, 0.0005),
+                "FAILURE: Earth Mover Distance does not work when the input arrays have different sums, "
+                        + "the difference was: " + currentExcessOrDearth);
 
         return totalEarthMoved;
     }
@@ -189,21 +187,21 @@ public class Histogram {
         checkIndexBounds(i);
 
         String minSide = (i == 0)
-            ? format("-[%." + (digitsAfterDecimalPlace) + "f", floorOfColumn(i))
-            : format("[%." + (digitsAfterDecimalPlace) + "f", floorOfColumn(i));
+                ? format("-[%." + (digitsAfterDecimalPlace) + "f", floorOfColumn(i))
+                : format("[%." + (digitsAfterDecimalPlace) + "f", floorOfColumn(i));
 
         String maxSide = (i == numColumns - 1)
-            ? format("%." + (digitsAfterDecimalPlace) + "f]+", ceilingOfColumn(i))
-            : format("%." + (digitsAfterDecimalPlace) + "f]", ceilingOfColumn(i));
+                ? format("%." + (digitsAfterDecimalPlace) + "f]+", ceilingOfColumn(i))
+                : format("%." + (digitsAfterDecimalPlace) + "f]", ceilingOfColumn(i));
 
         String count = " : " + counts[i];
 
         return new StringBuilder()
-            .append(minSide)
-            .append("-")
-            .append(maxSide)
-            .append(count)
-            .toString();
+                .append(minSide)
+                .append("-")
+                .append(maxSide)
+                .append(count)
+                .toString();
     }
 
     public double floorOfColumn(int i) {
@@ -267,10 +265,8 @@ public class Histogram {
         public <T> Builder fromCollection(Collection<T> data, Function<T, Double> dataScorer) {
             checkState(isNull(this.data), "Data import was already set");
 
-            List<Double> scoredData = data.stream()
-                .map(dataScorer)
-                .filter(Objects::nonNull)
-                .collect(toList());
+            List<Double> scoredData =
+                    data.stream().map(dataScorer).filter(Objects::nonNull).collect(toList());
 
             this.data = Doubles.toArray(scoredData);
 

@@ -124,8 +124,7 @@ public class MapBuilder {
 
     public MapBuilder useLocalDiskCaching(Duration cacheRetention) {
         requireNonNull(cacheRetention);
-        checkArgument(cacheRetention.getSeconds() > 0,
-            "cacheRetention must be greater than 0 seconds");
+        checkArgument(cacheRetention.getSeconds() > 0, "cacheRetention must be greater than 0 seconds");
         this.useDiskCaching = true;
         this.cacheRetention = cacheRetention;
         return this;
@@ -170,9 +169,7 @@ public class MapBuilder {
      */
     public <T> MapBuilder addFeatures(Collection<T> objects, Function<T, MapFeature> renderer) {
 
-        List<MapFeature> asMapFeatures = objects.stream()
-            .map(renderer)
-            .collect(Collectors.toList());
+        List<MapFeature> asMapFeatures = objects.stream().map(renderer).collect(Collectors.toList());
 
         return addFeatures(asMapFeatures);
     }
@@ -185,17 +182,15 @@ public class MapBuilder {
         requireNonNull(tileServer, "tileServer cannot be null");
         requireNonNull(center, "center cannot be null");
 
-        //Width must be set be exactly once
-        if(isNull(distanceWidth) && isNull(pixelWidth)) {
+        // Width must be set be exactly once
+        if (isNull(distanceWidth) && isNull(pixelWidth)) {
             throw new NullPointerException("The width not set");
         }
 
-        //add caching if requested...
-        TileServer source = (useDiskCaching)
-            ? new LocallyCachingTileServer(tileServer, cacheRetention)
-            : tileServer;
+        // add caching if requested...
+        TileServer source = (useDiskCaching) ? new LocallyCachingTileServer(tileServer, cacheRetention) : tileServer;
 
-        if(nonNull(distanceWidth)) {
+        if (nonNull(distanceWidth)) {
             return new MapImage(source, center, distanceWidth);
         } else {
             return new MapImage(source, center, pixelWidth, zoomLevel);

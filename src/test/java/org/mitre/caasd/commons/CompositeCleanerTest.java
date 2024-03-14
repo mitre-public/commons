@@ -28,29 +28,25 @@ import org.junit.jupiter.api.Test;
 
 public class CompositeCleanerTest {
 
-    //an example DataCleaner that ONLY works on Integers
+    // an example DataCleaner that ONLY works on Integers
     static class RemoveOddIntegers implements DataCleaner<Integer> {
 
         @Override
         public Optional<Integer> clean(Integer number) {
-            return (number % 2 == 1)
-                ? Optional.empty()
-                : Optional.of(number);
+            return (number % 2 == 1) ? Optional.empty() : Optional.of(number);
         }
     }
 
-    //an example DataCleaner that ONLY works on Integers
+    // an example DataCleaner that ONLY works on Integers
     static class RemoveNegativeIntegers implements DataCleaner<Integer> {
 
         @Override
         public Optional<Integer> clean(Integer number) {
-            return (number < 0)
-                ? Optional.empty()
-                : Optional.of(number);
+            return (number < 0) ? Optional.empty() : Optional.of(number);
         }
     }
 
-    //an example DataCleaner that ONLY works on Doubles
+    // an example DataCleaner that ONLY works on Doubles
     static class TruncateDouble implements DataCleaner<Double> {
 
         @Override
@@ -59,14 +55,12 @@ public class CompositeCleanerTest {
         }
     }
 
-    //an example DataCleaner that works on all Numbers
+    // an example DataCleaner that works on all Numbers
     static class RemoveNegativeNumbers implements DataCleaner<Number> {
 
         @Override
         public Optional<Number> clean(Number number) {
-            return (number.doubleValue() < 0)
-                ? Optional.empty()
-                : Optional.of(number);
+            return (number.doubleValue() < 0) ? Optional.empty() : Optional.of(number);
         }
     }
 
@@ -87,10 +81,7 @@ public class CompositeCleanerTest {
     @Test
     public void testConstructor_2() {
 
-        CompositeCleaner<Integer> cleaner = CompositeCleaner.of(
-            new RemoveOddIntegers(),
-            new RemoveNegativeNumbers()
-        );
+        CompositeCleaner<Integer> cleaner = CompositeCleaner.of(new RemoveOddIntegers(), new RemoveNegativeNumbers());
 
         assertThat(cleaner.clean(12).get(), is(12));
         assertThat(cleaner.clean(11), is(Optional.empty()));
@@ -100,11 +91,8 @@ public class CompositeCleanerTest {
     @Test
     public void testBulkClean_onlyIntegers() {
 
-        //Note: both of these DataCleaners are DataCleaner<Integer>
-        CompositeCleaner<Integer> cleaner = CompositeCleaner.of(
-            new RemoveOddIntegers(),
-            new RemoveNegativeIntegers()
-        );
+        // Note: both of these DataCleaners are DataCleaner<Integer>
+        CompositeCleaner<Integer> cleaner = CompositeCleaner.of(new RemoveOddIntegers(), new RemoveNegativeIntegers());
 
         List<Integer> list = newArrayList(-2, -1, 0, 1, 2, 3, 4);
 
@@ -119,11 +107,8 @@ public class CompositeCleanerTest {
     @Test
     public void testBulkClean_compatibleGenericTypes() {
 
-        //Note: One DataCleaner is a DataCleaner<Integer> and the other is a DataCleaner<Number>
-        CompositeCleaner<Integer> cleaner = CompositeCleaner.of(
-            new RemoveOddIntegers(),
-            new RemoveNegativeNumbers()
-        );
+        // Note: One DataCleaner is a DataCleaner<Integer> and the other is a DataCleaner<Number>
+        CompositeCleaner<Integer> cleaner = CompositeCleaner.of(new RemoveOddIntegers(), new RemoveNegativeNumbers());
 
         List<Integer> list = newArrayList(-2, -1, 0, 1, 2, 3, 4);
 

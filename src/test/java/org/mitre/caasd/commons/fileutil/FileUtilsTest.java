@@ -51,10 +51,7 @@ public class FileUtilsTest {
         String fileName = "doesThisFileGetWrittenProperly.gz";
         String fileContents = "this text goes inside the file";
 
-        assertThat(
-            "The file should not exist at the beginning of the test",
-            new File(fileName).exists(), is(false)
-        );
+        assertThat("The file should not exist at the beginning of the test", new File(fileName).exists(), is(false));
 
         FileUtils.writeToNewGzFile(fileName, fileContents);
 
@@ -63,22 +60,17 @@ public class FileUtilsTest {
         BufferedReader reader = FileUtils.createReaderFor(new File(fileName));
 
         assertThat(
-            "The file should have the expected contents",
-            reader.readLine().equals(fileContents)
-        );
-        assertThat(
-            "That should have been the only line",
-            reader.readLine() == null
-        );
+                "The file should have the expected contents", reader.readLine().equals(fileContents));
+        assertThat("That should have been the only line", reader.readLine() == null);
 
         reader.close();
 
-        new File(fileName).delete(); //clean up
+        new File(fileName).delete(); // clean up
     }
 
     @Test
     public void testDeserializeViaInputStream() {
-        //This file can be found in the resource folder
+        // This file can be found in the resource folder
         String TEST_FILE = "serializedArrayListOfTenDoubles.ser";
         InputStream stream = getClass().getResourceAsStream(TEST_FILE);
 
@@ -98,15 +90,13 @@ public class FileUtilsTest {
 
         File file = new File("ThisFileDoesnotExist.txt");
 
-        //should throw an IllegalArgumentException because the file didn't exist
-        assertThrows(IllegalArgumentException.class,
-            () -> deserialize(file)
-        );
+        // should throw an IllegalArgumentException because the file didn't exist
+        assertThrows(IllegalArgumentException.class, () -> deserialize(file));
     }
 
     @Test
     public void testGetResourceFile() throws Exception {
-        //we cannot just use: "findMe.txt" because this method isn't based off a particular class
+        // we cannot just use: "findMe.txt" because this method isn't based off a particular class
         File file = getResourceFile("org/mitre/caasd/commons/fileutil/findMe.txt");
 
         List<String> lines = Files.readAllLines(file.toPath());
@@ -116,10 +106,8 @@ public class FileUtilsTest {
 
     @Test
     public void testGetResourceFile_missingResource() {
-        //"Should fail because the request resource doesnt exist
-        assertThrows(IllegalArgumentException.class,
-            () -> getResourceFile("thisFileDoesntExist.missing")
-        );
+        // "Should fail because the request resource doesnt exist
+        assertThrows(IllegalArgumentException.class, () -> getResourceFile("thisFileDoesntExist.missing"));
     }
 
     @Test
@@ -129,9 +117,7 @@ public class FileUtilsTest {
 
         assertTrue(rejectFile.exists());
 
-        assertThrows(IllegalArgumentException.class,
-            () -> FileUtils.getProperties(rejectFile)
-        );
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.getProperties(rejectFile));
     }
 
     @Test

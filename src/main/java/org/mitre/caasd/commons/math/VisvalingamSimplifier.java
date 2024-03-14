@@ -65,48 +65,44 @@ public class VisvalingamSimplifier {
 
         ArrayList<XyPoint> points = dataset.asXyPointList();
 
-        //step 1 -- pipe all the x-y  data to a serachable linked dataset
+        // step 1 -- pipe all the x-y  data to a serachable linked dataset
         HashedLinkedSequence<XyPoint> hashedSequence = newHashedLinkedSequence(points);
 
-        //step 2 -- Create initial triangles
+        // step 2 -- Create initial triangles
         PriorityQueue<Triangle> triangleQueue = initalizeTriangles(points);
 
-        //step 3 -- repeatedly remove the centerPoint from triangle's with small areas
+        // step 3 -- repeatedly remove the centerPoint from triangle's with small areas
         while (!triangleQueue.isEmpty() && triangleQueue.peek().area < removalThreshold) {
 
             Triangle lowAreaTriangle = triangleQueue.poll();
 
-            //do nothing if the lowAreaTriangle is invalid because one of its points has already been removed
+            // do nothing if the lowAreaTriangle is invalid because one of its points has already been removed
             if (!hashedSequence.containsAll(lowAreaTriangle.points())) {
                 continue;
             }
 
             XyPoint pointToRemove = lowAreaTriangle.center;
-            XyPoint left = hashedSequence.getElementBefore(pointToRemove); //always non-null
-            XyPoint right = hashedSequence.getElementAfter(pointToRemove); //always non-null
+            XyPoint left = hashedSequence.getElementBefore(pointToRemove); // always non-null
+            XyPoint right = hashedSequence.getElementAfter(pointToRemove); // always non-null
 
-            XyPoint leftOfLeft = (left == hashedSequence.getFirst())
-                ? null
-                : hashedSequence.getElementBefore(left);
+            XyPoint leftOfLeft = (left == hashedSequence.getFirst()) ? null : hashedSequence.getElementBefore(left);
 
-            XyPoint rightOfRight = (right == hashedSequence.getLast())
-                ? null
-                : hashedSequence.getElementAfter(right);
+            XyPoint rightOfRight = (right == hashedSequence.getLast()) ? null : hashedSequence.getElementAfter(right);
 
             hashedSequence.remove(lowAreaTriangle.center);
 
-            //add the new leftside Triangle
+            // add the new leftside Triangle
             if (leftOfLeft != null) {
                 triangleQueue.add(new Triangle(leftOfLeft, left, right));
             } else {
-                //We just removed Point B from ABCDEFGHIJKL..., so there is no new leftside Triangle
+                // We just removed Point B from ABCDEFGHIJKL..., so there is no new leftside Triangle
             }
 
-            //add the new rightside Triangle
+            // add the new rightside Triangle
             if (rightOfRight != null) {
                 triangleQueue.add(new Triangle(left, right, rightOfRight));
             } else {
-                //We just removed Point Y from ...NOPQRSTUVWXYZ, so there is no new rightside Triangle
+                // We just removed Point Y from ...NOPQRSTUVWXYZ, so there is no new rightside Triangle
             }
         }
 
@@ -117,11 +113,7 @@ public class VisvalingamSimplifier {
     private PriorityQueue<Triangle> initalizeTriangles(ArrayList<XyPoint> points) {
         PriorityQueue<Triangle> triangleQueue = new PriorityQueue<>();
         for (int i = 1; i < points.size() - 1; i++) {
-            Triangle tri = new Triangle(
-                points.get(i - 1),
-                points.get(i),
-                points.get(i + 1)
-            );
+            Triangle tri = new Triangle(points.get(i - 1), points.get(i), points.get(i + 1));
             triangleQueue.add(tri);
         }
         return triangleQueue;
@@ -173,7 +165,7 @@ public class VisvalingamSimplifier {
         double slope = rise / width;
         double predictedCenterY = slope * (center.x - left.x) + left.y;
 
-        //spacing between a perfect straight line from left to right and the actual center xyPoint
+        // spacing between a perfect straight line from left to right and the actual center xyPoint
         double error = abs(center.y - predictedCenterY);
 
         return .5 * error * width; // .5 because these are triangles
@@ -200,10 +192,9 @@ public class VisvalingamSimplifier {
         double zSlope = zDelta / width;
         double predictedCenterZ = zSlope * (center.x - left.x) + left.z;
 
-        //spacing between a perfect straight line from left to right and the actual center xyzPoint
+        // spacing between a perfect straight line from left to right and the actual center xyzPoint
         double error = hypot(center.y - predictedCenterY, center.z - predictedCenterZ);
 
         return .5 * error * width; // .5 because these are triangles
     }
-
 }

@@ -38,10 +38,7 @@ public class TimeWindowTest {
         /*
          * Confirm the constructor and the data access methods are properly aligned.
          */
-        TimeWindow sample = new TimeWindow(
-            Instant.EPOCH,
-            Instant.EPOCH.plusSeconds(1)
-        );
+        TimeWindow sample = new TimeWindow(Instant.EPOCH, Instant.EPOCH.plusSeconds(1));
 
         assertThat(Instant.EPOCH, is(sample.start()));
 
@@ -50,7 +47,7 @@ public class TimeWindowTest {
 
     @Test
     public void testSingleInstantWindow() {
-        //this should be possible
+        // this should be possible
         TimeWindow sample = new TimeWindow(Instant.EPOCH, Instant.EPOCH);
 
         assertTrue(sample.contains(Instant.EPOCH));
@@ -64,9 +61,8 @@ public class TimeWindowTest {
             TimeWindow.of(Instant.EPOCH.plusSeconds(1), Instant.EPOCH);
             fail("The above call should fail because the inputs are out of order");
         } catch (IllegalArgumentException iae) {
-            assertTrue(iae.getMessage().contains(
-                "The start of a TimeWindow cannot come after the end of a TimeWindow"
-            ));
+            assertTrue(
+                    iae.getMessage().contains("The start of a TimeWindow cannot come after the end of a TimeWindow"));
         }
     }
 
@@ -77,9 +73,7 @@ public class TimeWindowTest {
             TimeWindow.of(null, Instant.EPOCH);
             fail("The above call should fail because the 1st input is null");
         } catch (NullPointerException npe) {
-            assertTrue(npe.getMessage().contains(
-                "The start of the time window cannot be null"
-            ));
+            assertTrue(npe.getMessage().contains("The start of the time window cannot be null"));
         }
     }
 
@@ -90,33 +84,23 @@ public class TimeWindowTest {
             TimeWindow.of(Instant.EPOCH, null);
             fail("The above call should fail because the 2nd input is null");
         } catch (NullPointerException npe) {
-            assertTrue(npe.getMessage().contains(
-                "The end of the time window cannot be null"
-            ));
+            assertTrue(npe.getMessage().contains("The end of the time window cannot be null"));
         }
     }
 
     @Test
     public void testConstructorOfZeroLengthWindow() {
-        //verify that this is doable
-        assertDoesNotThrow(
-            () -> TimeWindow.of(Instant.EPOCH, Instant.EPOCH)
-        );
+        // verify that this is doable
+        assertDoesNotThrow(() -> TimeWindow.of(Instant.EPOCH, Instant.EPOCH));
     }
 
     @Test
     public void testStaticConstructor() {
         TimeWindow sample = TimeWindow.of(Instant.EPOCH, Instant.EPOCH.plusSeconds(1));
 
-        assertEquals(
-            Instant.EPOCH,
-            sample.start()
-        );
+        assertEquals(Instant.EPOCH, sample.start());
 
-        assertEquals(
-            Instant.EPOCH.plusSeconds(1),
-            sample.end()
-        );
+        assertEquals(Instant.EPOCH.plusSeconds(1), sample.end());
     }
 
     @Test
@@ -126,12 +110,13 @@ public class TimeWindowTest {
         assertThat("The beginning is contained", instance.contains(Instant.EPOCH), is(true));
         assertThat("The end is contained", instance.contains(Instant.EPOCH.plusSeconds(120)), is(true));
         assertThat(
-            "Just prior to the beginning is not contained",
-            instance.contains(Instant.EPOCH.minusNanos(1)), is(false)
-        );
-        assertThat("Just after the end is not contained",
-            instance.contains(Instant.EPOCH.plusSeconds(120).plusNanos(1)), is(false)
-        );
+                "Just prior to the beginning is not contained",
+                instance.contains(Instant.EPOCH.minusNanos(1)),
+                is(false));
+        assertThat(
+                "Just after the end is not contained",
+                instance.contains(Instant.EPOCH.plusSeconds(120).plusNanos(1)),
+                is(false));
     }
 
     @Test
@@ -141,21 +126,15 @@ public class TimeWindowTest {
 
         String fileName = "testTimeWindow.ser";
 
-        assertThat(
-            "The file we are serilizing to should not exists yet",
-            new File(fileName).exists(), is(false)
-        );
+        assertThat("The file we are serilizing to should not exists yet", new File(fileName).exists(), is(false));
 
         FileUtils.serialize(original, fileName);
 
-        assertThat(
-            "The file we serilized to should now exist",
-            new File(fileName).exists(), is(true)
-        );
+        assertThat("The file we serilized to should now exist", new File(fileName).exists(), is(true));
 
         TimeWindow deserializedTimeWindow = (TimeWindow) FileUtils.deserialize(new File(fileName));
 
-        //confirm a fields are the same..
+        // confirm a fields are the same..
         assertEquals(original.start(), deserializedTimeWindow.start());
         assertEquals(original.end(), deserializedTimeWindow.end());
 
@@ -166,14 +145,8 @@ public class TimeWindowTest {
     public void testLength() {
         TimeWindow original = TimeWindow.of(Instant.EPOCH, Instant.EPOCH.plusSeconds(120));
 
-        assertEquals(
-            120,
-            original.duration().getSeconds()
-        );
-        assertEquals(
-            120 * 1000,
-            original.duration().toMillis()
-        );
+        assertEquals(120, original.duration().getSeconds());
+        assertEquals(120 * 1000, original.duration().toMillis());
     }
 
     @Test
@@ -206,34 +179,28 @@ public class TimeWindowTest {
         TimeWindow subset = TimeWindow.of(Instant.EPOCH.plusSeconds(1), Instant.EPOCH.plusSeconds(119));
 
         assertEquals(
-            TimeWindow.of(Instant.EPOCH, Instant.EPOCH.plusSeconds(60)),
-            all.getOverlapWith(firstHalf).get()
-        );
+                TimeWindow.of(Instant.EPOCH, Instant.EPOCH.plusSeconds(60)),
+                all.getOverlapWith(firstHalf).get());
         assertEquals(
-            TimeWindow.of(Instant.EPOCH, Instant.EPOCH.plusSeconds(60)),
-            firstHalf.getOverlapWith(all).get()
-        );
+                TimeWindow.of(Instant.EPOCH, Instant.EPOCH.plusSeconds(60)),
+                firstHalf.getOverlapWith(all).get());
 
         assertEquals(
-            TimeWindow.of(Instant.EPOCH.plusSeconds(60), Instant.EPOCH.plusSeconds(120)),
-            all.getOverlapWith(secondHalf).get()
-        );
+                TimeWindow.of(Instant.EPOCH.plusSeconds(60), Instant.EPOCH.plusSeconds(120)),
+                all.getOverlapWith(secondHalf).get());
         assertEquals(
-            TimeWindow.of(Instant.EPOCH.plusSeconds(60), Instant.EPOCH.plusSeconds(120)),
-            secondHalf.getOverlapWith(all).get()
-        );
+                TimeWindow.of(Instant.EPOCH.plusSeconds(60), Instant.EPOCH.plusSeconds(120)),
+                secondHalf.getOverlapWith(all).get());
 
         assertTrue(firstHalf.getOverlapWith(secondHalf).isPresent());
         assertTrue(secondHalf.getOverlapWith(firstHalf).isPresent());
 
         assertEquals(
-            TimeWindow.of(Instant.EPOCH.plusSeconds(1), Instant.EPOCH.plusSeconds(119)),
-            all.getOverlapWith(subset).get()
-        );
+                TimeWindow.of(Instant.EPOCH.plusSeconds(1), Instant.EPOCH.plusSeconds(119)),
+                all.getOverlapWith(subset).get());
         assertEquals(
-            TimeWindow.of(Instant.EPOCH.plusSeconds(1), Instant.EPOCH.plusSeconds(119)),
-            subset.getOverlapWith(all).get()
-        );
+                TimeWindow.of(Instant.EPOCH.plusSeconds(1), Instant.EPOCH.plusSeconds(119)),
+                subset.getOverlapWith(all).get());
     }
 
     @Test
@@ -242,24 +209,24 @@ public class TimeWindowTest {
         TimeWindow window1 = TimeWindow.of(Instant.EPOCH, Instant.EPOCH.plusSeconds(60));
         TimeWindow window2 = TimeWindow.of(Instant.EPOCH.plusSeconds(60), Instant.EPOCH.plusSeconds(120));
 
-        //do this twice, changing argument order each time
+        // do this twice, changing argument order each time
         assertThat(
-            "The overlap contains a single instant, but it does exist",
-            window1.getOverlapWith(window2).isPresent(), is(true)
-        );
+                "The overlap contains a single instant, but it does exist",
+                window1.getOverlapWith(window2).isPresent(),
+                is(true));
         assertThat(
-            "The overlap contains a single instant, but it does exist",
-            window2.getOverlapWith(window1).isPresent(), is(true)
-        );
-        //do this twice, changing argument order each time
+                "The overlap contains a single instant, but it does exist",
+                window2.getOverlapWith(window1).isPresent(),
+                is(true));
+        // do this twice, changing argument order each time
         assertThat(
-            "The overlap contains a single instant, but it does exist",
-            window1.getOverlapWith(window2).get().duration(), is(Duration.ZERO)
-        );
+                "The overlap contains a single instant, but it does exist",
+                window1.getOverlapWith(window2).get().duration(),
+                is(Duration.ZERO));
         assertThat(
-            "The overlap contains a single instant, but it does exist",
-            window2.getOverlapWith(window1).get().duration(), is(Duration.ZERO)
-        );
+                "The overlap contains a single instant, but it does exist",
+                window2.getOverlapWith(window1).get().duration(),
+                is(Duration.ZERO));
     }
 
     @Test
@@ -315,9 +282,9 @@ public class TimeWindowTest {
         assertTrue(window2.contains(time3));
 
         assertThat(
-            "If both windows include time2 then both TimeWindows should overlap",
-            window1.overlapsWith(window2), is(true)
-        );
+                "If both windows include time2 then both TimeWindows should overlap",
+                window1.overlapsWith(window2),
+                is(true));
     }
 
     @Test
@@ -346,27 +313,15 @@ public class TimeWindowTest {
 
         TimeWindow window = TimeWindow.of(time1, time2);
 
-        assertEquals(
-            Instant.EPOCH,
-            window.instantWithin(0.0)
-        );
-        assertEquals(
-            Instant.EPOCH.plusSeconds(30),
-            window.instantWithin(1.0)
-        );
-        assertEquals(
-            Instant.EPOCH.plusSeconds(15),
-            window.instantWithin(0.5)
-        );
+        assertEquals(Instant.EPOCH, window.instantWithin(0.0));
+        assertEquals(Instant.EPOCH.plusSeconds(30), window.instantWithin(1.0));
+        assertEquals(Instant.EPOCH.plusSeconds(15), window.instantWithin(0.5));
     }
 
     @Test
     public void testInstantWithinOnBadInput() {
 
-        TimeWindow window = TimeWindow.of(
-            Instant.EPOCH,
-            Instant.EPOCH.plusSeconds(30)
-        );
+        TimeWindow window = TimeWindow.of(Instant.EPOCH, Instant.EPOCH.plusSeconds(30));
 
         try {
             window.instantWithin(1.1);
@@ -386,10 +341,7 @@ public class TimeWindowTest {
     @Test
     public void isEmpty_onZeroDurationWindow() {
 
-        TimeWindow window = TimeWindow.of(
-            Instant.EPOCH,
-            Instant.EPOCH
-        );
+        TimeWindow window = TimeWindow.of(Instant.EPOCH, Instant.EPOCH);
 
         assertThat(window.isEmpty(), is(true));
     }
@@ -397,10 +349,7 @@ public class TimeWindowTest {
     @Test
     public void isEmpty_onNonZeroDurationWindow() {
 
-        TimeWindow window = TimeWindow.of(
-            Instant.EPOCH,
-            Instant.EPOCH.plusMillis(1)
-        );
+        TimeWindow window = TimeWindow.of(Instant.EPOCH, Instant.EPOCH.plusMillis(1));
 
         assertThat(window.isEmpty(), is(false));
     }
@@ -429,9 +378,8 @@ public class TimeWindowTest {
     @Test
     public void bulkSlide() {
         ArrayList<TimeWindow> list = newArrayList(
-            TimeWindow.of(EPOCH, EPOCH.plusSeconds(11)),
-            TimeWindow.of(EPOCH.plusSeconds(1), EPOCH.plusSeconds(12))
-        );
+                TimeWindow.of(EPOCH, EPOCH.plusSeconds(11)),
+                TimeWindow.of(EPOCH.plusSeconds(1), EPOCH.plusSeconds(12)));
 
         ArrayList<TimeWindow> shifted = TimeWindow.shiftAll(list, Duration.ofSeconds(1000));
 
@@ -457,9 +405,8 @@ public class TimeWindowTest {
     @Test
     public void bulkSlide_inMillis() {
         ArrayList<TimeWindow> list = newArrayList(
-            TimeWindow.of(EPOCH, EPOCH.plusSeconds(11)),
-            TimeWindow.of(EPOCH.plusSeconds(1), EPOCH.plusSeconds(12))
-        );
+                TimeWindow.of(EPOCH, EPOCH.plusSeconds(11)),
+                TimeWindow.of(EPOCH.plusSeconds(1), EPOCH.plusSeconds(12)));
 
         ArrayList<TimeWindow> shifted = TimeWindow.shiftAll(list, 1000);
 

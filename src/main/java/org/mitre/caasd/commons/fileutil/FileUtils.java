@@ -58,10 +58,10 @@ public class FileUtils {
         }
     }
 
-    //as per the .gz file format all .gz file begin with these two bytes
+    // as per the .gz file format all .gz file begin with these two bytes
     private static final byte GZ_MAGIC_BYTE_0 = (byte) 0x1f;
     private static final byte GZ_MAGIC_BYTE_1 = (byte) 0x8b;
-    //SOME references show this byte as well
+    // SOME references show this byte as well
     private static final byte GZ_MAGIC_BYTE_2 = (byte) 0x08;
 
     /**
@@ -76,15 +76,14 @@ public class FileUtils {
      */
     public static boolean isGZipFile(File file) throws IOException {
 
-        //so we'll read the first two byte and check them against those
+        // so we'll read the first two byte and check them against those
         byte[] byteBuffer = new byte[3];
         try (FileInputStream fis = new FileInputStream(file)) {
             fis.read(byteBuffer);
         }
 
-        return byteBuffer[0] == GZ_MAGIC_BYTE_0
-            && byteBuffer[1] == GZ_MAGIC_BYTE_1;
-        //we aren't checking the 3rd byte -- even though we grab it
+        return byteBuffer[0] == GZ_MAGIC_BYTE_0 && byteBuffer[1] == GZ_MAGIC_BYTE_1;
+        // we aren't checking the 3rd byte -- even though we grab it
     }
 
     /**
@@ -109,11 +108,10 @@ public class FileUtils {
          * the stream open is required for performance AND correctness (compression does not work
          * well when the compression stream is broken up into small pieces)
          */
-        FileOutputStream fos = new FileOutputStream(targetGzFile); //pipe data to a file...
-        GZIPOutputStream gos = new GZIPOutputStream(fos); //gz compress the data...
-        return new PrintWriter(gos); //enable calls like "write(String)"
+        FileOutputStream fos = new FileOutputStream(targetGzFile); // pipe data to a file...
+        GZIPOutputStream gos = new GZIPOutputStream(fos); // gz compress the data...
+        return new PrintWriter(gos); // enable calls like "write(String)"
     }
-
 
     /**
      * Collect all the lines in a text file OR a GZIP compressed text file.
@@ -123,8 +121,8 @@ public class FileUtils {
      * @return All the lines in the input file (potentially a lot of data).
      */
     public static ArrayList<String> fileLines(File f) {
-        //Note:  This is not a mere replication of similarly name Java/Guava methods
-        //This method ALSO works with .gz files
+        // Note:  This is not a mere replication of similarly name Java/Guava methods
+        // This method ALSO works with .gz files
 
         FileLineIterator fli = new FileLineIterator(f);
         return stream(fli).collect(toCollection(ArrayList::new));
@@ -215,7 +213,7 @@ public class FileUtils {
      * @throws IOException Throws IOException as well as FileNotFoundException
      */
     private static void writeToFile(File file, String writeMe, boolean append) throws IOException {
-        //NOTE:  This method is private so that we expose the clearest possible external API.
+        // NOTE:  This method is private so that we expose the clearest possible external API.
         FileOutputStream fos = new FileOutputStream(file, append);
         PrintWriter dout = new PrintWriter(fos);
 
@@ -271,10 +269,9 @@ public class FileUtils {
      */
     public static void writeToNewGzFile(File aGzFile, String writeMe) throws IOException {
         checkArgument(
-            "gz".equals(Files.getFileExtension(aGzFile.getName()))
-                || "gzip".equals(Files.getFileExtension(aGzFile.getName())),
-            "The output file " + aGzFile + " does not have the extension .gz or .gzip"
-        );
+                "gz".equals(Files.getFileExtension(aGzFile.getName()))
+                        || "gzip".equals(Files.getFileExtension(aGzFile.getName())),
+                "The output file " + aGzFile + " does not have the extension .gz or .gzip");
         FileOutputStream fos = new FileOutputStream(aGzFile);
         GZIPOutputStream gos = new GZIPOutputStream(fos);
         PrintWriter dout = new PrintWriter(gos);
@@ -449,7 +446,7 @@ public class FileUtils {
         }
 
         File[] files = directory.listFiles();
-        if (files == null) {  // null if security restricted
+        if (files == null) { // null if security restricted
             throw new IOException("Failed to list contents of " + directory);
         }
 
@@ -541,7 +538,7 @@ public class FileUtils {
      * @throws IllegalArgumentException if the resource is not found
      */
     public static File getResourceFile(String filename) {
-        //this method was copied from the CAASD test project
+        // this method was copied from the CAASD test project
         URL url = Resources.getResource(filename);
         try {
             return new File(url.toURI());

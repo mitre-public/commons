@@ -25,5 +25,4 @@ public interface MapFeature {
 
     /** Draw this MapFeature onto the Graphics2D.  Use the zeroPixel to place to drawing. */
     void drawOn(Graphics2D g, PixelLatLong zeroPixel);
-
 }

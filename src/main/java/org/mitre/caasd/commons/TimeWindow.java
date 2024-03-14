@@ -57,10 +57,7 @@ public class TimeWindow implements Serializable {
     public TimeWindow(Instant start, Instant end) {
         this.start = requireNonNull(start, "The start of the time window cannot be null");
         this.end = requireNonNull(end, "The end of the time window cannot be null");
-        checkArgument(
-            !start.isAfter(end),
-            "The start of a TimeWindow cannot come after the end of a TimeWindow"
-        );
+        checkArgument(!start.isAfter(end), "The start of a TimeWindow cannot come after the end of a TimeWindow");
     }
 
     /**
@@ -95,42 +92,31 @@ public class TimeWindow implements Serializable {
     public TimeWindow shift(Duration duration) {
         requireNonNull(duration, "The slide duration cannot be null");
 
-        return new TimeWindow(
-          start.plus(duration),
-          end.plus(duration)
-        );
+        return new TimeWindow(start.plus(duration), end.plus(duration));
     }
 
     /** Create a new TimeWindow shifted by the given number of milliseconds. */
     public TimeWindow shiftMillis(long milliseconds) {
-        return new TimeWindow(
-            start.plusMillis(milliseconds),
-            end.plusMillis(milliseconds)
-        );
+        return new TimeWindow(start.plusMillis(milliseconds), end.plusMillis(milliseconds));
     }
 
     /** Applies the shift method in bulk. */
-    public static ArrayList<TimeWindow> shiftAll(Collection<TimeWindow>windows, Duration duration) {
+    public static ArrayList<TimeWindow> shiftAll(Collection<TimeWindow> windows, Duration duration) {
         requireNonNull(windows, "The List<TimeWindow> cannot be null");
         requireNonNull(duration, "The slide duration cannot be null");
 
-        return windows.stream()
-            .map(w -> w.shift(duration))
-            .collect(toCollection(ArrayList::new));
+        return windows.stream().map(w -> w.shift(duration)).collect(toCollection(ArrayList::new));
     }
-
 
     /**
      * Applies the shift method in bulk.
      *
      * @param millis The number of millisecond to shift
      */
-    public static ArrayList<TimeWindow> shiftAll(Collection<TimeWindow>windows, long millis) {
+    public static ArrayList<TimeWindow> shiftAll(Collection<TimeWindow> windows, long millis) {
         requireNonNull(windows, "The List<TimeWindow> cannot be null");
 
-        return windows.stream()
-            .map(w -> w.shiftMillis(millis))
-            .collect(toCollection(ArrayList::new));
+        return windows.stream().map(w -> w.shiftMillis(millis)).collect(toCollection(ArrayList::new));
     }
 
     /**
@@ -182,7 +168,7 @@ public class TimeWindow implements Serializable {
         Instant startOfOverlap = Time.latest(this.start, other.start);
         Instant endOfOverlap = Time.earliest(this.end, other.end);
 
-        //is only true when these two tracks overlap in time.
+        // is only true when these two tracks overlap in time.
         return startOfOverlap.isBefore(endOfOverlap) || startOfOverlap.equals(endOfOverlap);
     }
 

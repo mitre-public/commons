@@ -74,30 +74,22 @@ public class TileAddress {
 
     public PixelLatLong topLeftPixel(int tileSize) {
 
-        return new PixelLatLong(
-            xIndex * tileSize, yIndex * tileSize,
-            zoomLevel, tileSize
-        );
+        return new PixelLatLong(xIndex * tileSize, yIndex * tileSize, zoomLevel, tileSize);
     }
 
     public PixelLatLong bottomRightPixel(int tileSize) {
 
-        return new PixelLatLong(
-            xIndex * tileSize + tileSize, yIndex * tileSize + tileSize,
-            zoomLevel, tileSize
-        );
+        return new PixelLatLong(xIndex * tileSize + tileSize, yIndex * tileSize + tileSize, zoomLevel, tileSize);
     }
 
     /** @return The TileAddress that contains a specific LatLong location. */
     public static TileAddress of(LatLong loc, int zoom) {
         int scale = 1 << zoom;
         double xFraction = (loc.longitude() + 180) / 360;
-        double yFraction =
-            (1 - log(tan(toRadians(loc.latitude())) + 1 / cos(toRadians(loc.latitude()))) / PI) / 2;
+        double yFraction = (1 - log(tan(toRadians(loc.latitude())) + 1 / cos(toRadians(loc.latitude()))) / PI) / 2;
 
         int xTile = (int) floor(xFraction * scale);
         int yTile = (int) floor(yFraction * scale);
-
 
         if (xTile < 0) {
             xTile = 0;
@@ -114,7 +106,6 @@ public class TileAddress {
 
         return new TileAddress(xTile, yTile, zoom);
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -138,7 +129,6 @@ public class TileAddress {
         return TileAddress.of(LatLong.of(lat, lon), zoom);
     }
 
-
     /**
      * @return a {@code Comparator<TileAddress>} That makes can sort TileAddress and easily identify
      *     the topLeft and bottomRight TileAddress.
@@ -152,7 +142,6 @@ public class TileAddress {
         };
     }
 
-
     /**
      * Assemble a list of all the Tiles that will appear between these two tiles
      *
@@ -161,11 +150,7 @@ public class TileAddress {
      * @param zoom        The zoom level of all the tiles
      * @return A List of TileAddress in the contiguous rectangular region specified by the params
      */
-    public static List<TileAddress> tileAddressesSpanning(
-        TileAddress topLeft,
-        TileAddress bottomRight,
-        int zoom
-    ) {
+    public static List<TileAddress> tileAddressesSpanning(TileAddress topLeft, TileAddress bottomRight, int zoom) {
         List<TileAddress> tiles = newArrayList();
         for (int x = topLeft.xIndex(); x <= bottomRight.xIndex(); x++) {
             for (int y = topLeft.yIndex(); y <= bottomRight.yIndex(); y++) {
@@ -183,15 +168,8 @@ public class TileAddress {
      * @param zoomLevel   The zoom level of all the tiles
      * @return A List of TileAddress in the contiguous rectangular region specified by the params
      */
-    public static List<TileAddress> tileAddressesSpanning(
-        LatLong topLeft,
-        LatLong bottomRight,
-        int zoomLevel
-    ) {
+    public static List<TileAddress> tileAddressesSpanning(LatLong topLeft, LatLong bottomRight, int zoomLevel) {
         return tileAddressesSpanning(
-            TileAddress.of(topLeft, zoomLevel),
-            TileAddress.of(bottomRight, zoomLevel),
-            zoomLevel
-        );
+                TileAddress.of(topLeft, zoomLevel), TileAddress.of(bottomRight, zoomLevel), zoomLevel);
     }
 }

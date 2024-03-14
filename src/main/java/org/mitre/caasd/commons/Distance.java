@@ -38,7 +38,7 @@ import com.google.common.collect.Iterators;
  */
 public class Distance implements Serializable, Comparable<Distance> {
 
-    //There is currently a quirk when dist.equals(ZERO) will fail if the units are different
+    // There is currently a quirk when dist.equals(ZERO) will fail if the units are different
     public static final Distance ZERO = new Distance(0.0, NAUTICAL_MILES);
     public static final Distance ZERO_FEET = new Distance(0.0, FEET);
 
@@ -75,9 +75,9 @@ public class Distance implements Serializable, Comparable<Distance> {
     public enum Unit {
         KILOMETERS(0.001, "km"),
         METERS(1.0, "m"),
-        FEET(1.0 / 0.3048, "ft"), //this is the exact ratio as per the definition of feet
-        MILES(1.0 / (0.3048 * 5_280.0), "mi"), //5,280 ft per mile
-        NAUTICAL_MILES(1.0 / 1852.0, "NM"); //this is the exact ratio as per the definition NM
+        FEET(1.0 / 0.3048, "ft"), // this is the exact ratio as per the definition of feet
+        MILES(1.0 / (0.3048 * 5_280.0), "mi"), // 5,280 ft per mile
+        NAUTICAL_MILES(1.0 / 1852.0, "NM"); // this is the exact ratio as per the definition NM
 
         private final double unitsPerMeter;
 
@@ -140,9 +140,7 @@ public class Distance implements Serializable, Comparable<Distance> {
      * @return This distance convert to a different unit.
      */
     public double in(Unit desiredUnit) {
-        return (this.unit == desiredUnit)
-            ? amount
-            : amount * desiredUnit.unitsPerMeter / this.unit.unitsPerMeter;
+        return (this.unit == desiredUnit) ? amount : amount * desiredUnit.unitsPerMeter / this.unit.unitsPerMeter;
     }
 
     public double inMeters() {
@@ -263,7 +261,7 @@ public class Distance implements Serializable, Comparable<Distance> {
 
     @Override
     public String toString() {
-        //use more digits after the decimal place when the units are significantly larger
+        // use more digits after the decimal place when the units are significantly larger
         if (unit == NAUTICAL_MILES || unit == KILOMETERS || unit == MILES) {
             return toString(5);
         } else {
@@ -301,7 +299,7 @@ public class Distance implements Serializable, Comparable<Distance> {
             throw new IllegalArgumentException("Could not parse Distance Unit from: " + parseMe);
         }
 
-        //store "23.0" instead of "23.0 ft"
+        // store "23.0" instead of "23.0 ft"
         String parseMeWithoutUnitsSuffix = parseMe.substring(0, parseMe.length() - unit.abbreviation.length());
 
         double amount = Double.parseDouble(parseMeWithoutUnitsSuffix);
@@ -402,9 +400,7 @@ public class Distance implements Serializable, Comparable<Distance> {
     public static Distance min(Distance one, Distance two) {
         checkNotNull(one);
         checkNotNull(two);
-        return (one.isLessThanOrEqualTo(two))
-            ? one
-            : two;
+        return (one.isLessThanOrEqualTo(two)) ? one : two;
     }
 
     public static Distance max(Distance... distances) {
@@ -439,15 +435,15 @@ public class Distance implements Serializable, Comparable<Distance> {
     public static Distance max(Distance one, Distance two) {
         checkNotNull(one);
         checkNotNull(two);
-        return (one.isGreaterThanOrEqualTo(two))
-            ? one
-            : two;
+        return (one.isGreaterThanOrEqualTo(two)) ? one : two;
     }
 
     private static Distance.Unit mostCommonUnit(EnumMultiset<Distance.Unit> unitCounts) {
 
         return unitCounts.entrySet().stream()
-            .sorted((e1, e2) -> Integer.compare(e2.getCount(), e1.getCount()))
-            .findFirst().get().getElement();
+                .sorted((e1, e2) -> Integer.compare(e2.getCount(), e1.getCount()))
+                .findFirst()
+                .get()
+                .getElement();
     }
 }

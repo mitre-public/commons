@@ -49,10 +49,17 @@ java {
     withJavadocJar()
 }
 
+// Enforces a consistent code style with the "spotless" plugin
+//
 // See https://github.com/diffplug/spotless
 // And https://github.com/diffplug/spotless/tree/main/plugin-gradle
 spotless {
     java {
+
+        // This formatter is "Good" but not "Perfect"
+        // But, using this formatter allows multiple contributors to work in a "common style"
+        palantirJavaFormat()
+
         // import order: static, JDK, MITRE, 3rd Party
         importOrder("\\#", "java|javax", "org.mitre", "")
         removeUnusedImports()

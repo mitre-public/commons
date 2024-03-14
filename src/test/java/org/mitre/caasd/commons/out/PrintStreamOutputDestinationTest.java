@@ -38,14 +38,12 @@ public class PrintStreamOutputDestinationTest {
     @Test
     public void printStreamRecievesOutputOfToStringFunction() {
 
-        //create a PrintStream to print output to.
+        // create a PrintStream to print output to.
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         PrintStream stream = new PrintStream(outContent, true);
 
-        PrintStreamSink destination = new PrintStreamSink<DummyRecord>(
-            (record) -> "--" + record.anImportantValue + "--",
-            stream
-        );
+        PrintStreamSink destination =
+                new PrintStreamSink<DummyRecord>((record) -> "--" + record.anImportantValue + "--", stream);
 
         destination.accept(new DummyRecord(123));
 
@@ -57,7 +55,7 @@ public class PrintStreamOutputDestinationTest {
 
         PrintStream oldSystemOut = System.out;
 
-        //redirect System.out to a PrintStream we can inspect
+        // redirect System.out to a PrintStream we can inspect
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         PrintStream stream = new PrintStream(outContent, true);
         System.setOut(stream);
@@ -71,7 +69,7 @@ public class PrintStreamOutputDestinationTest {
 
         assertThat(outContent.toString(), is("{\n  \"anImportantValue\": 123\n}" + System.lineSeparator()));
 
-        //reinstate the proper System.out
+        // reinstate the proper System.out
         System.setOut(oldSystemOut);
     }
 }

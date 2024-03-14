@@ -38,7 +38,7 @@ import com.google.common.primitives.Ints;
  */
 public class QuasiOptimalSplitter implements DataSplitter {
 
-    //this index value means the dataset should not be split
+    // this index value means the dataset should not be split
     private static final int NO_MORE_SPLITS = -1;
 
     /**
@@ -87,16 +87,17 @@ public class QuasiOptimalSplitter implements DataSplitter {
         return Ints.toArray(boundaryIndexValues);
     }
 
-    private void recursivelySplitDataset(List<Double> xData, List<Double> yData, int minIndex, int maxIndex, TreeSet<Integer> chops) {
+    private void recursivelySplitDataset(
+            List<Double> xData, List<Double> yData, int minIndex, int maxIndex, TreeSet<Integer> chops) {
 
         int splitIndex = determineSplitFor(xData, yData, minIndex, maxIndex);
 
-        //end the recursion
+        // end the recursion
         if (splitIndex == NO_MORE_SPLITS) {
             return;
         }
 
-        //save the chop, and recurse into the left and right side
+        // save the chop, and recurse into the left and right side
         chops.add(splitIndex);
         recursivelySplitDataset(xData, yData, minIndex, splitIndex, chops);
         recursivelySplitDataset(xData, yData, splitIndex, maxIndex, chops);
@@ -124,16 +125,13 @@ public class QuasiOptimalSplitter implements DataSplitter {
         double minErrorSoFar = Double.POSITIVE_INFINITY;
         int indexOfMinError = -1;
 
-        //minIndex + 1 because the earliest "chop" has to leave at least 2 values for the left side (and chops have AFTER the index)
+        // minIndex + 1 because the earliest "chop" has to leave at least 2 values for the left side (and chops have
+        // AFTER the index)
         for (int i = minIndex + 1; i < maxIndex - 1; i++) {
-            FastLinearApproximation left = new FastLinearApproximation(
-                xData.subList(minIndex, i),
-                yData.subList(minIndex, i)
-            );
-            FastLinearApproximation right = new FastLinearApproximation(
-                xData.subList(i, maxIndex),
-                yData.subList(i, maxIndex)
-            );
+            FastLinearApproximation left =
+                    new FastLinearApproximation(xData.subList(minIndex, i), yData.subList(minIndex, i));
+            FastLinearApproximation right =
+                    new FastLinearApproximation(xData.subList(i, maxIndex), yData.subList(i, maxIndex));
 
             double thisError = left.totalSquaredError() + right.totalSquaredError();
             if (thisError < minErrorSoFar) {
@@ -146,7 +144,7 @@ public class QuasiOptimalSplitter implements DataSplitter {
         double averageError = minErrorSoFar / n;
 
         return averageError > targetAverageSquaredError
-            ? indexOfMinError + 1 //split AFTER the best index
-            : NO_MORE_SPLITS;
+                ? indexOfMinError + 1 // split AFTER the best index
+                : NO_MORE_SPLITS;
     }
 }

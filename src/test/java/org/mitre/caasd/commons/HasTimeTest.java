@@ -50,7 +50,7 @@ public class HasTimeTest {
 
     @Test
     public void validateAcceptsInstantsAfterEpoch() {
-        HasTime.validate(EPOCH.plusMillis(1)); //passes validation, no other side effect
+        HasTime.validate(EPOCH.plusMillis(1)); // passes validation, no other side effect
     }
 
     @Test
@@ -76,10 +76,9 @@ public class HasTimeTest {
     public void binarySearchMatchesGiveCorrectIndex() {
 
         ArrayList<PojoWithTime> list = newArrayList(
-            new PojoWithTime("a", EPOCH),
-            new PojoWithTime("b", EPOCH.plusSeconds(10)),
-            new PojoWithTime("c", EPOCH.plusSeconds(20))
-        );
+                new PojoWithTime("a", EPOCH),
+                new PojoWithTime("b", EPOCH.plusSeconds(10)),
+                new PojoWithTime("c", EPOCH.plusSeconds(20)));
 
         assertThat(HasTime.binarySearch(list, EPOCH), is(0));
         assertThat(HasTime.binarySearch(list, EPOCH.plusSeconds(10)), is(1));
@@ -90,16 +89,15 @@ public class HasTimeTest {
     public void binarySearchMissesGiveCorrectIndex() {
 
         ArrayList<PojoWithTime> list = newArrayList(
-            new PojoWithTime("a", EPOCH),
-            new PojoWithTime("b", EPOCH.plusSeconds(10)),
-            new PojoWithTime("c", EPOCH.plusSeconds(20))
-        );
+                new PojoWithTime("a", EPOCH),
+                new PojoWithTime("b", EPOCH.plusSeconds(10)),
+                new PojoWithTime("c", EPOCH.plusSeconds(20)));
 
-        //output int = (-(insertion point) -1)
-        assertThat(HasTime.binarySearch(list, EPOCH.minusSeconds(1)), is(-1));  //insert before item 0
-        assertThat(HasTime.binarySearch(list, EPOCH.plusSeconds(1)), is(-2)); //insert between 0 and 1
-        assertThat(HasTime.binarySearch(list, EPOCH.plusSeconds(11)), is(-3)); //insert between 1 and 2
-        assertThat(HasTime.binarySearch(list, EPOCH.plusSeconds(21)), is(-4)); //insert after 2
+        // output int = (-(insertion point) -1)
+        assertThat(HasTime.binarySearch(list, EPOCH.minusSeconds(1)), is(-1)); // insert before item 0
+        assertThat(HasTime.binarySearch(list, EPOCH.plusSeconds(1)), is(-2)); // insert between 0 and 1
+        assertThat(HasTime.binarySearch(list, EPOCH.plusSeconds(11)), is(-3)); // insert between 1 and 2
+        assertThat(HasTime.binarySearch(list, EPOCH.plusSeconds(21)), is(-4)); // insert after 2
     }
 
     @Test
@@ -131,15 +129,9 @@ public class HasTimeTest {
 
         ArrayList<PojoWithTime> list = newArrayList(a, b, c, d);
 
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> HasTime.floor(list, EPOCH.minusSeconds(1))
-        );
+        assertThrows(IllegalArgumentException.class, () -> HasTime.floor(list, EPOCH.minusSeconds(1)));
 
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> HasTime.floor(list, EPOCH.plusSeconds(31))
-        );
+        assertThrows(IllegalArgumentException.class, () -> HasTime.floor(list, EPOCH.plusSeconds(31)));
     }
 
     @Test
@@ -171,17 +163,10 @@ public class HasTimeTest {
 
         ArrayList<PojoWithTime> list = newArrayList(a, b, c, d);
 
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> HasTime.ceiling(list, EPOCH.minusSeconds(1))
-        );
+        assertThrows(IllegalArgumentException.class, () -> HasTime.ceiling(list, EPOCH.minusSeconds(1)));
 
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> HasTime.ceiling(list, EPOCH.plusSeconds(31))
-        );
+        assertThrows(IllegalArgumentException.class, () -> HasTime.ceiling(list, EPOCH.plusSeconds(31)));
     }
-
 
     @Test
     public void closestGivesCorrectItem() {
@@ -208,7 +193,6 @@ public class HasTimeTest {
         assertThat(HasTime.closest(list, EPOCH.plusSeconds(29)), is(d));
     }
 
-
     @Test
     void closestRejectsOutOfRange() {
 
@@ -219,17 +203,10 @@ public class HasTimeTest {
 
         ArrayList<PojoWithTime> list = newArrayList(a, b, c, d);
 
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> HasTime.closest(list, EPOCH.minusSeconds(1))
-        );
+        assertThrows(IllegalArgumentException.class, () -> HasTime.closest(list, EPOCH.minusSeconds(1)));
 
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> HasTime.closest(list, EPOCH.plusSeconds(31))
-        );
+        assertThrows(IllegalArgumentException.class, () -> HasTime.closest(list, EPOCH.plusSeconds(31)));
     }
-
 
     /**
      * This class does not implement Comparable BUT we can sort instance of PojoWithTime by its time

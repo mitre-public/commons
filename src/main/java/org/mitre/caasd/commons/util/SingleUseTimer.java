@@ -66,9 +66,7 @@ public class SingleUseTimer {
     public Duration elapsedTime() {
         checkState(startTime != null, "This timer was never started (must call \"tic\")");
 
-        return (endTime == null)
-            ? Duration.between(startTime, Instant.now())
-            : Duration.between(startTime, endTime);
+        return (endTime == null) ? Duration.between(startTime, Instant.now()) : Duration.between(startTime, endTime);
     }
 
     /**

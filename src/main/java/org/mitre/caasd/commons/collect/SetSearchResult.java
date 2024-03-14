@@ -58,7 +58,8 @@ public class SetSearchResult<K> implements Comparable<SetSearchResult<K>> {
     public int hashCode() {
         int hash = 7;
         hash = 29 * hash + Objects.hashCode(this.key);
-        hash = 29 * hash + (int) (Double.doubleToLongBits(this.distance) ^ (Double.doubleToLongBits(this.distance) >>> 32));
+        hash = 29 * hash
+                + (int) (Double.doubleToLongBits(this.distance) ^ (Double.doubleToLongBits(this.distance) >>> 32));
         return hash;
     }
 

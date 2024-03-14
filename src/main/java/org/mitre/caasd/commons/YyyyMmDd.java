@@ -141,7 +141,6 @@ public class YyyyMmDd implements Comparable<YyyyMmDd> {
         return dates.stream().max(Comparator.naturalOrder()).orElse(null);
     }
 
-
     private static final String DATE_FORMAT_ERROR = "Date not specified as YYYY-MM-DD format";
 
     /** Throw an IllegalArgumentException if the input String is not in the YYYY-MM-DD format. */
@@ -150,7 +149,7 @@ public class YyyyMmDd implements Comparable<YyyyMmDd> {
 
         try {
             ISO_LOCAL_DATE.parse(date);
-        } catch(DateTimeParseException dtpe) {
+        } catch (DateTimeParseException dtpe) {
             throw new IllegalArgumentException("ISO_LOCAL_DATE cannot parse: " + date);
         }
     }

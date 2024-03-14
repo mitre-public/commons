@@ -41,17 +41,18 @@ import com.google.common.cache.LoadingCache;
  */
 public class LocallyCachingTileServer implements TileServer {
 
-    //this cache is designed for session-to-session disk-based caching, not in memory caching.
+    // this cache is designed for session-to-session disk-based caching, not in memory caching.
     private static final int CACHE_SIZE = 64;
 
     private static final Duration DEFAULT_CACHE_LIFETIME = Duration.ofDays(7);
 
     private static final String DEFAULT_CACHE_DIR = "mapTileCache";
 
-    //A TileServer we want to hit less often
+    // A TileServer we want to hit less often
     private final TileServer inner;
 
-    //A LoadingCache that stores a few images in memory...but is really just a seem to weave in disk-base caching before delegating to the TileServer's REST API.
+    // A LoadingCache that stores a few images in memory...but is really just a seem to weave in disk-base caching
+    // before delegating to the TileServer's REST API.
     private final LoadingCache<TileAddress, BufferedImage> cache;
 
     public LocallyCachingTileServer(TileServer server, Duration maxAge, String cacheDirectory) {
@@ -59,16 +60,10 @@ public class LocallyCachingTileServer implements TileServer {
         requireNonNull(cacheDirectory);
         this.inner = server;
 
-        CacheLoader<TileAddress, BufferedImage> onCacheMiss = makeCacheLoader(
-            inner,
-            cacheDirectory,
-            maxAge
-        );
+        CacheLoader<TileAddress, BufferedImage> onCacheMiss = makeCacheLoader(inner, cacheDirectory, maxAge);
 
-        this.cache = CacheBuilder.newBuilder()
-            .maximumSize(CACHE_SIZE)
-            .recordStats()
-            .build(onCacheMiss);
+        this.cache =
+                CacheBuilder.newBuilder().maximumSize(CACHE_SIZE).recordStats().build(onCacheMiss);
     }
 
     public LocallyCachingTileServer(TileServer server, Duration maxAg) {
@@ -124,19 +119,16 @@ public class LocallyCachingTileServer implements TileServer {
      * @return A CacheLoader to process "in memory cache misses"
      */
     public static CacheLoader<TileAddress, BufferedImage> makeCacheLoader(
-        TileServer fallbackTileServer,
-        String cacheDir,
-        Duration maxAge
-    ) {
+            TileServer fallbackTileServer, String cacheDir, Duration maxAge) {
 
         return new CacheLoader<TileAddress, BufferedImage>() {
 
             @Override
             public BufferedImage load(TileAddress ta) throws Exception {
 
-                //We only get here if the "in-memory" cache failed...
+                // We only get here if the "in-memory" cache failed...
 
-                //so first we look for an image file "cacheDir/tileAddress.dat"...
+                // so first we look for an image file "cacheDir/tileAddress.dat"...
                 FileUtils.makeDirIfMissing(cacheDir);
                 File cachedImageFile = new File(cacheDir + File.separator + ta + ".png");
 
@@ -144,7 +136,7 @@ public class LocallyCachingTileServer implements TileServer {
                     return ImageIO.read(cachedImageFile);
                 }
 
-                //download the map, store it to disk, return the image
+                // download the map, store it to disk, return the image
                 BufferedImage img = fallbackTileServer.downloadMap(ta);
                 ImageIO.write(img, "png", cachedImageFile);
                 return img;

@@ -60,11 +60,11 @@ public interface DataCleaner<T> {
      */
     default ArrayList<T> clean(Collection<T> dataset) {
 
-        //apply this DataCleaner to each entry and collect the non-empty results
+        // apply this DataCleaner to each entry and collect the non-empty results
         return dataset.stream()
-            .map((T item) -> clean(item))
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .collect(toCollection(ArrayList::new));
+                .map((T item) -> clean(item))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(toCollection(ArrayList::new));
     }
 }

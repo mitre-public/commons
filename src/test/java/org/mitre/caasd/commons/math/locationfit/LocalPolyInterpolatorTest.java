@@ -63,14 +63,12 @@ public class LocalPolyInterpolatorTest {
         LocalPolyInterpolator qi = new LocalPolyInterpolator(Duration.ofMinutes(1));
 
         List<TestLocationDatum> testData = testPoints();
-        Collections.sort(testData, (a,b) -> a.time().compareTo(b.time()));
+        Collections.sort(testData, (a, b) -> a.time().compareTo(b.time()));
 
         List<PositionRecord<TestLocationDatum>> wrappedTestData = asRecords(testData);
 
         TimeWindow range = TimeWindow.of(
-            testData.get(0).time(),
-            testData.get(testData.size() - 1).time()
-        );
+                testData.get(0).time(), testData.get(testData.size() - 1).time());
 
         int NUM_SAMPLES = 300;
 
@@ -79,7 +77,8 @@ public class LocalPolyInterpolatorTest {
         for (int i = 0; i < NUM_SAMPLES; i++) {
 
             Instant sampleTime = range.instantWithin(i * 1.0 / (double) NUM_SAMPLES);
-            KineticRecord<TestLocationDatum> approximation = qi.floorInterpolate(wrappedTestData, sampleTime).get();
+            KineticRecord<TestLocationDatum> approximation =
+                    qi.floorInterpolate(wrappedTestData, sampleTime).get();
 
             interpolatedPoints.add(approximation);
         }
@@ -100,18 +99,18 @@ public class LocalPolyInterpolatorTest {
          * Negative Turn rates should yield negative turn radii (i.e. counter clock wise turning)
          */
         int count = 0;
-        for (KineticRecord<TestLocationDatum> pt: interpolatedPoints) {
-            if(pt.kinetics().turnRate() > 0) {
+        for (KineticRecord<TestLocationDatum> pt : interpolatedPoints) {
+            if (pt.kinetics().turnRate() > 0) {
                 assertThat(pt.kinetics().turnRadius().isPositive(), is(true));
                 count++;
             }
 
-            if(pt.kinetics().turnRate() < 0) {
+            if (pt.kinetics().turnRate() < 0) {
                 assertThat(pt.kinetics().turnRadius().isNegative(), is(true));
                 count++;
             }
         }
-        assertThat(count > 100 , is(true));
+        assertThat(count > 100, is(true));
     }
 
     private void validateLatLongs(List<TestLocationDatum> testData, List<KineticRecord<TestLocationDatum>> fitData) {
@@ -121,21 +120,24 @@ public class LocalPolyInterpolatorTest {
         for (KineticRecord<TestLocationDatum> pt : fitData) {
             Pair<TestLocationDatum, TestLocationDatum> floorAndCeiling = floorAndCeiling(testData, pt.time());
 
-            double distToFloor = pt.latLong().distanceTo(latLongFor(floorAndCeiling.first())).inNauticalMiles();
-            double distToCeiling = pt.latLong().distanceTo(latLongFor(floorAndCeiling.second())).inNauticalMiles();
+            double distToFloor =
+                    pt.latLong().distanceTo(latLongFor(floorAndCeiling.first())).inNauticalMiles();
+            double distToCeiling = pt.latLong()
+                    .distanceTo(latLongFor(floorAndCeiling.second()))
+                    .inNauticalMiles();
 
             stats.add(distToFloor);
             stats.add(distToCeiling);
         }
 
-        //perform unit tests on the aggregate statistics.
+        // perform unit tests on the aggregate statistics.
         assertThat("There are at least 100 samples", stats.count() > 100, is(true));
         assertThat("The average distance is small", stats.mean() < .075, is(true));
         assertThat("No single sample has a large distance error", stats.max() < 2, is(true));
     }
 
     private void validateAltitudes(List<TestLocationDatum> testData, List<KineticRecord<TestLocationDatum>> fitData) {
-        //Aggregate statistics on the difference between the raw data and the fit data
+        // Aggregate statistics on the difference between the raw data and the fit data
         StatsAccumulator stats = new StatsAccumulator();
 
         for (KineticRecord<TestLocationDatum> pt : fitData) {
@@ -148,7 +150,7 @@ public class LocalPolyInterpolatorTest {
             stats.add(deltaToSecond);
         }
 
-        //perform unit tests on the aggregate statistics.
+        // perform unit tests on the aggregate statistics.
         assertThat("There are at least 100 samples", stats.count() > 100, is(true));
         assertThat("The average delta is small", stats.mean() < 50, is(true));
         assertThat("No single sample has a large difference in altitude", stats.max() < 250, is(true));
@@ -156,14 +158,16 @@ public class LocalPolyInterpolatorTest {
 
     private void validateSpeeds(List<TestLocationDatum> testData, List<KineticRecord<TestLocationDatum>> fitData) {
 
-        //Aggregate statistics on the difference between the raw data and the fit data
+        // Aggregate statistics on the difference between the raw data and the fit data
         StatsAccumulator stats = new StatsAccumulator();
 
         for (KineticRecord<TestLocationDatum> pt : fitData) {
             Pair<TestLocationDatum, TestLocationDatum> floorAndCeiling = floorAndCeiling(testData, pt.time());
 
-            double deltaToFirst = abs(pt.kinetics().speed().inKnots() - floorAndCeiling.first().speed().inKnots());
-            double deltaToSecond = abs(pt.kinetics().speed().inKnots() - floorAndCeiling.second().speed().inKnots());
+            double deltaToFirst = abs(pt.kinetics().speed().inKnots()
+                    - floorAndCeiling.first().speed().inKnots());
+            double deltaToSecond = abs(pt.kinetics().speed().inKnots()
+                    - floorAndCeiling.second().speed().inKnots());
 
             stats.add(deltaToFirst);
             stats.add(deltaToSecond);
@@ -176,7 +180,7 @@ public class LocalPolyInterpolatorTest {
 
     private void validateCourses(List<TestLocationDatum> testData, List<KineticRecord<TestLocationDatum>> samples) {
 
-        //Aggregate statistics on the difference between the raw data and the fit data
+        // Aggregate statistics on the difference between the raw data and the fit data
         StatsAccumulator stats = new StatsAccumulator();
         int badCount = 0;
         Course THRESHOLD = Course.ofDegrees(30);
@@ -185,16 +189,12 @@ public class LocalPolyInterpolatorTest {
             Pair<TestLocationDatum, TestLocationDatum> floorAndCeiling = floorAndCeiling(testData, pt.time());
 
             Course deltaToFirst = Course.angleBetween(
-                floorAndCeiling.first().course(),
-                pt.kinetics().course()
-            );
+                    floorAndCeiling.first().course(), pt.kinetics().course());
 
             Course deltaToSecond = Course.angleBetween(
-                pt.kinetics().course(),
-                floorAndCeiling.second().course()
-            );
+                    pt.kinetics().course(), floorAndCeiling.second().course());
 
-            //This is more a measurement of how poorly the raw course data matches the raw LatLong data
+            // This is more a measurement of how poorly the raw course data matches the raw LatLong data
             if (deltaToFirst.isGreaterThan(THRESHOLD) || deltaToSecond.isGreaterThan(THRESHOLD)) {
                 badCount++;
             }
@@ -208,28 +208,27 @@ public class LocalPolyInterpolatorTest {
         assertThat("Few samples are bad", badCount < 3, is(true));
     }
 
-
     private void validateTurnRates(List<KineticRecord<TestLocationDatum>> interpolatedPoints) {
 
         NeighborIterator<KineticRecord<TestLocationDatum>> pairIterator = newNeighborIterator(interpolatedPoints);
 
         PairedStatsAccumulator stats = new PairedStatsAccumulator();
 
-        while(pairIterator.hasNext()) {
+        while (pairIterator.hasNext()) {
             IterPair<KineticRecord<TestLocationDatum>> pair = pairIterator.next();
 
             double newCourse = pair.current().kinetics().course().inDegrees();
             double oldCourse = pair.prior().kinetics().course().inDegrees();
 
-            //ignore big changes (like from 1 degree to 359 degree or vice versa)
-            if(abs(newCourse - oldCourse) > 200) {
+            // ignore big changes (like from 1 degree to 359 degree or vice versa)
+            if (abs(newCourse - oldCourse) > 200) {
                 continue;
             }
 
             Duration timeDelta = durationBtw(pair.prior().time(), pair.current().time());
 
-            double courseDelta = newCourse - oldCourse; //estimated over ~5 second time horizon
-            double turnRate = pair.prior().kinetics().turnRate(); //instantaneous approximation
+            double courseDelta = newCourse - oldCourse; // estimated over ~5 second time horizon
+            double turnRate = pair.prior().kinetics().turnRate(); // instantaneous approximation
 
             stats.add(courseDelta, turnRate);
         }
@@ -239,10 +238,11 @@ public class LocalPolyInterpolatorTest {
 
         assertThat("The correlation is VERY strong", correlation > .95, is(true));
         assertThat("The slope is positive", slope > 0.05, is(true));
-        //i.e. positive courseDeltas are associated with positive turn rates (and vice versa)
+        // i.e. positive courseDeltas are associated with positive turn rates (and vice versa)
     }
 
-    public static Pair<TestLocationDatum, TestLocationDatum> floorAndCeiling(List<TestLocationDatum> points, Instant time) {
+    public static Pair<TestLocationDatum, TestLocationDatum> floorAndCeiling(
+            List<TestLocationDatum> points, Instant time) {
 
         TestLocationDatum ceiling = null;
         TestLocationDatum floor = null;
@@ -261,21 +261,26 @@ public class LocalPolyInterpolatorTest {
     }
 
     public List<TestLocationDatum> testPoints() {
-        File file = getResourceAsFile(LocalPolyInterpolator.class, "oneTrack.txt").get();
+        File file =
+                getResourceAsFile(LocalPolyInterpolator.class, "oneTrack.txt").get();
 
         return FileUtils.fileLines(file).stream()
-            .map(datum -> TestLocationDatum.parse(datum))
-            .sorted((a, b) -> a.time().compareTo(b.time()))
-            .collect(toList());
+                .map(datum -> TestLocationDatum.parse(datum))
+                .sorted((a, b) -> a.time().compareTo(b.time()))
+                .collect(toList());
     }
 
     public List<PositionRecord<TestLocationDatum>> asRecords(List<TestLocationDatum> points) {
 
         return points.stream()
-            .map(
-                pt -> new PositionRecord<>(pt, new Position(pt.time().toEpochMilli(), pt.latitude(), pt.longitude(), pt.altitude().inFeet()))
-            )
-            .collect(toList());
+                .map(pt -> new PositionRecord<>(
+                        pt,
+                        new Position(
+                                pt.time().toEpochMilli(),
+                                pt.latitude(),
+                                pt.longitude(),
+                                pt.altitude().inFeet())))
+                .collect(toList());
     }
 
     @Test
@@ -286,9 +291,7 @@ public class LocalPolyInterpolatorTest {
         List<TestLocationDatum> testData = testPoints();
 
         TimeWindow range = TimeWindow.of(
-            testData.get(0).time(),
-            testData.get(testData.size() - 1).time()
-        );
+                testData.get(0).time(), testData.get(testData.size() - 1).time());
 
         Instant beforeStart = range.start().minusMillis(1L);
         Instant start = range.start();
@@ -301,10 +304,10 @@ public class LocalPolyInterpolatorTest {
         Optional<KineticRecord<TestLocationDatum>> atEnd = qi.floorInterpolate(wrappedTestData, end);
         Optional<KineticRecord<TestLocationDatum>> after = qi.floorInterpolate(wrappedTestData, afterEnd);
 
-        assertThat(before.isPresent(), is(false)); //no result provided outside TimeWindow
+        assertThat(before.isPresent(), is(false)); // no result provided outside TimeWindow
         assertThat(atStart.isPresent(), is(true));
         assertThat(atEnd.isPresent(), is(true));
-        assertThat(after.isPresent(), is(false)); //no result provided outside TimeWindow
+        assertThat(after.isPresent(), is(false)); // no result provided outside TimeWindow
     }
 
     private static LatLong latLongFor(TestLocationDatum hit) {
@@ -318,11 +321,7 @@ public class LocalPolyInterpolatorTest {
     @Test
     public void basicUsage_withoutAltitudeData() {
 
-        LocalPolyInterpolator qi = new LocalPolyInterpolator(
-            Duration.ofMinutes(1),
-            3,
-            true
-        );
+        LocalPolyInterpolator qi = new LocalPolyInterpolator(Duration.ofMinutes(1), 3, true);
 
         List<TestLocationDatum> testData = testPoints();
         Collections.sort(testData, Comparator.comparing(TestLocationDatum::time));
@@ -330,9 +329,7 @@ public class LocalPolyInterpolatorTest {
         List<PositionRecord<TestLocationDatum>> wrappedTestData = asRecords(testData);
 
         TimeWindow range = TimeWindow.of(
-            testData.get(0).time(),
-            testData.get(testData.size() - 1).time()
-        );
+                testData.get(0).time(), testData.get(testData.size() - 1).time());
 
         int NUM_SAMPLES = 300;
 
@@ -341,51 +338,47 @@ public class LocalPolyInterpolatorTest {
         for (int i = 0; i < NUM_SAMPLES; i++) {
 
             Instant sampleTime = range.instantWithin(i * 1.0 / (double) NUM_SAMPLES);
-            KineticRecord<TestLocationDatum> approximation = qi.floorInterpolate(wrappedTestData, sampleTime).get();
+            KineticRecord<TestLocationDatum> approximation =
+                    qi.floorInterpolate(wrappedTestData, sampleTime).get();
 
             interpolatedPoints.add(approximation);
         }
 
-        //Verify all altitude data is ignored..
+        // Verify all altitude data is ignored..
         for (KineticRecord<TestLocationDatum> kr : interpolatedPoints) {
             assertThat(kr.altitude(), is(Distance.ZERO_FEET));
             assertThat(kr.kinetics().climbRate(), is(Speed.ZERO_FEET_PER_MIN));
         }
     }
 
-    private static class Dummy {
-
-    }
+    private static class Dummy {}
 
     @Test
     public void verifyAccelerationDeduction() {
 
-        //Numerically produce some LatLong data that shows an accelerating object..
-        //Then verify the acceleration is correct
+        // Numerically produce some LatLong data that shows an accelerating object..
+        // Then verify the acceleration is correct
 
-        Acceleration ACCEL = Acceleration.of(Speed.ofKnots(2.0)); //1 knot per sec
+        Acceleration ACCEL = Acceleration.of(Speed.ofKnots(2.0)); // 1 knot per sec
 
-        List<PositionRecord<Dummy>> records =  createDataShowingConstantAcceleration(ACCEL);
+        List<PositionRecord<Dummy>> records = createDataShowingConstantAcceleration(ACCEL);
 
-        LocalPolyInterpolator interpolator = new LocalPolyInterpolator(
-            Duration.ofMinutes(1), 7, true
-        );
+        LocalPolyInterpolator interpolator = new LocalPolyInterpolator(Duration.ofMinutes(1), 7, true);
 
-        KineticRecord<Dummy> kinetics = interpolator.floorInterpolate(
-            records,
-            EPOCH.plusMillis(2500L)
-        ).get();
+        KineticRecord<Dummy> kinetics =
+                interpolator.floorInterpolate(records, EPOCH.plusMillis(2500L)).get();
 
         Acceleration deducedAccel = kinetics.kinetics().acceleration();
 
-        //Approximation error can be as large a 1% of the input ACCEL value
+        // Approximation error can be as large a 1% of the input ACCEL value
         Speed threshold = ACCEL.speedDeltaPerSecond().times(.01);
 
-        //Difference between input ACCEL and deduced value
-        Speed error = ACCEL.speedDeltaPerSecond().minus(deducedAccel.speedDeltaPerSecond()).abs();
+        // Difference between input ACCEL and deduced value
+        Speed error = ACCEL.speedDeltaPerSecond()
+                .minus(deducedAccel.speedDeltaPerSecond())
+                .abs();
 
         assertThat(error.isLessThan(threshold), is(true));
-
     }
 
     private List<PositionRecord<Dummy>> createDataShowingConstantAcceleration(Acceleration rate) {
@@ -408,12 +401,12 @@ public class LocalPolyInterpolatorTest {
         }
 
         return locationData.stream()
-            .map(pos -> new PositionRecord<>(new Dummy(), pos))
-            .collect(toList());
+                .map(pos -> new PositionRecord<>(new Dummy(), pos))
+                .collect(toList());
     }
 
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(
-        "MM/dd/yyyy HH:mm:ss.SSS X").withZone(ZoneOffset.UTC);
+    private static final DateTimeFormatter DATE_FORMATTER =
+            DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss.SSS X").withZone(ZoneOffset.UTC);
 
     /**
      * @param dateString The "date portion". For example the "10/18/2016" in
@@ -425,55 +418,41 @@ public class LocalPolyInterpolatorTest {
      */
     public static Instant parseTime(String dateString, String timeString) {
 
-        ZonedDateTime zdt = ZonedDateTime.parse(
-            dateString.replace("-", "/") + " " + timeString + " Z",
-            DATE_FORMATTER
-        );
+        ZonedDateTime zdt = ZonedDateTime.parse(dateString.replace("-", "/") + " " + timeString + " Z", DATE_FORMATTER);
         return Instant.from(zdt);
     }
 
-
     static PositionRecord<Dummy> parseTestInput(String input) {
-        //Expected input = "07/17/2022,18:44:33.930,036.89253,-112.35783"
-        //Expected input = "date,time,lat,long"
+        // Expected input = "07/17/2022,18:44:33.930,036.89253,-112.35783"
+        // Expected input = "date,time,lat,long"
         String[] tokens = input.split(",");
 
         Position pos = new Position(
-            parseTime(tokens[0],tokens[1]).toEpochMilli(),
-            parseDouble(tokens[2]),
-            parseDouble(tokens[3])
-        );
+                parseTime(tokens[0], tokens[1]).toEpochMilli(), parseDouble(tokens[2]), parseDouble(tokens[3]));
 
         return PositionRecord.of(new Dummy(), pos);
     }
 
-
     @Test
     public void brokenExample_duplicate_time_and_position_1() {
 
-        //FAILURE LOGS =
+        // FAILURE LOGS =
         //
-        //Longitude is out of range: -222.96536332927727
-        //Could not interpolate input data.
+        // Longitude is out of range: -222.96536332927727
+        // Could not interpolate input data.
         //        sampleTime= 2022-07-17T18:44:40.600Z
-        //07/17/2022,18:44:33.930,036.89253,-112.35783
-        //07/17/2022,18:44:47.270,036.89253,-112.35783
-        //07/17/2022,18:44:47.270,036.89253,-112.35783
+        // 07/17/2022,18:44:33.930,036.89253,-112.35783
+        // 07/17/2022,18:44:47.270,036.89253,-112.35783
+        // 07/17/2022,18:44:47.270,036.89253,-112.35783
 
         PositionRecord<Dummy> p1 = parseTestInput("07/17/2022,18:44:33.930,036.89253,-112.35783");
         PositionRecord<Dummy> p2 = parseTestInput("07/17/2022,18:44:47.270,036.89253,-112.35783");
         PositionRecord<Dummy> p3 = parseTestInput("07/17/2022,18:44:47.270,036.89253,-112.35783");
-        //notice, p2 and p3 are the same! -- Our raw data contains a duplicate, how should this be handled
-        LocalPolyInterpolator interpolator = new LocalPolyInterpolator(
-            Duration.ofSeconds(60),
-            3,
-            true
-        );
+        // notice, p2 and p3 are the same! -- Our raw data contains a duplicate, how should this be handled
+        LocalPolyInterpolator interpolator = new LocalPolyInterpolator(Duration.ofSeconds(60), 3, true);
 
-        Optional<KineticRecord<Dummy>> result = interpolator.floorInterpolate(
-            newArrayList(p1,p2,p3),
-            Instant.parse("2022-07-17T18:44:40.600Z")
-        );
+        Optional<KineticRecord<Dummy>> result =
+                interpolator.floorInterpolate(newArrayList(p1, p2, p3), Instant.parse("2022-07-17T18:44:40.600Z"));
 
         assertThat(result.isPresent(), is(false));
     }
@@ -481,29 +460,23 @@ public class LocalPolyInterpolatorTest {
     @Test
     public void brokenExample_duplicate_time_and_position_2() {
 
-        //FAILURE LOGS =
+        // FAILURE LOGS =
         //
         //    Latitude is out of range: 96.0
         //    Could not interpolate input data.
         //        sampleTime= 2022-07-17T18:55:52Z
-        //07/17/2022,18:55:38.713,037.59117,-119.19317
-        //07/17/2022,18:55:38.713,037.59117,-119.19317
-        //07/17/2022,18:56:14.713,037.57589,-119.09622
+        // 07/17/2022,18:55:38.713,037.59117,-119.19317
+        // 07/17/2022,18:55:38.713,037.59117,-119.19317
+        // 07/17/2022,18:56:14.713,037.57589,-119.09622
 
         PositionRecord<Dummy> p1 = parseTestInput("07/17/2022,18:55:38.713,037.59117,-119.19317");
         PositionRecord<Dummy> p2 = parseTestInput("07/17/2022,18:55:38.713,037.59117,-119.19317");
         PositionRecord<Dummy> p3 = parseTestInput("07/17/2022,18:56:14.713,037.57589,-119.09622");
-        //notice, p2 and p3 are the same! -- Our raw data contains a duplicate, how should this be handled
-        LocalPolyInterpolator interpolator = new LocalPolyInterpolator(
-            Duration.ofSeconds(60),
-            3,
-            true
-        );
+        // notice, p2 and p3 are the same! -- Our raw data contains a duplicate, how should this be handled
+        LocalPolyInterpolator interpolator = new LocalPolyInterpolator(Duration.ofSeconds(60), 3, true);
 
-        Optional<KineticRecord<Dummy>> result = interpolator.floorInterpolate(
-            newArrayList(p1, p2, p3),
-            Instant.parse("2022-07-17T18:55:52Z")
-        );
+        Optional<KineticRecord<Dummy>> result =
+                interpolator.floorInterpolate(newArrayList(p1, p2, p3), Instant.parse("2022-07-17T18:55:52Z"));
 
         assertThat(result.isPresent(), is(false));
     }

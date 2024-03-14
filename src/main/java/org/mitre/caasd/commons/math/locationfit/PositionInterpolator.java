@@ -60,22 +60,18 @@ public interface PositionInterpolator {
      * certain input constraints are not met (i.e., Do you have enough sample data?  Does the
      * sampleTime occur between the first and last Position sample?
      */
-    default <T> Optional<KineticRecord<T>> floorInterpolate(
-        List<PositionRecord<T>> positionData,
-        Instant sampleTime
-    ) {
+    default <T> Optional<KineticRecord<T>> floorInterpolate(List<PositionRecord<T>> positionData, Instant sampleTime) {
 
-        List<Position> positions = positionData.stream()
-            .map(PositionRecord::position)
-            .collect(toList());
+        List<Position> positions =
+                positionData.stream().map(PositionRecord::position).collect(toList());
 
         Optional<KineticPosition> kinetics = interpolate(positions, sampleTime);
 
         if (!kinetics.isPresent()) {
-            //interpolate did not return a KineticPosition ... return nothing
+            // interpolate did not return a KineticPosition ... return nothing
             return Optional.empty();
         } else {
-            //a KineticPosition was made -- find out which datum to match with it
+            // a KineticPosition was made -- find out which datum to match with it
             PositionRecord<T> floor = HasTime.floor(positionData, sampleTime);
             KineticRecord<T> kr = new KineticRecord<>(floor.datum(), kinetics.get());
             return Optional.of(kr);

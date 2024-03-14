@@ -34,7 +34,7 @@ import org.mitre.caasd.commons.fileutil.FileUtils;
  */
 public class FileSink implements Consumer<String> {
 
-    //@todo -- Consider adding the sub-directory Strategy that JsonFileSink supports.
+    // @todo -- Consider adding the sub-directory Strategy that JsonFileSink supports.
 
     /** The root directory where files documenting each event are placed. */
     private final String outputDirectory;
@@ -62,7 +62,7 @@ public class FileSink implements Consumer<String> {
         String fullFileName = outputDirectory + File.separator + fileName + ".txt";
 
         try {
-            //every message gets a new line (just like System.out.println(msg))
+            // every message gets a new line (just like System.out.println(msg))
             FileUtils.appendToFile(fullFileName, message + "\n");
         } catch (Exception ex) {
             throw demote("Error writing message to FileSink, fileName = " + fileName, ex);

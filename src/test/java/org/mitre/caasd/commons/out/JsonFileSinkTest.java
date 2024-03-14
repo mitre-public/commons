@@ -62,7 +62,7 @@ public class JsonFileSinkTest {
 
         @Override
         public String apply(SampleClassThatContainsNamingInformation record) {
-            //cherry pick some value from the type we expect...in this case, the fileNamePrefix itself
+            // cherry pick some value from the type we expect...in this case, the fileNamePrefix itself
             return record.fileNamePrefix;
         }
     }
@@ -90,7 +90,9 @@ public class JsonFileSinkTest {
         @Override
         public Path apply(SampleClassThatContainsNamingInformation sampleClassThatContainsNamingInformation) {
             // just use the filename prefix for something
-            return Paths.get(Double.toString(sampleClassThatContainsNamingInformation.recordValue), sampleClassThatContainsNamingInformation.fileNamePrefix);
+            return Paths.get(
+                    Double.toString(sampleClassThatContainsNamingInformation.recordValue),
+                    sampleClassThatContainsNamingInformation.fileNamePrefix);
         }
     }
 
@@ -100,16 +102,17 @@ public class JsonFileSinkTest {
         File expectFile_A = new File(tempDir, new File("A", "A.json").toString());
         File expectFile_B = new File(tempDir, new File("B", "B.json").toString());
 
-        //neither file exists....
+        // neither file exists....
         assertThat(expectFile_A.exists(), is(false));
         assertThat(expectFile_B.exists(), is(false));
 
-        JsonFileSink jfd = newJsonFileDestination(tempDir.toString(), new ClassSpecificFileNamer(), new SubdirectoryByFilename());
+        JsonFileSink jfd =
+                newJsonFileDestination(tempDir.toString(), new ClassSpecificFileNamer(), new SubdirectoryByFilename());
 
         jfd.accept(new SampleClassThatContainsNamingInformation("A", 123.0));
         jfd.accept(new SampleClassThatContainsNamingInformation("B", 345.0));
 
-        //but now they do
+        // but now they do
         assertThat(expectFile_A.exists(), is(true));
         assertThat(expectFile_B.exists(), is(true));
     }
@@ -117,19 +120,22 @@ public class JsonFileSinkTest {
     @Test
     public void showHowAPerRecordMultipleLevelSubdirectoryCanBeSpecified() throws IOException {
 
-        File expectFile_A = tempDir.toPath().resolve("123.0").resolve("A").resolve("A.json").toFile();
-        File expectFile_B = tempDir.toPath().resolve("345.0").resolve("B").resolve("B.json").toFile();
+        File expectFile_A =
+                tempDir.toPath().resolve("123.0").resolve("A").resolve("A.json").toFile();
+        File expectFile_B =
+                tempDir.toPath().resolve("345.0").resolve("B").resolve("B.json").toFile();
 
-        //neither file exists....
+        // neither file exists....
         assertThat(expectFile_A.exists(), is(false));
         assertThat(expectFile_B.exists(), is(false));
 
-        JsonFileSink jfd = newJsonFileDestination(tempDir.toString(), new ClassSpecificFileNamer(), new SubdirectoryByValueThenFilename());
+        JsonFileSink jfd = newJsonFileDestination(
+                tempDir.toString(), new ClassSpecificFileNamer(), new SubdirectoryByValueThenFilename());
 
         jfd.accept(new SampleClassThatContainsNamingInformation("A", 123.0));
         jfd.accept(new SampleClassThatContainsNamingInformation("B", 345.0));
 
-        //but now they do
+        // but now they do
         assertThat(expectFile_A.exists(), is(true));
         assertThat(expectFile_B.exists(), is(true));
     }
@@ -140,16 +146,17 @@ public class JsonFileSinkTest {
         File expectFile_A = new File(tempDir, "A.json");
         File expectFile_B = new File(tempDir, "B.json");
 
-        //neither file exists....
+        // neither file exists....
         assertThat(expectFile_A.exists(), is(false));
         assertThat(expectFile_B.exists(), is(false));
 
-        JsonFileSink jfd = newJsonFileDestination(tempDir.toString(), new ClassSpecificFileNamer(), new FlatDirectory());
+        JsonFileSink jfd =
+                newJsonFileDestination(tempDir.toString(), new ClassSpecificFileNamer(), new FlatDirectory());
 
         jfd.accept(new SampleClassThatContainsNamingInformation("A", 123.0));
         jfd.accept(new SampleClassThatContainsNamingInformation("B", 345.0));
 
-        //but now they do
+        // but now they do
         assertThat(expectFile_A.exists(), is(true));
         assertThat(expectFile_B.exists(), is(true));
     }
@@ -160,7 +167,7 @@ public class JsonFileSinkTest {
         File expectFile_1 = new File(tempDir, "789.json");
         File expectFile_2 = new File(tempDir, "790.json");
 
-        //neither file exists....
+        // neither file exists....
         assertThat(expectFile_1.exists(), is(false));
         assertThat(expectFile_2.exists(), is(false));
 
@@ -169,7 +176,7 @@ public class JsonFileSinkTest {
         jfd.accept(new SampleClassNamedUsingExternalRules(123.0));
         jfd.accept(new SampleClassNamedUsingExternalRules(345.0));
 
-        //but now they do
+        // but now they do
         assertThat(expectFile_1.exists(), is(true));
         assertThat(expectFile_2.exists(), is(true));
     }
@@ -184,14 +191,12 @@ public class JsonFileSinkTest {
         return new File(tempDir, outerMethod);
     }
 
-    private <T> JsonFileSink newJsonFileDestination(String outputDirectory,
-        ToStringFunction<T> fileNamer,
-        Function<T, Path> subdirectory
-    ) {
+    private <T> JsonFileSink newJsonFileDestination(
+            String outputDirectory, ToStringFunction<T> fileNamer, Function<T, Path> subdirectory) {
         return new JsonFileSink(outputDirectory, fileNamer, subdirectory, new VoidExceptionHandler());
     }
 
-    //Files written from these inputs will be numbered numerically
+    // Files written from these inputs will be numbered numerically
     static class SampleClassNamedUsingExternalRules implements JsonWritable {
 
         double recordValue;
@@ -258,28 +263,24 @@ public class JsonFileSinkTest {
         File expectFile_1 = new File(tempDir, "type1.json");
         File expectFile_2 = new File(tempDir, "type2.json");
 
-        //neither file exists....
+        // neither file exists....
         assertThat(expectFile_1.exists(), is(false));
         assertThat(expectFile_2.exists(), is(false));
 
-        JsonFileSink<FauxLogEntry> jfd = new JsonFileSink<>(
-            tempDir.toString(),
-            (FauxLogEntry fle) -> {
-                return fle.logType;
-            }
-        );
+        JsonFileSink<FauxLogEntry> jfd = new JsonFileSink<>(tempDir.toString(), (FauxLogEntry fle) -> {
+            return fle.logType;
+        });
 
         jfd.accept(new FauxLogEntry("type1", "a"));
         jfd.accept(new FauxLogEntry("type1", "b"));
         jfd.accept(new FauxLogEntry("type2", "c"));
 
-        //but now they do
+        // but now they do
         assertThat(expectFile_1.exists(), is(true));
         assertThat(expectFile_2.exists(), is(true));
 
-        //The file with 2 entries is twice as big as the file with one entry
-        //i.e. When using a JsonFileSink to write log data the log data must aggregate, not overwrite.
+        // The file with 2 entries is twice as big as the file with one entry
+        // i.e. When using a JsonFileSink to write log data the log data must aggregate, not overwrite.
         assertThat(expectFile_1.length() == 2 * expectFile_2.length(), is(true));
     }
-
 }

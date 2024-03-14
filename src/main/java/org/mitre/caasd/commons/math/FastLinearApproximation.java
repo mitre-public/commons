@@ -38,7 +38,7 @@ public class FastLinearApproximation {
     List<Double> yData;
     private final int n;
     private final double halfWidth;
-    private final double middleX; //the exact middle of the bin
+    private final double middleX; // the exact middle of the bin
     private final double avgY;
     private double bestSlope;
     private double error;
@@ -63,37 +63,35 @@ public class FastLinearApproximation {
     }
 
     private double computeAverageY() {
-        //DoubleSummaryStatistics is better at handling numeric error than naively computing the average.
+        // DoubleSummaryStatistics is better at handling numeric error than naively computing the average.
         DoubleSummaryStatistics dss = new DoubleSummaryStatistics();
         yData.stream().mapToDouble(x -> x).forEach(dss);
         return dss.getAverage();
     }
 
     private void computeSlopeAndError() {
-        //use these values for the inital points in the binary search
-        double lowSlope = avgY / halfWidth; //this slope makes the first Y value 0
+        // use these values for the inital points in the binary search
+        double lowSlope = avgY / halfWidth; // this slope makes the first Y value 0
         double lowSlopeError = sumSquaredErrorGivenSlope(lowSlope);
 
-        double highSlope = -avgY / halfWidth; //this slope makes the last Y value 0
+        double highSlope = -avgY / halfWidth; // this slope makes the last Y value 0
         double highSlopeError = sumSquaredErrorGivenSlope(highSlope);
 
-        //while slope is changing
+        // while slope is changing
         while (abs(lowSlope - highSlope) > 0.00001) {
 
             if (lowSlopeError < highSlopeError) {
-                //low slope is better -- reset highSlope, recompute its error
+                // low slope is better -- reset highSlope, recompute its error
                 highSlope = (lowSlope + highSlope) / 2.0;
                 highSlopeError = sumSquaredErrorGivenSlope(highSlope);
             } else {
-                //high slope is better -- reset lowSlope, recompute its error
+                // high slope is better -- reset lowSlope, recompute its error
                 lowSlope = (lowSlope + highSlope) / 2.0;
                 lowSlopeError = sumSquaredErrorGivenSlope(lowSlope);
             }
         }
 
-        this.bestSlope = (lowSlopeError < highSlopeError)
-            ? lowSlope
-            : highSlope;
+        this.bestSlope = (lowSlopeError < highSlopeError) ? lowSlope : highSlope;
         this.error = min(lowSlopeError, highSlopeError);
     }
 

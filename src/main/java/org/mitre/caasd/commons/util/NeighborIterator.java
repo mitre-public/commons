@@ -16,14 +16,12 @@
 
 package org.mitre.caasd.commons.util;
 
-
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
 
 /**
  * A NeighborIterator is an Iterator decorated to always return two consecutive elements in the
@@ -77,11 +75,10 @@ public class NeighborIterator<T> implements Iterator<IterPair<T>> {
          * Take the first iteration step to ensure the first call to "next()" returns
          * OrderedPair.of(element0, element1) and not OrderedPair.of(null, element0)
          */
-        if(iter.hasNext()) {
+        if (iter.hasNext()) {
             this.next();
         }
     }
-
 
     public static <T> NeighborIterator<T> newNeighborIterator(Iterator<T> iter) {
         return new NeighborIterator<>(iter);
@@ -103,7 +100,7 @@ public class NeighborIterator<T> implements Iterator<IterPair<T>> {
 
     @Override
     public IterPair<T> next() {
-        if(!iterator.hasNext()) {
+        if (!iterator.hasNext()) {
             throw new NoSuchElementException();
         }
 
@@ -127,11 +124,10 @@ public class NeighborIterator<T> implements Iterator<IterPair<T>> {
     }
 
     public T getSoleElement() {
-        if(hadExactlyOneElement()) {
+        if (hadExactlyOneElement()) {
             return current;
         } else {
             throw new IllegalStateException("Iterator did not have exactly one element");
         }
     }
-
 }

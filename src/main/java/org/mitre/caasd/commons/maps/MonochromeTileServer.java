@@ -38,7 +38,6 @@ public class MonochromeTileServer implements TileServer {
 
     private final int tileSize = 512;
 
-
     public MonochromeTileServer(Color color) {
         requireNonNull(color);
         this.color = color;
@@ -57,7 +56,7 @@ public class MonochromeTileServer implements TileServer {
     @Override
     public URL getUrlFor(TileAddress ta) {
         throw new UnsupportedOperationException(
-            "URLs are not provided because single color tiles can be created directly");
+                "URLs are not provided because single color tiles can be created directly");
     }
 
     /**

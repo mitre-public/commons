@@ -37,7 +37,7 @@ public class PathSimilarity {
      *     similarity score finds the Most similar paths.
      */
     public static double slowSimilarity(LatLongPath p1, LatLongPath p2) {
-        //ACCURATE BUT SLOW
+        // ACCURATE BUT SLOW
 
         requireNonNull(p1);
         requireNonNull(p2);
@@ -50,7 +50,7 @@ public class PathSimilarity {
             distanceSum += mine.distanceInNM(his);
         }
 
-        //return the
+        // return the
         return 0 - distanceSum;
     }
 
@@ -80,7 +80,8 @@ public class PathSimilarity {
      *     similarity score finds the Most similar paths.
      */
     public static double similarity(LatLongPath p1, LatLongPath p2) {
-        //USUALLY GOOD ENOUGH FOR PICKING THE "MOST SIMILAR PATH" BECAUSE ACCURACY IMPROVES AS PATHS GET MORE AND MORE SIMILAR
+        // USUALLY GOOD ENOUGH FOR PICKING THE "MOST SIMILAR PATH" BECAUSE ACCURACY IMPROVES AS PATHS GET MORE AND MORE
+        // SIMILAR
 
         requireNonNull(p1);
         requireNonNull(p2);
@@ -122,10 +123,9 @@ public class PathSimilarity {
         return abs(latitude1 - latitude2);
     }
 
-
     /** Computes the "delta in degrees" between two valid longitudes (always positive). */
     static double longitudeDelta(double longitude1, double longitude2) {
-        //be careful with longitude -- the international date line is a problem
+        // be careful with longitude -- the international date line is a problem
         return abs(angleDifference(longitude1 - longitude2));
     }
 }

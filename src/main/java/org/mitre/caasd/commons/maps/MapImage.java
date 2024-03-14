@@ -49,7 +49,9 @@ import org.mitre.caasd.commons.LatLong;
  */
 public class MapImage {
 
-    //@todo -- MapImage should support augmenting the "undecoratedImage".  This would have real performance impacts when you are going to render 10k frames and EVERY frame would need to redraw a constant MapFeatures like a scale, legend, etc.
+    // @todo -- MapImage should support augmenting the "undecoratedImage".  This would have real performance impacts
+    // when you are going to render 10k frames and EVERY frame would need to redraw a constant MapFeatures like a scale,
+    // legend, etc.
 
     /** The center of the map (after combining and cropping). */
     final LatLong center;
@@ -65,9 +67,9 @@ public class MapImage {
 
     final int zoomLevel;
 
-    final int tileSize; //the width (in pixels) of a raw tile
+    final int tileSize; // the width (in pixels) of a raw tile
 
-    final BufferedImage undecoratedImage; //the combined and cropped image without any MapFeatures
+    final BufferedImage undecoratedImage; // the combined and cropped image without any MapFeatures
 
     /**
      * Create a Map by downloading, combining, and then cropping multiple map tiles.  MapImages are
@@ -80,22 +82,21 @@ public class MapImage {
     public MapImage(TileServer tileServer, LatLong center, Distance width) {
         this.center = requireNonNull(center);
 
-        //Find the top-left and bottom-right corners of the map (ASSUMES the map is a square)
+        // Find the top-left and bottom-right corners of the map (ASSUMES the map is a square)
         Distance halfWidth = width.times(.5);
         this.topLeft = center.project(WEST, halfWidth).project(NORTH, halfWidth);
         this.bottomRight = center.project(EAST, halfWidth).project(SOUTH, halfWidth);
 
         this.tileSize = tileServer.maxTileSize();
 
-        //Guess a good value for the zoom level.  Assume a "good map size" is 2 or 3 tiles wide & tall
+        // Guess a good value for the zoom level.  Assume a "good map size" is 2 or 3 tiles wide & tall
         this.zoomLevel = computeZoomLevel(width);
 
-        this.undecoratedImage = buildCroppedImage(
-            tileServer, topLeft, bottomRight, zoomLevel
-        );
+        this.undecoratedImage = buildCroppedImage(tileServer, topLeft, bottomRight, zoomLevel);
 
-        //Save the "global pixel coordinates" of the top left corner of the map.
-        //This pixel coordinate becomes the "new (0,0) coordinate" in "pixel space" and allows us to locate where MapFeatures get draw
+        // Save the "global pixel coordinates" of the top left corner of the map.
+        // This pixel coordinate becomes the "new (0,0) coordinate" in "pixel space" and allows us to locate where
+        // MapFeatures get draw
         this.zeroPixel = new PixelLatLong(topLeft, zoomLevel, tileSize);
     }
 
@@ -116,11 +117,9 @@ public class MapImage {
         int half = widthInPixels / 2;
         PixelLatLong cp = new PixelLatLong(center, zoomLvl, tileSize);
 
-        this.topLeft = new PixelLatLong(cp.x() - half, cp.y() - half, zoomLvl, tileSize)
-            .latLong();
+        this.topLeft = new PixelLatLong(cp.x() - half, cp.y() - half, zoomLvl, tileSize).latLong();
 
-        this.bottomRight = new PixelLatLong(cp.x() + half, cp.y() + half, zoomLvl, tileSize)
-            .latLong();
+        this.bottomRight = new PixelLatLong(cp.x() + half, cp.y() + half, zoomLvl, tileSize).latLong();
 
         this.undecoratedImage = buildCroppedImage(tileServer, topLeft, bottomRight, zoomLvl);
         this.zeroPixel = new PixelLatLong(topLeft, zoomLvl, tileSize);
@@ -138,26 +137,22 @@ public class MapImage {
      * @return A BufferedImage built from 1 or more tiles
      */
     private static BufferedImage buildCroppedImage(
-        TileServer tileServer,
-        LatLong topLeft,
-        LatLong bottomRight,
-        int zoomLevel
-    ) {
+            TileServer tileServer, LatLong topLeft, LatLong bottomRight, int zoomLevel) {
         int tileSize = tileServer.maxTileSize();
         List<TileAddress> tilesInMap = tileAddressesSpanning(topLeft, bottomRight, zoomLevel);
         BufferedImage combinedTileImage = tileServer.downloadAndCombineTiles(tilesInMap);
 
-        //When cropping the "image we want" out of the combinedTileImage we need to reference the top-left corner of the combinedTileImage
+        // When cropping the "image we want" out of the combinedTileImage we need to reference the top-left corner of
+        // the combinedTileImage
         PixelLatLong topLeftOfCombined = TileAddress.of(topLeft, zoomLevel).topLeftPixel(tileSize);
         PixelLatLong excerptTopLeft = new PixelLatLong(topLeft, zoomLevel, tileSize);
         PixelLatLong excerptBottomRight = new PixelLatLong(bottomRight, zoomLevel, tileSize);
 
         BufferedImage undecoratedImage = combinedTileImage.getSubimage(
-            excerptTopLeft.x(topLeftOfCombined),
-            excerptTopLeft.y(topLeftOfCombined),
-            (int) (excerptBottomRight.x() - excerptTopLeft.x()),
-            (int) (excerptBottomRight.y() - excerptTopLeft.y())
-        );
+                excerptTopLeft.x(topLeftOfCombined),
+                excerptTopLeft.y(topLeftOfCombined),
+                (int) (excerptBottomRight.x() - excerptTopLeft.x()),
+                (int) (excerptBottomRight.y() - excerptTopLeft.y()));
 
         return undecoratedImage;
     }
@@ -165,7 +160,7 @@ public class MapImage {
     /** Find the zoom level where a given distance DOES NOT fit in a single tile. */
     private static int computeZoomLevel(Distance width) {
 
-        //At Zoom Level 0 the distance shown in a tile is the circumference of earth
+        // At Zoom Level 0 the distance shown in a tile is the circumference of earth
         Distance currentDistance = Distance.ofNauticalMiles(2 * PI * EARTH_RADIUS_NM);
         int zoomLevel = 0;
 
@@ -177,7 +172,6 @@ public class MapImage {
         return zoomLevel;
     }
 
-
     /** @return This MapImage as a BufferedImage. */
     public BufferedImage plot() {
         return copyOfImage();
@@ -185,7 +179,7 @@ public class MapImage {
 
     /** @return This MapImage, with additional MapFeatures, as a BufferedImage. */
     public BufferedImage plot(Iterable<MapFeature> features) {
-        //copy the "raw map"...then add these features...
+        // copy the "raw map"...then add these features...
         BufferedImage copy = copyOfImage();
         Graphics2D g = (Graphics2D) copy.getGraphics();
 
@@ -198,7 +192,7 @@ public class MapImage {
 
     /** @return This MapImage, with additional MapFeatures, as a BufferedImage. */
     public BufferedImage plot(FeatureSet... sets) {
-        //copy the "raw map"...then add these features...
+        // copy the "raw map"...then add these features...
         BufferedImage copy = copyOfImage();
         Graphics2D g = (Graphics2D) copy.getGraphics();
 
@@ -224,7 +218,6 @@ public class MapImage {
         writeImageToFile(plot(features), targetFile);
     }
 
-
     /** Write this MapImage, with additional MapFeatures, to a ".png" or ".jpg" file. */
     public void plotToFile(File targetFile, FeatureSet... sets) {
         requireNonNull(sets);
@@ -240,11 +233,10 @@ public class MapImage {
 
         String filename = targetFile.getName();
         checkArgument(
-            filename.endsWith(".jpg") || filename.endsWith(".png"),
-            "Must write to a \".jpg\" file or a \".png\" file"
-        );
+                filename.endsWith(".jpg") || filename.endsWith(".png"),
+                "Must write to a \".jpg\" file or a \".png\" file");
 
-        //Extract the "jpg" or "png" (accidentally adding the leading "." will cause a failure)
+        // Extract the "jpg" or "png" (accidentally adding the leading "." will cause a failure)
         String imageFormat = filename.substring(filename.lastIndexOf(".") + 1);
 
         try {
@@ -271,25 +263,21 @@ public class MapImage {
 
         LatLong center = LatLong.avgLatLong(locations.toArray(new LatLong[0]));
 
-        List<MapFeature> pointData = locations.stream()
-            .map(loc -> circle(loc, Color.GREEN, 6, 1.0f))
-            .collect(Collectors.toList());
+        List<MapFeature> pointData =
+                locations.stream().map(loc -> circle(loc, Color.GREEN, 6, 1.0f)).collect(Collectors.toList());
 
         return newMapBuilder()
-            .mapBoxDarkMode()
-            .center(center)
-            .width(mapWidth)
-            .addFeatures(pointData)
-            .toImage();
+                .mapBoxDarkMode()
+                .center(center)
+                .width(mapWidth)
+                .addFeatures(pointData)
+                .toImage();
     }
 
     private BufferedImage copyOfImage() {
 
         BufferedImage copy = new BufferedImage(
-            undecoratedImage.getWidth(),
-            undecoratedImage.getHeight(),
-            BufferedImage.TYPE_3BYTE_BGR
-        );
+                undecoratedImage.getWidth(), undecoratedImage.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
         Graphics2D g = (Graphics2D) copy.getGraphics();
 
         g.drawImage(undecoratedImage, null, null);

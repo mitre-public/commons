@@ -45,7 +45,7 @@ public class Vector {
     }
 
     public double[] components() {
-        //return a defensive copy to ensure that users cannot alter the vector
+        // return a defensive copy to ensure that users cannot alter the vector
         return Arrays.copyOf(components, components.length);
     }
 
@@ -103,9 +103,6 @@ public class Vector {
 
     /** @throws IllegalArgumentException if these vectors have different lengths. */
     public static void checkDimensionsAreEqual(Vector v1, Vector v2) {
-        checkArgument(
-            v1.components.length == v2.components.length,
-            "These vectors have different dimensions"
-        );
+        checkArgument(v1.components.length == v2.components.length, "These vectors have different dimensions");
     }
 }

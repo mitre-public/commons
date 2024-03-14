@@ -36,11 +36,11 @@ public class MemoryIteratorTest {
         MemoryIterator<Integer> memIter = new MemoryIterator<>(numbers.iterator());
 
         assertThat(memIter.hasNext(), is(true));
-        memIter.next(); //1
+        memIter.next(); // 1
         assertThat(memIter.hasNext(), is(true));
-        memIter.next(); //2
+        memIter.next(); // 2
         assertThat(memIter.hasNext(), is(true));
-        memIter.next(); //3
+        memIter.next(); // 3
         assertThat(memIter.hasNext(), is(false));
     }
 
@@ -58,11 +58,11 @@ public class MemoryIteratorTest {
         MemoryIterator<Integer> memIter = new MemoryIterator<>(numbers.iterator());
 
         assertThat(memIter.hasNext(), is(true));
-        memIter.next(); //1
+        memIter.next(); // 1
         assertThat(memIter.hasNext(), is(true));
-        assertNull(memIter.next()); //null
+        assertNull(memIter.next()); // null
         assertThat(memIter.hasNext(), is(true));
-        memIter.next(); //3
+        memIter.next(); // 3
         assertThat(memIter.hasNext(), is(false));
     }
 
@@ -72,11 +72,11 @@ public class MemoryIteratorTest {
         MemoryIterator<Integer> memIter = new MemoryIterator<>(numbers.iterator());
 
         assertThat(memIter.hasPrior(), is(false));
-        memIter.next(); //1
+        memIter.next(); // 1
         assertThat(memIter.hasPrior(), is(true));
-        memIter.next(); //2
+        memIter.next(); // 2
         assertThat(memIter.hasPrior(), is(true));
-        memIter.next(); //3
+        memIter.next(); // 3
         assertThat(memIter.hasPrior(), is(true));
     }
 
@@ -94,11 +94,11 @@ public class MemoryIteratorTest {
         MemoryIterator<Integer> memIter = new MemoryIterator(numbers.iterator());
 
         assertThat(memIter.hasPrior(), is(false));
-        memIter.next(); //1
+        memIter.next(); // 1
         assertThat(memIter.hasPrior(), is(true));
-        memIter.next(); //null
+        memIter.next(); // null
         assertThat(memIter.hasPrior(), is(true));
-        memIter.next(); //3
+        memIter.next(); // 3
         assertThat(memIter.hasPrior(), is(true));
     }
 
@@ -226,11 +226,11 @@ public class MemoryIteratorTest {
         MemoryIterator<Integer> memIter = new MemoryIterator(numbers.iterator());
 
         assertThat(memIter.isEmpty(), is(false));
-        memIter.next(); //1
+        memIter.next(); // 1
         assertThat(memIter.isEmpty(), is(false));
-        memIter.next(); //2
+        memIter.next(); // 2
         assertThat(memIter.isEmpty(), is(false));
-        memIter.next(); //3
+        memIter.next(); // 3
         assertThat(memIter.isEmpty(), is(false));
     }
 
@@ -243,7 +243,7 @@ public class MemoryIteratorTest {
         memIter.next();
         memIter.remove();
 
-        assertThat(numbers.get(0), is(2)); //we removed 1, so the new first element is 2
+        assertThat(numbers.get(0), is(2)); // we removed 1, so the new first element is 2
     }
 
     @Test
@@ -255,17 +255,17 @@ public class MemoryIteratorTest {
         memIter.next();
         memIter.remove();
 
-        assertThat(numbers.get(0), is(2)); //we removed 1, so the new first element is 2
+        assertThat(numbers.get(0), is(2)); // we removed 1, so the new first element is 2
     }
 
     @Test
     public void removeOnArrayIsNotSupported() {
 
-        Integer[] numbers = new Integer[]{1, 2, 3};
+        Integer[] numbers = new Integer[] {1, 2, 3};
         MemoryIterator<Integer> memIter = newMemoryIterator(numbers);
 
         memIter.next();
 
-        assertThrows(UnsupportedOperationException.class, () -> memIter.remove()); //not supported
+        assertThrows(UnsupportedOperationException.class, () -> memIter.remove()); // not supported
     }
 }

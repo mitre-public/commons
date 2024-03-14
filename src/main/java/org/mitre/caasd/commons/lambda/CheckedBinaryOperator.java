@@ -24,5 +24,4 @@ import java.util.function.BinaryOperator;
  * {@link CheckedBiFunction}
  */
 @FunctionalInterface
-public interface CheckedBinaryOperator<T> extends CheckedBiFunction<T, T, T> {
-}
+public interface CheckedBinaryOperator<T> extends CheckedBiFunction<T, T, T> {}
