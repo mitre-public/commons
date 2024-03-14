@@ -20,31 +20,9 @@ import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
 import static java.lang.reflect.Modifier.isPublic;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mitre.caasd.commons.util.PropertyUtils.getBoolean;
-import static org.mitre.caasd.commons.util.PropertyUtils.getByte;
-import static org.mitre.caasd.commons.util.PropertyUtils.getDouble;
-import static org.mitre.caasd.commons.util.PropertyUtils.getFloat;
-import static org.mitre.caasd.commons.util.PropertyUtils.getInt;
-import static org.mitre.caasd.commons.util.PropertyUtils.getLong;
-import static org.mitre.caasd.commons.util.PropertyUtils.getOptionalBoolean;
-import static org.mitre.caasd.commons.util.PropertyUtils.getOptionalByte;
-import static org.mitre.caasd.commons.util.PropertyUtils.getOptionalDouble;
-import static org.mitre.caasd.commons.util.PropertyUtils.getOptionalFloat;
-import static org.mitre.caasd.commons.util.PropertyUtils.getOptionalInt;
-import static org.mitre.caasd.commons.util.PropertyUtils.getOptionalLong;
-import static org.mitre.caasd.commons.util.PropertyUtils.getOptionalShort;
-import static org.mitre.caasd.commons.util.PropertyUtils.getOptionalString;
-import static org.mitre.caasd.commons.util.PropertyUtils.getShort;
-import static org.mitre.caasd.commons.util.PropertyUtils.getString;
-import static org.mitre.caasd.commons.util.PropertyUtils.parseProperties;
-import static org.mitre.caasd.commons.util.PropertyUtils.tokenizeAndValidate;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mitre.caasd.commons.util.PropertyUtils.*;
 
 import java.lang.reflect.Constructor;
 import java.util.List;
@@ -54,7 +32,6 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
-import org.mitre.caasd.commons.util.PropertyUtils.MissingPropertyException;
 
 public class PropertyUtilsTest {
 

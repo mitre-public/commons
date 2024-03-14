@@ -22,8 +22,9 @@ import static org.hamcrest.Matchers.is;
 
 import java.util.Optional;
 
-import org.junit.jupiter.api.Test;
 import org.mitre.caasd.commons.util.ExceptionHandler;
+
+import org.junit.jupiter.api.Test;
 
 public class ExceptionCatchingCleanerTest {
 

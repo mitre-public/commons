@@ -19,8 +19,6 @@ package org.mitre.caasd.commons.lambda;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 
-import org.mitre.caasd.commons.util.DemotedException;
-
 /**
  * {@link BinaryOperator} is to {@link BiFunction} as {@link CheckedBinaryOperator} is to
  * {@link CheckedBiFunction}

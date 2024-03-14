@@ -17,6 +17,7 @@
 package org.mitre.caasd.commons.maps;
 
 import static java.awt.Font.PLAIN;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -68,6 +69,3 @@ public class DebugTileServer implements TileServer {
     }
 
 }
-
-
-

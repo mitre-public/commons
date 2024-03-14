@@ -22,12 +22,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mitre.caasd.commons.HasTime.nearest;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.Test;
 import org.mitre.caasd.commons.TimeTest.HasTimeImp;
+
+import org.junit.jupiter.api.Test;
 
 public class HasTimeTest {
 

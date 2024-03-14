@@ -19,9 +19,7 @@ package org.mitre.caasd.commons;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mitre.caasd.commons.Functions.ALWAYS_FALSE;
-import static org.mitre.caasd.commons.Functions.ALWAYS_TRUE;
-import static org.mitre.caasd.commons.Functions.NO_OP_CONSUMER;
+import static org.mitre.caasd.commons.Functions.*;
 
 import java.util.function.Predicate;
 

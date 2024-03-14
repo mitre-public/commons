@@ -26,9 +26,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.IOException;
 import java.util.List;
 
+import org.mitre.caasd.commons.Pair;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mitre.caasd.commons.Pair;
 
 public class PiecewiseLinearSplitterTest {
 

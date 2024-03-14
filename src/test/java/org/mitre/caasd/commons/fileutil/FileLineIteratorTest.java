@@ -19,9 +19,7 @@ package org.mitre.caasd.commons.fileutil;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mitre.caasd.commons.fileutil.FileUtils.getResourceFile;
 
 import java.io.File;
@@ -29,8 +27,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.NoSuchElementException;
 
-import org.junit.jupiter.api.Test;
 import org.mitre.caasd.commons.util.DemotedException;
+
+import org.junit.jupiter.api.Test;
 
 public class FileLineIteratorTest {
 

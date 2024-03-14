@@ -19,9 +19,8 @@ package org.mitre.caasd.commons.maps;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Lists.newArrayList;
-import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
-import static java.util.Objects.requireNonNull;
+import static java.util.Objects.*;
+
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;

@@ -20,18 +20,14 @@ import static java.lang.Long.toBinaryString;
 import static java.time.Instant.EPOCH;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mitre.caasd.commons.ids.IdFactoryShard.inMemoryCounter;
-import static org.mitre.caasd.commons.ids.IdFactoryShard.limitedMemoryCounter;
-import static org.mitre.caasd.commons.ids.IdFactoryShard.numBitsRequiredFor;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mitre.caasd.commons.ids.IdFactoryShard.*;
+
 import java.time.Instant;
 import java.util.NoSuchElementException;
 import java.util.TreeSet;
 
 import org.junit.jupiter.api.Test;
-import org.mitre.caasd.commons.ids.IdFactoryShard.CountKeeper;
 
 class IdFactoryShardTest {
 

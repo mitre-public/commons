@@ -18,6 +18,7 @@ package org.mitre.caasd.commons.out;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
+
 import java.io.Closeable;
 import java.io.Flushable;
 import java.io.IOException;

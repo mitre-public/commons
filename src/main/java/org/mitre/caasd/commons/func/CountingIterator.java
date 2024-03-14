@@ -54,4 +54,3 @@ public class CountingIterator<T> implements Iterator<T> {
         return innerIter;
     }
 }
-

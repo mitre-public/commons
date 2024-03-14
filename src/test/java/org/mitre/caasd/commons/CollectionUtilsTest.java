@@ -22,6 +22,7 @@ import static java.time.Instant.EPOCH;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mitre.caasd.commons.CollectionUtils.zip;
+
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -29,8 +30,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 
-import org.junit.jupiter.api.Test;
 import org.mitre.caasd.commons.HasTimeTest.PojoWithTime;
+
+import org.junit.jupiter.api.Test;
 
 
 public class CollectionUtilsTest {

@@ -18,12 +18,8 @@ package org.mitre.caasd.commons.maps;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.collect.Lists.newArrayList;
-import static java.lang.Math.PI;
-import static java.lang.Math.cos;
-import static java.lang.Math.floor;
-import static java.lang.Math.log;
-import static java.lang.Math.tan;
-import static java.lang.Math.toRadians;
+import static java.lang.Math.*;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;

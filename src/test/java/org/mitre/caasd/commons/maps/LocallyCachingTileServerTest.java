@@ -18,9 +18,10 @@ package org.mitre.caasd.commons.maps;
 
 import java.time.Duration;
 
+import org.mitre.caasd.commons.LatLong;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mitre.caasd.commons.LatLong;
 
 class LocallyCachingTileServerTest {
 

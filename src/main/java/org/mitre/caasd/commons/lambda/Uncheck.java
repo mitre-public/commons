@@ -16,7 +16,11 @@
 
 package org.mitre.caasd.commons.lambda;
 
-import java.util.function.*;
+import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.mitre.caasd.commons.util.DemotedException;

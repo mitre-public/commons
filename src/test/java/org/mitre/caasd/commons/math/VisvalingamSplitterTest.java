@@ -24,8 +24,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.Test;
 import org.mitre.caasd.commons.Pair;
+
+import org.junit.jupiter.api.Test;
 
 public class VisvalingamSplitterTest {
 

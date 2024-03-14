@@ -21,6 +21,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static java.lang.Math.PI;
 import static org.mitre.caasd.commons.Course.Unit.DEGREES;
 import static org.mitre.caasd.commons.Course.Unit.RADIANS;
+
 import java.util.Objects;
 
 import org.apache.commons.math3.util.FastMath;

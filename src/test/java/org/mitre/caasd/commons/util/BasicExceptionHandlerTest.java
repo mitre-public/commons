@@ -17,14 +17,13 @@
 package org.mitre.caasd.commons.util;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 import java.sql.SQLException;
 
-import org.junit.jupiter.api.Test;
 import org.mitre.caasd.commons.Pair;
+
+import org.junit.jupiter.api.Test;
 
 public class BasicExceptionHandlerTest {
 

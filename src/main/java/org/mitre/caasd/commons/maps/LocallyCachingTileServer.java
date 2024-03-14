@@ -18,6 +18,7 @@ package org.mitre.caasd.commons.maps;
 
 import static java.util.Objects.requireNonNull;
 import static org.mitre.caasd.commons.util.DemotedException.demote;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;

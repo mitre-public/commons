@@ -29,7 +29,6 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
-
 import javax.annotation.Nonnull;
 
 import com.google.common.collect.Iterators;

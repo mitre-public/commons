@@ -19,16 +19,14 @@ package org.mitre.caasd.commons.maps;
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.lang.Math.PI;
 import static java.util.Objects.requireNonNull;
-import static org.mitre.caasd.commons.Course.EAST;
-import static org.mitre.caasd.commons.Course.NORTH;
-import static org.mitre.caasd.commons.Course.SOUTH;
-import static org.mitre.caasd.commons.Course.WEST;
+import static org.mitre.caasd.commons.Course.*;
 import static org.mitre.caasd.commons.Spherical.EARTH_RADIUS_NM;
 import static org.mitre.caasd.commons.maps.FeatureSet.noMapFeatures;
 import static org.mitre.caasd.commons.maps.MapBuilder.newMapBuilder;
 import static org.mitre.caasd.commons.maps.MapFeatures.circle;
 import static org.mitre.caasd.commons.maps.TileAddress.tileAddressesSpanning;
 import static org.mitre.caasd.commons.util.DemotedException.demote;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;

@@ -17,6 +17,7 @@
 package org.mitre.caasd.commons.out;
 
 import static java.util.Objects.requireNonNull;
+
 import java.util.Collection;
 
 public class Sinks {

@@ -19,6 +19,7 @@ package org.mitre.caasd.commons.util;
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 import static org.mitre.caasd.commons.util.PropertyUtils.loadProperties;
+
 import java.io.File;
 import java.util.Optional;
 import java.util.Properties;

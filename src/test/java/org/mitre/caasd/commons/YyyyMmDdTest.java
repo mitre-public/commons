@@ -25,9 +25,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mitre.caasd.commons.YyyyMmDd.newestOf;
-import static org.mitre.caasd.commons.YyyyMmDd.oldestOf;
-import static org.mitre.caasd.commons.YyyyMmDd.verifyYearMonthDayFormat;
+import static org.mitre.caasd.commons.YyyyMmDd.*;
 
 import java.time.Duration;
 import java.time.Instant;

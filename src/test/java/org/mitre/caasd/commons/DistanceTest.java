@@ -18,23 +18,10 @@ package org.mitre.caasd.commons;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.closeTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mitre.caasd.commons.Distance.Unit.FEET;
-import static org.mitre.caasd.commons.Distance.Unit.KILOMETERS;
-import static org.mitre.caasd.commons.Distance.Unit.METERS;
-import static org.mitre.caasd.commons.Distance.Unit.MILES;
-import static org.mitre.caasd.commons.Distance.Unit.NAUTICAL_MILES;
-import static org.mitre.caasd.commons.Distance.max;
-import static org.mitre.caasd.commons.Distance.mean;
-import static org.mitre.caasd.commons.Distance.min;
-import static org.mitre.caasd.commons.Distance.sum;
-import static org.mitre.caasd.commons.Distance.unitFromString;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mitre.caasd.commons.Distance.*;
+import static org.mitre.caasd.commons.Distance.Unit.*;
 import static org.mitre.caasd.commons.Speed.Unit.MILES_PER_HOUR;
 
 import java.time.Duration;
@@ -408,17 +395,17 @@ public class DistanceTest {
         assertThat(unitFromString("ft"), is(Distance.Unit.FEET));
         assertThat(unitFromString("5.0ft"), is(Distance.Unit.FEET));
 
-        assertThat(unitFromString("km"), is(Distance.Unit.KILOMETERS));
-        assertThat(unitFromString("5.0km"), is(Distance.Unit.KILOMETERS));
+        assertThat(unitFromString("km"), is(KILOMETERS));
+        assertThat(unitFromString("5.0km"), is(KILOMETERS));
 
-        assertThat(unitFromString("m"), is(Distance.Unit.METERS));
-        assertThat(unitFromString("5.0m"), is(Distance.Unit.METERS));
+        assertThat(unitFromString("m"), is(METERS));
+        assertThat(unitFromString("5.0m"), is(METERS));
 
         assertThat(unitFromString("mi"), is(Distance.Unit.MILES));
         assertThat(unitFromString("5.0mi"), is(Distance.Unit.MILES));
 
-        assertThat(unitFromString("NM"), is(Distance.Unit.NAUTICAL_MILES));
-        assertThat(unitFromString("5.0NM"), is(Distance.Unit.NAUTICAL_MILES));
+        assertThat(unitFromString("NM"), is(NAUTICAL_MILES));
+        assertThat(unitFromString("5.0NM"), is(NAUTICAL_MILES));
 
         assertThat(unitFromString(""), nullValue());
         assertThat(unitFromString("notAUnit"), nullValue());

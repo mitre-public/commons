@@ -19,11 +19,7 @@ package org.mitre.caasd.commons;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Arrays.asList;
-import static org.mitre.caasd.commons.Distance.Unit.FEET;
-import static org.mitre.caasd.commons.Distance.Unit.KILOMETERS;
-import static org.mitre.caasd.commons.Distance.Unit.METERS;
-import static org.mitre.caasd.commons.Distance.Unit.MILES;
-import static org.mitre.caasd.commons.Distance.Unit.NAUTICAL_MILES;
+import static org.mitre.caasd.commons.Distance.Unit.*;
 
 import java.io.Serializable;
 import java.time.Duration;

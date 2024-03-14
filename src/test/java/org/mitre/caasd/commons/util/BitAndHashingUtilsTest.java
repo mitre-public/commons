@@ -19,9 +19,7 @@ package org.mitre.caasd.commons.util;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mitre.caasd.commons.util.BitAndHashingUtils.compute64BitHash;
-import static org.mitre.caasd.commons.util.BitAndHashingUtils.makeBitMask;
-import static org.mitre.caasd.commons.util.BitAndHashingUtils.nRandomBitsFrom;
+import static org.mitre.caasd.commons.util.BitAndHashingUtils.*;
 
 import org.junit.jupiter.api.Test;
 
