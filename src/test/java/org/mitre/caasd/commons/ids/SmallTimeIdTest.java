@@ -22,6 +22,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.mitre.caasd.commons.util.BitAndHashingUtils.compute64BitHash;
 import static org.mitre.caasd.commons.util.BitAndHashingUtils.makeBitMask;
+
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;

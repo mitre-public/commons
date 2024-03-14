@@ -28,6 +28,7 @@ import static org.mitre.caasd.commons.Time.compareByTime;
 import static org.mitre.caasd.commons.Time.durationBtw;
 import static org.mitre.caasd.commons.fileutil.FileUtils.getResourceAsFile;
 import static org.mitre.caasd.commons.util.NeighborIterator.newNeighborIterator;
+
 import java.io.File;
 import java.time.Duration;
 import java.time.Instant;
@@ -40,17 +41,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.Test;
-import org.mitre.caasd.commons.Acceleration;
-import org.mitre.caasd.commons.Course;
-import org.mitre.caasd.commons.Distance;
-import org.mitre.caasd.commons.KineticRecord;
-import org.mitre.caasd.commons.LatLong;
-import org.mitre.caasd.commons.Pair;
-import org.mitre.caasd.commons.Position;
-import org.mitre.caasd.commons.PositionRecord;
-import org.mitre.caasd.commons.Speed;
-import org.mitre.caasd.commons.TimeWindow;
+import org.mitre.caasd.commons.*;
 import org.mitre.caasd.commons.fileutil.FileUtils;
 import org.mitre.caasd.commons.testing.TestLocationDatum;
 import org.mitre.caasd.commons.util.IterPair;
@@ -58,6 +49,7 @@ import org.mitre.caasd.commons.util.NeighborIterator;
 
 import com.google.common.math.PairedStatsAccumulator;
 import com.google.common.math.StatsAccumulator;
+import org.junit.jupiter.api.Test;
 
 public class LocalPolyInterpolatorTest {
 

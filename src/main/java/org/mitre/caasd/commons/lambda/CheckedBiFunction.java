@@ -17,9 +17,6 @@
 package org.mitre.caasd.commons.lambda;
 
 import java.util.function.BiFunction;
-import java.util.function.Function;
-
-import org.mitre.caasd.commons.util.DemotedException;
 
 /**
  * A CheckedBiFunction is similar to a {@link BiFunction} EXCEPT it throws a checked exception.

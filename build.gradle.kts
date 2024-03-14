@@ -1,6 +1,7 @@
 plugins {
     `java-library`
     `maven-publish`
+    id("com.diffplug.spotless") version "6.23.3"
 }
 
 group = "org.mitre"
@@ -35,8 +36,6 @@ tasks {
 tasks.named<Test>("test") {
     useJUnitPlatform()
 
-//    maxHeapSize = "1G"
-
     testLogging {
         events("PASSED", "SKIPPED", "FAILED")
     }
@@ -48,6 +47,16 @@ java {
     }
     withSourcesJar()
     withJavadocJar()
+}
+
+// See https://github.com/diffplug/spotless
+// And https://github.com/diffplug/spotless/tree/main/plugin-gradle
+spotless {
+    java {
+        // import order: static, JDK, MITRE, 3rd Party
+        importOrder("\\#", "java|javax", "org.mitre", "")
+        removeUnusedImports()
+    }
 }
 
 publishing {

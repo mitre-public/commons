@@ -21,9 +21,7 @@ import static java.lang.Math.sin;
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toCollection;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.closeTo;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.mitre.caasd.commons.Time.theDuration;
 import static org.mitre.caasd.commons.math.DataSplitterTest.loadTestXYData;
 import static org.mitre.caasd.commons.math.VisvalingamSimplifier.computeTriangleArea;
@@ -34,9 +32,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
 import org.mitre.caasd.commons.Pair;
 import org.mitre.caasd.commons.util.SingleUseTimer;
+
+import org.junit.jupiter.api.Test;
 
 public class VisvalingamSimplifierTest {
 

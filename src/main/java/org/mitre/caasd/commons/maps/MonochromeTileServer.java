@@ -17,6 +17,7 @@
 package org.mitre.caasd.commons.maps;
 
 import static java.util.Objects.requireNonNull;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -78,6 +79,3 @@ public class MonochromeTileServer implements TileServer {
         return img;
     }
 }
-
-
-

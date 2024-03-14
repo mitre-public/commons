@@ -17,6 +17,7 @@
 package org.mitre.caasd.commons.util;
 
 import static com.google.common.base.Preconditions.checkArgument;
+
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 

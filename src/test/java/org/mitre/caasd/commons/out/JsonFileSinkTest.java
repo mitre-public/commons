@@ -25,12 +25,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.function.Function;
 
+import org.mitre.caasd.commons.Functions.ToStringFunction;
+import org.mitre.caasd.commons.util.ExceptionHandler;
+
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.mitre.caasd.commons.Functions.ToStringFunction;
-import org.mitre.caasd.commons.util.ExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

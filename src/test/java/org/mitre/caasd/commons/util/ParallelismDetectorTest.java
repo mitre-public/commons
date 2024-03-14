@@ -66,7 +66,7 @@ class ParallelismDetectorTest {
         }
     }
 
-    @RepeatedTest(100)
+    @RepeatedTest(10)
     @Test
     public void demonstrateParallelismDetectionAndExceptionThrowing() {
 

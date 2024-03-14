@@ -17,27 +17,14 @@
 package org.mitre.caasd.commons;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.mitre.caasd.commons.ConsumingCollections.newConsumingHashSet;
-import static org.mitre.caasd.commons.ConsumingCollections.newConsumingLinkedList;
-import static org.mitre.caasd.commons.ConsumingCollections.newConsumingPriorityQueue;
-import static org.mitre.caasd.commons.ConsumingCollections.newConsumingTreeSet;
+import static org.hamcrest.Matchers.*;
+import static org.mitre.caasd.commons.ConsumingCollections.*;
 
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.TreeSet;
 
 import org.junit.jupiter.api.Test;
-import org.mitre.caasd.commons.ConsumingCollections.ConsumingArrayList;
-import org.mitre.caasd.commons.ConsumingCollections.ConsumingHashSet;
-import org.mitre.caasd.commons.ConsumingCollections.ConsumingLinkedList;
-import org.mitre.caasd.commons.ConsumingCollections.ConsumingPriorityQueue;
-import org.mitre.caasd.commons.ConsumingCollections.ConsumingTreeSet;
 
 public class ConsumingCollectionsTest {
 

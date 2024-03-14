@@ -41,9 +41,6 @@ import java.util.Random;
 import java.util.stream.Stream;
 import javax.imageio.ImageIO;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 import org.mitre.caasd.commons.Course;
 import org.mitre.caasd.commons.Distance;
 import org.mitre.caasd.commons.LatLong;
@@ -53,6 +50,10 @@ import org.mitre.caasd.commons.TimeWindow;
 import org.mitre.caasd.commons.fileutil.FileUtils;
 import org.mitre.caasd.commons.math.locationfit.LocalPolyInterpolator;
 import org.mitre.caasd.commons.testing.TestLocationDatum;
+
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 class MapBuilderTest {
 

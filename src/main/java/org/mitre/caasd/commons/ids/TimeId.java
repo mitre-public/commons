@@ -20,6 +20,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static java.time.Instant.now;
 import static java.util.Objects.requireNonNull;
 import static org.mitre.caasd.commons.util.BitAndHashingUtils.makeBitMask;
+
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;

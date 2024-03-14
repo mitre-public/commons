@@ -16,9 +16,7 @@
 
 package org.mitre.caasd.commons;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.base.Preconditions.*;
 import static com.google.common.math.DoubleMath.fuzzyEquals;
 import static java.lang.String.format;
 import static java.util.Objects.isNull;

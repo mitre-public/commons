@@ -20,22 +20,15 @@ import static com.google.common.collect.Lists.newArrayList;
 import static java.time.Instant.EPOCH;
 import static java.util.stream.Collectors.toList;
 import static org.mitre.caasd.commons.math.CurveFitters.weightedFit;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+import org.mitre.caasd.commons.*;
+
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
-import org.mitre.caasd.commons.Acceleration;
-import org.mitre.caasd.commons.Course;
-import org.mitre.caasd.commons.Distance;
-import org.mitre.caasd.commons.KineticPosition;
-import org.mitre.caasd.commons.KineticRecord;
-import org.mitre.caasd.commons.LatLong;
-import org.mitre.caasd.commons.Position;
-import org.mitre.caasd.commons.Speed;
-import org.mitre.caasd.commons.Spherical;
-import org.mitre.caasd.commons.TimeWindow;
 
 /**
  * A LocalPolyInterpolator converts a sequence of Positions into a KineticPosition that fits the

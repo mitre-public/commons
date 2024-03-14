@@ -29,6 +29,7 @@ import static org.mitre.caasd.commons.Time.theDuration;
 import static org.mitre.caasd.commons.fileutil.FileUtils.buildGzWriter;
 import static org.mitre.caasd.commons.fileutil.FileUtils.makeDirIfMissing;
 import static org.mitre.caasd.commons.util.DemotedException.demote;
+
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
@@ -47,6 +48,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
+
 import com.google.common.collect.Multiset;
 import com.google.common.collect.TreeMultiset;
 

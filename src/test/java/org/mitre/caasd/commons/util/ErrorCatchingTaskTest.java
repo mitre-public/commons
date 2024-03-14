@@ -19,15 +19,14 @@ package org.mitre.caasd.commons.util;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mitre.caasd.commons.util.ErrorCatchingTask.ignoreAndRethrow;
 import static org.mitre.caasd.commons.util.ErrorCatchingTask.killJvmOnError;
 
+import org.mitre.caasd.commons.util.ErrorCatchingTask.ErrorHandlingPolicy;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mitre.caasd.commons.util.ErrorCatchingTask.ErrorHandlingPolicy;
 
 public class ErrorCatchingTaskTest {
 

@@ -17,6 +17,7 @@
 package org.mitre.caasd.commons.maps;
 
 import static org.mitre.caasd.commons.util.Suppliers.stringSupplierChain;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;

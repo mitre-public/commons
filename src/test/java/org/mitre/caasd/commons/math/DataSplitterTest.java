@@ -26,9 +26,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
 import org.mitre.caasd.commons.Pair;
 import org.mitre.caasd.commons.fileutil.FileUtils;
+
+import org.junit.jupiter.api.Test;
 
 public class DataSplitterTest {
 

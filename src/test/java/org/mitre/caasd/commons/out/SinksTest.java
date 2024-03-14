@@ -19,9 +19,7 @@ package org.mitre.caasd.commons.out;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mitre.caasd.commons.out.Sinks.collectionSink;
-import static org.mitre.caasd.commons.out.Sinks.noOpSink;
-import static org.mitre.caasd.commons.out.Sinks.CollectionSink;
+import static org.mitre.caasd.commons.out.Sinks.*;
 
 import java.util.List;
 

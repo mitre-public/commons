@@ -18,10 +18,7 @@ package org.mitre.caasd.commons;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mitre.caasd.commons.HasPosition.maxLatitude;
-import static org.mitre.caasd.commons.HasPosition.maxLongitude;
-import static org.mitre.caasd.commons.HasPosition.minLatitude;
-import static org.mitre.caasd.commons.HasPosition.minLongitude;
+import static org.mitre.caasd.commons.HasPosition.*;
 
 import java.util.List;
 

@@ -20,6 +20,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 import static org.mitre.caasd.commons.maps.TileAddress.cornerFinder;
 import static org.mitre.caasd.commons.util.DemotedException.demote;
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;

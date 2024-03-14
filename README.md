@@ -52,6 +52,7 @@ general purpose Java utilities from the Aviation Risk Identification and Assessm
 - [ ] (Re)Add code coverage
 
 ### Tasks
+
 - [ ] Interpolator needs to work across the international date line (e.g. where longitudes have a cliff)
 
 ---
@@ -61,7 +62,6 @@ general purpose Java utilities from the Aviation Risk Identification and Assessm
 All official releases are available at [Maven Central](https://central.sonatype.com/artifact/org.mitre/commons).
 The latest official release is version: `0.0.54`
 
-
 #### Gradle
 
 ```
@@ -69,6 +69,7 @@ dependencies {
   implementation("org.mitre:commons:0.0.54")
 }
 ```
+
 #### Maven
 
 ```
@@ -80,12 +81,29 @@ dependencies {
 ```
 
 #### Accessing pre-release builds
-Users who want to access the unreleased features within a SNAPSHOT build must download and build the source themselves.  The build command is:
+
+Users who want to access the unreleased features within a SNAPSHOT build must download and build the source themselves.
+The build command is:
+
 ```
 ./gradlew build publishToMavenLocal
 ```
 
-## About Our Dependencies
+---
+
+## Contributing
+
+Contributions are welcomed and encouraged. But please keep in mind the project's goals and our philosophy on
+dependencies.
+
+### Code Formatting
+
+To keep source code consistent this project uses:
+
+- A [checkstyle.xml](docs%2Fcode-style%2Fcheckstyle.xml) style sheet
+- The [spotless](https://github.com/diffplug/spotless) build plugin
+
+### About Dependencies
 
 - We want the `commons` library to be hassle-free to use in **YOUR** java project.
 - Therefore `commons`:
@@ -95,6 +113,8 @@ Users who want to access the unreleased features within a SNAPSHOT build must do
 - If you notice a violation of this aspiration, please submit an issue. Dependency wrangling is a terrible time sink. We
   don't want `commons` contributing to this headache.
 
+---
+
 ## Version History
 
 ### Version 0.0.54
@@ -102,10 +122,13 @@ Users who want to access the unreleased features within a SNAPSHOT build must do
 - The initial public release of the project.
 
 ### Older Versions
-- Brief release notes from versions that pre-date public-release are available [here](./docs/pre-github-version-history.md)
 
+- Brief release notes from versions that pre-date public-release are
+  available [here](./docs/pre-github-version-history.md)
 
-### Legal Statement
+---
+
+## Legal Statements
 
 - **Copyright:** The contents of this project is copyright `The MITRE Corporation`. See details [here](COPYRIGHT) .
 - **Open Source License:** This project is released under the Apache License Version 2.0. See details [here](LICENSE).

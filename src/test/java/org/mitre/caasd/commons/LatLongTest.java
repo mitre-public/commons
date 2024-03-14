@@ -21,20 +21,19 @@ import static java.lang.Math.PI;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mitre.caasd.commons.LatLong.avgLatLong;
-import static org.mitre.caasd.commons.LatLong.maxLatitude;
-import static org.mitre.caasd.commons.LatLong.maxLongitude;
-import static org.mitre.caasd.commons.LatLong.minLatitude;
-import static org.mitre.caasd.commons.LatLong.minLongitude;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mitre.caasd.commons.LatLong.*;
 import static org.mitre.caasd.commons.Spherical.EARTH_RADIUS_NM;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Random;
+
+import org.mitre.caasd.commons.fileutil.FileUtils;
 
 import org.apache.avro.Schema;
 import org.apache.avro.file.DataFileReader;
@@ -45,7 +44,6 @@ import org.apache.avro.reflect.ReflectDatumWriter;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.mitre.caasd.commons.fileutil.FileUtils;
 
 public class LatLongTest {
 

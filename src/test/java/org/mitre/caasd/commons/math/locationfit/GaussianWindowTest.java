@@ -23,8 +23,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import java.time.Duration;
 import java.time.Instant;
 
-import org.junit.jupiter.api.Test;
 import org.mitre.caasd.commons.TimeWindow;
+
+import org.junit.jupiter.api.Test;
 
 public class GaussianWindowTest {
 

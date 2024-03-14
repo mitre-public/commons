@@ -16,12 +16,8 @@
 
 package org.mitre.caasd.commons;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mitre.caasd.commons.Functions.ALWAYS_FALSE;
-import static org.mitre.caasd.commons.Functions.ALWAYS_TRUE;
-import static org.mitre.caasd.commons.Functions.NO_OP_CONSUMER;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mitre.caasd.commons.Functions.*;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;

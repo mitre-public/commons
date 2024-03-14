@@ -31,14 +31,20 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.SecureRandom;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.junit.jupiter.api.Test;
 import org.mitre.caasd.commons.Time;
 
 import com.google.common.math.StatsAccumulator;
+import org.junit.jupiter.api.Test;
 
 class TimeIdTest {
 

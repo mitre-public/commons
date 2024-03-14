@@ -22,16 +22,16 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mitre.caasd.commons.Spherical.alongTrackDistanceNM;
-import static org.mitre.caasd.commons.Spherical.courseInDegrees;
-import static org.mitre.caasd.commons.Spherical.crossTrackDistanceNM;
+import static org.mitre.caasd.commons.Spherical.*;
+
 import java.awt.Color;
 import java.io.File;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 import org.mitre.caasd.commons.maps.MapBuilder;
 import org.mitre.caasd.commons.maps.MapFeatures;
+
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 public class SphericalTest {
 

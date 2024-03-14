@@ -16,9 +16,7 @@
 
 package org.mitre.caasd.commons.collect;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.base.Preconditions.*;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Objects.nonNull;
 import static org.mitre.caasd.commons.collect.CenterPointSelectors.maxOfRandomSamples;

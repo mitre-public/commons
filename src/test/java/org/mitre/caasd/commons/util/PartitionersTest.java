@@ -21,10 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mitre.caasd.commons.util.Partitioners.newListCollector;
-import static org.mitre.caasd.commons.util.Partitioners.newTreeSetCollector;
-import static org.mitre.caasd.commons.util.Partitioners.splitOnChange;
-import static org.mitre.caasd.commons.util.Partitioners.splitOnPairwiseChange;
+import static org.mitre.caasd.commons.util.Partitioners.*;
 
 import java.util.Arrays;
 import java.util.List;

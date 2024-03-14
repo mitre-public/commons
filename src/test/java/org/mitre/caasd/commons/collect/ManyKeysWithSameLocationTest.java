@@ -27,10 +27,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.junit.jupiter.api.Test;
-
 import com.google.common.collect.Sets;
 import com.google.common.collect.Sets.SetView;
+import org.junit.jupiter.api.Test;
 
 /**
  * The Bug verified here occurs when a Metric Tree contains too many Keys whose distance from each

@@ -13,8 +13,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.Test;
 import org.mitre.caasd.commons.util.DemotedException;
+
+import org.junit.jupiter.api.Test;
 
 public class UncheckTest {
 

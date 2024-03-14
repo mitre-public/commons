@@ -17,6 +17,7 @@
 package org.mitre.caasd.commons.math.locationfit;
 
 import static java.util.stream.Collectors.toList;
+
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;

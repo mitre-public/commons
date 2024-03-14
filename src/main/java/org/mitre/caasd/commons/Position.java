@@ -17,9 +17,7 @@
 package org.mitre.caasd.commons;
 
 import static com.google.common.base.Preconditions.checkState;
-import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
-import static java.util.Objects.requireNonNull;
+import static java.util.Objects.*;
 import static org.mitre.caasd.commons.LatLong.checkLatitude;
 import static org.mitre.caasd.commons.LatLong.checkLongitude;
 

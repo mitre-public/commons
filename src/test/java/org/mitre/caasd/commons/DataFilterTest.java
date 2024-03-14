@@ -25,8 +25,9 @@ import static org.mitre.caasd.commons.ConsumingCollections.newConsumingLinkedLis
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import org.junit.jupiter.api.Test;
 import org.mitre.caasd.commons.ConsumingCollections.ConsumingLinkedList;
+
+import org.junit.jupiter.api.Test;
 
 public class DataFilterTest {
 

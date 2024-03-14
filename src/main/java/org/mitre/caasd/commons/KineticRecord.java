@@ -17,6 +17,7 @@
 package org.mitre.caasd.commons;
 
 import static java.util.Objects.requireNonNull;
+
 import java.time.Instant;
 import java.util.Objects;
 

@@ -18,6 +18,7 @@ package org.mitre.caasd.commons.util;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Objects.nonNull;
+
 import java.util.List;
 import java.util.function.Supplier;
 

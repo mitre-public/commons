@@ -8,7 +8,12 @@ import static org.mitre.caasd.commons.LatLong.checkLongitude;
 import static org.mitre.caasd.commons.util.Preconditions.checkNoNullElement;
 
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
 

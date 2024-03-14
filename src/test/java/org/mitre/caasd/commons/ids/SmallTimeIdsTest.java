@@ -22,6 +22,7 @@ import static org.hamcrest.core.Is.is;
 import static org.mitre.caasd.commons.ids.TimeIds.directBitsetTimeId;
 import static org.mitre.caasd.commons.util.BitAndHashingUtils.compute64BitHash;
 import static org.mitre.caasd.commons.util.BitAndHashingUtils.truncateBits;
+
 import java.time.Instant;
 
 import org.junit.jupiter.api.Test;

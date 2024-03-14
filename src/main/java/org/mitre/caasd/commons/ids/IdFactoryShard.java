@@ -20,6 +20,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.math.DoubleMath.log2;
 import static java.util.Objects.requireNonNull;
 import static org.mitre.caasd.commons.ids.SmallTimeId.NUM_BITS_FOR_DISTINGUISHING_ITEMS;
+
 import java.time.Instant;
 import java.util.NoSuchElementException;
 import java.util.TreeMap;

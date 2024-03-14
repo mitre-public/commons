@@ -19,8 +19,9 @@ package org.mitre.caasd.commons.maps;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
 
-import org.junit.jupiter.api.Test;
 import org.mitre.caasd.commons.LatLong;
+
+import org.junit.jupiter.api.Test;
 
 class PixelLatLongTest {
 

@@ -17,15 +17,7 @@
 package org.mitre.caasd.commons.maps;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static java.lang.Math.PI;
-import static java.lang.Math.atan;
-import static java.lang.Math.ceil;
-import static java.lang.Math.exp;
-import static java.lang.Math.log;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.pow;
-import static java.lang.Math.sin;
+import static java.lang.Math.*;
 import static java.util.Objects.requireNonNull;
 
 import org.mitre.caasd.commons.LatLong;

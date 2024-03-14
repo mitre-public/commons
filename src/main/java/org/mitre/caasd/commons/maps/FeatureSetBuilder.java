@@ -19,13 +19,8 @@ package org.mitre.caasd.commons.maps;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.awt.Font.PLAIN;
 import static java.util.Objects.requireNonNull;
-import static org.mitre.caasd.commons.maps.MapFeatures.circle;
-import static org.mitre.caasd.commons.maps.MapFeatures.filledCircle;
-import static org.mitre.caasd.commons.maps.MapFeatures.filledShape;
-import static org.mitre.caasd.commons.maps.MapFeatures.line;
-import static org.mitre.caasd.commons.maps.MapFeatures.path;
-import static org.mitre.caasd.commons.maps.MapFeatures.shape;
-import static org.mitre.caasd.commons.maps.MapFeatures.text;
+import static org.mitre.caasd.commons.maps.MapFeatures.*;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.util.List;
@@ -210,4 +205,3 @@ public class FeatureSetBuilder {
         return new FeatureSet(this.features);
     }
 }
-

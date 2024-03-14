@@ -23,13 +23,15 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mitre.caasd.commons.util.Suppliers.environmentVarSupplier;
 import static org.mitre.caasd.commons.util.Suppliers.systemPropertySupplier;
+
 import java.io.File;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+import org.mitre.caasd.commons.fileutil.FileUtils;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.mitre.caasd.commons.fileutil.FileUtils;
 
 class SuppliersTest {
 

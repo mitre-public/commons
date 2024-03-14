@@ -22,11 +22,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.List;
 
-import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
-import org.junit.jupiter.api.Test;
 import org.mitre.caasd.commons.math.CurveFitters;
 
 import com.google.common.collect.Range;
+import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
+import org.junit.jupiter.api.Test;
 
 public class CurveFittersTest {
 

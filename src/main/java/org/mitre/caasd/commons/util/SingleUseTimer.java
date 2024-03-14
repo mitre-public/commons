@@ -17,6 +17,7 @@
 package org.mitre.caasd.commons.util;
 
 import static com.google.common.base.Preconditions.checkState;
+
 import java.time.Duration;
 import java.time.Instant;
 

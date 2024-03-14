@@ -22,11 +22,11 @@ import static org.hamcrest.Matchers.is;
 import java.io.File;
 import java.time.ZoneId;
 
-import org.junit.jupiter.api.Test;
 import org.mitre.caasd.commons.fileutil.FileUtils;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
+import org.junit.jupiter.api.Test;
 
 public class DailySequentialFileWriterTest {
 

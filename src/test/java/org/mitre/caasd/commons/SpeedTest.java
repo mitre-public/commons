@@ -18,22 +18,11 @@ package org.mitre.caasd.commons;
 
 import static java.time.Instant.EPOCH;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.closeTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mitre.caasd.commons.Distance.Unit.METERS;
 import static org.mitre.caasd.commons.Distance.Unit.MILES;
-import static org.mitre.caasd.commons.Speed.Unit.FEET_PER_MINUTE;
-import static org.mitre.caasd.commons.Speed.Unit.FEET_PER_SECOND;
-import static org.mitre.caasd.commons.Speed.Unit.KILOMETERS_PER_HOUR;
-import static org.mitre.caasd.commons.Speed.Unit.KNOTS;
-import static org.mitre.caasd.commons.Speed.Unit.METERS_PER_SECOND;
-import static org.mitre.caasd.commons.Speed.Unit.MILES_PER_HOUR;
+import static org.mitre.caasd.commons.Speed.Unit.*;
 import static org.mitre.caasd.commons.Speed.unitFromString;
 
 import java.time.Duration;

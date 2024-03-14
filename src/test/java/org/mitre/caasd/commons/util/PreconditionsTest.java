@@ -21,10 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mitre.caasd.commons.util.Preconditions.checkAllFalse;
-import static org.mitre.caasd.commons.util.Preconditions.checkAllMatch;
-import static org.mitre.caasd.commons.util.Preconditions.checkAllTrue;
-import static org.mitre.caasd.commons.util.Preconditions.checkNoNullElement;
+import static org.mitre.caasd.commons.util.Preconditions.*;
 
 import java.awt.Color;
 import java.util.ArrayList;

@@ -19,21 +19,20 @@ package org.mitre.caasd.commons.maps;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mitre.caasd.commons.Course.EAST;
-import static org.mitre.caasd.commons.Course.NORTH;
-import static org.mitre.caasd.commons.Course.SOUTH;
-import static org.mitre.caasd.commons.Course.WEST;
+import static org.mitre.caasd.commons.Course.*;
 import static org.mitre.caasd.commons.maps.FeatureSetBuilder.newFeatureSetBuilder;
 import static org.mitre.caasd.commons.maps.MapBoxApi.Style.DARK;
+
 import java.awt.Color;
 import java.io.File;
 import java.util.List;
 
+import org.mitre.caasd.commons.Distance;
+import org.mitre.caasd.commons.LatLong;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.mitre.caasd.commons.Distance;
-import org.mitre.caasd.commons.LatLong;
 
 class MapImageTest {
 

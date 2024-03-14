@@ -17,9 +17,11 @@ package org.mitre.caasd.commons.out;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.mitre.caasd.commons.util.DemotedException.demote;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+
 import org.mitre.caasd.commons.Functions.ToStringFunction;
 import org.mitre.caasd.commons.fileutil.FileUtils;
 

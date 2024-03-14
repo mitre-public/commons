@@ -26,6 +26,7 @@ import static org.apache.commons.math3.util.FastMath.atan2;
 import static org.apache.commons.math3.util.FastMath.cos;
 import static org.apache.commons.math3.util.FastMath.hypot;
 import static org.apache.commons.math3.util.FastMath.sin;
+
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.Base64;

@@ -20,19 +20,16 @@ import static com.google.common.collect.Lists.newArrayList;
 import static java.time.Instant.EPOCH;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.Test;
 import org.mitre.caasd.commons.fileutil.FileUtils;
+
+import org.junit.jupiter.api.Test;
 
 public class TimeWindowTest {
 
