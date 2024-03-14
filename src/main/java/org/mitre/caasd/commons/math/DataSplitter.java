@@ -69,5 +69,4 @@ public interface DataSplitter {
             last = cur;
         }
     }
-
 }

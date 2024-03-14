@@ -34,7 +34,7 @@ public class XyPoint {
     }
 
     public static XyDataset asDataset(Collection<XyPoint> xyData) {
-        //re-package results as a Dataset and return
+        // re-package results as a Dataset and return
         ArrayList<Double> xData = new ArrayList<>(xyData.size());
         ArrayList<Double> yData = new ArrayList<>(xyData.size());
         for (XyPoint xyPoint : xyData) {
@@ -56,5 +56,4 @@ public class XyPoint {
     public String toString() {
         return "(" + x + " , " + y + ")";
     }
-
 }

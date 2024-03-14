@@ -207,11 +207,11 @@ public class CourseTest {
         Course oneRadian = Course.ofRadians(1);
         Course ninetyDegrees = Course.ofDegrees(90);
 
-        //native unit is taken from first argument
+        // native unit is taken from first argument
         assertThat(oneRadian.plus(ninetyDegrees).nativeUnit(), is(RADIANS));
         assertThat(ninetyDegrees.plus(oneRadian).nativeUnit(), is(DEGREES));
 
-        //result is the same regardless of order
+        // result is the same regardless of order
         assertThat(oneRadian.plus(ninetyDegrees).inRadians(), is(1.0 + PI / 2.0));
         assertThat(ninetyDegrees.plus(oneRadian).inRadians(), is(1.0 + PI / 2.0));
     }
@@ -221,18 +221,18 @@ public class CourseTest {
         Course oneRadian = Course.ofRadians(1);
         Course ninetyDegrees = Course.ofDegrees(90);
 
-        //native unit is taken from first argument
+        // native unit is taken from first argument
         assertThat(oneRadian.minus(ninetyDegrees).nativeUnit(), is(RADIANS));
         assertThat(ninetyDegrees.minus(oneRadian).nativeUnit(), is(DEGREES));
 
-        //order is reflected
+        // order is reflected
         assertThat(oneRadian.minus(ninetyDegrees).inRadians(), is(1.0 - PI / 2.0));
         assertThat(ninetyDegrees.minus(oneRadian).inRadians(), is(PI / 2.0 - 1.0));
     }
 
     @Test
     public void testCompareTo() {
-        //test via List sorting...
+        // test via List sorting...
 
         Course negativeOneRadian = Course.ofRadians(-1.0);
         Course tenDegrees = Course.ofDegrees(10.0);
@@ -241,14 +241,8 @@ public class CourseTest {
         Course oneRadian = Course.ofRadians(1.0);
         Course twoPiRadians = Course.ofRadians(2 * PI);
 
-        Course[] courses = new Course[]{
-            oneRadian,
-            twentyDegrees,
-            tenDegrees,
-            twoPiRadians,
-            negativeOneRadian,
-            twohundredDegrees
-        };
+        Course[] courses =
+                new Course[] {oneRadian, twentyDegrees, tenDegrees, twoPiRadians, negativeOneRadian, twohundredDegrees};
 
         Arrays.sort(courses);
 
@@ -262,15 +256,9 @@ public class CourseTest {
 
     @Test
     public void testAngleDifference() {
-        assertThat(
-            angleBetween(Course.ofDegrees(5.0), Course.ofDegrees(355.0)),
-            is(Course.ofDegrees(10))
-        );
+        assertThat(angleBetween(Course.ofDegrees(5.0), Course.ofDegrees(355.0)), is(Course.ofDegrees(10)));
 
-        assertThat(
-            angleBetween(Course.ofDegrees(355.0), Course.ofDegrees(5.0)),
-            is(Course.ofDegrees(-10))
-        );
+        assertThat(angleBetween(Course.ofDegrees(355.0), Course.ofDegrees(5.0)), is(Course.ofDegrees(-10)));
     }
 
     @Test
@@ -310,11 +298,11 @@ public class CourseTest {
         Course zeroDegrees = Course.ofDegrees(0);
         Course zeroRadians = Course.ofRadians(0);
 
-        //both ARE ZERO
+        // both ARE ZERO
         assertThat(zeroDegrees.isZero(), is(true));
         assertThat(zeroRadians.isZero(), is(true));
 
-        //they are not equal
+        // they are not equal
         assertThat(zeroRadians.equals(zeroDegrees), is(false));
     }
 
@@ -343,7 +331,7 @@ public class CourseTest {
         assertThat(Course.ofDegrees(-45).tan(), closeTo(-1.0, TOLERANCE));
         assertThat(Course.ofDegrees(0).tan(), is(0.0));
         assertThat(Course.ofDegrees(45).tan(), closeTo(1.0, TOLERANCE));
-        assertThat(Course.ofDegrees(90).tan(), greaterThan(2E14)); //HUGE number...but won't be INFINITY
+        assertThat(Course.ofDegrees(90).tan(), greaterThan(2E14)); // HUGE number...but won't be INFINITY
         assertThat(Course.ofDegrees(135).tan(), closeTo(-1, TOLERANCE));
     }
 
@@ -351,68 +339,67 @@ public class CourseTest {
     public void testZeroConstant() {
 
         assertTrue(Course.ZERO.isZero());
-        assertThat(Course.ZERO.inDegrees(),
-            closeTo(Course.of(0.0, DEGREES).inDegrees(), 1E-10));
+        assertThat(Course.ZERO.inDegrees(), closeTo(Course.of(0.0, DEGREES).inDegrees(), 1E-10));
     }
 
     //	/**
-//	 * Test of between method, of class Course.
-//	 */
-//	@Test
-//	public void testBetween() {
-//		System.out.println("between");
-//		Course one = null;
-//		Course two = null;
-//		Course expResult = null;
-//		Course result = Course.between(one, two);
-//		assertEquals(expResult, result);
-//		// TODO review the generated test code and remove the default call to fail.
-//		fail("The test case is a prototype.");
-//	}  
+    //	 * Test of between method, of class Course.
+    //	 */
+    //	@Test
+    //	public void testBetween() {
+    //		System.out.println("between");
+    //		Course one = null;
+    //		Course two = null;
+    //		Course expResult = null;
+    //		Course result = Course.between(one, two);
+    //		assertEquals(expResult, result);
+    //		// TODO review the generated test code and remove the default call to fail.
+    //		fail("The test case is a prototype.");
+    //	}
 
-//
-//	/**
-//	 * Test of isZero method, of class Course.
-//	 */
-//	@Test
-//	public void testIsZero() {
-//		System.out.println("isZero");
-//		Course instance = null;
-//		boolean expResult = false;
-//		boolean result = instance.isZero();
-//		assertEquals(expResult, result);
-//		// TODO review the generated test code and remove the default call to fail.
-//		fail("The test case is a prototype.");
-//	}
-//     
-//
-//	/**
-//	 * Test of angleDifference method, of class Course.
-//	 */
-//	@Test
-//	public void testAngleDifference_Double_Double() {
-//		System.out.println("angleDifference");
-//		Double hdg = null;
-//		Double hdg0 = null;
-//		Double expResult = null;
-//		Double result = Course.angleDifference(hdg, hdg0);
-//		assertEquals(expResult, result);
-//		// TODO review the generated test code and remove the default call to fail.
-//		fail("The test case is a prototype.");
-//	}
-//
-//	/**
-//	 * Test of angleDifference method, of class Course.
-//	 */
-//	@Test
-//	public void testAngleDifference_Double() {
-//		System.out.println("angleDifference");
-//		Double dz = null;
-//		Double expResult = null;
-//		Double result = Course.angleDifference(dz);
-//		assertEquals(expResult, result);
-//		// TODO review the generated test code and remove the default call to fail.
-//		fail("The test case is a prototype.");
-//	}
+    //
+    //	/**
+    //	 * Test of isZero method, of class Course.
+    //	 */
+    //	@Test
+    //	public void testIsZero() {
+    //		System.out.println("isZero");
+    //		Course instance = null;
+    //		boolean expResult = false;
+    //		boolean result = instance.isZero();
+    //		assertEquals(expResult, result);
+    //		// TODO review the generated test code and remove the default call to fail.
+    //		fail("The test case is a prototype.");
+    //	}
+    //
+    //
+    //	/**
+    //	 * Test of angleDifference method, of class Course.
+    //	 */
+    //	@Test
+    //	public void testAngleDifference_Double_Double() {
+    //		System.out.println("angleDifference");
+    //		Double hdg = null;
+    //		Double hdg0 = null;
+    //		Double expResult = null;
+    //		Double result = Course.angleDifference(hdg, hdg0);
+    //		assertEquals(expResult, result);
+    //		// TODO review the generated test code and remove the default call to fail.
+    //		fail("The test case is a prototype.");
+    //	}
+    //
+    //	/**
+    //	 * Test of angleDifference method, of class Course.
+    //	 */
+    //	@Test
+    //	public void testAngleDifference_Double() {
+    //		System.out.println("angleDifference");
+    //		Double dz = null;
+    //		Double expResult = null;
+    //		Double result = Course.angleDifference(dz);
+    //		assertEquals(expResult, result);
+    //		// TODO review the generated test code and remove the default call to fail.
+    //		fail("The test case is a prototype.");
+    //	}
 
 }

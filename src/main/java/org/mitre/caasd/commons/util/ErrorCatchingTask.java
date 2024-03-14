@@ -38,7 +38,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class ErrorCatchingTask implements Runnable {
 
-    //the Exit code provided when an Error causes the ErrorHandlingPolicy to call System.exit(int)
+    // the Exit code provided when an Error causes the ErrorHandlingPolicy to call System.exit(int)
     private static final int EXIT_ERROR_CODE = 123_456_789;
 
     private final Runnable runMe;
@@ -102,8 +102,7 @@ public class ErrorCatchingTask implements Runnable {
 
     /** @return An ErrorHandlingPolicy that does no extra work, the Error is merely rethrown. */
     public static ErrorHandlingPolicy ignoreAndRethrow() {
-        return error -> {
-        };
+        return error -> {};
     }
 
     @FunctionalInterface

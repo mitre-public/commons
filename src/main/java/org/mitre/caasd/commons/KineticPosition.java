@@ -44,10 +44,10 @@ public class KineticPosition implements HasTime, HasPosition {
 
     private final long epochTime;
 
-    //latitude kept independently for serialized form
+    // latitude kept independently for serialized form
     private final double latitude;
 
-    //longitude kept independently for serialized form
+    // longitude kept independently for serialized form
     private final double longitude;
 
     private final double altitudeInFeet;
@@ -61,7 +61,6 @@ public class KineticPosition implements HasTime, HasPosition {
     private final double speedInKnots;
 
     private final double accelerationInKnotsPerSec;
-
 
     /**
      * A KineticPosition is generally created programmatically by fitting Latitude-vs-time,
@@ -77,8 +76,15 @@ public class KineticPosition implements HasTime, HasPosition {
      * @param speed     The speed
      * @param accel     The acceleration in Knots Per Second
      */
-    public KineticPosition(Instant time, LatLong location, Distance altitude, Speed climbRate,
-                           Course course, double turnRate, Speed speed, Acceleration accel) {
+    public KineticPosition(
+            Instant time,
+            LatLong location,
+            Distance altitude,
+            Speed climbRate,
+            Course course,
+            double turnRate,
+            Speed speed,
+            Acceleration accel) {
         requireNonNull(time);
         requireNonNull(location);
         requireNonNull(altitude);
@@ -174,21 +180,22 @@ public class KineticPosition implements HasTime, HasPosition {
             return Distance.ofNauticalMiles(Double.POSITIVE_INFINITY);
         }
 
-        //Assume a circular travel path....
+        // Assume a circular travel path....
 
-        //Find the time required to travel in a circle, i.e. while moving "straight" but gradually turning left or right
+        // Find the time required to travel in a circle, i.e. while moving "straight" but gradually turning left or
+        // right
         double secToTurn360 = 360.0 / Math.abs(turnRateInDegreesPerSecond);
         long asMilliSec = (long) secToTurn360 * 1000;
 
-        //Find distance traveled while "moving in a circle"
+        // Find distance traveled while "moving in a circle"
         Distance distTraveled = speed.times(Duration.ofMillis(asMilliSec));
 
-        //convert circle circumference to a radius
+        // convert circle circumference to a radius
         Distance radius = distTraveled.times(1.0 / (2.0 * Math.PI));
 
         return (turnRateInDegreesPerSecond > 0)
-            ? radius //clockwise = positive radius
-            : radius.times(-1); //counter-clockwise = negative radisu
+                ? radius // clockwise = positive radius
+                : radius.times(-1); // counter-clockwise = negative radisu
     }
 
     /**
@@ -199,17 +206,17 @@ public class KineticPosition implements HasTime, HasPosition {
      * @return The bytes in this KineticPosition.
      */
     public byte[] toBytes() {
-        return ByteBuffer.allocate(72) //72 bytes = 9 fields @ 8 bytes each
-            .putLong(epochTime)
-            .putDouble(latitude)
-            .putDouble(longitude)
-            .putDouble(altitudeInFeet)
-            .putDouble(climbRateInFtPerMin)
-            .putDouble(courseInDegrees)
-            .putDouble(turnRateInDegreesPerSecond)
-            .putDouble(speedInKnots)
-            .putDouble(accelerationInKnotsPerSec)
-            .array();
+        return ByteBuffer.allocate(72) // 72 bytes = 9 fields @ 8 bytes each
+                .putLong(epochTime)
+                .putDouble(latitude)
+                .putDouble(longitude)
+                .putDouble(altitudeInFeet)
+                .putDouble(climbRateInFtPerMin)
+                .putDouble(courseInDegrees)
+                .putDouble(turnRateInDegreesPerSecond)
+                .putDouble(speedInKnots)
+                .putDouble(accelerationInKnotsPerSec)
+                .array();
     }
 
     /**
@@ -271,8 +278,7 @@ public class KineticPosition implements HasTime, HasPosition {
         if (Double.compare(that.courseInDegrees, courseInDegrees) != 0) {
             return false;
         }
-        if (Double.compare(that.turnRateInDegreesPerSecond, turnRateInDegreesPerSecond) !=
-            0) {
+        if (Double.compare(that.turnRateInDegreesPerSecond, turnRateInDegreesPerSecond) != 0) {
             return false;
         }
         if (Double.compare(that.speedInKnots, speedInKnots) != 0) {
@@ -311,14 +317,14 @@ public class KineticPosition implements HasTime, HasPosition {
 
     public static Builder builder(KineticPosition seed) {
         return builder()
-            .time(seed.time())
-            .latLong(seed.latLong())
-            .altitude(seed.altitude())
-            .climbRate(seed.climbRate())
-            .course(seed.course())
-            .turnRate(seed.turnRate())
-            .speed(seed.speed())
-            .acceleration(seed.acceleration());
+                .time(seed.time())
+                .latLong(seed.latLong())
+                .altitude(seed.altitude())
+                .climbRate(seed.climbRate())
+                .course(seed.course())
+                .turnRate(seed.turnRate())
+                .speed(seed.speed())
+                .acceleration(seed.acceleration());
     }
 
     public static class Builder {
@@ -343,15 +349,14 @@ public class KineticPosition implements HasTime, HasPosition {
             requireNonNull(turnRateInDegreesPerSec, "turn rate was not set");
 
             return new KineticPosition(
-                Instant.ofEpochMilli(epochTime),
-                latLong,
-                Distance.ofFeet(altitudeInFeet),
-                Speed.of(climbRateInFtPerMin, FEET_PER_MINUTE),
-                Course.ofDegrees(courseInDegrees),
-                turnRateInDegreesPerSec,
-                Speed.of(speedInKnots, KNOTS),
-                Acceleration.of(Speed.ofKnots(accelerationInKnotsPerSec))
-            );
+                    Instant.ofEpochMilli(epochTime),
+                    latLong,
+                    Distance.ofFeet(altitudeInFeet),
+                    Speed.of(climbRateInFtPerMin, FEET_PER_MINUTE),
+                    Course.ofDegrees(courseInDegrees),
+                    turnRateInDegreesPerSec,
+                    Speed.of(speedInKnots, KNOTS),
+                    Acceleration.of(Speed.ofKnots(accelerationInKnotsPerSec)));
         }
 
         /** Set the time while enforcing that it was not set previously. */

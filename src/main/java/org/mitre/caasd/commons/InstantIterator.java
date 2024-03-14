@@ -81,9 +81,7 @@ public class InstantIterator implements Iterator<Instant> {
         } else {
             Instant possible = next.plus(timeStep);
 
-            next = (window.contains(possible))
-                ? possible
-                : window.end();
+            next = (window.contains(possible)) ? possible : window.end();
         }
     }
 }

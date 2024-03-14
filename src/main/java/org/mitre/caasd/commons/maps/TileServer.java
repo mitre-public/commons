@@ -43,7 +43,7 @@ public interface TileServer {
 
         URL url = getUrlFor(ta);
 
-        //Todo -- log this download...
+        // Todo -- log this download...
 
         try {
             InputStream inStream = url.openConnection().getInputStream();
@@ -72,18 +72,17 @@ public interface TileServer {
         int size = maxTileSize();
 
         BufferedImage combined = new BufferedImage(
-            size * (bottomRightTile.xIndex() - topLeftTile.xIndex() + 1),
-            size * (bottomRightTile.yIndex() - topLeftTile.yIndex() + 1),
-            BufferedImage.TYPE_3BYTE_BGR
-        );
+                size * (bottomRightTile.xIndex() - topLeftTile.xIndex() + 1),
+                size * (bottomRightTile.yIndex() - topLeftTile.yIndex() + 1),
+                BufferedImage.TYPE_3BYTE_BGR);
         Graphics2D g = (Graphics2D) combined.getGraphics();
 
         int xOffset = topLeftTile.xIndex();
         int yOffset = topLeftTile.yIndex();
 
         for (TileAddress tile : tiles) {
-            BufferedImage img = downloadMap(tile);  //these queries are launch in serial...!
-            //compute the "row/column" indices used to assemble the combined image
+            BufferedImage img = downloadMap(tile); // these queries are launch in serial...!
+            // compute the "row/column" indices used to assemble the combined image
             int imgCol = tile.xIndex() - xOffset;
             int imgRow = tile.yIndex() - yOffset;
             g.drawImage(img, imgCol * size, imgRow * size, size, size, null);
@@ -92,12 +91,12 @@ public interface TileServer {
         return combined;
     }
 
-//    static double wrapLongitude(double lon) {
-//        double z = ((lon + 180.0) % 360.0);
-//        if (z < 0) {
-//            z += 360.0;
-//        }
-//        return z - 180.0;
-//    }
+    //    static double wrapLongitude(double lon) {
+    //        double z = ((lon + 180.0) % 360.0);
+    //        if (z < 0) {
+    //            z += 360.0;
+    //        }
+    //        return z - 180.0;
+    //    }
 
 }

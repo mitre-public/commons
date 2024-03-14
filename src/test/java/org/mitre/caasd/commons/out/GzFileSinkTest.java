@@ -42,16 +42,12 @@ public class GzFileSinkTest {
         File expectFile = new File(tempDir, "aTargetFile.gz");
         File expectInProgressFile = new File(tempDir, IN_PROGRESS_PREFIX + "aTargetFile.gz");
 
-        //none of the files exist yet....
+        // none of the files exist yet....
         assertThat(expectFile.exists(), is(false));
         assertThat(expectInProgressFile.exists(), is(false));
 
         GzFileSink<JsonableData> sink = new GzFileSink<>(
-            tempDir.toString(),
-            (item) -> item.asJson(),
-            (item) -> "aTargetFile",
-            Duration.ofHours(1)
-        );
+                tempDir.toString(), (item) -> item.asJson(), (item) -> "aTargetFile", Duration.ofHours(1));
 
         JsonableData item1 = new JsonableData("one", 1);
         JsonableData item2 = new JsonableData("two", 2);
@@ -63,22 +59,22 @@ public class GzFileSinkTest {
         sink.accept(item3);
         sink.accept(item4);
 
-        //we manually drain the data because the automatic process occurs once a second, no need to wait
+        // we manually drain the data because the automatic process occurs once a second, no need to wait
         sink.drainQueueAndWriteRecords();
 
-        //after the drain, the "IN_PROGRESS_PREFIX" file exists, but the "DONE" file doesn't
+        // after the drain, the "IN_PROGRESS_PREFIX" file exists, but the "DONE" file doesn't
         assertThat(expectInProgressFile.exists(), is(true));
         assertThat(expectFile.exists(), is(false));
         assertThat(sink.numOpenWriters(), is(1));
 
         sink.close();
 
-        //after the close, the "IN_PROGRESS_PREFIX" file no longers exists, but the "DONE" file appears
+        // after the close, the "IN_PROGRESS_PREFIX" file no longers exists, but the "DONE" file appears
         assertThat(expectInProgressFile.exists(), is(false));
         assertThat(expectFile.exists(), is(true));
         assertThat(sink.numOpenWriters(), is(0));
 
-        //Now we inspect the archive file to ensure it contains everything we need.
+        // Now we inspect the archive file to ensure it contains everything we need.
         List<String> lines = gzFileLines(expectFile);
 
         assertThat(lines.contains(item1.asJson()), is(true));
@@ -96,12 +92,8 @@ public class GzFileSinkTest {
         assertThat(expectFileA.exists(), is(false));
         assertThat(expectFileB.exists(), is(false));
 
-        GzFileSink<JsonableData> sink = new GzFileSink<>(
-            tempDir.toString(),
-            (item) -> item.asJson(),
-            (item) -> item.key,
-            Duration.ofHours(1)
-        );
+        GzFileSink<JsonableData> sink =
+                new GzFileSink<>(tempDir.toString(), (item) -> item.asJson(), (item) -> item.key, Duration.ofHours(1));
 
         JsonableData item1 = new JsonableData("a", 1);
         JsonableData item2 = new JsonableData("a", 2);
@@ -143,18 +135,14 @@ public class GzFileSinkTest {
         assertThat(expectFile2.exists(), is(false));
 
         GzFileSink<JsonableData> sink = new GzFileSink<>(
-            tempDir.toString(),
-            (item) -> item.asJson(),
-            (item) -> "aTargetFile",
-            Duration.ofHours(1)
-        );
+                tempDir.toString(), (item) -> item.asJson(), (item) -> "aTargetFile", Duration.ofHours(1));
 
         JsonableData item1 = new JsonableData("one", 1);
         JsonableData item2 = new JsonableData("two", 2);
         JsonableData item3 = new JsonableData("three", 3);
         JsonableData item4 = new JsonableData("four", 4);
 
-        //this data should appear in "aTargetFile.gz"
+        // this data should appear in "aTargetFile.gz"
         sink.accept(item1);
         sink.accept(item2);
         sink.flushAndCloseCurrentFiles();
@@ -166,7 +154,7 @@ public class GzFileSinkTest {
         assertThat(lines1.contains(item1.asJson()), is(true));
         assertThat(lines1.contains(item2.asJson()), is(true));
 
-        //this data should appear in "aTargetFile_1.gz"
+        // this data should appear in "aTargetFile_1.gz"
         sink.accept(item3);
         sink.accept(item4);
         sink.close();
@@ -179,7 +167,7 @@ public class GzFileSinkTest {
         assertThat(lines2.contains(item4.asJson()), is(true));
     }
 
-    @Disabled //skipping because this test has a 5 second wait
+    @Disabled // skipping because this test has a 5 second wait
     @Test
     public void backgroundThreadFinalizesArchivesRecords() throws Exception {
 
@@ -187,13 +175,9 @@ public class GzFileSinkTest {
 
         assertThat(expectFile.exists(), is(false));
 
-        //Any data published to this sink should be fully flushed and closed within 2 or 3 seconds
+        // Any data published to this sink should be fully flushed and closed within 2 or 3 seconds
         GzFileSink<JsonableData> sink = new GzFileSink<>(
-            tempDir.toString(),
-            (item) -> item.asJson(),
-            (item) -> "aTargetFile",
-            Duration.ofSeconds(2)
-        );
+                tempDir.toString(), (item) -> item.asJson(), (item) -> "aTargetFile", Duration.ofSeconds(2));
 
         JsonableData item1 = new JsonableData("one", 1);
         JsonableData item2 = new JsonableData("two", 2);
@@ -205,7 +189,7 @@ public class GzFileSinkTest {
         sink.accept(item3);
         sink.accept(item4);
 
-        //wait..
+        // wait..
         Thread.sleep(5_000);
 
         assertThat(expectFile.exists(), is(true));

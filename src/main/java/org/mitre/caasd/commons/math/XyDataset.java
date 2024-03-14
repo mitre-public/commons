@@ -92,9 +92,8 @@ public class XyDataset {
 
         for (int i = 0; i < splitIndices.length - 1; i++) {
             splits[i] = new XyDataset(
-                xData.subList(splitIndices[i], splitIndices[i + 1]),
-                yData.subList(splitIndices[i], splitIndices[i + 1])
-            );
+                    xData.subList(splitIndices[i], splitIndices[i + 1]),
+                    yData.subList(splitIndices[i], splitIndices[i + 1]));
         }
         return splits;
     }

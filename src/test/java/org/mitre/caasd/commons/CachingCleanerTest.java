@@ -56,23 +56,23 @@ public class CachingCleanerTest {
 
         Optional<String> result = instance.clean("ISLOWERCASE");
 
-        //empty cache -- expect 0 hits and 0 evictions
+        // empty cache -- expect 0 hits and 0 evictions
         assertEquals("islowercase", result.get());
         assertEquals(instance.cache().stats().hitCount(), 0);
         assertEquals(instance.cache().stats().evictionCount(), 0);
 
-        //reuse the same key, expect 1 hit and 0 evictions
+        // reuse the same key, expect 1 hit and 0 evictions
         instance.clean("ISLOWERCASE");
         assertEquals(instance.cache().stats().hitCount(), 1);
         assertEquals(instance.cache().stats().evictionCount(), 0);
 
-        //new key, the old value in the cache should get evicted
+        // new key, the old value in the cache should get evicted
         Optional<String> newResult = instance.clean("NEXT");
         assertEquals("next", newResult.get());
         assertEquals(instance.cache().stats().hitCount(), 1);
         assertEquals(instance.cache().stats().evictionCount(), 1);
 
-        //reuse the same key, expect another hit
+        // reuse the same key, expect another hit
         instance.clean("NEXT");
         assertEquals(instance.cache().stats().hitCount(), 2);
         assertEquals(instance.cache().stats().evictionCount(), 1);

@@ -125,5 +125,4 @@ public class PositionRecord<T> implements HasTime, HasPosition {
         }
         return true;
     }
-
 }

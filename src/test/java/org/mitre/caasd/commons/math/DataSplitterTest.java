@@ -59,44 +59,33 @@ public class DataSplitterTest {
     @Test
     public void checkInputRejectsNullInputs_x() {
 
-        assertThrows(NullPointerException.class,
-            () -> checkInputData(null, newArrayList(2.0, 3.0))
-        );
+        assertThrows(NullPointerException.class, () -> checkInputData(null, newArrayList(2.0, 3.0)));
     }
 
     @Test
     public void checkInputRejectsNullInputs_y() {
-        assertThrows(NullPointerException.class,
-            () -> checkInputData(newArrayList(2.0, 3.0), null)
-        );
+        assertThrows(NullPointerException.class, () -> checkInputData(newArrayList(2.0, 3.0), null));
     }
 
     @Test
     public void checkInputRejectsInputWithDifferentSizes() {
-        assertThrows(IllegalArgumentException.class,
-            () -> checkInputData(
-                newArrayList(2.0, 3.0),
-                newArrayList(2.0, 3.0, 4.0)
-            )
-        );
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> checkInputData(newArrayList(2.0, 3.0), newArrayList(2.0, 3.0, 4.0)));
     }
 
     @Test
     public void checkInputRejectsUnsortedXValues() {
-        assertThrows(IllegalArgumentException.class,
-            () -> checkInputData(
-                newArrayList(2.0, 3.0, -10.0), //x values must be sorted
-                newArrayList(2.0, 3.0, 4.0)
-            )
-        );
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> checkInputData(
+                        newArrayList(2.0, 3.0, -10.0), // x values must be sorted
+                        newArrayList(2.0, 3.0, 4.0)));
     }
 
     @Test
     public void checkInputDoesNothingWhenInputIsGood() {
-        checkInputData(
-            newArrayList(2.0, 3.0, 4.0),
-            newArrayList(20.0, -10.0, 400.0)
-        );
+        checkInputData(newArrayList(2.0, 3.0, 4.0), newArrayList(20.0, -10.0, 400.0));
     }
 
     @Test
@@ -106,16 +95,12 @@ public class DataSplitterTest {
 
     @Test
     public void checkOrderingRejectsUnsortedData() {
-        assertThrows(IllegalArgumentException.class,
-            () -> checkOrdering(newArrayList(10.0, 2.0, 11.0))
-        );
+        assertThrows(IllegalArgumentException.class, () -> checkOrdering(newArrayList(10.0, 2.0, 11.0)));
     }
 
     @Test
     public void checkOrderingRejectsUnsortedData_duplicateValues() {
-        //2 copies of the same value should fail
-        assertThrows(IllegalArgumentException.class,
-            () -> checkOrdering(newArrayList(1.0, 2.0, 3.0, 3.0))
-        );
+        // 2 copies of the same value should fail
+        assertThrows(IllegalArgumentException.class, () -> checkOrdering(newArrayList(1.0, 2.0, 3.0, 3.0)));
     }
 }

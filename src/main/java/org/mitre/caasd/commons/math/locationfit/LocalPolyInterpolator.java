@@ -56,7 +56,7 @@ public class LocalPolyInterpolator implements PositionInterpolator {
     /** Computes Normally distributed weights for the data points we are fitting. */
     private final GaussianWindow weightedWindow;
 
-    //Only generate synthetic points when this many points are inside the sampling window
+    // Only generate synthetic points when this many points are inside the sampling window
     private final int requiredPoints;
 
     /**
@@ -123,7 +123,6 @@ public class LocalPolyInterpolator implements PositionInterpolator {
         this.ignoreAltitude = ignoreAltitude;
     }
 
-
     /**
      * @param positionData A time sorted list of location data tracking a single object.
      * @param sampleTime   The time at which a "KineticRecord" will be made.
@@ -135,44 +134,41 @@ public class LocalPolyInterpolator implements PositionInterpolator {
     @Override
     public Optional<KineticPosition> interpolate(List<Position> positionData, Instant sampleTime) {
 
-        //Start with the TimeWindow that will have non-zero sample weights...
+        // Start with the TimeWindow that will have non-zero sample weights...
         final TimeWindow sampleWindow = weightedWindow.windowCenteredAt(sampleTime);
 
-        //isolate points inside the sample window so polynomial fitting has less data to churn through
+        // isolate points inside the sample window so polynomial fitting has less data to churn through
         List<Position> pointsInSampleWindow = positionData.stream()
-            .filter(pt -> sampleWindow.contains(pt.time()))
-            .collect(toList());
+                .filter(pt -> sampleWindow.contains(pt.time()))
+                .collect(toList());
 
-        long numUniqueTimes = pointsInSampleWindow.stream()
-            .map(pt -> pt.time())
-            .distinct()
-            .count();
+        long numUniqueTimes =
+                pointsInSampleWindow.stream().map(pt -> pt.time()).distinct().count();
 
-        //Not enough sample data to perform polynomial fitting
+        // Not enough sample data to perform polynomial fitting
         //   Data point sharing the same timestamp don't count!
         if (numUniqueTimes < requiredPoints) {
             return Optional.empty();
         }
 
-        //Determine the range of our sample data
+        // Determine the range of our sample data
         TimeWindow dataSupportedWindow = TimeWindow.of(
-            pointsInSampleWindow.get(0).time(),
-            pointsInSampleWindow.get(pointsInSampleWindow.size() - 1).time()
-        );
+                pointsInSampleWindow.get(0).time(),
+                pointsInSampleWindow.get(pointsInSampleWindow.size() - 1).time());
 
-        //NEVER generate a KineticRecord when the source data does not "surround" the sample time
+        // NEVER generate a KineticRecord when the source data does not "surround" the sample time
         if (!dataSupportedWindow.contains(sampleTime)) {
             return Optional.empty();
         }
 
         long sampleEpochTime = sampleTime.toEpochMilli();
 
-        //Save data we'll need for polynomial fitting
+        // Save data we'll need for polynomial fitting
         List<Double> timesAsEpochMs = newArrayList();
         List<Double> weights = newArrayList();
         List<Double> lats = newArrayList();
         List<Double> longs = newArrayList();
-        //altitudes are extracted separately in case they are ignored
+        // altitudes are extracted separately in case they are ignored
         List<Double> altitudes = extractAltitudes(pointsInSampleWindow);
 
         for (Position pt : pointsInSampleWindow) {
@@ -187,11 +183,11 @@ public class LocalPolyInterpolator implements PositionInterpolator {
             longs.add(pt.longitude());
         }
 
-        //These two polynomials allow us to deduce location, speed, course, and turnRate
+        // These two polynomials allow us to deduce location, speed, course, and turnRate
         PolynomialFunction latFunc = weightedFit(2, weights, timesAsEpochMs, lats);
         PolynomialFunction lonFunc = weightedFit(2, weights, timesAsEpochMs, longs);
 
-        //When fitting altitude...
+        // When fitting altitude...
         // (1) Use a line fit because a quadratic fit is too sensitive and volatile
 
         /*
@@ -210,30 +206,32 @@ public class LocalPolyInterpolator implements PositionInterpolator {
          * seconds and passed more then X ft.
          */
         PolynomialFunction altitudeFunction = (ignoreAltitude)
-            ? new PolynomialFunction(new double[] {0.0, 0.0}) //Altitudes are always 0, so is climbrate
-            : weightedFit(1, weights, timesAsEpochMs, altitudes);
+                ? new PolynomialFunction(new double[] {0.0, 0.0}) // Altitudes are always 0, so is climbrate
+                : weightedFit(1, weights, timesAsEpochMs, altitudes);
 
         BatchDeductions deductions = new BatchDeductions(latFunc, lonFunc);
 
         KineticPosition kinetics = KineticPosition.builder()
-            .time(sampleTime)
-            .latLong(deductions.location)
-            .altitude(deduceAltitude(altitudeFunction))
-            .climbRate(deduceClimbRate(altitudeFunction))
-            .speed(deductions.speed)
-            .course(deductions.course)
-            .acceleration(deductions.acceleration)
-            .turnRate(deduceTurnRate(latFunc, lonFunc))
-            .build();
+                .time(sampleTime)
+                .latLong(deductions.location)
+                .altitude(deduceAltitude(altitudeFunction))
+                .climbRate(deduceClimbRate(altitudeFunction))
+                .speed(deductions.speed)
+                .course(deductions.course)
+                .acceleration(deductions.acceleration)
+                .turnRate(deduceTurnRate(latFunc, lonFunc))
+                .build();
 
         return Optional.of(kinetics);
     }
 
-    //only extract data when we'll use it -- Allows PositionRecords to not implement altitude()
+    // only extract data when we'll use it -- Allows PositionRecords to not implement altitude()
     private <T> List<Double> extractAltitudes(List<Position> pointsInSampleWindow) {
         return (ignoreAltitude)
-            ? newArrayList()
-            : pointsInSampleWindow.stream().map(pt -> pt.altitude().inFeet()).collect(toList());
+                ? newArrayList()
+                : pointsInSampleWindow.stream()
+                        .map(pt -> pt.altitude().inFeet())
+                        .collect(toList());
     }
 
     /**
@@ -264,10 +262,8 @@ public class LocalPolyInterpolator implements PositionInterpolator {
 
         final long TIME_STEP_IN_MS = 100;
 
-        LatLong stepBack =
-            LatLong.of(latFunc.value(-TIME_STEP_IN_MS), lonFunc.value(-TIME_STEP_IN_MS));
-        LatLong stepForward =
-            LatLong.of(latFunc.value(TIME_STEP_IN_MS), lonFunc.value(TIME_STEP_IN_MS));
+        LatLong stepBack = LatLong.of(latFunc.value(-TIME_STEP_IN_MS), lonFunc.value(-TIME_STEP_IN_MS));
+        LatLong stepForward = LatLong.of(latFunc.value(TIME_STEP_IN_MS), lonFunc.value(TIME_STEP_IN_MS));
 
         return Spherical.courseBtw(stepBack, stepForward);
     }
@@ -282,18 +278,16 @@ public class LocalPolyInterpolator implements PositionInterpolator {
 
         final long TIME_STEP = 500;
 
-        LatLong stepBack =
-            LatLong.of(latFunc.value(-TIME_STEP), lonFunc.value(-TIME_STEP)); //backward 1/2 second
+        LatLong stepBack = LatLong.of(latFunc.value(-TIME_STEP), lonFunc.value(-TIME_STEP)); // backward 1/2 second
         LatLong current = LatLong.of(latFunc.value(0), lonFunc.value(0));
-        LatLong stepForward =
-            LatLong.of(latFunc.value(TIME_STEP), lonFunc.value(TIME_STEP));  //forward 1/2 second
+        LatLong stepForward = LatLong.of(latFunc.value(TIME_STEP), lonFunc.value(TIME_STEP)); // forward 1/2 second
 
         Course priorToCurrent = Spherical.courseBtw(stepBack, current);
         Course currentToNext = Spherical.courseBtw(current, stepForward);
 
         Course delta = Course.angleBetween(currentToNext, priorToCurrent);
 
-        return delta.inDegrees();  //change in course over 1 second
+        return delta.inDegrees(); // change in course over 1 second
     }
 
     /**
@@ -324,26 +318,22 @@ public class LocalPolyInterpolator implements PositionInterpolator {
          */
         BatchDeductions(PolynomialFunction latFunc, PolynomialFunction lonFunc) {
 
-            //deduce location @ Time=0 for polynomials
+            // deduce location @ Time=0 for polynomials
             this.location = LatLong.of(latFunc.value(0), lonFunc.value(0));
 
-            //deduce speed & course @ Time=0
-            final long TIME_STEP_IN_MS = 1_000;  //If this timestep is too small then the acceleration approximate becomes trash (e.g. 50MS = fail)
-            LatLong priorLocation = LatLong.of(
-                latFunc.value(-TIME_STEP_IN_MS),
-                lonFunc.value(-TIME_STEP_IN_MS)
-            );
-            LatLong futureLocation = LatLong.of(
-                latFunc.value(TIME_STEP_IN_MS),
-                lonFunc.value(TIME_STEP_IN_MS)
-            );
+            // deduce speed & course @ Time=0
+            final long TIME_STEP_IN_MS =
+                    1_000; // If this timestep is too small then the acceleration approximate becomes trash (e.g. 50MS =
+            // fail)
+            LatLong priorLocation = LatLong.of(latFunc.value(-TIME_STEP_IN_MS), lonFunc.value(-TIME_STEP_IN_MS));
+            LatLong futureLocation = LatLong.of(latFunc.value(TIME_STEP_IN_MS), lonFunc.value(TIME_STEP_IN_MS));
             Instant priorTime = EPOCH.minusMillis(TIME_STEP_IN_MS);
             Instant futureTime = EPOCH.plusMillis(TIME_STEP_IN_MS);
 
             this.speed = Speed.between(priorLocation, priorTime, futureLocation, futureTime);
             this.course = Spherical.courseBtw(priorLocation, futureLocation);
 
-            //estimate acceleration...
+            // estimate acceleration...
             Speed priorSpeed = Speed.between(priorLocation, priorTime, location, EPOCH);
             Speed futureSpeed = Speed.between(location, EPOCH, futureLocation, futureTime);
 

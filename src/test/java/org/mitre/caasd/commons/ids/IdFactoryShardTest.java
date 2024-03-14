@@ -34,20 +34,16 @@ class IdFactoryShardTest {
     @Test
     public void testNumBitsRequiredFor() {
 
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> numBitsRequiredFor(0)
-        );
+        assertThrows(IllegalArgumentException.class, () -> numBitsRequiredFor(0));
 
         assertAll(
-            () -> assertThat(numBitsRequiredFor(1), is(0)),
-            () -> assertThat(numBitsRequiredFor(2), is(1)),
-            () -> assertThat(numBitsRequiredFor(3), is(2)),
-            () -> assertThat(numBitsRequiredFor(4), is(2)),
-            () -> assertThat(numBitsRequiredFor(8), is(3)),
-            () -> assertThat(numBitsRequiredFor(16), is(4)),
-            () -> assertThat(numBitsRequiredFor(32), is(5))
-        );
+                () -> assertThat(numBitsRequiredFor(1), is(0)),
+                () -> assertThat(numBitsRequiredFor(2), is(1)),
+                () -> assertThat(numBitsRequiredFor(3), is(2)),
+                () -> assertThat(numBitsRequiredFor(4), is(2)),
+                () -> assertThat(numBitsRequiredFor(8), is(3)),
+                () -> assertThat(numBitsRequiredFor(16), is(4)),
+                () -> assertThat(numBitsRequiredFor(32), is(5)));
     }
 
     @Test
@@ -92,19 +88,13 @@ class IdFactoryShardTest {
 
     @Test
     public void limitOnShardIndexIsEnforced() {
-        //if you only have 1 shard the max "shardIndex" is zero
+        // if you only have 1 shard the max "shardIndex" is zero
         assertDoesNotThrow(() -> new IdFactoryShard(0, 1));
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> new IdFactoryShard(1, 1)
-        );
+        assertThrows(IllegalArgumentException.class, () -> new IdFactoryShard(1, 1));
 
-        //if you only have 5 shard the max "shardIndex" is 4
+        // if you only have 5 shard the max "shardIndex" is 4
         assertDoesNotThrow(() -> new IdFactoryShard(4, 5));
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> new IdFactoryShard(5, 5)
-        );
+        assertThrows(IllegalArgumentException.class, () -> new IdFactoryShard(5, 5));
     }
 
     @Test
@@ -114,16 +104,14 @@ class IdFactoryShardTest {
         SmallTimeId id0 = factory.generateIdFor(EPOCH);
         SmallTimeId id1 = factory.generateIdFor(EPOCH);
 
-        assertThat(toBinaryString(id0.nonTimeBits()), is("0")); //21 bits of 00000...0
-        assertThat(toBinaryString(id1.nonTimeBits()), is("1")); //21 bits of 00000...1
+        assertThat(toBinaryString(id0.nonTimeBits()), is("0")); // 21 bits of 00000...0
+        assertThat(toBinaryString(id1.nonTimeBits()), is("1")); // 21 bits of 00000...1
         assertThat(id0.nonTimeBits(), is(0L));
         assertThat(id1.nonTimeBits(), is(1L));
 
-        //trying to get a 3rd TimeId while referencing the same EpochMill will fail because you only had 1 bit to work with
-        assertThrows(
-            NoSuchElementException.class,
-            () -> factory.generateIdFor(EPOCH)
-        );
+        // trying to get a 3rd TimeId while referencing the same EpochMill will fail because you only had 1 bit to work
+        // with
+        assertThrows(NoSuchElementException.class, () -> factory.generateIdFor(EPOCH));
     }
 
     @Test
@@ -132,25 +120,23 @@ class IdFactoryShardTest {
 
         assertThat(factory.numBitsForItemDistinction(), is(1));
 
-        SmallTimeId id0 = factory.generateIdFor(EPOCH); //power of 2 - 2
-        SmallTimeId id1 = factory.generateIdFor(EPOCH); //power of 2 - 1
+        SmallTimeId id0 = factory.generateIdFor(EPOCH); // power of 2 - 2
+        SmallTimeId id1 = factory.generateIdFor(EPOCH); // power of 2 - 1
 
         assertThat(toBinaryString(id0.nonTimeBits()), is("111111111111111111110"));
         assertThat(toBinaryString(id1.nonTimeBits()), is("111111111111111111111"));
 
-        assertThat(id0.nonTimeBits(), is((long)(2_097_152 - 2)));
-        assertThat(id1.nonTimeBits(), is((long)(2_097_152 - 1)));
+        assertThat(id0.nonTimeBits(), is((long) (2_097_152 - 2)));
+        assertThat(id1.nonTimeBits(), is((long) (2_097_152 - 1)));
 
-        //trying to get a 3rd TimeId while referencing the same EpochMill will fail because you only had 1 bit to work with
-        assertThrows(
-            NoSuchElementException.class,
-            () -> factory.generateIdFor(EPOCH)
-        );
+        // trying to get a 3rd TimeId while referencing the same EpochMill will fail because you only had 1 bit to work
+        // with
+        assertThrows(NoSuchElementException.class, () -> factory.generateIdFor(EPOCH));
     }
 
     @Test
     public void testLimitPerInstant_500kShards() {
-        //524_288 = 2^19
+        // 524_288 = 2^19
         IdFactoryShard factory = new IdFactoryShard(0, 524_288);
 
         assertThat(factory.numBitsForItemDistinction(), is(2));
@@ -169,17 +155,14 @@ class IdFactoryShardTest {
         assertThat(id2.nonTimeBits(), is(2L));
         assertThat(id3.nonTimeBits(), is(3L));
 
-        //trying to get a 5th TimeId while referencing the same EpochMill will fail because you only had 2 bit to work with
-        assertThrows(
-            NoSuchElementException.class,
-            () -> factory.generateIdFor(EPOCH)
-        );
+        // trying to get a 5th TimeId while referencing the same EpochMill will fail because you only had 2 bit to work
+        // with
+        assertThrows(NoSuchElementException.class, () -> factory.generateIdFor(EPOCH));
     }
-
 
     @Test
     public void multipleFactoriesCombineToCoverTheBitSpace() {
-        //Together, these for factories should create 2_097_152 unique TimeIds that map to EPOCH
+        // Together, these for factories should create 2_097_152 unique TimeIds that map to EPOCH
         IdFactoryShard factory0 = new IdFactoryShard(0, 4);
         IdFactoryShard factory1 = new IdFactoryShard(1, 4);
         IdFactoryShard factory2 = new IdFactoryShard(2, 4);
@@ -190,37 +173,37 @@ class IdFactoryShardTest {
         Instant sharedTimeStamp = EPOCH;
 
         for (int i = 0; i < 524_288; i++) {
-            //Every factory makes a TimeId
+            // Every factory makes a TimeId
             SmallTimeId id0 = factory0.generateIdFor(sharedTimeStamp);
             SmallTimeId id1 = factory1.generateIdFor(sharedTimeStamp);
             SmallTimeId id2 = factory2.generateIdFor(sharedTimeStamp);
             SmallTimeId id3 = factory3.generateIdFor(sharedTimeStamp);
 
-            //Save the TimeId
+            // Save the TimeId
             idsThemselves.add(id0);
             idsThemselves.add(id1);
             idsThemselves.add(id2);
             idsThemselves.add(id3);
 
-            //Save the full bitsets
+            // Save the full bitsets
             idBitsets.add(id0.id());
             idBitsets.add(id1.id());
             idBitsets.add(id2.id());
             idBitsets.add(id3.id());
-
         }
 
-        //All TimeIds and Bitset Longs were unique! ....
+        // All TimeIds and Bitset Longs were unique! ....
         assertThat(idsThemselves.size(), is(2_097_152));
         assertThat(idBitsets.size(), is(2_097_152));
 
-        //all 4 factories will fail if they ask for one more TimeId using the "sharedTimeStamp" that was just fully allocated
+        // all 4 factories will fail if they ask for one more TimeId using the "sharedTimeStamp" that was just fully
+        // allocated
         assertThrows(NoSuchElementException.class, () -> factory0.generateIdFor(sharedTimeStamp));
         assertThrows(NoSuchElementException.class, () -> factory1.generateIdFor(sharedTimeStamp));
         assertThrows(NoSuchElementException.class, () -> factory2.generateIdFor(sharedTimeStamp));
         assertThrows(NoSuchElementException.class, () -> factory3.generateIdFor(sharedTimeStamp));
 
-        //BUT all 4 factories have no problem getting a TimeId that hasn't been allocated
+        // BUT all 4 factories have no problem getting a TimeId that hasn't been allocated
         assertDoesNotThrow(() -> factory0.generateIdFor(sharedTimeStamp.plusMillis(1)));
         assertDoesNotThrow(() -> factory1.generateIdFor(sharedTimeStamp.plusMillis(1)));
         assertDoesNotThrow(() -> factory2.generateIdFor(sharedTimeStamp.plusMillis(1)));
@@ -268,14 +251,17 @@ class IdFactoryShardTest {
         assertThat(counter.nextCountFor(EPOCH.plusMillis(1)), is(2));
         assertThat(counter.nextCountFor(EPOCH.plusMillis(2)), is(2));
 
-        //trigger the eviction of the oldest "time counter" by requesting a counter for a 4th unique timestamp..
+        // trigger the eviction of the oldest "time counter" by requesting a counter for a 4th unique timestamp..
         assertThat(counter.nextCountFor(EPOCH.plusSeconds(1)), is(0));
 
         assertThrows(IllegalStateException.class, () -> counter.nextCountFor(EPOCH));
     }
 
     enum SimpleEnum {
-        CASE_A, CASE_B, CASE_C, CASE_D
+        CASE_A,
+        CASE_B,
+        CASE_C,
+        CASE_D
     }
 
     @Test
@@ -302,5 +288,4 @@ class IdFactoryShardTest {
         assertThat(factory_D.numShardsInTeam(), is(4));
         assertThat(factory_D.numBitsToStoreShardIndex(), is(2));
     }
-
 }

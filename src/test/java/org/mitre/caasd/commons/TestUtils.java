@@ -53,5 +53,4 @@ public class TestUtils {
 
         assertEquals(serializableObj, obj);
     }
-
 }

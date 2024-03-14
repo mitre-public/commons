@@ -120,7 +120,6 @@ public class ParallelismDetector {
         isMidExecution = false;
     }
 
-
     /**
      * Execute the provided task in the current thread.  Ensure any other Threads that calls
      * "run(Runnable)" or "call(Callable)" on this instance of ParallelismDetector will fail with a

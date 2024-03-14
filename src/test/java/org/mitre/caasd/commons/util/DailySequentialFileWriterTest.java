@@ -44,12 +44,12 @@ public class DailySequentialFileWriterTest {
         assertThat("Should have created 1 file", files.length, is(1));
         File actual = files[0];
 
-        assertThat("Heading should include WARNING",
-            Files.readLines(actual, Charsets.UTF_8).get(0).contains("WARNING")
-        );
-        assertThat("Message must be included",
-            Files.readLines(actual, Charsets.UTF_8).get(1).contains(message)
-        );
+        assertThat(
+                "Heading should include WARNING",
+                Files.readLines(actual, Charsets.UTF_8).get(0).contains("WARNING"));
+        assertThat(
+                "Message must be included",
+                Files.readLines(actual, Charsets.UTF_8).get(1).contains(message));
 
         FileUtils.forceDelete(actual);
         FileUtils.deleteDirectory(directory);
@@ -59,10 +59,10 @@ public class DailySequentialFileWriterTest {
     public void testCreateWarningFileWithMultiLineMessage() throws Exception {
 
         File directory = new File("testDir");
-        String message = "simple message that should be written\n" +
-            "plus some more details here, potentially going into\n" +
-            "a long paragraph describing what happened, why we might think\n" +
-            "it could have happened, etc., even though no one may read this...";
+        String message =
+                "simple message that should be written\n" + "plus some more details here, potentially going into\n"
+                        + "a long paragraph describing what happened, why we might think\n"
+                        + "it could have happened, etc., even though no one may read this...";
 
         DailySequentialFileWriter writer = new DailySequentialFileWriter(directory.getName());
         writer.warn(message);
@@ -72,9 +72,9 @@ public class DailySequentialFileWriterTest {
         assertThat("Should have created 1 file", files.length == 1);
         File actual = files[0];
 
-        assertThat("Message should be tabbed.",
-            Files.readLines(actual, Charsets.UTF_8).get(4).contains("\tit could have happened")
-        );
+        assertThat(
+                "Message should be tabbed.",
+                Files.readLines(actual, Charsets.UTF_8).get(4).contains("\tit could have happened"));
 
         FileUtils.forceDelete(actual);
         FileUtils.deleteDirectory(directory);
@@ -87,9 +87,8 @@ public class DailySequentialFileWriterTest {
         Exception ex = new RuntimeException("Something went wrong!");
         int maxStackTraceDepthToPrint = 4;
 
-        DailySequentialFileWriter writer = new DailySequentialFileWriter(
-            directory.getName(), ZoneId.of("UTC-5"), maxStackTraceDepthToPrint
-        );
+        DailySequentialFileWriter writer =
+                new DailySequentialFileWriter(directory.getName(), ZoneId.of("UTC-5"), maxStackTraceDepthToPrint);
         writer.handle(ex);
 
         File[] files = directory.listFiles();
@@ -97,16 +96,16 @@ public class DailySequentialFileWriterTest {
         assertThat("Should have created 1 file", files.length == 1);
         File actual = files[0];
 
-        assertThat("Heading should include ERROR",
-            Files.readLines(actual, Charsets.UTF_8).get(0).contains("ERROR")
-        );
-        assertThat("Message must be included",
-            Files.readLines(actual, Charsets.UTF_8).get(1).contains("RuntimeException")
-        );
+        assertThat(
+                "Heading should include ERROR",
+                Files.readLines(actual, Charsets.UTF_8).get(0).contains("ERROR"));
+        assertThat(
+                "Message must be included",
+                Files.readLines(actual, Charsets.UTF_8).get(1).contains("RuntimeException"));
         // stack trace depth (4) + header (1) + footer (1) + the ellipsis (1)
-        assertThat("Stack trace should be truncated",
-            Files.readLines(actual, Charsets.UTF_8).size() == maxStackTraceDepthToPrint + 1 + 1 + 1
-        );
+        assertThat(
+                "Stack trace should be truncated",
+                Files.readLines(actual, Charsets.UTF_8).size() == maxStackTraceDepthToPrint + 1 + 1 + 1);
 
         FileUtils.forceDelete(actual);
         FileUtils.deleteDirectory(directory);
@@ -127,18 +126,17 @@ public class DailySequentialFileWriterTest {
         assertThat("Should have created 1 file", files.length == 1);
         File actual = files[0];
 
-        assertThat("Heading should include ERROR",
-            Files.readLines(actual, Charsets.UTF_8).get(0).contains("ERROR")
-        );
-        assertThat("Message must be included",
-            Files.readLines(actual, Charsets.UTF_8).get(1).contains(message)
-        );
-        assertThat("Exception must be included",
-            Files.readLines(actual, Charsets.UTF_8).get(1).contains("Something went wrong!")
-        );
+        assertThat(
+                "Heading should include ERROR",
+                Files.readLines(actual, Charsets.UTF_8).get(0).contains("ERROR"));
+        assertThat(
+                "Message must be included",
+                Files.readLines(actual, Charsets.UTF_8).get(1).contains(message));
+        assertThat(
+                "Exception must be included",
+                Files.readLines(actual, Charsets.UTF_8).get(1).contains("Something went wrong!"));
 
         FileUtils.forceDelete(actual);
         FileUtils.deleteDirectory(directory);
     }
-
 }

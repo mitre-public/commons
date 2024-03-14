@@ -109,5 +109,4 @@ public class KineticRecord<T> implements HasTime, HasPosition {
         }
         return true;
     }
-
 }

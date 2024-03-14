@@ -48,10 +48,7 @@ public class DataFilterTest {
 
         ConsumingLinkedList<Integer> onRemoval = newConsumingLinkedList();
 
-        DataFilter<Integer> filter = new DataFilter<>(
-            isPositive(),
-            onRemoval
-        );
+        DataFilter<Integer> filter = new DataFilter<>(isPositive(), onRemoval);
 
         filter.clean(20);
         filter.clean(-10);
@@ -66,5 +63,4 @@ public class DataFilterTest {
     static Predicate<Integer> isPositive() {
         return (Integer a) -> a > 0;
     }
-
 }

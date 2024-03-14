@@ -80,9 +80,12 @@ public class Interval implements Serializable, Comparable<Interval> {
      */
     public Interval(LocalDate startDateInclusive, LocalDate endDateInclusive) {
         this(
-            startDateInclusive.equals(LocalDate.MIN) ? Instant.MIN : startDateInclusive.atStartOfDay().toInstant(ZoneOffset.UTC),
-            endDateInclusive.equals(LocalDate.MAX) ? Instant.MAX : endDateInclusive.plus(1, DAYS).atStartOfDay().toInstant(ZoneOffset.UTC)
-        );
+                startDateInclusive.equals(LocalDate.MIN)
+                        ? Instant.MIN
+                        : startDateInclusive.atStartOfDay().toInstant(ZoneOffset.UTC),
+                endDateInclusive.equals(LocalDate.MAX)
+                        ? Instant.MAX
+                        : endDateInclusive.plus(1, DAYS).atStartOfDay().toInstant(ZoneOffset.UTC));
     }
 
     public boolean isEmpty() {
@@ -201,10 +204,7 @@ public class Interval implements Serializable, Comparable<Interval> {
     }
 
     public Interval extendTo(Instant time) {
-        return new Interval(
-            start(),
-            time.isAfter(end()) ? time : end()
-        );
+        return new Interval(start(), time.isAfter(end()) ? time : end());
     }
 
     public Interval truncateTo(Interval int1) {
@@ -221,8 +221,8 @@ public class Interval implements Serializable, Comparable<Interval> {
      */
     public List<LocalDate> listDates() {
         return datesBetween(start(), end())
-            .map(i -> i.atZone(ZoneId.of("GMT")).toLocalDate())
-            .collect(Collectors.toList());
+                .map(i -> i.atZone(ZoneId.of("GMT")).toLocalDate())
+                .collect(Collectors.toList());
     }
 
     public Stream<Instant> timesBetween(Duration width) {
@@ -230,7 +230,9 @@ public class Interval implements Serializable, Comparable<Interval> {
     }
 
     public <P extends Comparable<? super P>> NavigableSet<P> filter(NavigableSet<P> vals, Function<P, Instant> conv) {
-        return vals.stream().filter(val -> this.contains(conv.apply(val))).collect(Collectors.toCollection(TreeSet::new));
+        return vals.stream()
+                .filter(val -> this.contains(conv.apply(val)))
+                .collect(Collectors.toCollection(TreeSet::new));
     }
 
     @Override
@@ -276,9 +278,8 @@ public class Interval implements Serializable, Comparable<Interval> {
         requireNonNull(dates);
         checkArgument(!dates.isEmpty(), "No covering for an empty date set.");
         return new Interval(
-            dates.stream().min(LocalDate::compareTo).get(),
-            dates.stream().max(LocalDate::compareTo).get()
-        );
+                dates.stream().min(LocalDate::compareTo).get(),
+                dates.stream().max(LocalDate::compareTo).get());
     }
 
     public static Interval covering(LocalDate... dates) {
@@ -298,7 +299,8 @@ public class Interval implements Serializable, Comparable<Interval> {
      * specified date range. Where the days of the week integers are those from {@link Calendar} :
      * {@link DayOfWeek}.
      */
-    public static Collection<Interval> fromRange(Long startTOD, Long endTOD, List<Integer> daysOfWeek, Long startDate, Long endDate) {
+    public static Collection<Interval> fromRange(
+            Long startTOD, Long endTOD, List<Integer> daysOfWeek, Long startDate, Long endDate) {
         Collection<Interval> itvs = new HashSet<>();
         Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
 
@@ -309,10 +311,7 @@ public class Interval implements Serializable, Comparable<Interval> {
             c.setTime(Date.from(Instant.ofEpochMilli(day)));
             if (daysOfWeek.contains(c.get(Calendar.DAY_OF_WEEK))) {
 
-                Interval itrvl = new Interval(
-                    Instant.ofEpochMilli(day + startTOD),
-                    Instant.ofEpochMilli(day + endTOD)
-                );
+                Interval itrvl = new Interval(Instant.ofEpochMilli(day + startTOD), Instant.ofEpochMilli(day + endTOD));
 
                 itvs.add(itrvl);
             }
@@ -355,8 +354,9 @@ public class Interval implements Serializable, Comparable<Interval> {
     public static boolean areDisjoint(Collection<Interval> intervals) {
         List<Interval> itvs = intervals.stream().sorted().collect(Collectors.toList());
         return IntStream.range(1, itvs.size())
-            .filter(i -> itvs.get(i - 1).overlaps(itvs.get(i)))
-            .count() == 0;
+                        .filter(i -> itvs.get(i - 1).overlaps(itvs.get(i)))
+                        .count()
+                == 0;
     }
 
     /**
@@ -367,20 +367,21 @@ public class Interval implements Serializable, Comparable<Interval> {
         if (!areDisjoint(subintervals)) {
             /* For now if the intervals aren't disjoint we just don't allow taking the complement.
              * We can add functionality to combine overlapping intervals in a collection later. */
-            throw new RuntimeException("Taking the complement of a collection of overlapping intervals is currently unsupported. Intervals were: "
-                + subintervals.stream().map(Object::toString).collect(Collectors.joining("\n")));
+            throw new RuntimeException(
+                    "Taking the complement of a collection of overlapping intervals is currently unsupported. Intervals were: "
+                            + subintervals.stream().map(Object::toString).collect(Collectors.joining("\n")));
         }
 
         NavigableSet<Instant> times = subintervals.stream()
-            .flatMap(i -> Stream.of(i.start(), i.end()))
-            .collect(Collectors.toCollection(TreeSet::new));
+                .flatMap(i -> Stream.of(i.start(), i.end()))
+                .collect(Collectors.toCollection(TreeSet::new));
         times.add(full.start());
         times.add(full.end());
 
         List<Instant> dts = new ArrayList<>(times);
         NavigableSet<Interval> fullCover = IntStream.range(1, dts.size())
-            .mapToObj(i -> new Interval(dts.get(i - 1), dts.get(i)))
-            .collect(Collectors.toCollection(TreeSet::new));
+                .mapToObj(i -> new Interval(dts.get(i - 1), dts.get(i)))
+                .collect(Collectors.toCollection(TreeSet::new));
 
         return new HashSet<>(Sets.difference(fullCover, new TreeSet<>(subintervals)));
     }

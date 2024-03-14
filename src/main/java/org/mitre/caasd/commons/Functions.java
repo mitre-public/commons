@@ -34,9 +34,8 @@ public class Functions {
      * NO_OP_CONSUMER instead of declaring your own NO_OP_CONSUMER (which usually looks bad when
      * inserted inline)
      */
-    public static final Consumer NO_OP_CONSUMER
-        = (obj) -> {
-        //this consumer does nothing
+    public static final Consumer NO_OP_CONSUMER = (obj) -> {
+        // this consumer does nothing
     };
 
     /**
@@ -64,6 +63,5 @@ public class Functions {
     };
 
     @FunctionalInterface
-    public interface ToStringFunction<T> extends Function<T, String> {
-    }
+    public interface ToStringFunction<T> extends Function<T, String> {}
 }

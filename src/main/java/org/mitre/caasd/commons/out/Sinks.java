@@ -31,7 +31,7 @@ public class Sinks {
 
         @Override
         public void accept(T record) {
-            //do nothing
+            // do nothing
         }
     }
 
@@ -62,5 +62,4 @@ public class Sinks {
             return this.col;
         }
     }
-
 }

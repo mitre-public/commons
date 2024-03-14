@@ -113,9 +113,7 @@ public class Course implements Comparable<Course> {
     }
 
     public static Course angleBetween(Course one, Course two) {
-        return Course.ofDegrees(
-            Spherical.angleDifference(one.inDegrees(), two.inDegrees())
-        );
+        return Course.ofDegrees(Spherical.angleDifference(one.inDegrees(), two.inDegrees()));
     }
 
     /**
@@ -133,9 +131,7 @@ public class Course implements Comparable<Course> {
      * @return This Course expressed in the desired unit.
      */
     public double in(Unit desiredUnit) {
-        return (this.unit == desiredUnit)
-            ? angle
-            : angle * desiredUnit.unitsPerDegree / this.unit.unitsPerDegree;
+        return (this.unit == desiredUnit) ? angle : angle * desiredUnit.unitsPerDegree / this.unit.unitsPerDegree;
     }
 
     public double inDegrees() {
@@ -228,12 +224,12 @@ public class Course implements Comparable<Course> {
 
     @Override
     public String toString() {
-        //when reporting a Course in terms of radians use 5 decimals places (by default)
+        // when reporting a Course in terms of radians use 5 decimals places (by default)
         if (unit == RADIANS) {
             return toString(5);
         }
 
-        //when reporting a Course in terms of degrees do not use decimals (by default)
+        // when reporting a Course in terms of degrees do not use decimals (by default)
         if (unit == DEGREES) {
             return toString(0);
         }

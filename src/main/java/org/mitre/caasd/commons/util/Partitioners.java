@@ -81,7 +81,8 @@ public class Partitioners {
         return newListCollector(Function.identity(), pred);
     }
 
-    public static <T, U> Collector<T, List<List<T>>, List<U>> newListCollector(Function<List<T>, U> partitionFinisher, Predicate<T> pred) {
+    public static <T, U> Collector<T, List<List<T>>, List<U>> newListCollector(
+            Function<List<T>, U> partitionFinisher, Predicate<T> pred) {
         return newListCollector(partitionFinisher, toBiPredicate(pred));
     }
 
@@ -118,46 +119,41 @@ public class Partitioners {
      *                          different partition
      */
     public static <T, U> Collector<T, List<List<T>>, List<U>> newListCollector(
-        Function<List<T>, U> partitionFinisher,
-        BiPredicate<List<T>, T> pred) {
+            Function<List<T>, U> partitionFinisher, BiPredicate<List<T>, T> pred) {
 
         requireNonNull(partitionFinisher);
         requireNonNull(pred);
 
         return new ListPartitioner<>(
-            partitionFinisher,
-            predicatedConsumer(
-                pred,
-                ArrayList::new,
-                ls -> ls.get(ls.size() - 1)
-            )
-        );
+                partitionFinisher, predicatedConsumer(pred, ArrayList::new, ls -> ls.get(ls.size() - 1)));
     }
 
-    public static <T extends Comparable<? super T>> Collector<T, TreeSet<TreeSet<T>>, TreeSet<TreeSet<T>>> newTreeSetCollector(Predicate<T> pred) {
+    public static <T extends Comparable<? super T>>
+            Collector<T, TreeSet<TreeSet<T>>, TreeSet<TreeSet<T>>> newTreeSetCollector(Predicate<T> pred) {
         return newTreeSetCollector(Comparator.comparing(TreeSet::first), Function.identity(), pred);
     }
 
-    public static <T extends Comparable<? super T>, U extends Comparable<? super U>> Collector<T, TreeSet<TreeSet<T>>, TreeSet<U>> newTreeSetCollector(
-        Function<TreeSet<T>, U> partitionFinisher,
-        Predicate<T> pred) {
+    public static <T extends Comparable<? super T>, U extends Comparable<? super U>>
+            Collector<T, TreeSet<TreeSet<T>>, TreeSet<U>> newTreeSetCollector(
+                    Function<TreeSet<T>, U> partitionFinisher, Predicate<T> pred) {
         return newTreeSetCollector(Comparator.naturalOrder(), partitionFinisher, pred);
     }
 
-    public static <T extends Comparable<? super T>, U> Collector<T, TreeSet<TreeSet<T>>, TreeSet<U>> newTreeSetCollector(
-        Comparator<U> comparator,
-        Function<TreeSet<T>, U> partitionFinisher,
-        Predicate<T> pred) {
+    public static <T extends Comparable<? super T>, U>
+            Collector<T, TreeSet<TreeSet<T>>, TreeSet<U>> newTreeSetCollector(
+                    Comparator<U> comparator, Function<TreeSet<T>, U> partitionFinisher, Predicate<T> pred) {
         return newTreeSetCollector(comparator, partitionFinisher, toBiPredicate(pred));
     }
 
-    public static <T extends Comparable<? super T>> Collector<T, TreeSet<TreeSet<T>>, TreeSet<TreeSet<T>>> newTreeSetCollector(BiPredicate<TreeSet<T>, T> pred) {
+    public static <T extends Comparable<? super T>>
+            Collector<T, TreeSet<TreeSet<T>>, TreeSet<TreeSet<T>>> newTreeSetCollector(
+                    BiPredicate<TreeSet<T>, T> pred) {
         return newTreeSetCollector(Comparator.comparing(TreeSet::first), Function.identity(), pred);
     }
 
-    public static <T extends Comparable<? super T>, U extends Comparable<? super U>> Collector<T, TreeSet<TreeSet<T>>, TreeSet<U>> newTreeSetCollector(
-        Function<TreeSet<T>, U> partitionFinisher,
-        BiPredicate<TreeSet<T>, T> pred) {
+    public static <T extends Comparable<? super T>, U extends Comparable<? super U>>
+            Collector<T, TreeSet<TreeSet<T>>, TreeSet<U>> newTreeSetCollector(
+                    Function<TreeSet<T>, U> partitionFinisher, BiPredicate<TreeSet<T>, T> pred) {
         return newTreeSetCollector(Comparator.naturalOrder(), partitionFinisher, pred);
     }
 
@@ -170,23 +166,16 @@ public class Partitioners {
      * @param pred              - predicate to use to decide when to split a new element off into a
      *                          different partition
      */
-    public static <T extends Comparable<? super T>, U> Collector<T, TreeSet<TreeSet<T>>, TreeSet<U>> newTreeSetCollector(
-        Comparator<U> comparator,
-        Function<TreeSet<T>, U> partitionFinisher,
-        BiPredicate<TreeSet<T>, T> pred
-    ) {
+    public static <T extends Comparable<? super T>, U>
+            Collector<T, TreeSet<TreeSet<T>>, TreeSet<U>> newTreeSetCollector(
+                    Comparator<U> comparator,
+                    Function<TreeSet<T>, U> partitionFinisher,
+                    BiPredicate<TreeSet<T>, T> pred) {
         requireNonNull(partitionFinisher);
         requireNonNull(pred);
 
         return new TreeSetPartitioner<>(
-            comparator,
-            partitionFinisher,
-            predicatedConsumer(
-                pred,
-                TreeSet::new,
-                TreeSet::last
-            )
-        );
+                comparator, partitionFinisher, predicatedConsumer(pred, TreeSet::new, TreeSet::last));
     }
 
     private static <T, C extends Collection<T>> BiPredicate<C, T> toBiPredicate(Predicate<T> predicate) {
@@ -202,9 +191,7 @@ public class Partitioners {
      * points are over 5 minutes apart (i.e. 5min subsegments).
      */
     private static <T, C extends Collection<T>, CC extends Collection<C>> BiConsumer<CC, T> predicatedConsumer(
-        BiPredicate<C, T> pred,
-        Supplier<C> supplier,
-        Function<CC, C> lastCol) {
+            BiPredicate<C, T> pred, Supplier<C> supplier, Function<CC, C> lastCol) {
         return (x, y) -> {
             if (x.isEmpty()) {
                 C col = supplier.get();
@@ -229,9 +216,7 @@ public class Partitioners {
         private final Function<List<T>, U> finisher;
         private final BiConsumer<List<List<T>>, T> accumulator;
 
-        public ListPartitioner(
-            Function<List<T>, U> finisher,
-            BiConsumer<List<List<T>>, T> accumulator) {
+        public ListPartitioner(Function<List<T>, U> finisher, BiConsumer<List<List<T>>, T> accumulator) {
             this.finisher = requireNonNull(finisher);
             this.accumulator = requireNonNull(accumulator);
         }
@@ -265,16 +250,17 @@ public class Partitioners {
         }
     }
 
-    private static final class TreeSetPartitioner<T extends Comparable<? super T>, U> implements Collector<T, TreeSet<TreeSet<T>>, TreeSet<U>> {
+    private static final class TreeSetPartitioner<T extends Comparable<? super T>, U>
+            implements Collector<T, TreeSet<TreeSet<T>>, TreeSet<U>> {
 
         private final Comparator<U> comparator;
         private final Function<TreeSet<T>, U> finisher;
         private final BiConsumer<TreeSet<TreeSet<T>>, T> accumulator;
 
         public TreeSetPartitioner(
-            Comparator<U> comparator,
-            Function<TreeSet<T>, U> finisher,
-            BiConsumer<TreeSet<TreeSet<T>>, T> accumulator) {
+                Comparator<U> comparator,
+                Function<TreeSet<T>, U> finisher,
+                BiConsumer<TreeSet<TreeSet<T>>, T> accumulator) {
             this.comparator = requireNonNull(comparator);
             this.finisher = requireNonNull(finisher);
             this.accumulator = requireNonNull(accumulator);

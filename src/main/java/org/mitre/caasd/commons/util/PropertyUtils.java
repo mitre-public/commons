@@ -97,9 +97,8 @@ public class PropertyUtils {
             return FileUtils.getProperties(propertiesFile);
         } catch (IOException ex) {
             throw new PropertyLoadingException(
-                "Problem loading Properties file: " + propertiesFile.getAbsolutePath() + "\n" + ex.getMessage(),
-                ex
-            );
+                    "Problem loading Properties file: " + propertiesFile.getAbsolutePath() + "\n" + ex.getMessage(),
+                    ex);
         }
     }
 
@@ -133,10 +132,7 @@ public class PropertyUtils {
         try {
             props.load(new StringReader(allProperties));
         } catch (IOException ioe) {
-            throw new PropertyLoadingException(
-                "Problem parsing properties from: " + allProperties,
-                ioe
-            );
+            throw new PropertyLoadingException("Problem parsing properties from: " + allProperties, ioe);
         }
 
         return props;
@@ -392,63 +388,49 @@ public class PropertyUtils {
 
         Optional<String> prop = getOptionalString(propertyKey, properties);
 
-        return prop.isPresent()
-            ? Byte.parseByte(prop.get())
-            : defaultValue;
+        return prop.isPresent() ? Byte.parseByte(prop.get()) : defaultValue;
     }
 
     public static short getOptionalShort(String propertyKey, Properties properties, short defaultValue) {
 
         Optional<String> prop = getOptionalString(propertyKey, properties);
 
-        return prop.isPresent()
-            ? Short.parseShort(prop.get())
-            : defaultValue;
+        return prop.isPresent() ? Short.parseShort(prop.get()) : defaultValue;
     }
 
     public static int getOptionalInt(String propertyKey, Properties properties, int defaultValue) {
 
         Optional<String> prop = getOptionalString(propertyKey, properties);
 
-        return prop.isPresent()
-            ? Integer.parseInt(prop.get())
-            : defaultValue;
+        return prop.isPresent() ? Integer.parseInt(prop.get()) : defaultValue;
     }
 
     public static long getOptionalLong(String propertyKey, Properties properties, long defaultValue) {
 
         Optional<String> prop = getOptionalString(propertyKey, properties);
 
-        return prop.isPresent()
-            ? Long.parseLong(prop.get())
-            : defaultValue;
+        return prop.isPresent() ? Long.parseLong(prop.get()) : defaultValue;
     }
 
     public static float getOptionalFloat(String propertyKey, Properties properties, float defaultValue) {
 
         Optional<String> prop = getOptionalString(propertyKey, properties);
 
-        return prop.isPresent()
-            ? Float.parseFloat(prop.get())
-            : defaultValue;
+        return prop.isPresent() ? Float.parseFloat(prop.get()) : defaultValue;
     }
 
     public static double getOptionalDouble(String propertyKey, Properties properties, double defaultValue) {
 
         Optional<String> prop = getOptionalString(propertyKey, properties);
 
-        return prop.isPresent()
-            ? Double.parseDouble(prop.get())
-            : defaultValue;
+        return prop.isPresent() ? Double.parseDouble(prop.get()) : defaultValue;
     }
 
     public static boolean getOptionalBoolean(String propertyKey, Properties properties, boolean defaultValue) {
 
         Optional<String> prop = getOptionalString(propertyKey, properties);
 
-        return prop.isPresent()
-            ? Boolean.parseBoolean(prop.get())
-            : defaultValue;
+        return prop.isPresent() ? Boolean.parseBoolean(prop.get()) : defaultValue;
     }
 
     /**
@@ -470,7 +452,7 @@ public class PropertyUtils {
             return newArrayList();
         }
 
-        //Tokenize, trim, and then verify the comma delimited tokens are valid
+        // Tokenize, trim, and then verify the comma delimited tokens are valid
         String[] splits = csvLine.split(",");
         for (int i = 0; i < splits.length; i++) {
             splits[i] = splits[i].trim();

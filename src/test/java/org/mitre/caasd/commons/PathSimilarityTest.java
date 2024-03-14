@@ -89,9 +89,9 @@ class PathSimilarityTest {
         double actualLatDist = latitudeDist(path1.latitudes(), path2.latitudes());
 
         double expectLatDist = abs(a.latitude() - e.latitude())
-            + abs(b.latitude() - f.latitude())
-            + abs(c.latitude() - g.latitude())
-            + abs(d.latitude() - h.latitude());
+                + abs(b.latitude() - f.latitude())
+                + abs(c.latitude() - g.latitude())
+                + abs(d.latitude() - h.latitude());
 
         assertEquals(actualLatDist, expectLatDist, 0.000000001);
     }
@@ -116,9 +116,9 @@ class PathSimilarityTest {
         double actualLongDist = longitudeDist(path1.longitudes(), path2.longitudes());
 
         double expectLongDist = abs(a.longitude() - e.longitude())
-            + abs(b.longitude() - f.longitude())
-            + abs(c.longitude() - g.longitude())
-            + abs(d.longitude() - h.longitude());
+                + abs(b.longitude() - f.longitude())
+                + abs(c.longitude() - g.longitude())
+                + abs(d.longitude() - h.longitude());
 
         assertEquals(actualLongDist, expectLongDist, 0.000000001);
     }
@@ -140,16 +140,15 @@ class PathSimilarityTest {
 
         LatLongPath path2 = new LatLongPath(e, f, g, h);
 
-        //self similarity is always zero
+        // self similarity is always zero
         assertEquals(similarity(path1, path1), 0.0, 0.00000001);
         assertEquals(similarity(path2, path2), 0.0, 0.00000001);
 
         double expectedSim = -latitudeDist(path1.latitudes(), path2.latitudes())
-            - longitudeDist(path1.longitudes(), path2.longitudes());
+                - longitudeDist(path1.longitudes(), path2.longitudes());
 
         assertThat(similarity(path1, path2), is(expectedSim));
         assertThat(similarity(path2, path1), is(expectedSim));
         assertThat(similarity(path1, path2), is(similarity(path2, path1)));
-
     }
 }

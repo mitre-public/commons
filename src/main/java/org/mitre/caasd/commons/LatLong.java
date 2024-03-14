@@ -98,8 +98,8 @@ public class LatLong implements Comparable<LatLong>, Serializable {
     public static LatLong fromBytes(byte[] exactly16Bytes) {
         requireNonNull(exactly16Bytes);
         checkArgument(exactly16Bytes.length == 16, "Must use exactly 16 bytes");
-        long bigBits = 0;  //e.g. most significant bits
-        long smallBits = 0;  //e.g. least significant bits
+        long bigBits = 0; // e.g. most significant bits
+        long smallBits = 0; // e.g. least significant bits
         for (int i = 0; i < 8; i++) {
             bigBits = (bigBits << 8) | (exactly16Bytes[i] & 0xff);
         }
@@ -112,7 +112,6 @@ public class LatLong implements Comparable<LatLong>, Serializable {
         return LatLong.of(longitude, latitude);
     }
 
-
     /**
      * Create a new LatLong object.
      *
@@ -122,9 +121,7 @@ public class LatLong implements Comparable<LatLong>, Serializable {
      * @return A new LatLong object.
      */
     public static LatLong fromBase64Str(String base64Encoding) {
-        return LatLong.fromBytes(
-            Base64.getUrlDecoder().decode(base64Encoding)
-        );
+        return LatLong.fromBytes(Base64.getUrlDecoder().decode(base64Encoding));
     }
 
     /**
@@ -177,10 +174,7 @@ public class LatLong implements Comparable<LatLong>, Serializable {
      * longitude.
      */
     public byte[] toBytes() {
-        return ByteBuffer.allocate(16)
-            .putDouble(latitude)
-            .putDouble(longitude)
-            .array();
+        return ByteBuffer.allocate(16).putDouble(latitude).putDouble(longitude).array();
     }
 
     /** @return The Base64 file and url safe encoding of this LatLong's byte[] . */
@@ -197,9 +191,7 @@ public class LatLong implements Comparable<LatLong>, Serializable {
     }
 
     public double courseInDegrees(LatLong that) {
-        return Spherical.courseInDegrees(
-            latitude, longitude,
-            that.latitude(), that.longitude());
+        return Spherical.courseInDegrees(latitude, longitude, that.latitude(), that.longitude());
     }
 
     public Course courseTo(LatLong that) {
@@ -263,8 +255,10 @@ public class LatLong implements Comparable<LatLong>, Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 89 * hash + (int) (Double.doubleToLongBits(this.latitude) ^ (Double.doubleToLongBits(this.latitude) >>> 32));
-        hash = 89 * hash + (int) (Double.doubleToLongBits(this.longitude) ^ (Double.doubleToLongBits(this.longitude) >>> 32));
+        hash = 89 * hash
+                + (int) (Double.doubleToLongBits(this.latitude) ^ (Double.doubleToLongBits(this.latitude) >>> 32));
+        hash = 89 * hash
+                + (int) (Double.doubleToLongBits(this.longitude) ^ (Double.doubleToLongBits(this.longitude) >>> 32));
         return hash;
     }
 
@@ -330,13 +324,13 @@ public class LatLong implements Comparable<LatLong>, Serializable {
      * @return The average location
      */
     public static LatLong quickAvgLatLong(LatLong one, LatLong two) {
-        //latitude never wraps, so arithmatic average is fine
+        // latitude never wraps, so arithmatic average is fine
         double averageLat = (one.latitude + two.latitude) / 2.0;
 
-        //be careful with longitude -- the international date line is a problem
+        // be careful with longitude -- the international date line is a problem
         double averageLong = (abs(one.longitude - two.longitude) > 180.0)
-            ? ((one.longitude + 180.0) + (two.longitude + 180.0)) / 2.0
-            : (one.longitude + two.longitude) / 2.0;
+                ? ((one.longitude + 180.0) + (two.longitude + 180.0)) / 2.0
+                : (one.longitude + two.longitude) / 2.0;
 
         return LatLong.of(averageLat, averageLong);
     }
@@ -421,15 +415,17 @@ public class LatLong implements Comparable<LatLong>, Serializable {
             return locations[0];
         }
 
-        //just take the simple average of latitude values....
-        double avgLatitude = Stream.of(locations).mapToDouble(loc -> loc.latitude).average().getAsDouble();
-        //longitude cannot be simply averaged due to discontinuity when -180 abuts 180
+        // just take the simple average of latitude values....
+        double avgLatitude =
+                Stream.of(locations).mapToDouble(loc -> loc.latitude).average().getAsDouble();
+        // longitude cannot be simply averaged due to discontinuity when -180 abuts 180
         // So, we are going to take several "weighted averages of TWO Longitude values"
         // We can correct for the international date line with every subsequent avg.
-        double[] longitudes = Stream.of(locations).mapToDouble(loc -> loc.longitude()).toArray();
+        double[] longitudes =
+                Stream.of(locations).mapToDouble(loc -> loc.longitude()).toArray();
 
-        //average the first two entries, then average in the 3rd entry, then the 4th...
-        //increase the "weight" on the "curAverage" each time through the loop
+        // average the first two entries, then average in the 3rd entry, then the 4th...
+        // increase the "weight" on the "curAverage" each time through the loop
         double curAvgLongitude = longitudes[0];
         for (int i = 1; i < longitudes.length; i++) {
             curAvgLongitude = avgLong(curAvgLongitude, i, longitudes[i], 1);
@@ -469,8 +465,8 @@ public class LatLong implements Comparable<LatLong>, Serializable {
         double w2 = (double) (weightB) / (double) (weightA + weightB);
 
         double averageLong = (abs(longitudeA - longitudeB) > 180.0)
-            ? w1 * (longitudeA + 180.0) + w2 * (longitudeB + 180.0)
-            : w1 * longitudeA + w2 * longitudeB;
+                ? w1 * (longitudeA + 180.0) + w2 * (longitudeB + 180.0)
+                : w1 * longitudeA + w2 * longitudeB;
 
         return averageLong;
     }
@@ -482,45 +478,36 @@ public class LatLong implements Comparable<LatLong>, Serializable {
         checkNotNull(locations, COLLECTION_CANNOT_BE_NULL);
         checkArgument(!locations.isEmpty(), COLLECTION_CANNOT_BE_EMPTY);
 
-        return locations
-            .stream()
-            .map(LatLong::latitude)
-            .reduce(-Double.MAX_VALUE, Math::max);
+        return locations.stream().map(LatLong::latitude).reduce(-Double.MAX_VALUE, Math::max);
     }
 
     public static Double minLatitude(Collection<LatLong> locations) {
         checkNotNull(locations, COLLECTION_CANNOT_BE_NULL);
         checkArgument(!locations.isEmpty(), COLLECTION_CANNOT_BE_EMPTY);
 
-        return locations.stream()
-            .map(LatLong::latitude)
-            .reduce(Double.MAX_VALUE, Math::min);
+        return locations.stream().map(LatLong::latitude).reduce(Double.MAX_VALUE, Math::min);
     }
 
     public static Double maxLongitude(Collection<LatLong> locations) {
         checkNotNull(locations, COLLECTION_CANNOT_BE_NULL);
         checkArgument(!locations.isEmpty(), COLLECTION_CANNOT_BE_EMPTY);
 
-        return locations.stream()
-            .map(LatLong::longitude)
-            .reduce(-Double.MAX_VALUE, Math::max);
+        return locations.stream().map(LatLong::longitude).reduce(-Double.MAX_VALUE, Math::max);
     }
 
     public static Double minLongitude(Collection<LatLong> locations) {
         checkNotNull(locations, COLLECTION_CANNOT_BE_NULL);
         checkArgument(!locations.isEmpty(), COLLECTION_CANNOT_BE_EMPTY);
 
-        return locations.stream()
-            .map(LatLong::longitude)
-            .reduce(Double.MAX_VALUE, Math::min);
+        return locations.stream().map(LatLong::longitude).reduce(Double.MAX_VALUE, Math::min);
     }
 
     @Override
     public int compareTo(LatLong other) {
         return ComparisonChain.start()
-            .compare(latitude, other.latitude)
-            .compare(longitude, other.longitude)
-            .result();
+                .compare(latitude, other.latitude)
+                .compare(longitude, other.longitude)
+                .result();
     }
 
     /**

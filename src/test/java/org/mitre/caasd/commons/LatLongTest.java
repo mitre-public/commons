@@ -121,8 +121,8 @@ public class LatLongTest {
         assertThat(toString.contains("15.0"), is(true));
         assertThat(toString.contains("22.0"), is(true));
 
-        assertThat("The Latitude value should come first",
-            toString.indexOf("15.0") < toString.indexOf("22.0"), is(true));
+        assertThat(
+                "The Latitude value should come first", toString.indexOf("15.0") < toString.indexOf("22.0"), is(true));
     }
 
     @Test
@@ -209,11 +209,7 @@ public class LatLongTest {
 
         double TOLERANCE = 0.1;
 
-        assertEquals(
-            45.0,
-            one.courseInDegrees(two),
-            TOLERANCE
-        );
+        assertEquals(45.0, one.courseInDegrees(two), TOLERANCE);
     }
 
     @Test
@@ -232,16 +228,8 @@ public class LatLongTest {
 
         double TOLERANCE = 0.01;
 
-        assertEquals(
-            actualDestination.latitude(),
-            expectedDestination.latitude(),
-            TOLERANCE
-        );
-        assertEquals(
-            actualDestination.longitude(),
-            expectedDestination.longitude(),
-            TOLERANCE
-        );
+        assertEquals(actualDestination.latitude(), expectedDestination.latitude(), TOLERANCE);
+        assertEquals(actualDestination.longitude(), expectedDestination.longitude(), TOLERANCE);
     }
 
     @Test
@@ -261,39 +249,23 @@ public class LatLongTest {
 
         double TOLERANCE = 0.01;
 
-        assertEquals(
-            actualDestination.latitude(),
-            expectedDestination.latitude(),
-            TOLERANCE
-        );
-        assertEquals(
-            actualDestination.longitude(),
-            expectedDestination.longitude(),
-            TOLERANCE
-        );
+        assertEquals(actualDestination.latitude(), expectedDestination.latitude(), TOLERANCE);
+        assertEquals(actualDestination.longitude(), expectedDestination.longitude(), TOLERANCE);
     }
 
     @Test
     public void testGreatCircleOrigin() {
 
         LatLong source = new LatLong(0.0, 0.0);
-        Double course = 0.0;  //traveling due north
+        Double course = 0.0; // traveling due north
 
-        LatLong expected = new LatLong(0.0, 90.0); //a point on the equator 1/4 around the earth
+        LatLong expected = new LatLong(0.0, 90.0); // a point on the equator 1/4 around the earth
         LatLong actual = source.greatCircleOrigin(course);
 
-        double TOLERANCE = 0.01;  //some rounding is ok, this test is just for macro errors
+        double TOLERANCE = 0.01; // some rounding is ok, this test is just for macro errors
 
-        assertEquals(
-            expected.latitude(),
-            actual.latitude(),
-            TOLERANCE
-        );
-        assertEquals(
-            expected.longitude(),
-            actual.longitude(),
-            TOLERANCE
-        );
+        assertEquals(expected.latitude(), actual.latitude(), TOLERANCE);
+        assertEquals(expected.longitude(), actual.longitude(), TOLERANCE);
     }
 
     @Test
@@ -315,49 +287,49 @@ public class LatLongTest {
 
     @Test
     public void testMinLatitude_nullInput() {
-        //input cannot be null
+        // input cannot be null
         assertThrows(NullPointerException.class, () -> minLongitude(null));
     }
 
     @Test
     public void testMinLatitude_emptyInput() {
-        //input cannot be empty
+        // input cannot be empty
         assertThrows(IllegalArgumentException.class, () -> minLatitude(newArrayList()));
     }
 
     @Test
     public void testMaxLatitude_nullInput() {
-        //input cannot be null
+        // input cannot be null
         assertThrows(NullPointerException.class, () -> maxLatitude(null));
     }
 
     @Test
     public void testMaxLatitude_emptyInput() {
-        //input cannot be empty
+        // input cannot be empty
         assertThrows(IllegalArgumentException.class, () -> maxLatitude(newArrayList()));
     }
 
     @Test
     public void testMinLongitude_nullInput() {
-        //input cannot be null
+        // input cannot be null
         assertThrows(NullPointerException.class, () -> minLatitude(null));
     }
 
     @Test
     public void testMinLongitude_emptyInput() {
-        //input cannot be empty
+        // input cannot be empty
         assertThrows(IllegalArgumentException.class, () -> minLatitude(newArrayList()));
     }
 
     @Test
     public void testMaxLongitude_nullInput() {
-        //input cannot be null
+        // input cannot be null
         assertThrows(NullPointerException.class, () -> maxLongitude(null));
     }
 
     @Test
     public void testMaxLongitude_emptyInput() {
-        //input cannot be empty
+        // input cannot be empty
         assertThrows(IllegalArgumentException.class, () -> maxLongitude(newArrayList()));
     }
 
@@ -365,7 +337,7 @@ public class LatLongTest {
     public void testAvgLatLong() {
         LatLong one = LatLong.of(0.0, 10.0);
         LatLong two = LatLong.of(10.0, 20.0);
-        LatLong niaveAverage = LatLong.of(5.0, 15.0); //niave arthimatic average of LatLong
+        LatLong niaveAverage = LatLong.of(5.0, 15.0); // niave arthimatic average of LatLong
         LatLong correctAverage = avgLatLong(one, two);
 
         Distance oneToAvg = one.distanceTo(correctAverage);
@@ -374,14 +346,14 @@ public class LatLongTest {
 
         assertEquals(oneToAvg.inNauticalMiles(), avgToTwo.inNauticalMiles(), 0.00001);
 
-        //the naive answer is off by over 2.5 NM !
+        // the naive answer is off by over 2.5 NM !
         assertThat(realToNiave.isGreaterThan(Distance.ofNauticalMiles(2.5)), is(true));
     }
 
     @Test
     public void testAvgLatLong_poleToPole() {
-        LatLong north = LatLong.of(89.0, 0.0); //near north pole
-        LatLong south = LatLong.of(-89.5, 0.0); //near south pole
+        LatLong north = LatLong.of(89.0, 0.0); // near north pole
+        LatLong south = LatLong.of(-89.5, 0.0); // near south pole
 
         LatLong avg = avgLatLong(north, south);
 
@@ -389,52 +361,44 @@ public class LatLongTest {
 
         Distance halfEarthCircumfrence = Distance.ofNauticalMiles(PI * EARTH_RADIUS_NM);
 
-        //these values are similar...but halfEarthCircumfrence is slightly larger
+        // these values are similar...but halfEarthCircumfrence is slightly larger
         assertThat(oneToTwo.dividedBy(halfEarthCircumfrence) > .95, is(true));
         assertThat(halfEarthCircumfrence.dividedBy(oneToTwo) < 1.05, is(true));
 
-        //the average is the same distance to both the northern and southern points
+        // the average is the same distance to both the northern and southern points
         assertEquals(
-            avg.distanceTo(north).inNauticalMiles(),
-            avg.distanceTo(south).inNauticalMiles(),
-            0.001
-        );
+                avg.distanceTo(north).inNauticalMiles(), avg.distanceTo(south).inNauticalMiles(), 0.001);
     }
 
     @Test
     public void testAvgLatLong_acrossDateLine() {
 
-        LatLong east = LatLong.of(0.0, -179.5); //just east of line
-        LatLong west = LatLong.of(0.0, 179.0); //just west of line
-        LatLong niaveAverage = LatLong.of(0.0, -0.25); //niave arthimatic average of LatLong
+        LatLong east = LatLong.of(0.0, -179.5); // just east of line
+        LatLong west = LatLong.of(0.0, 179.0); // just west of line
+        LatLong niaveAverage = LatLong.of(0.0, -0.25); // niave arthimatic average of LatLong
         LatLong correctAverage = avgLatLong(east, west);
 
         Distance distBtwPoints = east.distanceTo(west);
 
-        //the distance between the east and west points is small (about 90.01 NM)
+        // the distance between the east and west points is small (about 90.01 NM)
         assertThat(distBtwPoints.isLessThan(Distance.ofNauticalMiles(91.0)), is(true));
         assertThat(distBtwPoints.isGreaterThan(Distance.ofNauticalMiles(89.0)), is(true));
 
-        //the distance between the average point and the east point is about 45.5 NM
-        assertThat(correctAverage.distanceTo(east).isLessThan(Distance.ofNauticalMiles(45.5)),
-            is(true));
-        assertThat(correctAverage.distanceTo(east).isGreaterThan(Distance.ofNauticalMiles(44.5)),
-            is(true));
+        // the distance between the average point and the east point is about 45.5 NM
+        assertThat(correctAverage.distanceTo(east).isLessThan(Distance.ofNauticalMiles(45.5)), is(true));
+        assertThat(correctAverage.distanceTo(east).isGreaterThan(Distance.ofNauticalMiles(44.5)), is(true));
 
-        //the distance between the average point and the west point is about 45.5 NM
-        assertThat(correctAverage.distanceTo(west).isLessThan(Distance.ofNauticalMiles(45.5)),
-            is(true));
-        assertThat(correctAverage.distanceTo(west).isGreaterThan(Distance.ofNauticalMiles(44.5)),
-            is(true));
+        // the distance between the average point and the west point is about 45.5 NM
+        assertThat(correctAverage.distanceTo(west).isLessThan(Distance.ofNauticalMiles(45.5)), is(true));
+        assertThat(correctAverage.distanceTo(west).isGreaterThan(Distance.ofNauticalMiles(44.5)), is(true));
 
-        //the distance from average to east = distance from average to west
+        // the distance from average to east = distance from average to west
         assertEquals(
-            correctAverage.distanceTo(east).inNauticalMiles(),
-            correctAverage.distanceTo(west).inNauticalMiles(),
-            0.001
-        );
+                correctAverage.distanceTo(east).inNauticalMiles(),
+                correctAverage.distanceTo(west).inNauticalMiles(),
+                0.001);
 
-        //the naive answer is literally on the otherside of the planet
+        // the naive answer is literally on the otherside of the planet
         Distance error = correctAverage.distanceTo(niaveAverage);
         assertThat(error.isGreaterThan(Distance.ofNauticalMiles(10_801)), is(true));
     }
@@ -442,18 +406,18 @@ public class LatLongTest {
     @Test
     public void testAvgLatLong_array() {
 
-        LatLong one = LatLong.of(0.0, -179.5); //just east of date-line
-        LatLong two = LatLong.of(0.0, 179.0); //just west of date-line
-        LatLong three = LatLong.of(1.0, 179.0); //due north of two
+        LatLong one = LatLong.of(0.0, -179.5); // just east of date-line
+        LatLong two = LatLong.of(0.0, 179.0); // just west of date-line
+        LatLong three = LatLong.of(1.0, 179.0); // due north of two
 
         LatLong realAverage = LatLong.avgLatLong(one, two, three);
         LatLong manualAverage = LatLong.of(0.33, 179.5);
 
-        //the real average is NOT the manual average
-        assertThat(realAverage.distanceTo(manualAverage).isGreaterThan(Distance.ofNauticalMiles(0)),
-            is(true));
+        // the real average is NOT the manual average
+        assertThat(realAverage.distanceTo(manualAverage).isGreaterThan(Distance.ofNauticalMiles(0)), is(true));
 
-        //distance are small -- so error won't be too big assuming the internation date line doesn't hose the computation
+        // distance are small -- so error won't be too big assuming the internation date line doesn't hose the
+        // computation
         assertThat(realAverage.latitude() > .33 && realAverage.latitude() < .34, is(true));
         assertThat(realAverage.longitude() > 179.5 && realAverage.longitude() < 179.51, is(true));
     }
@@ -461,13 +425,12 @@ public class LatLongTest {
     @Test
     public void testQuickAvgLatLong_1() {
 
-        LatLong east = LatLong.of(0.0, -179.5); //just east of line
-        LatLong west = LatLong.of(0.0, 179.0); //just west of line
+        LatLong east = LatLong.of(0.0, -179.5); // just east of line
+        LatLong west = LatLong.of(0.0, 179.0); // just west of line
         LatLong quickAverage = LatLong.quickAvgLatLong(east, west);
         LatLong expected = LatLong.of(0.0, 179.750);
 
-        assertThat(quickAverage.distanceTo(expected).isLessThan(Distance.ofNauticalMiles(0.001)),
-            is(true));
+        assertThat(quickAverage.distanceTo(expected).isLessThan(Distance.ofNauticalMiles(0.001)), is(true));
     }
 
     @Test
@@ -478,8 +441,7 @@ public class LatLongTest {
         LatLong quickAverage = LatLong.quickAvgLatLong(east, west);
         LatLong expected = LatLong.of(2.0, -14.75);
 
-        assertThat(quickAverage.distanceTo(expected).isLessThan(Distance.ofNauticalMiles(0.001)),
-            is(true));
+        assertThat(quickAverage.distanceTo(expected).isLessThan(Distance.ofNauticalMiles(0.001)), is(true));
     }
 
     @Test
@@ -488,159 +450,143 @@ public class LatLongTest {
         LatLong one = LatLong.of(42.93675, -83.70776);
         LatLong two = LatLong.of(42.95037, -83.70570);
 
-        //compute the solution two ways..
+        // compute the solution two ways..
         LatLong quickAverage = LatLong.quickAvgLatLong(one, two);
         LatLong accurateAverage = LatLong.avgLatLong(one, two);
 
-        //solutions a NOT the same...but they are damn near indistiquishable
+        // solutions a NOT the same...but they are damn near indistiquishable
         assertNotEquals(quickAverage, accurateAverage);
-        assertThat(
-            quickAverage.distanceTo(accurateAverage).isLessThan(Distance.ofNauticalMiles(0.00005)),
-            is(true));
+        assertThat(quickAverage.distanceTo(accurateAverage).isLessThan(Distance.ofNauticalMiles(0.00005)), is(true));
     }
 
     @Test
     public void quickAvgLatLong_simple() {
 
-        //These points are 846.45952 Nautical Miles apart!
-        //The "naive average location" will be WRONG
+        // These points are 846.45952 Nautical Miles apart!
+        // The "naive average location" will be WRONG
         LatLong one = LatLong.of(0.0, 10.0);
         LatLong two = LatLong.of(10.0, 20.0);
 
         ArrayList<LatLong> path = newArrayList(one, two);
 
-        LatLong average = LatLong.avgLatLong(path); //accurately computed avg LatLong
-        LatLong naiveAverage = LatLong.of(5.0, 15.0); //naive arithmetic average of LatLong
+        LatLong average = LatLong.avgLatLong(path); // accurately computed avg LatLong
+        LatLong naiveAverage = LatLong.of(5.0, 15.0); // naive arithmetic average of LatLong
 
         assertThat(LatLong.quickAvgLatLong(path), is(naiveAverage));
 
-        //the naive answer is off by over 2.5 NM!
+        // the naive answer is off by over 2.5 NM!
         Distance realToNaive = average.distanceTo(naiveAverage);
         assertThat(realToNaive.isGreaterThan(Distance.ofNauticalMiles(2.5)), is(true));
     }
 
-
     @Test
     public void testQuickAvgLatLong_acrossDateLine() {
 
-        LatLong east = LatLong.of(0.0, -179.5); //just east of line
-        LatLong west = LatLong.of(0.0, 179.0); //just west of line
+        LatLong east = LatLong.of(0.0, -179.5); // just east of line
+        LatLong west = LatLong.of(0.0, 179.0); // just west of line
 
         ArrayList<LatLong> path = newArrayList(east, west);
 
-        LatLong naiveAverage = LatLong.of(0.0, -0.25); //naive arithmetic average of LatLong
-        LatLong correctAverage = LatLong.quickAvgLatLong(path);  //(0.0,179.75)
+        LatLong naiveAverage = LatLong.of(0.0, -0.25); // naive arithmetic average of LatLong
+        LatLong correctAverage = LatLong.quickAvgLatLong(path); // (0.0,179.75)
 
         System.out.println(correctAverage.toString());
 
         Distance distBtwPoints = east.distanceTo(west);
 
-        //the distance between the east and west points is small (about 90.01 NM)
+        // the distance between the east and west points is small (about 90.01 NM)
         assertThat(distBtwPoints.isLessThan(Distance.ofNauticalMiles(91.0)), is(true));
         assertThat(distBtwPoints.isGreaterThan(Distance.ofNauticalMiles(89.0)), is(true));
 
-        //the distance between the average point and the east point is about 45.5 NM
-        assertThat(correctAverage.distanceTo(east).isLessThan(Distance.ofNauticalMiles(45.5)),
-            is(true));
-        assertThat(correctAverage.distanceTo(east).isGreaterThan(Distance.ofNauticalMiles(44.5)),
-            is(true));
+        // the distance between the average point and the east point is about 45.5 NM
+        assertThat(correctAverage.distanceTo(east).isLessThan(Distance.ofNauticalMiles(45.5)), is(true));
+        assertThat(correctAverage.distanceTo(east).isGreaterThan(Distance.ofNauticalMiles(44.5)), is(true));
 
-        //the distance between the average point and the west point is about 45.5 NM
-        assertThat(correctAverage.distanceTo(west).isLessThan(Distance.ofNauticalMiles(45.5)),
-            is(true));
-        assertThat(correctAverage.distanceTo(west).isGreaterThan(Distance.ofNauticalMiles(44.5)),
-            is(true));
+        // the distance between the average point and the west point is about 45.5 NM
+        assertThat(correctAverage.distanceTo(west).isLessThan(Distance.ofNauticalMiles(45.5)), is(true));
+        assertThat(correctAverage.distanceTo(west).isGreaterThan(Distance.ofNauticalMiles(44.5)), is(true));
 
-        //the distance from average to east = distance from average to west
+        // the distance from average to east = distance from average to west
         assertEquals(
-            correctAverage.distanceTo(east).inNauticalMiles(),
-            correctAverage.distanceTo(west).inNauticalMiles(),
-            0.001
-        );
+                correctAverage.distanceTo(east).inNauticalMiles(),
+                correctAverage.distanceTo(west).inNauticalMiles(),
+                0.001);
 
-        //the naive answer is literally on the other side of the planet
+        // the naive answer is literally on the other side of the planet
         Distance error = correctAverage.distanceTo(naiveAverage);
         assertThat(error.isGreaterThan(Distance.ofNauticalMiles(10_801)), is(true));
     }
 
-
     @Test
     public void testQuickAvgLatLong_acrossDateLine_2() {
 
-        LatLong east = LatLong.of(0.0, -179.5); //just east of line  (aka "180 - .5")
-        LatLong west_1 = LatLong.of(0.0, 179.0); //just west of line (aka "180 + 1")
-        LatLong west_2 = LatLong.of(0.0, 179.0); //just west of line (aka "180 + 1")
+        LatLong east = LatLong.of(0.0, -179.5); // just east of line  (aka "180 - .5")
+        LatLong west_1 = LatLong.of(0.0, 179.0); // just west of line (aka "180 + 1")
+        LatLong west_2 = LatLong.of(0.0, 179.0); // just west of line (aka "180 + 1")
 
         ArrayList<LatLong> path_1 = newArrayList(east, west_1);
         ArrayList<LatLong> path_2 = newArrayList(east, west_1, west_2);
 
-        LatLong midPoint = LatLong.quickAvgLatLong(path_1); //should be midpoint
-        LatLong twoThirdPoint = LatLong.quickAvgLatLong(path_2);  //should be 2/3rds towards west
+        LatLong midPoint = LatLong.quickAvgLatLong(path_1); // should be midpoint
+        LatLong twoThirdPoint = LatLong.quickAvgLatLong(path_2); // should be 2/3rds towards west
 
         assertThat(midPoint, is(LatLong.of(0.0, 179.75)));
         assertThat(twoThirdPoint, is(LatLong.of(0.0, 179.5)));
 
         Distance distBtwPoints = east.distanceTo(west_1);
 
-        //the distance between the east and west points is small (about 90.01 NM)
+        // the distance between the east and west points is small (about 90.01 NM)
         assertThat(distBtwPoints.isLessThan(Distance.ofNauticalMiles(90.1)), is(true));
         assertThat(distBtwPoints.isGreaterThan(Distance.ofNauticalMiles(90.0)), is(true));
 
-        //the distance between the average point and the east point is about 45.5 NM
+        // the distance between the average point and the east point is about 45.5 NM
         assertEquals(midPoint.distanceTo(east).inNauticalMiles(), 45.005, 0.001);
 
-        //the distance between the average point and the west point is about 45.005 NM
+        // the distance between the average point and the west point is about 45.005 NM
         assertEquals(midPoint.distanceTo(west_1).inNauticalMiles(), 45.005, 0.001);
 
-        //the distance from average to east = distance from average to west
+        // the distance from average to east = distance from average to west
         assertEquals(
-            midPoint.distanceTo(east).inNauticalMiles(),
-            midPoint.distanceTo(west_1).inNauticalMiles(),
-            0.001
-        );
+                midPoint.distanceTo(east).inNauticalMiles(),
+                midPoint.distanceTo(west_1).inNauticalMiles(),
+                0.001);
 
-        //the distance between the 2/3rd point and the east point is about 60.006 NM
+        // the distance between the 2/3rd point and the east point is about 60.006 NM
         assertEquals(twoThirdPoint.distanceTo(east).inNauticalMiles(), 60.006, 0.001);
 
-        //the distance between the 2/3rd point and the west point is about 30.003 NM
+        // the distance between the 2/3rd point and the west point is about 30.003 NM
         assertEquals(twoThirdPoint.distanceTo(west_1).inNauticalMiles(), 30.003, 0.001);
 
-        //the distance from 2/3rd point to east is twice the distance from 2/3rd point to west
+        // the distance from 2/3rd point to east is twice the distance from 2/3rd point to west
         assertEquals(
-            twoThirdPoint.distanceTo(east).inNauticalMiles(),
-            twoThirdPoint.distanceTo(west_1).inNauticalMiles() * 2,
-            0.001
-        );
+                twoThirdPoint.distanceTo(east).inNauticalMiles(),
+                twoThirdPoint.distanceTo(west_1).inNauticalMiles() * 2,
+                0.001);
     }
 
     @Test
     public void testAvgLatLong_similarResults_differentMethods_longerPaths() {
 
-        //total path length = 254.52942NM
-        ArrayList<LatLong> path = newArrayList(
-            LatLong.of(0.0, 0.1),
-            LatLong.of(1.0, 1.1),
-            LatLong.of(2.0, 2.1),
-            LatLong.of(3.0, 3.1)
-        );
+        // total path length = 254.52942NM
+        ArrayList<LatLong> path =
+                newArrayList(LatLong.of(0.0, 0.1), LatLong.of(1.0, 1.1), LatLong.of(2.0, 2.1), LatLong.of(3.0, 3.1));
 
-        //compute the solution two ways ..
+        // compute the solution two ways ..
         LatLong quickAverage = LatLong.quickAvgLatLong(path);
         LatLong accurateAverage = LatLong.avgLatLong(path);
 
-        //solutions a NOT the same...but they are very similar given the length of the path involved
+        // solutions a NOT the same...but they are very similar given the length of the path involved
         assertNotEquals(quickAverage, accurateAverage);
 
         Distance leg1 = path.get(0).distanceTo(path.get(1));
         Distance leg2 = path.get(1).distanceTo(path.get(2));
         Distance leg3 = path.get(2).distanceTo(path.get(3));
-        Distance pathDist = leg1.plus(leg2).plus(leg3);  //254.52942NM
+        Distance pathDist = leg1.plus(leg2).plus(leg3); // 254.52942NM
 
-        Distance delta = quickAverage.distanceTo(accurateAverage);  //0.03832NM
+        Distance delta = quickAverage.distanceTo(accurateAverage); // 0.03832NM
 
         assertThat(delta.inNauticalMiles() / pathDist.inNauticalMiles(), lessThan(0.001));
     }
-
 
     @Test
     public void avgLatLong_empty_collection() {
@@ -650,17 +596,10 @@ public class LatLongTest {
 
         ArrayList<LatLong> locations = newArrayList();
 
-        assertThrows(
-            NoSuchElementException.class,
-            () -> LatLong.avgLatLong(locations)
-        );
+        assertThrows(NoSuchElementException.class, () -> LatLong.avgLatLong(locations));
 
-        assertThrows(
-            NoSuchElementException.class,
-            () -> LatLong.quickAvgLatLong(locations)
-        );
+        assertThrows(NoSuchElementException.class, () -> LatLong.quickAvgLatLong(locations));
     }
-
 
     @Test
     public void avgLatLong_empty_arrays() {
@@ -670,17 +609,10 @@ public class LatLongTest {
 
         LatLong[] locations = new LatLong[0];
 
-        assertThrows(
-            NoSuchElementException.class,
-            () -> LatLong.avgLatLong(locations)
-        );
+        assertThrows(NoSuchElementException.class, () -> LatLong.avgLatLong(locations));
 
-        assertThrows(
-            NoSuchElementException.class,
-            () -> LatLong.quickAvgLatLong(locations)
-        );
+        assertThrows(NoSuchElementException.class, () -> LatLong.quickAvgLatLong(locations));
     }
-
 
     @Test
     public void avgLatLong_null_collection() {
@@ -690,17 +622,10 @@ public class LatLongTest {
 
         ArrayList<LatLong> locations = null;
 
-        assertThrows(
-            NullPointerException.class,
-            () -> LatLong.avgLatLong(locations)
-        );
+        assertThrows(NullPointerException.class, () -> LatLong.avgLatLong(locations));
 
-        assertThrows(
-            NullPointerException.class,
-            () -> LatLong.quickAvgLatLong(locations)
-        );
+        assertThrows(NullPointerException.class, () -> LatLong.quickAvgLatLong(locations));
     }
-
 
     @Test
     public void avgLatLong_null_arrays() {
@@ -710,23 +635,16 @@ public class LatLongTest {
 
         LatLong[] locations = null;
 
-        assertThrows(
-            NullPointerException.class,
-            () -> LatLong.avgLatLong(locations)
-        );
+        assertThrows(NullPointerException.class, () -> LatLong.avgLatLong(locations));
 
-        assertThrows(
-            NullPointerException.class,
-            () -> LatLong.quickAvgLatLong(locations)
-        );
+        assertThrows(NullPointerException.class, () -> LatLong.quickAvgLatLong(locations));
     }
-
 
     @Test
     public void isWithin_samePoint() {
 
         LatLong one = LatLong.of(0.0, 0.0);
-        LatLong two = LatLong.of(0.0, 0.0); //same point twice
+        LatLong two = LatLong.of(0.0, 0.0); // same point twice
 
         assertThat(one.isWithin(Distance.ofFeet(0), two), is(true));
         assertThat(one.isWithin(Distance.ofFeet(0.1), two), is(true));
@@ -746,8 +664,7 @@ public class LatLongTest {
         Distance expectedDist = Distance.ofKiloMeters(EXPECTED_DIST_IN_KM);
 
         double TOLERANCE = 0.05;
-        assertThat(computedDistance.minus(expectedDist).inKilometers(),
-            Matchers.closeTo(0.0, TOLERANCE));
+        assertThat(computedDistance.minus(expectedDist).inKilometers(), Matchers.closeTo(0.0, TOLERANCE));
         assertThat(one.isWithin(computedDistance, two), is(true));
     }
 
@@ -767,7 +684,6 @@ public class LatLongTest {
 
         Object obj = FileUtils.deserialize(targetFile);
 
-
         assertEquals(location, obj);
     }
 
@@ -777,15 +693,13 @@ public class LatLongTest {
         Class<LatLong> clazz = LatLong.class;
         Class<?>[] NO_ARG = new Class[] {};
 
-        //We can build a LatLong object using a private no-arg constructor
-        assertDoesNotThrow(
-            () -> {
-                Constructor<LatLong> structor = clazz.getDeclaredConstructor(NO_ARG);
-                structor.setAccessible(true); //don't allow a private constructor to stop us!
+        // We can build a LatLong object using a private no-arg constructor
+        assertDoesNotThrow(() -> {
+            Constructor<LatLong> structor = clazz.getDeclaredConstructor(NO_ARG);
+            structor.setAccessible(true); // don't allow a private constructor to stop us!
 
-                LatLong location = structor.newInstance((Object[]) NO_ARG);
-            }
-        );
+            LatLong location = structor.newInstance((Object[]) NO_ARG);
+        });
     }
 
     @Test
@@ -803,10 +717,7 @@ public class LatLongTest {
         dfw.append(LatLong.of(5.0, -5.0));
         dfw.close();
 
-        DataFileReader<LatLong> reader = new DataFileReader<>(
-            targetFile,
-            new ReflectDatumReader<>(schema)
-        );
+        DataFileReader<LatLong> reader = new DataFileReader<>(targetFile, new ReflectDatumReader<>(schema));
 
         LatLong first = reader.next();
         LatLong second = reader.next();

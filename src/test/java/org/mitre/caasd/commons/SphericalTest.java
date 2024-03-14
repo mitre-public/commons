@@ -38,35 +38,27 @@ public class SphericalTest {
     @Test
     public void testOneQuarterCircumferenceOfEarthInNM() {
 
-        double EARTH_RADIUS_IN_MILES = 3_959;  //according to google
-        double MILES_PER_NAUTICAL_MILE = 1.15078; //according to google
+        double EARTH_RADIUS_IN_MILES = 3_959; // according to google
+        double MILES_PER_NAUTICAL_MILE = 1.15078; // according to google
         double EARTH_RADIUS_IN_NM = EARTH_RADIUS_IN_MILES / MILES_PER_NAUTICAL_MILE;
         double CIRCUMFERENCE_OF_EARTH_IN_NM = 2.0 * Math.PI * EARTH_RADIUS_IN_NM;
 
         double expected = CIRCUMFERENCE_OF_EARTH_IN_NM / 4;
 
-        double TOLERANCE = 5;  //some rounding is ok, this test is just for macro errors
+        double TOLERANCE = 5; // some rounding is ok, this test is just for macro errors
 
-        assertEquals(
-            expected,
-            Spherical.oneQuarterCircumferenceOfEarthInNM(),
-            TOLERANCE
-        );
+        assertEquals(expected, Spherical.oneQuarterCircumferenceOfEarthInNM(), TOLERANCE);
     }
 
     @Test
     public void testFeetPerNM() {
 
-        double FEET_PER_NM = 6076.12;  //according to google
+        double FEET_PER_NM = 6076.12; // according to google
         double expected = FEET_PER_NM;
 
-        double TOLERANCE = 1;  //some rounding is ok, this test is just for macro errors
+        double TOLERANCE = 1; // some rounding is ok, this test is just for macro errors
 
-        assertEquals(
-            expected,
-            Spherical.feetPerNM(),
-            TOLERANCE
-        );
+        assertEquals(expected, Spherical.feetPerNM(), TOLERANCE);
     }
 
     @Test
@@ -79,18 +71,14 @@ public class SphericalTest {
         double latDeg2 = 10.0;
         double lonDeg2 = 10.0;
 
-        //according to http://www.movable-type.co.uk/scripts/latlong.html
+        // according to http://www.movable-type.co.uk/scripts/latlong.html
         double EXPECTED_DIST_IN_KM = 1569;
         double KM_PER_NM = 1.852;
         double expected = EXPECTED_DIST_IN_KM / KM_PER_NM;
 
-        double TOLERANCE = 1;  //some rounding is ok, this test is just for macro errors
+        double TOLERANCE = 1; // some rounding is ok, this test is just for macro errors
 
-        assertEquals(
-            expected,
-            Spherical.distanceInNM(latDeg1, lonDeg1, latDeg2, lonDeg2),
-            TOLERANCE
-        );
+        assertEquals(expected, Spherical.distanceInNM(latDeg1, lonDeg1, latDeg2, lonDeg2), TOLERANCE);
     }
 
     @Test
@@ -118,13 +106,9 @@ public class SphericalTest {
 
         double expected = 90.0;
 
-        double TOLERANCE = 0.01;  //some rounding is ok, this test is just for macro errors
+        double TOLERANCE = 0.01; // some rounding is ok, this test is just for macro errors
 
-        assertEquals(
-            expected,
-            courseInDegrees(latDeg1, lonDeg1, latDeg2, lonDeg2),
-            TOLERANCE
-        );
+        assertEquals(expected, courseInDegrees(latDeg1, lonDeg1, latDeg2, lonDeg2), TOLERANCE);
     }
 
     @Test
@@ -139,13 +123,9 @@ public class SphericalTest {
 
         double expected = 270.0;
 
-        double TOLERANCE = 0.01;  //some rounding is ok, this test is just for macro errors
+        double TOLERANCE = 0.01; // some rounding is ok, this test is just for macro errors
 
-        assertEquals(
-            expected,
-            courseInDegrees(latDeg1, lonDeg1, latDeg2, lonDeg2),
-            TOLERANCE
-        );
+        assertEquals(expected, courseInDegrees(latDeg1, lonDeg1, latDeg2, lonDeg2), TOLERANCE);
     }
 
     @Test
@@ -160,13 +140,9 @@ public class SphericalTest {
 
         double expected = 360.0;
 
-        double TOLERANCE = 0.01;  //some rounding is ok, this test is just for macro errors
+        double TOLERANCE = 0.01; // some rounding is ok, this test is just for macro errors
 
-        assertEquals(
-            expected,
-            courseInDegrees(latDeg1, lonDeg1, latDeg2, lonDeg2),
-            TOLERANCE
-        );
+        assertEquals(expected, courseInDegrees(latDeg1, lonDeg1, latDeg2, lonDeg2), TOLERANCE);
     }
 
     @Test
@@ -181,13 +157,9 @@ public class SphericalTest {
 
         double expected = 180.0;
 
-        double TOLERANCE = 0.01;  //some rounding is ok, this test is just for macro errors
+        double TOLERANCE = 0.01; // some rounding is ok, this test is just for macro errors
 
-        assertEquals(
-            expected,
-            courseInDegrees(latDeg1, lonDeg1, latDeg2, lonDeg2),
-            TOLERANCE
-        );
+        assertEquals(expected, courseInDegrees(latDeg1, lonDeg1, latDeg2, lonDeg2), TOLERANCE);
     }
 
     @Test
@@ -202,80 +174,65 @@ public class SphericalTest {
 
         double expected = 45.0;
 
-        double TOLERANCE = 0.01;  //some rounding is ok, this test is just for macro errors
+        double TOLERANCE = 0.01; // some rounding is ok, this test is just for macro errors
 
-        assertEquals(
-            expected,
-            courseInDegrees(latDeg1, lonDeg1, latDeg2, lonDeg2),
-            TOLERANCE
-        );
+        assertEquals(expected, courseInDegrees(latDeg1, lonDeg1, latDeg2, lonDeg2), TOLERANCE);
     }
 
     @Test
     public void courseTo_hasPosition() {
-        //start at 0.0, 0.0
+        // start at 0.0, 0.0
         HasPosition hp1 = () -> LatLong.of(0.0, 0.0);
 
-        //move toward 1.0, 1.0
+        // move toward 1.0, 1.0
         HasPosition hp2 = () -> LatLong.of(1.0, 1.0);
 
-        //you travel at almost 45 degrees
-        assertThat(
-            Spherical.courseBtw(hp1, hp2).inDegrees(),
-            closeTo(45.0, 0.005)
-        );
+        // you travel at almost 45 degrees
+        assertThat(Spherical.courseBtw(hp1, hp2).inDegrees(), closeTo(45.0, 0.005));
     }
 
-//	@Test
-//	public void testProjectionInDegrees_4args() {
-//		/*
-//		 * TESTING: Spherical.projectOut(latDeg1, lonDeg1, latDeg2, lonDeg2) -- northEast
-//		 */
-//		double latDeg = 0.0;
-//		double lonDeg = 0.0;
-//		double headingInDegrees = Spherical.courseInDegrees(0.0, 0.0, 10.0, 10.0);
-//		double distNM = Spherical.distanceInNM(0.0, 0.0, 10.0, 10.0);
-//
-//		LatLong expected = new LatLong(10.0, 10.0);
-//		LatLong actual = Spherical.projectOut(latDeg, lonDeg, headingInDegrees, distNM);
-//
-//		double TOLERANCE = 0.01;  //some rounding is ok, this test is just for macro errors
-//
-//		assertEquals(
-//			expected.latitude(),
-//			actual.latitude(),
-//			TOLERANCE
-//		);
-//		assertEquals(
-//			expected.longitude(),
-//			actual.longitude(),
-//			TOLERANCE
-//		);
-//	}
+    //	@Test
+    //	public void testProjectionInDegrees_4args() {
+    //		/*
+    //		 * TESTING: Spherical.projectOut(latDeg1, lonDeg1, latDeg2, lonDeg2) -- northEast
+    //		 */
+    //		double latDeg = 0.0;
+    //		double lonDeg = 0.0;
+    //		double headingInDegrees = Spherical.courseInDegrees(0.0, 0.0, 10.0, 10.0);
+    //		double distNM = Spherical.distanceInNM(0.0, 0.0, 10.0, 10.0);
+    //
+    //		LatLong expected = new LatLong(10.0, 10.0);
+    //		LatLong actual = Spherical.projectOut(latDeg, lonDeg, headingInDegrees, distNM);
+    //
+    //		double TOLERANCE = 0.01;  //some rounding is ok, this test is just for macro errors
+    //
+    //		assertEquals(
+    //			expected.latitude(),
+    //			actual.latitude(),
+    //			TOLERANCE
+    //		);
+    //		assertEquals(
+    //			expected.longitude(),
+    //			actual.longitude(),
+    //			TOLERANCE
+    //		);
+    //	}
 
     @Test
     public void projectWorksCorrectly() {
 
         LatLong start = LatLong.of(0.0, 0.0);
-        LatLong end = LatLong.of(10.0, 10.0);  //expected output LatLong
+        LatLong end = LatLong.of(10.0, 10.0); // expected output LatLong
         Course direction = Spherical.courseBtw(start, end);
         Distance distance = Spherical.distanceBtw(start, end);
 
         LatLong actual = Spherical.projectOut(start, direction, distance);
         LatLong expected = end;
 
-        double TOLERANCE = 0.01;  //some rounding is ok, this test is just for macro errors
+        double TOLERANCE = 0.01; // some rounding is ok, this test is just for macro errors
 
-        assertEquals(
-            expected.latitude(),
-            actual.latitude(),
-            TOLERANCE
-        );
-        assertEquals(
-            expected.longitude(),
-            actual.longitude(),
-            TOLERANCE
-        );
+        assertEquals(expected.latitude(), actual.latitude(), TOLERANCE);
+        assertEquals(expected.longitude(), actual.longitude(), TOLERANCE);
     }
 
     @Test
@@ -283,19 +240,15 @@ public class SphericalTest {
 
         Double latitude = 0.0;
         Double longitude = 0.0;
-        Double course = 90.0;  //traveling due east
+        Double course = 90.0; // traveling due east
 
-        LatLong expected = new LatLong(-90.0, 0.0);  //the south pole
+        LatLong expected = new LatLong(-90.0, 0.0); // the south pole
         LatLong actual = Spherical.greatCircleOrigin(latitude, longitude, course);
 
-        double TOLERANCE = 0.01;  //some rounding is ok, this test is just for macro errors
+        double TOLERANCE = 0.01; // some rounding is ok, this test is just for macro errors
 
-        assertEquals(
-            expected.latitude(),
-            actual.latitude(),
-            TOLERANCE
-        );
-        //all longitudes work at a pole
+        assertEquals(expected.latitude(), actual.latitude(), TOLERANCE);
+        // all longitudes work at a pole
     }
 
     @Test
@@ -303,24 +256,20 @@ public class SphericalTest {
 
         Double latitude = 0.0;
         Double longitude = 0.0;
-        Double course = 270.0;  //traveling due west
+        Double course = 270.0; // traveling due west
 
-        LatLong expected = new LatLong(90.0, 0.0);  //the north pole
+        LatLong expected = new LatLong(90.0, 0.0); // the north pole
         LatLong actual = Spherical.greatCircleOrigin(latitude, longitude, course);
 
-        double TOLERANCE = 0.01;  //some rounding is ok, this test is just for macro errors
+        double TOLERANCE = 0.01; // some rounding is ok, this test is just for macro errors
 
-        assertEquals(
-            expected.latitude(),
-            actual.latitude(),
-            TOLERANCE
-        );
-        //all longitudes work at a pole
-//		assertEquals(
-//			expected.longitude(),
-//			actual.longitude(),
-//			TOLERANCE
-//		);
+        assertEquals(expected.latitude(), actual.latitude(), TOLERANCE);
+        // all longitudes work at a pole
+        //		assertEquals(
+        //			expected.longitude(),
+        //			actual.longitude(),
+        //			TOLERANCE
+        //		);
     }
 
     @Test
@@ -328,23 +277,15 @@ public class SphericalTest {
 
         Double latitude = 0.0;
         Double longitude = 0.0;
-        Double course = 0.0;  //traveling due north
+        Double course = 0.0; // traveling due north
 
-        LatLong expected = new LatLong(0.0, 90.0); //a point on the equator 1/4 around the earth
+        LatLong expected = new LatLong(0.0, 90.0); // a point on the equator 1/4 around the earth
         LatLong actual = Spherical.greatCircleOrigin(latitude, longitude, course);
 
-        double TOLERANCE = 0.01;  //some rounding is ok, this test is just for macro errors
+        double TOLERANCE = 0.01; // some rounding is ok, this test is just for macro errors
 
-        assertEquals(
-            expected.latitude(),
-            actual.latitude(),
-            TOLERANCE
-        );
-        assertEquals(
-            expected.longitude(),
-            actual.longitude(),
-            TOLERANCE
-        );
+        assertEquals(expected.latitude(), actual.latitude(), TOLERANCE);
+        assertEquals(expected.longitude(), actual.longitude(), TOLERANCE);
     }
 
     @Test
@@ -352,23 +293,15 @@ public class SphericalTest {
 
         Double latitude = 0.0;
         Double longitude = 0.0;
-        Double course = 180.0;  //traveling due south
+        Double course = 180.0; // traveling due south
 
-        LatLong expected = new LatLong(0.0, -90.0); //a point on the equator 1/4 around the earth
+        LatLong expected = new LatLong(0.0, -90.0); // a point on the equator 1/4 around the earth
         LatLong actual = Spherical.greatCircleOrigin(latitude, longitude, course);
 
-        double TOLERANCE = 0.01;  //some rounding is ok, this test is just for macro errors
+        double TOLERANCE = 0.01; // some rounding is ok, this test is just for macro errors
 
-        assertEquals(
-            expected.latitude(),
-            actual.latitude(),
-            TOLERANCE
-        );
-        assertEquals(
-            expected.longitude(),
-            actual.longitude(),
-            TOLERANCE
-        );
+        assertEquals(expected.latitude(), actual.latitude(), TOLERANCE);
+        assertEquals(expected.longitude(), actual.longitude(), TOLERANCE);
     }
 
     @Test
@@ -381,18 +314,17 @@ public class SphericalTest {
         double latDeg2 = 10.0;
         double lonDeg2 = 10.0;
 
-        //according to http://www.movable-type.co.uk/scripts/latlong.html
+        // according to http://www.movable-type.co.uk/scripts/latlong.html
         double EXPECTED_DIST_IN_KM = 1569;
         double KM_PER_NM = 1.852;
         double expected = EXPECTED_DIST_IN_KM / KM_PER_NM;
 
-        double TOLERANCE = 1;  //some rounding is ok, this test is just for macro errors
+        double TOLERANCE = 1; // some rounding is ok, this test is just for macro errors
 
         assertEquals(
-            expected,
-            Spherical.distanceInNM(new LatLong(latDeg1, lonDeg1), new LatLong(latDeg2, lonDeg2)),
-            TOLERANCE
-        );
+                expected,
+                Spherical.distanceInNM(new LatLong(latDeg1, lonDeg1), new LatLong(latDeg2, lonDeg2)),
+                TOLERANCE);
     }
 
     @Test
@@ -407,58 +339,26 @@ public class SphericalTest {
 
         double expected = 45.0;
 
-        double TOLERANCE = 0.01;  //some rounding is ok, this test is just for macro errors
+        double TOLERANCE = 0.01; // some rounding is ok, this test is just for macro errors
 
         assertEquals(
-            expected,
-            courseInDegrees(new LatLong(latDeg1, lonDeg1), new LatLong(latDeg2, lonDeg2)),
-            TOLERANCE
-        );
+                expected, courseInDegrees(new LatLong(latDeg1, lonDeg1), new LatLong(latDeg2, lonDeg2)), TOLERANCE);
     }
 
     @Test
     public void testAngleDifference_Double() {
         double TOLERANCE = 0.0001;
 
-        //test positive inputs
-        assertEquals(
-            5.0,
-            Spherical.angleDifference(5.0),
-            TOLERANCE
-        );
-        assertEquals(
-            175.0,
-            Spherical.angleDifference(175.0),
-            TOLERANCE
-        );
-        assertEquals(
-            -175.0,
-            Spherical.angleDifference(185.0),
-            TOLERANCE
-        );
-        assertEquals(
-            -5.0,
-            Spherical.angleDifference(355.0),
-            TOLERANCE
-        );
+        // test positive inputs
+        assertEquals(5.0, Spherical.angleDifference(5.0), TOLERANCE);
+        assertEquals(175.0, Spherical.angleDifference(175.0), TOLERANCE);
+        assertEquals(-175.0, Spherical.angleDifference(185.0), TOLERANCE);
+        assertEquals(-5.0, Spherical.angleDifference(355.0), TOLERANCE);
 
-        //test negative inputs
-        assertEquals(
-            -5.0,
-            Spherical.angleDifference(-5.0),
-            TOLERANCE
-        );
-        assertEquals(
-            -175.0,
-            Spherical.angleDifference(-175.0),
-            TOLERANCE
-        );
-        assertEquals(
-            175.0,
-            Spherical.angleDifference(-185.0),
-            TOLERANCE
-        );
-
+        // test negative inputs
+        assertEquals(-5.0, Spherical.angleDifference(-5.0), TOLERANCE);
+        assertEquals(-175.0, Spherical.angleDifference(-175.0), TOLERANCE);
+        assertEquals(175.0, Spherical.angleDifference(-185.0), TOLERANCE);
     }
 
     @Test
@@ -466,17 +366,8 @@ public class SphericalTest {
 
         double TOLERANCE = 0.0001;
 
-        assertEquals(
-            10.0,
-            Spherical.angleDifference(5.0, 355.0),
-            TOLERANCE
-        );
-        assertEquals(
-            -10.0,
-            Spherical.angleDifference(355.0, 5.0),
-            TOLERANCE
-        );
-
+        assertEquals(10.0, Spherical.angleDifference(5.0, 355.0), TOLERANCE);
+        assertEquals(-10.0, Spherical.angleDifference(355.0, 5.0), TOLERANCE);
     }
 
     @Test
@@ -512,11 +403,11 @@ public class SphericalTest {
 
     @Test
     void testAlongTrackDistanceFloatingPointError() {
-        //In the past there 3 points generated a NaN for the alongTrackDistance computation
-        //These 3 point form a Triangle with sides:
-        //start-end = 25.97489NM
-        //start-point = 0.01393NM
-        //end-point = 25.97490NM
+        // In the past there 3 points generated a NaN for the alongTrackDistance computation
+        // These 3 point form a Triangle with sides:
+        // start-end = 25.97489NM
+        // start-point = 0.01393NM
+        // end-point = 25.97490NM
         final HasPosition START = HasPosition.from(46.294875, -119.96004166666667);
         final HasPosition END = HasPosition.from(46.57024166666667, -120.44463611111111);
         final HasPosition POINT = HasPosition.from(46.29469627061987, -119.96025624188381);
@@ -532,22 +423,22 @@ public class SphericalTest {
     @Disabled
     @Test
     void testShowMapForAlongTrackDistanceFloatingPointError() {
-        //In the past there 3 points generated a NaN for the alongTrackDistance computation
-        //These 3 point form a Triangle with sides:
-        //start-end = 25.97489NM
-        //start-point = 0.01393NM
-        //end-point = 25.97490NM
+        // In the past there 3 points generated a NaN for the alongTrackDistance computation
+        // These 3 point form a Triangle with sides:
+        // start-end = 25.97489NM
+        // start-point = 0.01393NM
+        // end-point = 25.97490NM
         final HasPosition START = HasPosition.from(46.294875, -119.96004166666667);
         final HasPosition END = HasPosition.from(46.57024166666667, -120.44463611111111);
         final HasPosition POINT = HasPosition.from(46.29469627061987, -119.96025624188381);
 
         MapBuilder.newMapBuilder()
-            .center(LatLong.avgLatLong(START.latLong(), END.latLong()))
-            .width(Distance.ofNauticalMiles(30))
-            .mapBoxDarkMode()
-            .addFeature(MapFeatures.line(START.latLong(), END.latLong(), Color.RED, 2.0f))
-            .addFeature(MapFeatures.circle(POINT.latLong(), Color.GREEN, 15, 2.0f))
-            .toFile(new File("alongTrackNumericError.png"));
+                .center(LatLong.avgLatLong(START.latLong(), END.latLong()))
+                .width(Distance.ofNauticalMiles(30))
+                .mapBoxDarkMode()
+                .addFeature(MapFeatures.line(START.latLong(), END.latLong(), Color.RED, 2.0f))
+                .addFeature(MapFeatures.circle(POINT.latLong(), Color.GREEN, 15, 2.0f))
+                .toFile(new File("alongTrackNumericError.png"));
     }
 
     @Test

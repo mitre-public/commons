@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 
 public class FilteredConsumerTest {
 
-    //Counts calls to "test".
+    // Counts calls to "test".
     static class CountingPredicate implements Predicate<String> {
 
         boolean returnValue;
@@ -52,7 +52,7 @@ public class FilteredConsumerTest {
 
         FilteredConsumer<String> filterConsumer = new FilteredConsumer<>(filter, NO_OP_CONSUMER);
 
-        assertThat(filter.numCallsToTest, is(0)); //"Not called yet"
+        assertThat(filter.numCallsToTest, is(0)); // "Not called yet"
 
         filterConsumer.accept("hello");
 
@@ -86,11 +86,8 @@ public class FilteredConsumerTest {
     @Test
     public void whenTrueConsumerReceivesWhenTrue() {
 
-        FilteredConsumer<Integer> fc = new FilteredConsumer<>(
-            ALWAYS_TRUE,
-            new CountingConsumer(NO_OP_CONSUMER),
-            NO_OP_CONSUMER
-        );
+        FilteredConsumer<Integer> fc =
+                new FilteredConsumer<>(ALWAYS_TRUE, new CountingConsumer(NO_OP_CONSUMER), NO_OP_CONSUMER);
 
         fc.accept(12);
 
@@ -100,11 +97,8 @@ public class FilteredConsumerTest {
     @Test
     public void whenFalseConsumerReceivesWhenFalse() {
 
-        FilteredConsumer<Integer> fc = new FilteredConsumer<>(
-            ALWAYS_FALSE,
-            NO_OP_CONSUMER,
-            new CountingConsumer<>(NO_OP_CONSUMER)
-        );
+        FilteredConsumer<Integer> fc =
+                new FilteredConsumer<>(ALWAYS_FALSE, NO_OP_CONSUMER, new CountingConsumer<>(NO_OP_CONSUMER));
 
         fc.accept(12);
 
@@ -113,25 +107,16 @@ public class FilteredConsumerTest {
 
     @Test
     public void predicateIsRequired() {
-        assertThrows(
-            NullPointerException.class,
-            () -> new FilteredConsumer<>(null, NO_OP_CONSUMER, NO_OP_CONSUMER)
-        );
+        assertThrows(NullPointerException.class, () -> new FilteredConsumer<>(null, NO_OP_CONSUMER, NO_OP_CONSUMER));
     }
 
     @Test
     public void whenTrueConsumerIsRequired() {
-        assertThrows(
-            NullPointerException.class,
-            () -> new FilteredConsumer<>(ALWAYS_TRUE, null, NO_OP_CONSUMER)
-        );
+        assertThrows(NullPointerException.class, () -> new FilteredConsumer<>(ALWAYS_TRUE, null, NO_OP_CONSUMER));
     }
 
     @Test
     public void whenFalseConsumerIsRequired() {
-        assertThrows(
-            NullPointerException.class, ()
-            -> new FilteredConsumer<>(ALWAYS_TRUE, NO_OP_CONSUMER, null)
-        );
+        assertThrows(NullPointerException.class, () -> new FilteredConsumer<>(ALWAYS_TRUE, NO_OP_CONSUMER, null));
     }
 }

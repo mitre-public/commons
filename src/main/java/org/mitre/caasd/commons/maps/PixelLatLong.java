@@ -89,16 +89,13 @@ public class PixelLatLong {
         checkArgument(0 <= x && x <= mapSize);
         checkArgument(0 <= y && y <= mapSize);
 
-        //first use the pixel coordinates to generate a LatLong
+        // first use the pixel coordinates to generate a LatLong
         double x_for_longitude = (clip(x, 0, mapSize - 1) / mapSize) - 0.5;
         double y_for_latitude = 0.5 - (clip(y, 0, mapSize - 1) / mapSize);
 
-        this.location = LatLong.of(
-            90 - 360 * atan(exp(-y_for_latitude * 2 * PI)) / PI,
-            360 * x_for_longitude
-        );
+        this.location = LatLong.of(90 - 360 * atan(exp(-y_for_latitude * 2 * PI)) / PI, 360 * x_for_longitude);
 
-        //now use the LatLong to (re)find the pixel coordinate...?
+        // now use the LatLong to (re)find the pixel coordinate...?
         double x2 = (location.longitude() + 180) / 360;
         double sinLatitude = sin(location.latitude() * Math.PI / 180);
         double y2 = 0.5 - log((1 + sinLatitude) / (1 - sinLatitude)) / (4 * Math.PI);

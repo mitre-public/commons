@@ -171,8 +171,8 @@ public class DailySequentialFileWriter implements ExceptionHandler {
         }
 
         String truncated = stackTrace.length < maxStackTraceDepthToPrint
-            ? String.join(NEW_LINE_CHAR, stackTrace)
-            : String.join(NEW_LINE_CHAR, Arrays.asList(stackTrace).subList(0, maxStackTraceDepthToPrint));
+                ? String.join(NEW_LINE_CHAR, stackTrace)
+                : String.join(NEW_LINE_CHAR, Arrays.asList(stackTrace).subList(0, maxStackTraceDepthToPrint));
 
         return truncated + NEW_LINE_CHAR + "...";
     }

@@ -73,11 +73,6 @@ public class JsonGzFileSink<T extends JsonWritable> extends GzFileSink<T> implem
      * @param expirationTime How long between writing pieces of data until a .gz file is closed
      */
     public JsonGzFileSink(String outputDir, Function<T, String> fileNamer, Duration expirationTime) {
-        super(
-            outputDir,
-            (item) -> item.asJson(),
-            fileNamer,
-            expirationTime
-        );
+        super(outputDir, (item) -> item.asJson(), fileNamer, expirationTime);
     }
 }

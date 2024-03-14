@@ -39,11 +39,15 @@ public class PropertyUtilsTest {
     public void testParseProperties() {
 
         String allLines = new StringBuilder()
-            .append("#shouldIgnoreThisComment = 5").append("\n")
-            .append("variable1 : 12").append("\n")
-            .append("what = valueForWhat").append("\n")
-            .append("var : 18").append("\n")
-            .toString();
+                .append("#shouldIgnoreThisComment = 5")
+                .append("\n")
+                .append("variable1 : 12")
+                .append("\n")
+                .append("what = valueForWhat")
+                .append("\n")
+                .append("var : 18")
+                .append("\n")
+                .toString();
 
         Properties props = parseProperties(allLines);
 
@@ -64,12 +68,12 @@ public class PropertyUtilsTest {
         /* Confirm a constructor is public so external packages can use this Exception type. */
         Constructor[] constructors = MissingPropertyException.class.getConstructors();
 
-        Constructor<MissingPropertyException> constructorWithOneStringParam
-            = (Constructor<MissingPropertyException>) Stream.of(constructors)
-            .filter(constructor -> constructor.getParameterCount() == 1)
-            .filter(constructor -> constructor.getParameterTypes()[0] == String.class)
-            .findFirst()
-            .get();
+        Constructor<MissingPropertyException> constructorWithOneStringParam =
+                (Constructor<MissingPropertyException>) Stream.of(constructors)
+                        .filter(constructor -> constructor.getParameterCount() == 1)
+                        .filter(constructor -> constructor.getParameterTypes()[0] == String.class)
+                        .findFirst()
+                        .get();
 
         assertTrue(isPublic(constructorWithOneStringParam.getModifiers()));
     }
@@ -84,9 +88,7 @@ public class PropertyUtilsTest {
 
     @Test
     public void getRequiredProperty_throwsMissingPropertyException() {
-        assertThrows(MissingPropertyException.class,
-            () -> getString("missingKey", new Properties())
-        );
+        assertThrows(MissingPropertyException.class, () -> getString("missingKey", new Properties()));
     }
 
     @Test
@@ -122,9 +124,7 @@ public class PropertyUtilsTest {
 
     @Test
     public void getRequiredByte_throwsMissingPropertyException() {
-        assertThrows(MissingPropertyException.class,
-            () -> getByte("missingKey", new Properties())
-        );
+        assertThrows(MissingPropertyException.class, () -> getByte("missingKey", new Properties()));
     }
 
     @Test
@@ -136,9 +136,7 @@ public class PropertyUtilsTest {
 
     @Test
     public void getRequiredShort_throwsMissingPropertyException() {
-        assertThrows(MissingPropertyException.class,
-            () -> getShort("missingKey", new Properties())
-        );
+        assertThrows(MissingPropertyException.class, () -> getShort("missingKey", new Properties()));
     }
 
     @Test
@@ -150,9 +148,7 @@ public class PropertyUtilsTest {
 
     @Test
     public void getRequiredInt_throwsMissingPropertyException() {
-        assertThrows(MissingPropertyException.class,
-            () -> getInt("missingKey", new Properties())
-        );
+        assertThrows(MissingPropertyException.class, () -> getInt("missingKey", new Properties()));
     }
 
     @Test
@@ -164,9 +160,7 @@ public class PropertyUtilsTest {
 
     @Test
     public void getRequiredLong_throwsMissingPropertyException() {
-        assertThrows(MissingPropertyException.class,
-            () -> getLong("missingKey", new Properties())
-        );
+        assertThrows(MissingPropertyException.class, () -> getLong("missingKey", new Properties()));
     }
 
     @Test
@@ -178,9 +172,7 @@ public class PropertyUtilsTest {
 
     @Test
     public void getRequiredFloat_throwsMissingPropertyException() {
-        assertThrows(MissingPropertyException.class,
-            () -> getFloat("missingKey", new Properties())
-        );
+        assertThrows(MissingPropertyException.class, () -> getFloat("missingKey", new Properties()));
     }
 
     @Test
@@ -192,9 +184,7 @@ public class PropertyUtilsTest {
 
     @Test
     public void getRequiredDouble_throwsMissingPropertyException() {
-        assertThrows(MissingPropertyException.class,
-            () -> getDouble("missingKey", new Properties())
-        );
+        assertThrows(MissingPropertyException.class, () -> getDouble("missingKey", new Properties()));
     }
 
     @Test
@@ -206,9 +196,7 @@ public class PropertyUtilsTest {
 
     @Test
     public void getRequiredBoolean_throwsMissingPropertyException() {
-        assertThrows(MissingPropertyException.class,
-            () -> getBoolean("missingKey", new Properties())
-        );
+        assertThrows(MissingPropertyException.class, () -> getBoolean("missingKey", new Properties()));
     }
 
     @Test
@@ -318,17 +306,15 @@ public class PropertyUtilsTest {
 
     @Test
     public void tokenizeAndValidate_rejectsNullString() {
-        assertThrows(NullPointerException.class,
-            () -> tokenizeAndValidate(null, newArrayList("OPTION_1", "OPTION_2"))
-        );
+        assertThrows(NullPointerException.class, () -> tokenizeAndValidate(null, newArrayList("OPTION_1", "OPTION_2")));
     }
 
     @Test
     public void tokenizeAndValidate_rejectsTokenNotInList() {
-        //CORE FUNCTIONALITY -- REJECTS UNKNOWN TOKENS
-        assertThrows(IllegalArgumentException.class,
-            () -> tokenizeAndValidate("OPTION_3", newArrayList("OPTION_1", "OPTION_2"))
-        );
+        // CORE FUNCTIONALITY -- REJECTS UNKNOWN TOKENS
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> tokenizeAndValidate("OPTION_3", newArrayList("OPTION_1", "OPTION_2")));
     }
 
     @Test

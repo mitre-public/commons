@@ -38,11 +38,14 @@ public class ImmutableConfigTest {
 
     /* All of these asProperties must exist for a TestConfigUsage to get created. */
     static List<String> REQUIRED_PROPS = newArrayList(
-        "stringProperty",
-        "byteProperty", "shortProperty", "intProperty", "longProperty",
-        "floatProperty", "doubleProperty",
-        "booleanProperty"
-    );
+            "stringProperty",
+            "byteProperty",
+            "shortProperty",
+            "intProperty",
+            "longProperty",
+            "floatProperty",
+            "doubleProperty",
+            "booleanProperty");
 
     /**
      * This test class shows how to use the ImmutableConfig class.
@@ -159,30 +162,22 @@ public class ImmutableConfigTest {
     }
 
     private TestConfigUsage newGoodProperties() {
-        Optional<File> resource = getResourceAsFile(ImmutableConfigTest.class,
-            "goodProperties.properties"
-        );
+        Optional<File> resource = getResourceAsFile(ImmutableConfigTest.class, "goodProperties.properties");
         return new TestConfigUsage(resource.get());
     }
 
     private TestConfigUsage newEmptyProperties() {
-        Optional<File> resource = getResourceAsFile(ImmutableConfigTest.class,
-            "emptyProperties.properties"
-        );
+        Optional<File> resource = getResourceAsFile(ImmutableConfigTest.class, "emptyProperties.properties");
         return new TestConfigUsage(resource.get());
     }
 
     private TestConfigUsageWithOptional newGoodOptionalProerties() {
-        Optional<File> resource = getResourceAsFile(ImmutableConfigTest.class,
-            "goodProperties.properties"
-        );
+        Optional<File> resource = getResourceAsFile(ImmutableConfigTest.class, "goodProperties.properties");
         return new TestConfigUsageWithOptional(resource.get());
     }
 
     private TestConfigUsageWithOptional newEmptyOptionalProerties() {
-        Optional<File> resource = getResourceAsFile(ImmutableConfigTest.class,
-            "emptyProperties.properties"
-        );
+        Optional<File> resource = getResourceAsFile(ImmutableConfigTest.class, "emptyProperties.properties");
         return new TestConfigUsageWithOptional(resource.get());
     }
 
@@ -317,36 +312,32 @@ public class ImmutableConfigTest {
 
     @Test
     public void testFailingCreation() {
-        //The command above should fail because that file doesn't exist
+        // The command above should fail because that file doesn't exist
         assertThrows(IllegalArgumentException.class, () -> new TestConfigUsage("missingFile.txt"));
     }
 
     @Test
     public void testFailingCreation2() {
-        //The command above should fail because that file doesn't exist
+        // The command above should fail because that file doesn't exist
         assertThrows(IllegalArgumentException.class, () -> new TestConfigUsage(new File("missingFile.txt")));
     }
 
     @Test
     public void testAlternateConstructor() {
-        Optional<File> resource = getResourceAsFile(
-            ImmutableConfigTest.class,
-            "goodProperties.properties"
-        );
+        Optional<File> resource = getResourceAsFile(ImmutableConfigTest.class, "goodProperties.properties");
 
-        //ImmutableConfig created from a String (path) are properly loaded
-        assertDoesNotThrow(
-            () -> new TestConfigUsage(resource.get().getAbsolutePath())
-        );
+        // ImmutableConfig created from a String (path) are properly loaded
+        assertDoesNotThrow(() -> new TestConfigUsage(resource.get().getAbsolutePath()));
     }
 
     @Test
     public void testEntrySet() {
-        ImmutableSortedSet<Entry<String, String>> entries = newGoodProperties().config().entrySet();
+        ImmutableSortedSet<Entry<String, String>> entries =
+                newGoodProperties().config().entrySet();
 
         assertEquals(entries.size(), 8);
 
-        //notice, this list is in a different order than the original asProperties file
+        // notice, this list is in a different order than the original asProperties file
         List<Entry<String, String>> list = newArrayList(entries.iterator());
         assertEquals(list.get(0).getKey(), "booleanProperty");
         assertEquals(list.get(0).getValue(), "true");
@@ -403,7 +394,7 @@ public class ImmutableConfigTest {
 
     @Test
     public void testCreationFailsWhenRequirePropsAreMissing() {
-        //fails because a new Properties object does not contain maxValue
+        // fails because a new Properties object does not contain maxValue
         assertThrows(MissingPropertyException.class, () -> new SimpleDemo(new Properties()));
     }
 
@@ -454,19 +445,19 @@ public class ImmutableConfigTest {
         combinedSource.setProperty("propRequiredBy1", "1");
         combinedSource.setProperty("propRequiredBy2", "2");
 
-        //direct creation works
+        // direct creation works
         DemoPair1 pair1 = new DemoPair1(combinedSource);
         assertEquals(pair1.requiredBy1(), 1);
 
-        //direct creation works
+        // direct creation works
         DemoPair2 pair2 = new DemoPair2(combinedSource);
         assertEquals(pair2.requiredBy2(), 2);
 
-        //indirect creation works too
+        // indirect creation works too
         DemoPair1 indirect1 = new DemoPair1(pair2.cfg.asProperties());
         assertEquals(indirect1.requiredBy1(), 1);
 
-        //indirect creation works too
+        // indirect creation works too
         DemoPair2 indirect2 = new DemoPair2(pair1.cfg.asProperties());
         assertEquals(indirect2.requiredBy2(), 2);
     }
@@ -478,26 +469,20 @@ public class ImmutableConfigTest {
          * asProperties alphabetically
          */
         String fileContents = new StringBuilder()
-            .append("prop3 : 22\n")
-            .append("prop2 : hello\n")
-            .append("prop1 : value")
-            .toString();
+                .append("prop3 : 22\n")
+                .append("prop2 : hello\n")
+                .append("prop1 : value")
+                .toString();
 
-        ImmutableConfig props = new ImmutableConfig(
-            PropertyUtils.parseProperties(fileContents),
-            newArrayList("prop1")
-        );
+        ImmutableConfig props = new ImmutableConfig(PropertyUtils.parseProperties(fileContents), newArrayList("prop1"));
 
         String expected = new StringBuilder()
-            .append("prop1 : value\n")
-            .append("prop2 : hello\n")
-            .append("prop3 : 22\n")
-            .toString();
+                .append("prop1 : value\n")
+                .append("prop2 : hello\n")
+                .append("prop3 : 22\n")
+                .toString();
 
-        assertEquals(
-            expected,
-            props.toString()
-        );
+        assertEquals(expected, props.toString());
     }
 
     @Test
@@ -511,9 +496,7 @@ public class ImmutableConfigTest {
 
         assertTrue(rejectFile.exists());
 
-        assertThrows(IllegalArgumentException.class,
-            () -> new ImmutableConfig(rejectFile, newArrayList())
-        );
+        assertThrows(IllegalArgumentException.class, () -> new ImmutableConfig(rejectFile, newArrayList()));
     }
 
     @Test
@@ -533,5 +516,4 @@ public class ImmutableConfigTest {
 
         assertThat(props.getString("key1"), is("goodValue"));
     }
-
 }

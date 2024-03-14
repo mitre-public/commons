@@ -80,17 +80,14 @@ public class Spherical {
         double lon1 = toRadians(lonDeg1);
         double lat2 = toRadians(latDeg2);
         double lon2 = toRadians(lonDeg2);
-        return EARTH_RADIUS_NM
-            * ahaversine(haversine(lat2 - lat1) + cos(lat1) * cos(lat2) * haversine(lon2 - lon1));
+        return EARTH_RADIUS_NM * ahaversine(haversine(lat2 - lat1) + cos(lat1) * cos(lat2) * haversine(lon2 - lon1));
     }
 
     /** Compute the great circle Distance between two locations. */
     public static Distance distanceBtw(LatLong one, LatLong two) {
-        return Distance.ofNauticalMiles(
-            distanceInNM(
+        return Distance.ofNauticalMiles(distanceInNM(
                 one.latitude(), one.longitude(),
-                two.latitude(), two.longitude())
-        );
+                two.latitude(), two.longitude()));
     }
 
     /** Compute the great circle Distance between two object with a location. */
@@ -130,10 +127,8 @@ public class Spherical {
      * @return The course between two points as a Course object
      */
     public static Course courseBtw(Double startLat, Double startLong, Double endLat, Double endLong) {
-        //call the other method, but return a Course object instead
-        return Course.ofDegrees(
-            courseInDegrees(startLat, startLong, endLat, endLong)
-        );
+        // call the other method, but return a Course object instead
+        return Course.ofDegrees(courseInDegrees(startLat, startLong, endLat, endLong));
     }
 
     /**
@@ -146,9 +141,8 @@ public class Spherical {
      */
     public static Course courseBtw(LatLong start, LatLong end) {
         return courseBtw(
-            start.latitude(), start.longitude(),
-            end.latitude(), end.longitude()
-        );
+                start.latitude(), start.longitude(),
+                end.latitude(), end.longitude());
     }
 
     /**
@@ -183,8 +177,7 @@ public class Spherical {
         double dist = abs(distNM) / EARTH_RADIUS_NM;
 
         double latProj = asinReal((cos(dist) * sin(lat)) + (sin(dist) * cos(lat) * cos(crs)));
-        double dlon = acosReal((cos(dist) - (sin(latProj) * sin(lat)))
-            / (cos(latProj) * cos(lat)));
+        double dlon = acosReal((cos(dist) - (sin(latProj) * sin(lat))) / (cos(latProj) * cos(lat)));
         double lonProj;
         if (EARTH_RADIUS_NM * abs(cos(latProj)) < 0.01) {
             lonProj = lon; // north pole
@@ -210,7 +203,8 @@ public class Spherical {
      * @return The destination location
      */
     public static LatLong projectOut(LatLong start, Course direction, Distance distance) {
-        return Spherical.projectOut(start.latitude(), start.longitude(), direction.inDegrees(), distance.inNauticalMiles());
+        return Spherical.projectOut(
+                start.latitude(), start.longitude(), direction.inDegrees(), distance.inNauticalMiles());
     }
 
     /**
@@ -226,12 +220,7 @@ public class Spherical {
      */
     public static LatLong projectOut(LatLong start, Course direction, Distance distance, double curvature) {
         return projectOut(
-            start.latitude(),
-            start.longitude(),
-            direction.inDegrees(),
-            distance.inNauticalMiles(),
-            curvature
-        );
+                start.latitude(), start.longitude(), direction.inDegrees(), distance.inNauticalMiles(), curvature);
     }
 
     /**
@@ -246,16 +235,17 @@ public class Spherical {
      *
      * @return The destination point
      */
-    public static LatLong projectOut(Double latDeg, Double lonDeg, double headingDegree, double distNM,
-        double curvature) {
+    public static LatLong projectOut(
+            Double latDeg, Double lonDeg, double headingDegree, double distNM, double curvature) {
         double rMax = EARTH_RADIUS_NM * Math.PI / 2.0;
         double radiusNM = Math.max(-rMax, Math.min(rMax, 1.0 / curvature));
         LatLong pair = Spherical.projectOut(latDeg, lonDeg, mod(headingDegree + 90.0, 360.0), radiusNM);
         double latCen = pair.latitude();
         double lonCen = pair.longitude();
-        double crsDelta = Math.copySign(Math.toDegrees(distNM
-                / (EARTH_RADIUS_NM * Math.sin(Math.min(Math.PI / 2, Math.abs(radiusNM) / EARTH_RADIUS_NM)))),
-            radiusNM);
+        double crsDelta = Math.copySign(
+                Math.toDegrees(distNM
+                        / (EARTH_RADIUS_NM * Math.sin(Math.min(Math.PI / 2, Math.abs(radiusNM) / EARTH_RADIUS_NM)))),
+                radiusNM);
         double crsCen = mod(courseInDegrees(latCen, lonCen, latDeg, lonDeg) + crsDelta, 360.0);
         return Spherical.projectOut(latCen, lonCen, crsCen, Math.abs(radiusNM));
     }
@@ -272,17 +262,16 @@ public class Spherical {
      * @return The ‘center' of the great circle to the right of the course for that lat/long.
      */
     public static LatLong greatCircleOrigin(Double latitude, Double longitude, Double course) {
-        return Spherical.projectOut(latitude, longitude, Spherical.mod(course + 90.0, 360.0),
-            oneQuarterCircumferenceOfEarthInNM());
+        return Spherical.projectOut(
+                latitude, longitude, Spherical.mod(course + 90.0, 360.0), oneQuarterCircumferenceOfEarthInNM());
     }
 
-    public static Double curvatureFromPointToPoint(Double latDeg1, Double lonDeg1, Double hdg1, Double latDeg2,
-        Double lonDeg2) {
+    public static Double curvatureFromPointToPoint(
+            Double latDeg1, Double lonDeg1, Double hdg1, Double latDeg2, Double lonDeg2) {
         double d = distanceInNM(latDeg1, lonDeg1, latDeg2, lonDeg2) / EARTH_RADIUS_NM;
         double dTheta = angleDifference(courseInDegrees(latDeg1, lonDeg1, latDeg2, lonDeg2), hdg1);
         double phi = toRadians(abs(dTheta));
-        return 1.0 / Math
-            .copySign(atan((1 - cos(d)) / (sin(d) * sin(phi))) * EARTH_RADIUS_NM, dTheta);
+        return 1.0 / Math.copySign(atan((1 - cos(d)) / (sin(d) * sin(phi))) * EARTH_RADIUS_NM, dTheta);
     }
 
     /**
@@ -377,15 +366,14 @@ public class Spherical {
      */
     public static double crossTrackDistanceNM(HasPosition startPoint, HasPosition endPoint, HasPosition location) {
         double dist = startPoint.distanceInRadians(location);
-        double angle = toRadians(startPoint.courseInDegrees(location)) - toRadians(startPoint.courseInDegrees(endPoint));
+        double angle =
+                toRadians(startPoint.courseInDegrees(location)) - toRadians(startPoint.courseInDegrees(endPoint));
         return distanceInNM(asin(sin(dist) * sin(angle)));
     }
 
-
-    //Tolerances used in the "alongTrackDistanceNM" computation to avoid failing due to numeric error.
-    private static final Double TOLERANCE =  1E-10;
-    private static final Range<Double> NUMERICALLY_TOLERANT_RANGE =
-        Range.closed(-1 - TOLERANCE, 1 + TOLERANCE);
+    // Tolerances used in the "alongTrackDistanceNM" computation to avoid failing due to numeric error.
+    private static final Double TOLERANCE = 1E-10;
+    private static final Range<Double> NUMERICALLY_TOLERANT_RANGE = Range.closed(-1 - TOLERANCE, 1 + TOLERANCE);
 
     /**
      * Computes the distance along the track (in NM) from startPoint to endPoint and the point p
@@ -404,16 +392,8 @@ public class Spherical {
      * @param CTD        The "cross track distance" of p (computed via the sister method
      *                   crossTrackDistanceNM)
      */
-    public static double alongTrackDistanceNM(
-        HasPosition startPoint,
-        HasPosition endPoint,
-        HasPosition p,
-        double CTD
-    ) {
-        double relAng = Spherical.angleDifference(
-            startPoint.courseInDegrees(endPoint),
-            startPoint.courseInDegrees(p)
-        );
+    public static double alongTrackDistanceNM(HasPosition startPoint, HasPosition endPoint, HasPosition p, double CTD) {
+        double relAng = Spherical.angleDifference(startPoint.courseInDegrees(endPoint), startPoint.courseInDegrees(p));
         double sign = (abs(relAng) > 90.0 ? -1.0 : 1.0);
         double cosCTD = cos(distanceInRadians(CTD));
         double cosPTD = cos(startPoint.distanceInRadians(p));
@@ -428,9 +408,10 @@ public class Spherical {
             throw new IllegalStateException("Cannot compute acos of: " + ratio);
         }
 
-        //clamp ratio down from the "tolerant range" to the "valid input to acos range"
+        // clamp ratio down from the "tolerant range" to the "valid input to acos range"
         ratio = Math.min(Math.max(ratio, -1.0), 1.0);
-        //@todo: Replace line with `ratio = constrainToRange(ratio, -1.0, 1.0);` when Guava is shaded from exported library
+        // @todo: Replace line with `ratio = constrainToRange(ratio, -1.0, 1.0);` when Guava is shaded from exported
+        // library
 
         return sign * distanceInNM(acos(ratio));
     }

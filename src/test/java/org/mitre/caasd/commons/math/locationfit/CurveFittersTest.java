@@ -33,7 +33,7 @@ public class CurveFittersTest {
     @Test
     public void fitAndPredict_unWeighted() {
 
-        //y = x^2 (plus some noise)
+        // y = x^2 (plus some noise)
         List<Double> xData = newArrayList(0.0, 1.0, 2.0, 3.0);
         List<Double> yData = newArrayList(-.1, .9, 4.1, 9.1);
 
@@ -53,11 +53,11 @@ public class CurveFittersTest {
     @Test
     public void fit_unWeighted() {
 
-        //y = x^2 (plus some noise)
+        // y = x^2 (plus some noise)
         List<Double> xData = newArrayList(0.0, 1.0, 2.0, 3.0);
         List<Double> yData = newArrayList(-.1, .9, 4.1, 9.1);
 
-        //Perform the fit exactly once, all samples are weighted the same..
+        // Perform the fit exactly once, all samples are weighted the same..
         PolynomialFunction func = CurveFitters.fit(2, xData, yData);
 
         double prediction1 = func.value(.5);
@@ -72,5 +72,4 @@ public class CurveFittersTest {
         assertThat(expected2.contains(prediction2), is(true));
         assertThat(expected3.contains(prediction3), is(true));
     }
-
 }

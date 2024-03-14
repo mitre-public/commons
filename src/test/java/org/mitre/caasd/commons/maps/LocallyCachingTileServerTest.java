@@ -29,9 +29,7 @@ class LocallyCachingTileServerTest {
     @Test
     public void cacheWorks() throws Exception {
 
-        LocallyCachingTileServer tileServer = new LocallyCachingTileServer(
-            new DebugTileServer()
-        );
+        LocallyCachingTileServer tileServer = new LocallyCachingTileServer(new DebugTileServer());
 
         tileServer.downloadMap(LatLong.of(32.8968, -97.0380), 10);
     }
@@ -39,12 +37,9 @@ class LocallyCachingTileServerTest {
     @Test
     public void cacheWithSmallLifetimeWorks() throws Exception {
 
-        LocallyCachingTileServer tileServer = new LocallyCachingTileServer(
-            new DebugTileServer(),
-            Duration.ofSeconds(1L)
-        );
+        LocallyCachingTileServer tileServer =
+                new LocallyCachingTileServer(new DebugTileServer(), Duration.ofSeconds(1L));
 
         tileServer.downloadMap(LatLong.of(32.8968, -97.0380), 10);
     }
-
 }

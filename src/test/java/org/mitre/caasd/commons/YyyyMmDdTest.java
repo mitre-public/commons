@@ -116,19 +116,16 @@ public class YyyyMmDdTest {
         YyyyMmDd date = new YyyyMmDd("2021-07-04");
         Instant time = date.asInstant();
 
-        //converting back to a YyyyMmDd produces the same date
+        // converting back to a YyyyMmDd produces the same date
         assertThat(YyyyMmDd.from(time), is(date));
 
-        //subtracting a tiny amount of time rolls back to the prior days
+        // subtracting a tiny amount of time rolls back to the prior days
         assertThat(YyyyMmDd.from(time.minusMillis(1)), is(date.yesterday()));
     }
 
-
     @Test
     public void verifyYearMonthDayFormat_requireDashes() {
-        assertThrows(IllegalArgumentException.class,
-            () -> verifyYearMonthDayFormat("19200131")
-        );
+        assertThrows(IllegalArgumentException.class, () -> verifyYearMonthDayFormat("19200131"));
     }
 
     @Test
@@ -138,29 +135,21 @@ public class YyyyMmDdTest {
 
     @Test
     public void verifyYearMonthDayFormat_badDay_low() {
-        assertThrows(IllegalArgumentException.class,
-            () -> verifyYearMonthDayFormat("2019-12-00")
-        );
+        assertThrows(IllegalArgumentException.class, () -> verifyYearMonthDayFormat("2019-12-00"));
     }
 
     @Test
     public void verifyYearMonthDayFormat_badDay_high() {
-        assertThrows(IllegalArgumentException.class,
-            () -> verifyYearMonthDayFormat("2019-12-32")
-        );
+        assertThrows(IllegalArgumentException.class, () -> verifyYearMonthDayFormat("2019-12-32"));
     }
 
     @Test
     public void verifyYearMonthDayFormat_badMonth_low() {
-        assertThrows(IllegalArgumentException.class,
-            () -> verifyYearMonthDayFormat("2019-00-02")
-        );
+        assertThrows(IllegalArgumentException.class, () -> verifyYearMonthDayFormat("2019-00-02"));
     }
 
     @Test
     public void verifyYearMonthDayFormat_badMonth_high() {
-        assertThrows(IllegalArgumentException.class,
-            () -> verifyYearMonthDayFormat("2019-13-02")
-        );
+        assertThrows(IllegalArgumentException.class, () -> verifyYearMonthDayFormat("2019-13-02"));
     }
 }

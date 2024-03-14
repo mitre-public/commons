@@ -42,61 +42,59 @@ class MapImageTest {
     @Disabled
     @Test
     public void drawSimpleMapWithNoFeatures() {
-        //Disabled because (1) downloaded map data takes a while, (2) tile server changes output...so we can't test against image equality
+        // Disabled because (1) downloaded map data takes a while, (2) tile server changes output...so we can't test
+        // against image equality
 
         MapImage map = new MapImage(
-            new MapBoxApi(DARK),  //tile server
-            LatLong.of(38.9223, -77.2016), //center point
-            Distance.ofNauticalMiles(2.5) //map width
-        );
+                new MapBoxApi(DARK), // tile server
+                LatLong.of(38.9223, -77.2016), // center point
+                Distance.ofNauticalMiles(2.5) // map width
+                );
 
         map.plotToFile(new File("mapWithoutDecoration.jpg"));
     }
 
-
     @Disabled
     @Test
     public void drawMapWithAdditionalFeatures() {
-        //Disabled because (1) downloaded map data takes a while, (2) tile server changes output...so we can't test against image equality
+        // Disabled because (1) downloaded map data takes a while, (2) tile server changes output...so we can't test
+        // against image equality
 
         LatLong lostDog = LatLong.of(38.9223, -77.2016);
 
         MapImage map = new MapImage(
-            new MapBoxApi(DARK),  //tile server
-            lostDog, //center point
-            Distance.ofNauticalMiles(2.5) //map width
-        );
+                new MapBoxApi(DARK), // tile server
+                lostDog, // center point
+                Distance.ofNauticalMiles(2.5) // map width
+                );
 
-        //create a list of MapFeatures that need to be drawn...
+        // create a list of MapFeatures that need to be drawn...
         FeatureSet features = newFeatureSetBuilder()
-            .addCircle(lostDog, Color.RED, 30, 4.0f)
-            .addLine(
-                lostDog.project(NORTH, Distance.ofNauticalMiles(1.0)),
-                lostDog.project(SOUTH, Distance.ofNauticalMiles(1.0)),
-                Color.MAGENTA,
-                1.f
-            )
-            .addFilledShape(
-                boxAround(lostDog),
-                new Color(255, 255, 255, 25)) //use Alpha channel for transparency!
-            .build();
+                .addCircle(lostDog, Color.RED, 30, 4.0f)
+                .addLine(
+                        lostDog.project(NORTH, Distance.ofNauticalMiles(1.0)),
+                        lostDog.project(SOUTH, Distance.ofNauticalMiles(1.0)),
+                        Color.MAGENTA,
+                        1.f)
+                .addFilledShape(boxAround(lostDog), new Color(255, 255, 255, 25)) // use Alpha channel for transparency!
+                .build();
 
         map.plotToFile(features, new File("mapWithDecoration.jpg"));
     }
 
-
     @Disabled
     @Test
     public void drawMovingDot() {
-        //Disabled because (1) downloaded map data takes a while, (2) tile server changes output...so we can't test against image equality
+        // Disabled because (1) downloaded map data takes a while, (2) tile server changes output...so we can't test
+        // against image equality
 
         LatLong lostDog = LatLong.of(38.9223, -77.2016);
 
         MapImage map = new MapImage(
-            new MapBoxApi(DARK),  //tile server
-            lostDog, //center point
-            Distance.ofNauticalMiles(2.5) //map width
-        );
+                new MapBoxApi(DARK), // tile server
+                lostDog, // center point
+                Distance.ofNauticalMiles(2.5) // map width
+                );
 
         for (int i = 0; i < 10; i++) {
             drawMovieFrame(lostDog, map, i);
@@ -106,24 +104,21 @@ class MapImageTest {
     private void drawMovieFrame(LatLong lostDog, MapImage map, int i) {
 
         FeatureSet features = newFeatureSetBuilder()
-            .addCircle(lostDog, Color.RED, 30, 4.0f)
-            .setStrokeWidth(3.0f)
-            .addCircle(lostDog.project(NORTH, Distance.ofNauticalMiles(.1).times(i)), Color.BLUE,
-                40)
-            .build();
+                .addCircle(lostDog, Color.RED, 30, 4.0f)
+                .setStrokeWidth(3.0f)
+                .addCircle(lostDog.project(NORTH, Distance.ofNauticalMiles(.1).times(i)), Color.BLUE, 40)
+                .build();
 
         map.plotToFile(features, new File("movingDot_" + i + ".jpg"));
     }
 
-
-    //find a "diamond of LatLongs" around a center point
+    // find a "diamond of LatLongs" around a center point
     private List<LatLong> boxAround(LatLong center) {
         return newArrayList(
-            center.project(NORTH, Distance.ofNauticalMiles(1)),
-            center.project(EAST, Distance.ofNauticalMiles(1)),
-            center.project(SOUTH, Distance.ofNauticalMiles(1)),
-            center.project(WEST, Distance.ofNauticalMiles(1))
-        );
+                center.project(NORTH, Distance.ofNauticalMiles(1)),
+                center.project(EAST, Distance.ofNauticalMiles(1)),
+                center.project(SOUTH, Distance.ofNauticalMiles(1)),
+                center.project(WEST, Distance.ofNauticalMiles(1)));
     }
 
     @Test
@@ -132,16 +127,15 @@ class MapImageTest {
         int WIDTH = 640;
 
         MapImage map = new MapImage(
-            new DebugTileServer(),
-            LatLong.of(38.9223, -77.2016), //center point
-            WIDTH,
-            12 //zoom
-        );
+                new DebugTileServer(),
+                LatLong.of(38.9223, -77.2016), // center point
+                WIDTH,
+                12 // zoom
+                );
 
         assertThat(map.plot().getWidth(), is(WIDTH));
         assertThat(map.plot().getHeight(), is(WIDTH));
 
         map.plotToFile(new File(tempDir, "640x640Map.jpg"));
     }
-
 }

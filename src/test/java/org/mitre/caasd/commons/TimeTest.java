@@ -39,29 +39,17 @@ public class TimeTest {
 
         double TOLERANCE = 0.000001;
 
-        assertEquals(
-            1.0,
-            Time.getDecimalDuration(duration, ChronoUnit.HOURS),
-            TOLERANCE
-        );
+        assertEquals(1.0, Time.getDecimalDuration(duration, ChronoUnit.HOURS), TOLERANCE);
 
-        assertEquals(
-            60.0,
-            Time.getDecimalDuration(duration, ChronoUnit.MINUTES),
-            TOLERANCE
-        );
+        assertEquals(60.0, Time.getDecimalDuration(duration, ChronoUnit.MINUTES), TOLERANCE);
 
-        assertEquals(
-            60.0 * 60.0,
-            Time.getDecimalDuration(duration, ChronoUnit.SECONDS),
-            TOLERANCE
-        );
+        assertEquals(60.0 * 60.0, Time.getDecimalDuration(duration, ChronoUnit.SECONDS), TOLERANCE);
     }
 
     @Test
     public void testAverageTime() {
 
-        long TIME_DELTA_IN_MILLISEC = 1256000; //some arbitrary number
+        long TIME_DELTA_IN_MILLISEC = 1256000; // some arbitrary number
 
         Instant time1 = Instant.EPOCH;
         Instant time2 = time1.plus(Duration.ofMillis(TIME_DELTA_IN_MILLISEC));
@@ -77,16 +65,12 @@ public class TimeTest {
 
     @Test
     public void testAverageTime_nullInputs1() {
-        assertThrows(NullPointerException.class,
-            () -> Time.averageTime(null, Instant.MIN)
-        );
+        assertThrows(NullPointerException.class, () -> Time.averageTime(null, Instant.MIN));
     }
 
     @Test
     public void testAverageTime_nullInputs2() {
-        assertThrows(NullPointerException.class,
-            () -> Time.averageTime(Instant.EPOCH, null)
-        );
+        assertThrows(NullPointerException.class, () -> Time.averageTime(Instant.EPOCH, null));
     }
 
     @Test
@@ -96,49 +80,43 @@ public class TimeTest {
         Instant futureTime = currentTime.plusMillis(500);
         Duration maxLag = Duration.of(500, ChronoUnit.MILLIS);
 
-        //does nothing if input is Verified
-        assertDoesNotThrow(
-            () -> confirmApproximateTimeOrdering(currentTime, futureTime, maxLag)
-        );
+        // does nothing if input is Verified
+        assertDoesNotThrow(() -> confirmApproximateTimeOrdering(currentTime, futureTime, maxLag));
     }
 
     @Test
     public void testConfirmApproximateTimeOrdering_farInFutureIsOK() {
 
         Instant currentTime = Instant.EPOCH;
-        Instant futureTime = currentTime.plus(500, ChronoUnit.DAYS);  //far in future
-        Duration maxLag = Duration.of(500, ChronoUnit.MILLIS);  //only allowed to be a bit in the past
+        Instant futureTime = currentTime.plus(500, ChronoUnit.DAYS); // far in future
+        Duration maxLag = Duration.of(500, ChronoUnit.MILLIS); // only allowed to be a bit in the past
 
-        //does nothing if input is Verified
-        assertDoesNotThrow(
-            () -> Time.confirmApproximateTimeOrdering(currentTime, futureTime, maxLag)
-        );
+        // does nothing if input is Verified
+        assertDoesNotThrow(() -> Time.confirmApproximateTimeOrdering(currentTime, futureTime, maxLag));
     }
 
     @Test
     public void testConfirmApproximateTimeOrdering_farInPastFails() {
 
         Instant currentTime = Instant.EPOCH;
-        Instant futureTime = currentTime.minus(500, ChronoUnit.DAYS);  //far in past
-        Duration maxLag = Duration.of(500, ChronoUnit.MILLIS);  //only allowed to be a bit in the past
+        Instant futureTime = currentTime.minus(500, ChronoUnit.DAYS); // far in past
+        Duration maxLag = Duration.of(500, ChronoUnit.MILLIS); // only allowed to be a bit in the past
 
-        //Fails because the futureTime is too far in the past
-        assertThrows(IllegalArgumentException.class,
-            () -> Time.confirmApproximateTimeOrdering(currentTime, futureTime, maxLag)
-        );
+        // Fails because the futureTime is too far in the past
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> Time.confirmApproximateTimeOrdering(currentTime, futureTime, maxLag));
     }
 
     @Test
     public void testConfirmApproximateTimeOrdering_aLittleInPastIsOK() {
 
         Instant currentTime = Instant.EPOCH;
-        Instant futureTime = currentTime.minus(500, ChronoUnit.NANOS);  //a little bit in past
-        Duration maxLag = Duration.of(500, ChronoUnit.MILLIS);  //only allowed to be a bit in the past
+        Instant futureTime = currentTime.minus(500, ChronoUnit.NANOS); // a little bit in past
+        Duration maxLag = Duration.of(500, ChronoUnit.MILLIS); // only allowed to be a bit in the past
 
-        //does nothing if input is Verified
-        assertDoesNotThrow(
-            () -> Time.confirmApproximateTimeOrdering(currentTime, futureTime, maxLag)
-        );
+        // does nothing if input is Verified
+        assertDoesNotThrow(() -> Time.confirmApproximateTimeOrdering(currentTime, futureTime, maxLag));
     }
 
     @Test
@@ -146,12 +124,12 @@ public class TimeTest {
 
         Instant currentTime = Instant.EPOCH;
         Instant futureTime = Instant.EPOCH;
-        Duration maxLag = Duration.of(500, ChronoUnit.MILLIS).negated();  //A NEGATIVE DURATION
+        Duration maxLag = Duration.of(500, ChronoUnit.MILLIS).negated(); // A NEGATIVE DURATION
 
-        //Fails because maxLag is negative
-        assertThrows(IllegalArgumentException.class,
-            () -> Time.confirmApproximateTimeOrdering(currentTime, futureTime, maxLag)
-        );
+        // Fails because maxLag is negative
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> Time.confirmApproximateTimeOrdering(currentTime, futureTime, maxLag));
     }
 
     @Test
@@ -160,10 +138,8 @@ public class TimeTest {
         Instant currentTime = Instant.EPOCH;
         Instant futureTime = Instant.EPOCH;
 
-        //does nothing if input is Verified
-        assertDoesNotThrow(
-            () -> confirmStrictTimeOrdering(currentTime, futureTime)
-        );
+        // does nothing if input is Verified
+        assertDoesNotThrow(() -> confirmStrictTimeOrdering(currentTime, futureTime));
     }
 
     @Test
@@ -172,10 +148,8 @@ public class TimeTest {
         Instant currentTime = Instant.EPOCH;
         Instant futureTime = Instant.EPOCH.plusNanos(1L);
 
-        //does nothing if input is Verified
-        assertDoesNotThrow(
-            () -> confirmStrictTimeOrdering(currentTime, futureTime)
-        );
+        // does nothing if input is Verified
+        assertDoesNotThrow(() -> confirmStrictTimeOrdering(currentTime, futureTime));
     }
 
     @Test
@@ -184,47 +158,29 @@ public class TimeTest {
         Instant currentTime = Instant.EPOCH;
         Instant futureTime = Instant.EPOCH.minusNanos(1L);
 
-        //Fails because the futureTime is actually in the past
-        assertThrows(IllegalArgumentException.class,
-            () -> Time.confirmStrictTimeOrdering(currentTime, futureTime)
-        );
+        // Fails because the futureTime is actually in the past
+        assertThrows(IllegalArgumentException.class, () -> Time.confirmStrictTimeOrdering(currentTime, futureTime));
     }
 
     @Test
     public void confirmTimeOrdering_rejectsOutOfOrder() {
-        Instant[] times = new Instant[]{
-            Instant.EPOCH,
-            Instant.EPOCH.minusMillis(1)
-        };
+        Instant[] times = new Instant[] {Instant.EPOCH, Instant.EPOCH.minusMillis(1)};
 
-        assertThrows(IllegalArgumentException.class,
-            () -> confirmTimeOrdering(times)
-        );
+        assertThrows(IllegalArgumentException.class, () -> confirmTimeOrdering(times));
     }
 
     @Test
     public void confirmTimeOrdering_acceptsInOrder() {
-        Instant[] times = new Instant[]{
-            Instant.EPOCH,
-            Instant.EPOCH.plusMillis(100)
-        };
-        assertDoesNotThrow(
-            () -> confirmTimeOrdering(times)
-        );
+        Instant[] times = new Instant[] {Instant.EPOCH, Instant.EPOCH.plusMillis(100)};
+        assertDoesNotThrow(() -> confirmTimeOrdering(times));
     }
 
     @Test
     public void confirmTimeOrdering_acceptsDuplicateTimes_whenOrderedCorrectly() {
-        Instant[] times = new Instant[]{
-            Instant.EPOCH.minusMillis(100),
-            Instant.EPOCH,
-            Instant.EPOCH,
-            Instant.EPOCH.plusMillis(100)
+        Instant[] times = new Instant[] {
+            Instant.EPOCH.minusMillis(100), Instant.EPOCH, Instant.EPOCH, Instant.EPOCH.plusMillis(100)
         };
-        assertDoesNotThrow(
-            () -> confirmTimeOrdering(times)
-        );
-
+        assertDoesNotThrow(() -> confirmTimeOrdering(times));
     }
 
     @Test
@@ -233,15 +189,9 @@ public class TimeTest {
         Instant time0 = Instant.EPOCH;
         Instant time1 = Instant.EPOCH.plusSeconds(1);
 
-        assertEquals(
-            time0,
-            Time.earliest(time0, time1)
-        );
+        assertEquals(time0, Time.earliest(time0, time1));
 
-        assertEquals(
-            time0,
-            Time.earliest(time1, time0)
-        );
+        assertEquals(time0, Time.earliest(time1, time0));
     }
 
     @Test
@@ -253,26 +203,11 @@ public class TimeTest {
         Instant time3 = Instant.EPOCH.plusSeconds(3);
         Instant time4 = Instant.EPOCH.plusSeconds(4);
 
-        assertEquals(
-            time0,
-            Time.earliest(time0, time1, time2)
-        );
-        assertEquals(
-            time0,
-            Time.earliest(time1, time0, time4, time3)
-        );
-        assertEquals(
-            time0,
-            Time.earliest(time1, time1, time1, time0)
-        );
-        assertEquals(
-            time0,
-            Time.earliest(time0)
-        );
-        assertEquals(
-            time0,
-            Time.earliest(new Instant[]{time1, time3, time0, time4})
-        );
+        assertEquals(time0, Time.earliest(time0, time1, time2));
+        assertEquals(time0, Time.earliest(time1, time0, time4, time3));
+        assertEquals(time0, Time.earliest(time1, time1, time1, time0));
+        assertEquals(time0, Time.earliest(time0));
+        assertEquals(time0, Time.earliest(new Instant[] {time1, time3, time0, time4}));
     }
 
     @Test
@@ -281,15 +216,9 @@ public class TimeTest {
         Instant time0 = Instant.EPOCH;
         Instant time1 = Instant.EPOCH.plusSeconds(1);
 
-        assertEquals(
-            time1,
-            Time.latest(time0, time1)
-        );
+        assertEquals(time1, Time.latest(time0, time1));
 
-        assertEquals(
-            time1,
-            Time.latest(time1, time0)
-        );
+        assertEquals(time1, Time.latest(time1, time0));
     }
 
     @Test
@@ -301,26 +230,11 @@ public class TimeTest {
         Instant time3 = Instant.EPOCH.minusSeconds(3);
         Instant time4 = Instant.EPOCH.minusSeconds(4);
 
-        assertEquals(
-            time0,
-            Time.latest(time0, time1, time2)
-        );
-        assertEquals(
-            time0,
-            Time.latest(time1, time0, time4, time3)
-        );
-        assertEquals(
-            time0,
-            Time.latest(time1, time1, time1, time0)
-        );
-        assertEquals(
-            time0,
-            Time.latest(time0)
-        );
-        assertEquals(
-            time0,
-            Time.latest(new Instant[]{time1, time3, time0, time4})
-        );
+        assertEquals(time0, Time.latest(time0, time1, time2));
+        assertEquals(time0, Time.latest(time1, time0, time4, time3));
+        assertEquals(time0, Time.latest(time1, time1, time1, time0));
+        assertEquals(time0, Time.latest(time0));
+        assertEquals(time0, Time.latest(new Instant[] {time1, time3, time0, time4}));
     }
 
     @Test
@@ -332,41 +246,23 @@ public class TimeTest {
         Instant time3 = Instant.EPOCH.minusSeconds(3);
         Instant time4 = Instant.EPOCH.minusSeconds(4);
 
-        assertEquals(
-            Duration.ofSeconds(2),
-            Time.durationBtw(time0, time1, time2)
-        );
-        assertEquals(
-            Duration.ofSeconds(4),
-            Time.durationBtw(time1, time0, time4, time3)
-        );
-        assertEquals(
-            Duration.ofSeconds(1),
-            Time.durationBtw(time1, time1, time1, time0)
-        );
-        assertEquals(
-            Duration.ofSeconds(0),
-            Time.durationBtw(time0)
-        );
-        assertEquals(
-            Duration.ofSeconds(4),
-            Time.durationBtw(new Instant[]{time1, time3, time0, time4})
-        );
+        assertEquals(Duration.ofSeconds(2), Time.durationBtw(time0, time1, time2));
+        assertEquals(Duration.ofSeconds(4), Time.durationBtw(time1, time0, time4, time3));
+        assertEquals(Duration.ofSeconds(1), Time.durationBtw(time1, time1, time1, time0));
+        assertEquals(Duration.ofSeconds(0), Time.durationBtw(time0));
+        assertEquals(Duration.ofSeconds(4), Time.durationBtw(new Instant[] {time1, time3, time0, time4}));
     }
 
     @Test
     public void testAsZTimeString() {
 
         Instant time = Instant.EPOCH
-            .plus(Duration.ofHours(2))
-            .plusSeconds(60 * 33)
-            .plusSeconds(2)
-            .plusMillis(431);
+                .plus(Duration.ofHours(2))
+                .plusSeconds(60 * 33)
+                .plusSeconds(2)
+                .plusMillis(431);
 
-        assertEquals(
-            "02:33:02.431",
-            Time.asZTimeString(time)
-        );
+        assertEquals("02:33:02.431", Time.asZTimeString(time));
     }
 
     @Test
@@ -433,7 +329,7 @@ public class TimeTest {
         assertThat(theDurationBtw(time4, time0).isGreaterThanOrEqualTo(Duration.ofSeconds(4)), is(true));
         assertThat(theDurationBtw(time4, time0).isLessThanOrEqualTo(Duration.ofSeconds(4)), is(true));
 
-        //adding a middle time does nothing
+        // adding a middle time does nothing
         assertThat(theDurationBtw(time0, time2, time4).isGreaterThanOrEqualTo(Duration.ofSeconds(4)), is(true));
         assertThat(theDurationBtw(time2, time0, time4).isLessThanOrEqualTo(Duration.ofSeconds(4)), is(true));
         assertThat(theDurationBtw(time4, time0, time2).isGreaterThanOrEqualTo(Duration.ofSeconds(4)), is(true));

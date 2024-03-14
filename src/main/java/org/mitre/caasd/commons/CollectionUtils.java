@@ -53,12 +53,9 @@ public class CollectionUtils {
      * identical use-case.
      */
     public static <T, R extends Comparable<? super R>> int binarySearch(
-        List<? extends T> preSortedList,
-        Function<T, R> sortValueGetter,
-        R searchKey
-    ) {
+            List<? extends T> preSortedList, Function<T, R> sortValueGetter, R searchKey) {
 
-        //The implementation of this binarySearch is essentially copied (with small tweaks) from:
+        // The implementation of this binarySearch is essentially copied (with small tweaks) from:
         //  java.util.Collections.binarySearch(List<? extends T> list, T key, Comparator<? super T> c)
 
         if (preSortedList instanceof RandomAccess) {
@@ -68,13 +65,9 @@ public class CollectionUtils {
         }
     }
 
-
-    //This method is ESSENTIALLY copied from java.util.Collections.indexedBinarySearch()
+    // This method is ESSENTIALLY copied from java.util.Collections.indexedBinarySearch()
     private static <T, R extends Comparable<? super R>> int indexedBinarySearch(
-        List<? extends T> preSortedList,
-        Function<T, R> sortValueGetter,
-        R searchKey
-    ) {
+            List<? extends T> preSortedList, Function<T, R> sortValueGetter, R searchKey) {
         int low = 0;
         int high = preSortedList.size() - 1;
 
@@ -91,16 +84,12 @@ public class CollectionUtils {
                 return mid; // key found
             }
         }
-        return -(low + 1);  // key not found
+        return -(low + 1); // key not found
     }
 
-
-    //This method is ESSENTIALLY copied from java.util.Collections.iteratorBinarySearch()
+    // This method is ESSENTIALLY copied from java.util.Collections.iteratorBinarySearch()
     private static <T, R extends Comparable<? super R>> int iteratorBinarySearch(
-        List<? extends T> preSortedList,
-        Function<T, R> sortValueGetter,
-        R searchKey
-    ) {
+            List<? extends T> preSortedList, Function<T, R> sortValueGetter, R searchKey) {
         int low = 0;
         int high = preSortedList.size() - 1;
         ListIterator<? extends T> i = preSortedList.listIterator();
@@ -112,16 +101,13 @@ public class CollectionUtils {
 
             if (cmp < 0) {
                 low = mid + 1;
-            } else if (cmp > 0)
-                high = mid - 1;
-            else
-                return mid; // key found
+            } else if (cmp > 0) high = mid - 1;
+            else return mid; // key found
         }
-        return -(low + 1);  // key not found
+        return -(low + 1); // key not found
     }
 
-
-    //This method is copied EXACTLY from java.util.Collections.get() (where it's a generic private static method)
+    // This method is copied EXACTLY from java.util.Collections.get() (where it's a generic private static method)
     private static <T> T get(ListIterator<? extends T> i, int index) {
         T obj = null;
         int pos = i.nextIndex();
@@ -183,9 +169,7 @@ public class CollectionUtils {
         }
 
         private void updateNext() {
-            this.next = (iterA.hasNext() && iterB.hasNext())
-                ? Pair.of(iterA.next(), iterB.next())
-                : null;
+            this.next = (iterA.hasNext() && iterB.hasNext()) ? Pair.of(iterA.next(), iterB.next()) : null;
         }
 
         @Override
@@ -246,8 +230,8 @@ public class CollectionUtils {
 
         private void updateNext() {
             this.next = (iterA.hasNext() && iterB.hasNext() && iterC.hasNext())
-                ? Triple.of(iterA.next(), iterB.next(), iterC.next())
-                : null;
+                    ? Triple.of(iterA.next(), iterB.next(), iterC.next())
+                    : null;
         }
 
         @Override
@@ -255,5 +239,4 @@ public class CollectionUtils {
             throw new UnsupportedOperationException("A TripleIterator cannot remove items.");
         }
     }
-
 }

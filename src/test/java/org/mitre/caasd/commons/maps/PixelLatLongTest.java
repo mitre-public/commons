@@ -25,7 +25,6 @@ import org.junit.jupiter.api.Test;
 
 class PixelLatLongTest {
 
-
     @Test
     public void basicPixelLatLongConstruction() {
 
@@ -48,9 +47,7 @@ class PixelLatLongTest {
 
         PixelLatLong pll = new PixelLatLong(dfw, zoom, tileSize);
 
-        PixelLatLong round2 = new PixelLatLong(
-            pll.x(), pll.y(), zoom, tileSize
-        );
+        PixelLatLong round2 = new PixelLatLong(pll.x(), pll.y(), zoom, tileSize);
 
         assertThat(round2.latLong().latitude(), closeTo(32.897480, 0.001));
         assertThat(round2.latLong().longitude(), closeTo(-97.040443, 0.001));

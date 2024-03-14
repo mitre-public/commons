@@ -50,9 +50,8 @@ public class MapBoxApi implements TileServer {
      * Sequentially searches: Environment Variables, System Properties, and then a flat text file
      * (java Property formatting) until is finds the requested propertyKey
      */
-    private static final Supplier<String> TOKEN_SUPPLIER = stringSupplierChain(
-        MAPBOX_ACCESS_TOKEN_KEY, new File(System.getProperty("user.dir"), "mapbox.token")
-    );
+    private static final Supplier<String> TOKEN_SUPPLIER =
+            stringSupplierChain(MAPBOX_ACCESS_TOKEN_KEY, new File(System.getProperty("user.dir"), "mapbox.token"));
 
     private final Style mappingStyle;
 
@@ -74,7 +73,7 @@ public class MapBoxApi implements TileServer {
 
     @Override
     public int maxZoomLevel() {
-        return 18; //this is what's in serpent level
+        return 18; // this is what's in serpent level
     }
 
     @Override
@@ -85,9 +84,9 @@ public class MapBoxApi implements TileServer {
     @Override
     public URL getUrlFor(TileAddress ta) {
         String url = "https://api.mapbox.com/styles/v1/mapbox/" + mappingStyle.urlComponent()
-            + "/tiles/512/"
-            + ta.tileUrlComponent()
-            + "/" + "?access_token=" + TOKEN_SUPPLIER.get();
+                + "/tiles/512/"
+                + ta.tileUrlComponent()
+                + "/" + "?access_token=" + TOKEN_SUPPLIER.get();
 
         try {
             return new URL(url);

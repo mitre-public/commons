@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 
 class ParallelismDetectorTest {
 
-    //This class's public facing "doSingleThreadedWork" method should NEVER be using in parallel
+    // This class's public facing "doSingleThreadedWork" method should NEVER be using in parallel
     //  We use a ParallelismDetector object to detect parallelism
     static class SingleThreadedAccessOnly {
 
@@ -45,7 +45,7 @@ class ParallelismDetectorTest {
         }
 
         private void theFragileWork() {
-            //force a stall here
+            // force a stall here
             try {
                 innerLatch.await();
             } catch (InterruptedException e) {
@@ -72,7 +72,7 @@ class ParallelismDetectorTest {
 
         SingleThreadedAccessOnly delicateFlower = new SingleThreadedAccessOnly();
 
-        //These threads start a never-ending task that "has the lease" on delicateFlower
+        // These threads start a never-ending task that "has the lease" on delicateFlower
         Thread t1 = new Thread(() -> delicateFlower.doSingleThreadedWork());
         Thread t2 = new Thread(() -> delicateFlower.doSingleThreadedWork());
 
@@ -83,7 +83,7 @@ class ParallelismDetectorTest {
         t1.start();
         t2.start();
 
-        //waste time, give Threads a moment to run
+        // waste time, give Threads a moment to run
         while (errorHandler.throwables.isEmpty()) {
             Thread.yield();
         }
@@ -93,18 +93,17 @@ class ParallelismDetectorTest {
     }
 
     @Test
-    public void detectorKnowsWhenItsWorking_andWillThrowConcurrentModificationException()
-        throws InterruptedException {
+    public void detectorKnowsWhenItsWorking_andWillThrowConcurrentModificationException() throws InterruptedException {
 
         CountDownLatch pausesRunMe = new CountDownLatch(1);
         CountDownLatch pausesMainThread = new CountDownLatch(1);
 
         Runnable task = () -> {
             try {
-                //this countdown permits the main thread can proceed after this task is active
+                // this countdown permits the main thread can proceed after this task is active
                 pausesMainThread.countDown();
 
-                //pause this "task" so the main thread has a moment to notice "task" is still actively processing
+                // pause this "task" so the main thread has a moment to notice "task" is still actively processing
                 pausesRunMe.await();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -113,43 +112,53 @@ class ParallelismDetectorTest {
 
         ParallelismDetector detector = new ParallelismDetector();
 
-        //Start a 2nd Thread (beyond this test execution thread) that launches work inside a NoParallelism task wrapper...
+        // Start a 2nd Thread (beyond this test execution thread) that launches work inside a NoParallelism task
+        // wrapper...
         Thread t = new Thread(() -> detector.run(task));
         t.start();
 
-        //Make sure this "main test execution thread" pauses to give time for the thread we just launched to get going...
-        pausesMainThread.await();  //stops blocking when "pausesMainThread.countDown();" is called
+        // Make sure this "main test execution thread" pauses to give time for the thread we just launched to get
+        // going...
+        pausesMainThread.await(); // stops blocking when "pausesMainThread.countDown();" is called
 
-        //At this point the NoParallelism object has a Runnable "inside it" that hasn't completed...
+        // At this point the NoParallelism object has a Runnable "inside it" that hasn't completed...
 
         // "isMidExecution()" should let us know
         assertThat(detector.isMidExecution(), is(true));
         // AND we should get a ConcurrentModificationException if we launch any new work
-        assertThrows(ConcurrentModificationException.class, () -> detector.run(() -> {int x = 1 + 2;}));
+        assertThrows(
+                ConcurrentModificationException.class,
+                () -> detector.run(() -> {
+                    int x = 1 + 2;
+                }));
 
-        //allow Thread "t" to exit normally by unblocking the Runnable "task"
+        // allow Thread "t" to exit normally by unblocking the Runnable "task"
         pausesRunMe.countDown();
     }
 
-
     @Test
     public void happyPath_runnables() {
-        //A single-thread can push a handful of Runnable through a single detector and everything works fine
+        // A single-thread can push a handful of Runnable through a single detector and everything works fine
 
         ParallelismDetector detector = new ParallelismDetector();
 
-        //these Runnable do nothing
-        detector.run(() -> {int x = 1 + 2;});
-        detector.run(() -> {int x = 2 + 3;});
-        detector.run(() -> {int x = 4 + 5;});
+        // these Runnable do nothing
+        detector.run(() -> {
+            int x = 1 + 2;
+        });
+        detector.run(() -> {
+            int x = 2 + 3;
+        });
+        detector.run(() -> {
+            int x = 4 + 5;
+        });
 
         assertThat(detector.isMidExecution(), is(false));
     }
 
-
     @Test
     public void happyPath_callable() throws Exception {
-        //A single-thread can push a handful of Callables through a single detector and everything works fine
+        // A single-thread can push a handful of Callables through a single detector and everything works fine
 
         ParallelismDetector detector = new ParallelismDetector();
 
@@ -160,27 +169,28 @@ class ParallelismDetectorTest {
         assertThat(detector.isMidExecution(), is(false));
     }
 
-
     @Test
     public void aCrashingRunnableDoesNotBrickTheAbilityToProcessJobs() {
 
         ParallelismDetector detector = new ParallelismDetector();
 
         try {
-            detector.run(() -> {throw new RuntimeException("oh no an Exception!");});
+            detector.run(() -> {
+                throw new RuntimeException("oh no an Exception!");
+            });
         } catch (RuntimeException rte) {
             assertThat(rte.getMessage().contains("oh no an Exception!"), is(true));
         }
 
-        //the exception doesn't prevent receiving new jobs
+        // the exception doesn't prevent receiving new jobs
         assertThat(detector.isMidExecution(), is(false));
 
         assertDoesNotThrow(
-            () -> detector.run(() -> {int x = 1 + 2;}),
-            "Look, the ParallelismDetector object still works"
-        );
+                () -> detector.run(() -> {
+                    int x = 1 + 2;
+                }),
+                "Look, the ParallelismDetector object still works");
     }
-
 
     @Test
     public void aCrashingCallableDoesNotBrickTheAbilityToProcessJobs() {
@@ -188,16 +198,20 @@ class ParallelismDetectorTest {
         ParallelismDetector detector = new ParallelismDetector();
 
         try {
-            detector.call(() -> {throw new RuntimeException("oh no an Exception!");});
+            detector.call(() -> {
+                throw new RuntimeException("oh no an Exception!");
+            });
         } catch (Exception rte) {
             assertThat(rte.getMessage().contains("oh no an Exception!"), is(true));
         }
 
-        //the exception doesn't prevent receiving new jobs
+        // the exception doesn't prevent receiving new jobs
         assertThat(detector.isMidExecution(), is(false));
 
         assertDoesNotThrow(
-            () -> detector.run(() -> {int x = 1 + 2;}),
-            "Look, the ParallelismDetector object still works");
+                () -> detector.run(() -> {
+                    int x = 1 + 2;
+                }),
+                "Look, the ParallelismDetector object still works");
     }
 }

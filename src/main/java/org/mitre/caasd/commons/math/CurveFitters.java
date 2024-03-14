@@ -47,14 +47,13 @@ public class CurveFitters {
      *
      * @return A predicted y value
      */
-    public static double fitAndPredict(int polynomialDegree, List<Double> xData, List<Double> yData, double predictHere) {
+    public static double fitAndPredict(
+            int polynomialDegree, List<Double> xData, List<Double> yData, double predictHere) {
         checkArgument(xData.size() == yData.size());
 
         int n = xData.size();
 
-        List<Double> equalWeights = IntStream.range(0, n)
-            .mapToObj(i -> 1.0)
-            .collect(toList());
+        List<Double> equalWeights = IntStream.range(0, n).mapToObj(i -> 1.0).collect(toList());
 
         return fitAndPredict(polynomialDegree, equalWeights, xData, yData, predictHere);
     }
@@ -68,7 +67,8 @@ public class CurveFitters {
      *
      * @return A predicted y value
      */
-    public static double fitAndPredict(int polynomialDegree, List<Double> weights, List<Double> xData, List<Double> yData, double predictHere) {
+    public static double fitAndPredict(
+            int polynomialDegree, List<Double> weights, List<Double> xData, List<Double> yData, double predictHere) {
 
         PolynomialFunction func = weightedFit(polynomialDegree, weights, xData, yData);
         return func.value(predictHere);
@@ -86,9 +86,7 @@ public class CurveFitters {
 
         int n = xData.size();
 
-        List<Double> equalWeights = IntStream.range(0, n)
-            .mapToObj(i -> 1.0)
-            .collect(toList());
+        List<Double> equalWeights = IntStream.range(0, n).mapToObj(i -> 1.0).collect(toList());
 
         return weightedFit(polynomialDegree, equalWeights, xData, yData);
     }
@@ -101,15 +99,16 @@ public class CurveFitters {
      *
      * @return A fitted PolynomialFunction (from org.apache.commons:commons-math3)
      */
-    public static PolynomialFunction weightedFit(int polynomialDegree, List<Double> weights, List<Double> xData, List<Double> yData) {
+    public static PolynomialFunction weightedFit(
+            int polynomialDegree, List<Double> weights, List<Double> xData, List<Double> yData) {
         checkArgument(weights.size() == xData.size());
         checkArgument(xData.size() == yData.size());
 
         int n = xData.size();
 
         List<WeightedObservedPoint> pts = IntStream.range(0, n)
-            .mapToObj(i -> new WeightedObservedPoint(weights.get(i), xData.get(i), yData.get(i)))
-            .collect(toList());
+                .mapToObj(i -> new WeightedObservedPoint(weights.get(i), xData.get(i), yData.get(i)))
+                .collect(toList());
 
         PolynomialCurveFitter pcf = PolynomialCurveFitter.create(polynomialDegree);
 
