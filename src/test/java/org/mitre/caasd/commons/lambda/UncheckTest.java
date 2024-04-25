@@ -156,6 +156,39 @@ public class UncheckTest {
         assertThat(result, is("redgreenyellow"));
     }
 
+    @Test
+    public void testCheckedSupplier_happyPath() {
+
+        CheckedSupplier<String> brokenSupplier = () -> "hello";
+
+        assertDoesNotThrow(() -> Uncheck.supplier(brokenSupplier).get());
+    }
+
+    @Test
+    public void testCheckedSupplier_failing() {
+
+        // Part 1 of test:  Checked Exceptions are wrapped in a DemotedException
+
+        CheckedSupplier<String> brokenSupplierCheckedException = () -> {
+            throw new ParseException("I always fail", 0);
+        };
+
+        DemotedException ex =
+                assertThrows(DemotedException.class, () -> Uncheck.supplier(brokenSupplierCheckedException)
+                        .get());
+
+        assertThat(ex.getCause(), instanceOf(ParseException.class));
+
+        // Part 2 of test:  RuntimeExceptions are not wrapped in a DemotedException
+
+        CheckedSupplier<String> brokenSupplierRuntimeException = () -> {
+            throw new UnsupportedOperationException("I always fail");
+        };
+
+        assertThrows(UnsupportedOperationException.class, () -> Uncheck.supplier(brokenSupplierRuntimeException)
+                .get());
+    }
+
     public enum Color {
         RED,
         ORANGE,

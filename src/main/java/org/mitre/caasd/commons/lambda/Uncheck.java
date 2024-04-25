@@ -21,6 +21,7 @@ import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.mitre.caasd.commons.util.DemotedException;
@@ -148,6 +149,30 @@ public class Uncheck {
         return (t, u) -> {
             try {
                 return binaryOperator.apply(t, u);
+            } catch (RuntimeException e) {
+                // pass runtime exceptions, they cannot be demoted
+                throw e;
+            } catch (Exception e) {
+                throw DemotedException.demote(e);
+            }
+        };
+    }
+
+    /**
+     * Demote a {@link CheckedSupplier} that throws an {@link Exception} into a plain
+     * {@link Supplier}.  This method is for simplifying stream processing pipelines.
+     *
+     * @param checkedSupplier A supplier that throws a checked exception
+     * @param <T>  The supplied type
+     *
+     * @return A plain Supplier that may emit DemotedExceptions
+     * @throws DemotedException when the original CheckedSupplier would have thrown a checked
+     *                          Exception
+     */
+    public static <T> Supplier<T> supplier(CheckedSupplier<T> checkedSupplier) {
+        return () -> {
+            try {
+                return checkedSupplier.get();
             } catch (RuntimeException e) {
                 // pass runtime exceptions, they cannot be demoted
                 throw e;
