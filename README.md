@@ -98,10 +98,15 @@ dependencies.
 
 ### Code Formatting
 
-To keep source code consistent this project uses:
+To keep source code formatting consistent this project uses:
 
-- A [checkstyle.xml](docs%2Fcode-style%2Fcheckstyle.xml) style sheet
 - The [spotless](https://github.com/diffplug/spotless) build plugin
+    - This plugin enforces a global code format during the build step (e.g. incorrect formatting breaks the build).
+    - Auto-format your code using: `./gradlew :spotlessApply`
+- A [checkstyle.xml](docs%2Fcode-style%2Fcheckstyle.xml) style sheet.
+    - The spotless plugin has priority,
+    - The goal of the style sheet is to configure your IDE so the spotless plugin and your IDE mostly agree on
+      formatting
 
 ### About Dependencies
 
