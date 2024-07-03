@@ -19,8 +19,10 @@ package org.mitre.caasd.commons;
 import static java.time.Instant.EPOCH;
 import static java.time.temporal.ChronoUnit.DAYS;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mitre.caasd.commons.Interval.timesBetween;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -113,10 +115,50 @@ public class IntervalTest {
                 .mapToObj(l -> EPOCH.plus(Duration.ofHours(12 * l + 24)))
                 .collect(Collectors.toSet());
 
-        Set<Instant> itvTimes = Interval.timesBetween(itv.start(), itv.end(), Duration.ofHours(12))
-                .collect(Collectors.toSet());
+        Set<Instant> itvTimes =
+                timesBetween(itv.start(), itv.end(), Duration.ofHours(12)).collect(Collectors.toSet());
 
         assertEquals(Sets.intersection(times, itvTimes).size(), times.size());
+    }
+
+    @Test
+    public void timeBetween_instantsAreRounded_doNotCoverEntireInterval() {
+
+        Instant start = Instant.parse("2024-07-03T13:52:45.057Z");
+        Instant end = Instant.parse("2024-07-03T15:14:45.057Z"); // 82 minutes later..
+
+        Instant[] times = timesBetween(start, end, Duration.ofMinutes(15)).toArray(Instant[]::new);
+
+        assertThat(times.length, is(5));
+        assertThat(times[0], is(Instant.parse("2024-07-03T14:00:00Z")));
+        assertThat(times[1], is(Instant.parse("2024-07-03T14:15:00Z")));
+        assertThat(times[2], is(Instant.parse("2024-07-03T14:30:00Z")));
+        assertThat(times[3], is(Instant.parse("2024-07-03T14:45:00Z")));
+        assertThat(times[4], is(Instant.parse("2024-07-03T15:00:00Z")));
+
+        assertThat(start.isBefore(times[0]), is(true));
+        assertThat(end.isAfter(times[4]), is(true));
+
+        Duration inputDuration = Duration.between(start, end); // 82 min
+        Duration outputDuration = Time.durationBtw(times); // 60 min
+
+        assertThat(inputDuration.toMillis(), greaterThan(outputDuration.toMillis()));
+    }
+
+    @Test
+    public void timeBetween_startAndEnd() {
+
+        Instant start = Instant.parse("2024-07-03T14:00:00Z");
+        Instant end = Instant.parse("2024-07-03T15:00:00Z"); // 60 minutes later..
+
+        Instant[] times = timesBetween(start, end, Duration.ofMinutes(15)).toArray(Instant[]::new);
+
+        assertThat(times.length, is(4));
+
+        assertThat(times[0], is(Instant.parse("2024-07-03T14:00:00Z")));
+        assertThat(times[1], is(Instant.parse("2024-07-03T14:15:00Z")));
+        assertThat(times[2], is(Instant.parse("2024-07-03T14:30:00Z")));
+        assertThat(times[3], is(Instant.parse("2024-07-03T14:45:00Z")));
     }
 
     @Test

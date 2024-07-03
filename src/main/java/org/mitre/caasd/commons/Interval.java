@@ -327,8 +327,21 @@ public class Interval implements Serializable, Comparable<Interval> {
     }
 
     /**
-     * Returns a stream of the epoch floors at the given width between the two dates. I.e. returns
-     * time bins of size width between start and end.
+     * Returns a stream of "rounded times" occurring btw the two Instants.
+     *
+     * @param start An instant that usually occurs BEFORE the first Instant in the stream. When
+     *              start is a perfect multiple of the width Duration then start will be the first
+     *              value in the output steam (e.g., if the duration width = 5 minutes and start =
+     *              12:05:00.000 then the start Instant will appear in the output stream)
+     * @param end   An instant that always occurs AFTER the last Instant in the stream.
+     *
+     * @return A stream of "Rounded Instants" that come between the start and end. For example, if
+     *     start = 13:52:45 and end = 15:14:45 (82 min apart) timesBetween(start, end,
+     *     Duration.ofMinutes(15)) will return a Stream containing: {14:00:00, 14:15:00, 14:30:00,
+     *     14:45:00, and 15:00:00}
+     *     <p>
+     *     Returns a stream of the epoch floors at the given width between the two dates. I.e.
+     *     returns time bins of size width between start and end.
      */
     public static Stream<Instant> timesBetween(Instant start, Instant end, Duration width) {
         if ((end.toEpochMilli() - start.toEpochMilli()) / width.toMillis() > 99999) {
