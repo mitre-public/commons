@@ -27,6 +27,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mitre.caasd.commons.Time.compareByTime;
 import static org.mitre.caasd.commons.Time.durationBtw;
 import static org.mitre.caasd.commons.fileutil.FileUtils.getResourceAsFile;
+import static org.mitre.caasd.commons.math.locationfit.LatLongFitter.unMod;
 import static org.mitre.caasd.commons.util.NeighborIterator.newNeighborIterator;
 
 import java.io.File;
@@ -63,6 +64,43 @@ public class LocalPolyInterpolatorTest {
         LocalPolyInterpolator qi = new LocalPolyInterpolator(Duration.ofMinutes(1));
 
         List<TestLocationDatum> testData = testPoints();
+        Collections.sort(testData, (a, b) -> a.time().compareTo(b.time()));
+
+        List<PositionRecord<TestLocationDatum>> wrappedTestData = asRecords(testData);
+
+        TimeWindow range = TimeWindow.of(
+                testData.get(0).time(), testData.get(testData.size() - 1).time());
+
+        int NUM_SAMPLES = 300;
+
+        List<KineticRecord<TestLocationDatum>> interpolatedPoints = newArrayList();
+
+        for (int i = 0; i < NUM_SAMPLES; i++) {
+
+            Instant sampleTime = range.instantWithin(i * 1.0 / (double) NUM_SAMPLES);
+            KineticRecord<TestLocationDatum> approximation =
+                    qi.floorInterpolate(wrappedTestData, sampleTime).get();
+
+            interpolatedPoints.add(approximation);
+        }
+
+        Collections.sort(interpolatedPoints, compareByTime());
+
+        validateLatLongs(testData, interpolatedPoints);
+        validateAltitudes(testData, interpolatedPoints);
+        validateSpeeds(testData, interpolatedPoints);
+        validateCourses(testData, interpolatedPoints);
+        validateTurnRates(interpolatedPoints);
+        validateTurnRateAndCurvatureAreConsistent(interpolatedPoints);
+    }
+
+    @Test
+    public void basicUsage_trackCrossesInternationalDateLine() {
+        // same test as above, but with a track that goes over the international date line
+
+        LocalPolyInterpolator qi = new LocalPolyInterpolator(Duration.ofMinutes(1));
+
+        List<TestLocationDatum> testData = testPoints_crossInternationalDateLine();
         Collections.sort(testData, (a, b) -> a.time().compareTo(b.time()));
 
         List<PositionRecord<TestLocationDatum>> wrappedTestData = asRecords(testData);
@@ -268,6 +306,33 @@ public class LocalPolyInterpolatorTest {
                 .map(datum -> TestLocationDatum.parse(datum))
                 .sorted((a, b) -> a.time().compareTo(b.time()))
                 .collect(toList());
+    }
+
+    public List<TestLocationDatum> testPoints_crossInternationalDateLine() {
+
+        List<TestLocationDatum> regularData = testPoints();
+
+        List<LatLong> locations = regularData.stream()
+                .map(x -> LatLong.of(x.latitude(), x.longitude()))
+                .collect(toList());
+
+        // we want the altered track to have its average longitude at exactly 180.0
+        // this means some data will be on each side of international date-line
+        double avgLongitude = LatLong.avgLatLong(locations).longitude();
+        double delta = 180 - avgLongitude;
+
+        // cannot just add a delta, that leads to illegal longitude values
+        // hence unMod(x.longitude() + delta) instead of just "x.longitude() + delta"
+        List<TestLocationDatum> altered = regularData.stream()
+                .map(x -> new TestLocationDatum(
+                        LatLong.of(x.latitude(), unMod(x.longitude() + delta)),
+                        x.time(),
+                        x.altitude(),
+                        x.speed(),
+                        x.course()))
+                .collect(toList());
+
+        return altered;
     }
 
     public List<PositionRecord<TestLocationDatum>> asRecords(List<TestLocationDatum> points) {

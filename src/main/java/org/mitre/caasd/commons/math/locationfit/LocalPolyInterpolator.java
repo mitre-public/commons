@@ -17,7 +17,6 @@
 package org.mitre.caasd.commons.math.locationfit;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static java.time.Instant.EPOCH;
 import static java.util.stream.Collectors.toList;
 import static org.mitre.caasd.commons.math.CurveFitters.weightedFit;
 
@@ -26,7 +25,14 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import org.mitre.caasd.commons.*;
+import org.mitre.caasd.commons.Distance;
+import org.mitre.caasd.commons.KineticPosition;
+import org.mitre.caasd.commons.KineticRecord;
+import org.mitre.caasd.commons.LatLong;
+import org.mitre.caasd.commons.Position;
+import org.mitre.caasd.commons.Speed;
+import org.mitre.caasd.commons.TimeWindow;
+import org.mitre.caasd.commons.math.locationfit.LatLongFitter.KineticValues;
 
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
 
@@ -166,8 +172,7 @@ public class LocalPolyInterpolator implements PositionInterpolator {
         // Save data we'll need for polynomial fitting
         List<Double> timesAsEpochMs = newArrayList();
         List<Double> weights = newArrayList();
-        List<Double> lats = newArrayList();
-        List<Double> longs = newArrayList();
+        List<LatLong> locations = newArrayList();
         // altitudes are extracted separately in case they are ignored
         List<Double> altitudes = extractAltitudes(pointsInSampleWindow);
 
@@ -179,13 +184,11 @@ public class LocalPolyInterpolator implements PositionInterpolator {
              */
             timesAsEpochMs.add((double) (pt.timeAsEpochMs() - sampleEpochTime));
             weights.add(weightedWindow.computeGaussianWeight(sampleTime, pt.time()));
-            lats.add(pt.latitude());
-            longs.add(pt.longitude());
+            locations.add(pt.latLong());
         }
 
-        // These two polynomials allow us to deduce location, speed, course, and turnRate
-        PolynomialFunction latFunc = weightedFit(2, weights, timesAsEpochMs, lats);
-        PolynomialFunction lonFunc = weightedFit(2, weights, timesAsEpochMs, longs);
+        // This fitter contains polynomials that help deduce location, speed, course, and turnRate
+        LatLongFitter fitter = new LatLongFitter(weights, timesAsEpochMs, locations);
 
         // When fitting altitude...
         // (1) Use a line fit because a quadratic fit is too sensitive and volatile
@@ -209,17 +212,17 @@ public class LocalPolyInterpolator implements PositionInterpolator {
                 ? new PolynomialFunction(new double[] {0.0, 0.0}) // Altitudes are always 0, so is climbrate
                 : weightedFit(1, weights, timesAsEpochMs, altitudes);
 
-        BatchDeductions deductions = new BatchDeductions(latFunc, lonFunc);
+        KineticValues deductions = fitter.fitKineticsAtTimeZero();
 
         KineticPosition kinetics = KineticPosition.builder()
                 .time(sampleTime)
-                .latLong(deductions.location)
+                .latLong(deductions.latLong())
                 .altitude(deduceAltitude(altitudeFunction))
                 .climbRate(deduceClimbRate(altitudeFunction))
-                .speed(deductions.speed)
-                .course(deductions.course)
-                .acceleration(deductions.acceleration)
-                .turnRate(deduceTurnRate(latFunc, lonFunc))
+                .speed(deductions.speed())
+                .course(deductions.course())
+                .acceleration(deductions.acceleration())
+                .turnRate(fitter.deduceTurnRate())
                 .build();
 
         return Optional.of(kinetics);
@@ -244,102 +247,13 @@ public class LocalPolyInterpolator implements PositionInterpolator {
     }
 
     /**
-     * @param latFunc A polynomial which gives latitude vs time
-     * @param lonFunc A polynomial which gives longitude vs time
-     * @return The approximate Course at time Zero (i.e. the sampleTime used when fitting the
-     * polynomials).
-     *
-     * <p>WARNING -- Course estimates are ESSENTIALLY NOISE when the input position data is NOT
-     * MOVING. The latFunc and lonFunc have near zero slopes and the course estimation has nothing
-     * to work off of.  It could be possible to compute the course using a much wider time window
-     * aperture if the speed is less than some threshold value.
-     *
-     * <p>This is a low priority issue because (1) when the aircraft isn't moving the "course" is
-     * not very valuable (2) it would be easy enough to manually correct a course when speed is
-     * near-zero
-     */
-    private Course deduceCourse(PolynomialFunction latFunc, PolynomialFunction lonFunc) {
-
-        final long TIME_STEP_IN_MS = 100;
-
-        LatLong stepBack = LatLong.of(latFunc.value(-TIME_STEP_IN_MS), lonFunc.value(-TIME_STEP_IN_MS));
-        LatLong stepForward = LatLong.of(latFunc.value(TIME_STEP_IN_MS), lonFunc.value(TIME_STEP_IN_MS));
-
-        return Spherical.courseBtw(stepBack, stepForward);
-    }
-
-    /**
-     * @param latFunc A polynomial which gives latitude vs time
-     * @param lonFunc A polynomial which gives longitude vs time
-     * @return The approximate turnRate in degree per second at time Zero (i.e. the sampleTime used
-     * when fitting the polynomials)
-     */
-    private double deduceTurnRate(PolynomialFunction latFunc, PolynomialFunction lonFunc) {
-
-        final long TIME_STEP = 500;
-
-        LatLong stepBack = LatLong.of(latFunc.value(-TIME_STEP), lonFunc.value(-TIME_STEP)); // backward 1/2 second
-        LatLong current = LatLong.of(latFunc.value(0), lonFunc.value(0));
-        LatLong stepForward = LatLong.of(latFunc.value(TIME_STEP), lonFunc.value(TIME_STEP)); // forward 1/2 second
-
-        Course priorToCurrent = Spherical.courseBtw(stepBack, current);
-        Course currentToNext = Spherical.courseBtw(current, stepForward);
-
-        Course delta = Course.angleBetween(currentToNext, priorToCurrent);
-
-        return delta.inDegrees(); // change in course over 1 second
-    }
-
-    /**
      * @param altitudeFunction A polynomials which gives altitude (in feet) vs. time (in millis)
      * @return The ClimbRate at time zero
      */
     private Speed deduceClimbRate(PolynomialFunction altitudeFunction) {
         double climbRateInFtPerMilli = altitudeFunction.derivative().value(0);
 
+        // @todo -- is this unit correct?
         return Speed.of(climbRateInFtPerMilli, Speed.Unit.FEET_PER_MINUTE);
-    }
-
-    /**
-     * Deduce a batch of "Kinetic Values" because they rely on shared intermediate values.
-     */
-    private static class BatchDeductions {
-
-        private final LatLong location;
-        private final Speed speed;
-        private final Course course;
-        private final Acceleration acceleration;
-
-        /**
-         * Use the provided "location polynomials" to numerical estimate a few kinetic values.
-         *
-         * @param latFunc A "well-fit polynomial" that approximates latitude vs. time
-         * @param lonFunc A "well-fit polynomial" that approximates longitude vs. time
-         */
-        BatchDeductions(PolynomialFunction latFunc, PolynomialFunction lonFunc) {
-
-            // deduce location @ Time=0 for polynomials
-            this.location = LatLong.of(latFunc.value(0), lonFunc.value(0));
-
-            // deduce speed & course @ Time=0
-            final long TIME_STEP_IN_MS =
-                    1_000; // If this timestep is too small then the acceleration approximate becomes trash (e.g. 50MS =
-            // fail)
-            LatLong priorLocation = LatLong.of(latFunc.value(-TIME_STEP_IN_MS), lonFunc.value(-TIME_STEP_IN_MS));
-            LatLong futureLocation = LatLong.of(latFunc.value(TIME_STEP_IN_MS), lonFunc.value(TIME_STEP_IN_MS));
-            Instant priorTime = EPOCH.minusMillis(TIME_STEP_IN_MS);
-            Instant futureTime = EPOCH.plusMillis(TIME_STEP_IN_MS);
-
-            this.speed = Speed.between(priorLocation, priorTime, futureLocation, futureTime);
-            this.course = Spherical.courseBtw(priorLocation, futureLocation);
-
-            // estimate acceleration...
-            Speed priorSpeed = Speed.between(priorLocation, priorTime, location, EPOCH);
-            Speed futureSpeed = Speed.between(location, EPOCH, futureLocation, futureTime);
-
-            // (speed delta) / (time Delta) = derivative of speed over time = acceleration..
-            Speed speedDelta = futureSpeed.minus(priorSpeed);
-            this.acceleration = Acceleration.of(speedDelta, Duration.ofMillis(TIME_STEP_IN_MS));
-        }
     }
 }

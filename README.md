@@ -44,7 +44,7 @@ general purpose Java utilities from the Aviation Risk Identification and Assessm
     - [ ] Execute change!
 - [ ] Add "CONTRIBUTION.md" rules
 - [ ] Add Roadmap
-    - [ ] Releasing current Java 8 version
+    - [x] Releasing current Java 8 version
     - [ ] Then pivoting to Java 17
     - [ ] Removing pair and triple (only in Java 17+)
     - [x] Add `LatLongPath`
@@ -53,7 +53,7 @@ general purpose Java utilities from the Aviation Risk Identification and Assessm
 
 ### Tasks
 
-- [ ] Interpolator needs to work across the international date line (e.g. where longitudes have a cliff)
+- [x] Interpolator needs to work across the international date line (e.g. where longitudes have a cliff)
 
 ---
 
