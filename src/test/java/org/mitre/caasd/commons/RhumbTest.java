@@ -21,9 +21,14 @@ class RhumbTest {
     double distRad = Rhumb.rhumbDistance(point1, point2);
     double az12Rad = Rhumb.rhumbAzimuth(point1, point2);
     LatLong testPt = Rhumb.rhumbEndPosition(point1, az12Rad, distRad);
+    double rhumbLineDistanceNM = Spherical.distanceInNM(distRad);
+    double sphericalEarthDistanceNM = Spherical.distanceInNM(point1, point2);
+
     assertAll(
         () -> assertEquals(35.7, testPt.latitude(), .000000001),
-        () -> assertEquals(-110.23333333333333, testPt.longitude(), .000000001)
+        () -> assertEquals(-110.23333333333333, testPt.longitude(), .000000001),
+        () -> assertEquals(sphericalEarthDistanceNM, rhumbLineDistanceNM, .01, "not the same distance but pretty close at this distance"),
+        () -> assertNotEquals(rhumbLineDistanceNM, sphericalEarthDistanceNM, "def not the same though")
     );
   }
 

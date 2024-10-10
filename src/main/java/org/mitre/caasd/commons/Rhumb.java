@@ -124,7 +124,7 @@ public final class Rhumb {
       q = FastMath.cos(lat1);
     }
     double dLon = pathLength * FastMath.sin(rhumbAzimuth) / q;
-    // Handle latitude passing over poles.
+
     if (FastMath.abs(lat2) > Math.PI / 2.0) {
       lat2 = lat2 > 0 ? Math.PI - lat2 : -Math.PI - lat2;
     }
