@@ -96,6 +96,11 @@ publishing {
                         name.set("Jon Parker")
                         email.set("jiparker@mitre.org")
                     }
+                    developer {
+                        id.set("dbaker")
+                        name.set("David Baker")
+                        email.set("dbaker@mitre.org")
+                    }
                 }
 
                 //REQUIRED! To publish to maven central (from experience the leading "scm:git" is required too)
