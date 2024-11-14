@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "org.mitre"
-version = "0.0.55-SNAPSHOT"
+version = "0.0.55"
 
 repositories {
     mavenCentral()
