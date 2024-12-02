@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static java.time.Instant.EPOCH;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
+import static org.mitre.caasd.commons.LatLong.clampLongitude;
 import static org.mitre.caasd.commons.Spherical.mod;
 import static org.mitre.caasd.commons.math.CurveFitters.weightedFit;
 
@@ -112,9 +113,14 @@ class LatLongFitter {
         double latitude = latFunc.value(timeInEpochMs);
         double longitude = lonFunc.value(timeInEpochMs);
 
-        // when the raw data crossed the internation date line we also "undo" the correction
+        // when the raw data crossed the international date line we also "undo" the correction
         if (crossesDateLine) {
             longitude = unMod(longitude);
+        } else {
+            // We have a documented failure where all longitude values are "-179.99 ish"
+            // Here, the raw data DID NOT cross the IDL but an interpolated longitude did!
+            // 99.999% of the time this is a NO-OP, but we clamp to avoid "Bad Longitude Exceptions"
+            longitude = clampLongitude(longitude);
         }
 
         return LatLong.of(latitude, longitude);
