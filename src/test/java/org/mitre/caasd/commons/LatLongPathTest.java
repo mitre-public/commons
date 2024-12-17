@@ -39,6 +39,16 @@ class LatLongPathTest {
     }
 
     @Test
+    void toBytes_yields_16_bytes_per_location() {
+
+        LatLongPath path = LatLongPath.from(LatLong.of(0.0, 0.1), LatLong.of(1.0, 1.1), LatLong.of(2.0, 2.1));
+
+        byte[] asBytes = path.toBytes();
+
+        assertThat(asBytes.length, is(3 * 16));
+    }
+
+    @Test
     public void toAndFromBase64() {
 
         LatLongPath path = LatLongPath.from(LatLong.of(0.0, 0.1), LatLong.of(1.0, 1.1), LatLong.of(2.0, 2.1));
@@ -165,8 +175,6 @@ class LatLongPathTest {
 
         LatLong naiveAverage = LatLong.of(0.0, -0.25); // naive arithmetic average of LatLong
         LatLong correctAverage = path.quickAvgLatLong(); // (0.0,179.75)
-
-        System.out.println(correctAverage.toString());
 
         Distance distBtwPoints = east.distanceTo(west);
 
@@ -353,5 +361,45 @@ class LatLongPathTest {
         assertThrows(IllegalArgumentException.class, () -> fullPath.subpath(-1, 3));
         assertThrows(IllegalArgumentException.class, () -> fullPath.subpath(3, 1));
         assertThrows(IllegalArgumentException.class, () -> fullPath.subpath(0, 4));
+    }
+
+    @Test
+    void compression_cuts_bytes_in_half() {
+
+        LatLongPath path = LatLongPath.from(
+                LatLong.of(0.0, 0.1),
+                LatLong.of(1.0, 1.1),
+                LatLong.of(2.0, 2.1),
+                LatLong.of(3.0, 3.1),
+                LatLong.of(4.0, 4.1),
+                LatLong.of(5.0, 5.1));
+
+        byte[] rawBytes = path.toBytes();
+        byte[] compressedBytes = path.compress().toBytes();
+
+        assertThat(rawBytes.length, is(compressedBytes.length * 2));
+    }
+
+    @Test
+    void compression_path_is_basically_the_same() {
+
+        // duplicated in LatLong64Path
+
+        LatLongPath path = LatLongPath.from(
+                LatLong.of(0.0, 0.1),
+                LatLong.of(1.0, 1.1),
+                LatLong.of(2.0, 2.1),
+                LatLong.of(3.0, 3.1),
+                LatLong.of(4.0, 4.1),
+                LatLong.of(5.0, 5.1));
+
+        LatLong64Path compressedPath = path.compress();
+
+        assertThat(path.size(), is(compressedPath.size()));
+
+        for (int i = 0; i < path.size(); i++) {
+            Distance dist = path.get(i).distanceTo(compressedPath.get(i).inflate());
+            assertThat(dist.isLessThan(Distance.ofFeet(0.001)), is(true));
+        }
     }
 }
