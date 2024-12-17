@@ -40,33 +40,24 @@ general purpose Java utilities from the Aviation Risk Identification and Assessm
 
 ### Early Open Sourcing checklist
 
-- [x] Reconsider groupId -- **Decision** change from `org.mitre.caasd` to `org.mitre`
-    - [ ] Execute change!
 - [ ] Add "CONTRIBUTION.md" rules
 - [ ] Add Roadmap
-    - [x] Releasing current Java 8 version
     - [ ] Then pivoting to Java 17
     - [ ] Removing pair and triple (only in Java 17+)
-    - [x] Add `LatLongPath`
-- [ ] Document CI/CD pipeline & strategy for (manually) publishing to maven central
 - [ ] (Re)Add code coverage
-
-### Tasks
-
-- [x] Interpolator needs to work across the international date line (e.g. where longitudes have a cliff)
 
 ---
 
 ## Adopting!
 
 All official releases are available at [Maven Central](https://central.sonatype.com/artifact/org.mitre/commons).
-The latest official release is version: `0.0.55`
+The latest official release is version: `0.0.56`
 
 #### Gradle
 
 ```
 dependencies {
-  implementation("org.mitre:commons:0.0.55")
+  implementation("org.mitre:commons:0.0.56")
 }
 ```
 
@@ -76,18 +67,16 @@ dependencies {
 <dependency>
     <groupId>org.mitre</groupId>
     <artifactId>commons</artifactId>
-    <version>0.055/version>
+    <version>0.056/version>
 </dependency>
 ```
 
 #### Accessing pre-release builds
 
-Users who want to access the unreleased features within a SNAPSHOT build must download and build the source themselves.
-The build command is:
+Users who want to access the unreleased features within a SNAPSHOT build must:
+1. **Clone:** this repo with: `git clone git@github.com:mitre-public/commons.git`
+2. **Build:** this project with: `./gradlew build publishToMavenLocal`
 
-```
-./gradlew build publishToMavenLocal
-```
 
 ---
 
@@ -120,30 +109,9 @@ To keep source code formatting consistent this project uses:
 
 ---
 
-## Version History
+## Release Notes
 
-### Version 0.0.56
-
-- Added `LatLong64` and `LatLong64Path`. These compressed editions of `LatLong` and `LatLongPath` reduce the number of
-  bytes required to store storing lat/long data by 50%.
-- Fixed issue with interpolating LatLong data near the international date line
-
-### Version 0.0.55
-
-- Added `LatLongPath`
-- Added `CheckedConsumer` and `CheckedSupplier`
-- Deprecated `Pair` and `Triple` because we modern projects should be using java records
-- Now formatting project code with The [Palantir Java Formatter](https://github.com/palantir/palantir-java-format)
-- Fixed issue with interpolating LatLong data near the international date line
-
-### Version 0.0.54
-
-- The initial public release of the project.
-
-### Older Versions
-
-- Brief release notes from versions that pre-date public-release are
-  available [here](./docs/pre-github-version-history.md)
+See [here](./docs/release-notes.md) for a summary of the changes and features included in each release. 
 
 ---
 
@@ -151,3 +119,9 @@ To keep source code formatting consistent this project uses:
 
 - **Copyright:** The contents of this project is copyright `The MITRE Corporation`. See details [here](COPYRIGHT) .
 - **Open Source License:** This project is released under the Apache License Version 2.0. See details [here](LICENSE).
+
+---
+
+## Publishing Official Releases Maven Central
+
+See [here](./docs/publish-to-maven-central.md) for notes on "how to publish official releases".
