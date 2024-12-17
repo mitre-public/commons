@@ -182,6 +182,14 @@ public class LatLong implements Comparable<LatLong>, Serializable {
         return Base64.getUrlEncoder().withoutPadding().encodeToString(toBytes());
     }
 
+    /**
+     * @return a LatLong64 version of this LatLong. Saves 50% space, while losing accuracy at 7th
+     *     decimal place.
+     */
+    public LatLong64 compress() {
+        return LatLong64.fromLatLong(this);
+    }
+
     public Distance distanceTo(LatLong that) {
         return Distance.ofNauticalMiles(distanceInNM(that));
     }

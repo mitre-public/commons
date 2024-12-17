@@ -122,7 +122,14 @@ To keep source code formatting consistent this project uses:
 
 ## Version History
 
+### Version 0.0.56
+
+- Added `LatLong64` and `LatLong64Path`. These compressed editions of `LatLong` and `LatLongPath` reduce the number of
+  bytes required to store storing lat/long data by 50%.
+- Fixed issue with interpolating LatLong data near the international date line
+
 ### Version 0.0.55
+
 - Added `LatLongPath`
 - Added `CheckedConsumer` and `CheckedSupplier`
 - Deprecated `Pair` and `Triple` because we modern projects should be using java records

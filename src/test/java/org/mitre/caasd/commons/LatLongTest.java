@@ -19,8 +19,7 @@ package org.mitre.caasd.commons;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.Math.PI;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mitre.caasd.commons.LatLong.*;
 import static org.mitre.caasd.commons.Spherical.EARTH_RADIUS_NM;
@@ -490,8 +489,6 @@ public class LatLongTest {
         LatLong naiveAverage = LatLong.of(0.0, -0.25); // naive arithmetic average of LatLong
         LatLong correctAverage = LatLong.quickAvgLatLong(path); // (0.0,179.75)
 
-        System.out.println(correctAverage.toString());
-
         Distance distBtwPoints = east.distanceTo(west);
 
         // the distance between the east and west points is small (about 90.01 NM)
@@ -666,6 +663,16 @@ public class LatLongTest {
         double TOLERANCE = 0.05;
         assertThat(computedDistance.minus(expectedDist).inKilometers(), Matchers.closeTo(0.0, TOLERANCE));
         assertThat(one.isWithin(computedDistance, two), is(true));
+    }
+
+    @Test
+    void can_compress() {
+
+        LatLong raw = new LatLong(83.225689134, -22.324187543);
+        LatLong64 compressed = raw.compress();
+
+        assertThat(raw.latitude(), closeTo(compressed.latitude(), 0.0000001));
+        assertThat(raw.longitude(), closeTo(compressed.longitude(), 0.0000001));
     }
 
     @Test

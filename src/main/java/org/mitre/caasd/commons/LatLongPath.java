@@ -134,6 +134,14 @@ public class LatLongPath implements Iterable<LatLong> {
     }
 
     /**
+     * @return A compressed version of this path that stores LatLong64s instead of LatLongs. This
+     *     saves 50% space, while losing accuracy at 7th decimal place.
+     */
+    public LatLong64Path compress() {
+        return LatLong64Path.from(this);
+    }
+
+    /**
      * Create a new LatLongPath object.
      *
      * @param base64Encoding The Base64 safe and URL safe (no padding) encoding of a LatLongPath's
@@ -253,7 +261,7 @@ public class LatLongPath implements Iterable<LatLong> {
     /** @return A new LatLongPath with these additional locations appended to this path. */
     public LatLongPath append(Collection<LatLong> locations) {
         requireNonNull(locations);
-        if (locations.size() == 0) {
+        if (locations.isEmpty()) {
             return this;
         }
 
@@ -291,7 +299,7 @@ public class LatLongPath implements Iterable<LatLong> {
     public static LatLongPath join(Collection<LatLongPath> paths) {
         requireNonNull(paths);
         checkNoNullElement(paths);
-        if (paths.size() == 0) {
+        if (paths.isEmpty()) {
             return new LatLongPath();
         }
 
