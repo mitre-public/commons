@@ -70,6 +70,32 @@ public class LatLongTest {
     }
 
     @Test
+    void clampLatitude_spec() {
+        assertThat(clampLatitude(Double.NEGATIVE_INFINITY), is(-90.0));
+        assertThat(clampLatitude(-90.001), is(-90.0));
+        assertThat(clampLatitude(-90.0), is(-90.0));
+        assertThat(clampLatitude(-89.999), is(-89.999));
+
+        assertThat(clampLatitude(Double.POSITIVE_INFINITY), is(90.0));
+        assertThat(clampLatitude(90.001), is(90.0));
+        assertThat(clampLatitude(90.00), is(90.0));
+        assertThat(clampLatitude(89.999), is(89.999));
+    }
+
+    @Test
+    void clampLongitude_spec() {
+        assertThat(clampLongitude(Double.NEGATIVE_INFINITY), is(-180.0));
+        assertThat(clampLongitude(-180.001), is(-180.0));
+        assertThat(clampLongitude(-180.0), is(-180.0));
+        assertThat(clampLongitude(-179.999), is(-179.999));
+
+        assertThat(clampLongitude(Double.POSITIVE_INFINITY), is(180.0));
+        assertThat(clampLongitude(180.01), is(180.0));
+        assertThat(clampLongitude(180.00), is(180.0));
+        assertThat(clampLongitude(179.999), is(179.999));
+    }
+
+    @Test
     public void testEqualsAndHashcode() {
         LatLong one = new LatLong(45.0, 45.0);
         LatLong two = new LatLong(45.0, 45.0);

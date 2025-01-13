@@ -1,11 +1,13 @@
 # Release Notes
 
+### Version 0.0.57 (Released 2025-01-13)
+- Fixed issue with interpolating LatLong data near the international date line.
+
 ### Version 0.0.56 (Released 2024-12-26)
 
 - Added `LatLong64` and `LatLong64Path`. These lossy compressed editions of `LatLong` and `LatLongPath` reduce the number of
   bytes required to store lat/long data by 50%.
     -  See `LatLong.compress()` and `LatLongPath.compress()`
-- Fixed issue with interpolating LatLong data near the international date line
 
 ### Version 0.0.55 (Released 2024-11-14)
 

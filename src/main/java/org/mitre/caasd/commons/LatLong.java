@@ -156,6 +156,28 @@ public class LatLong implements Comparable<LatLong>, Serializable {
         }
     }
 
+    /**
+     * Clamps the provided latitude value to the closed range [-90,90]
+     *
+     * @param latitude A candidate latitude value that could be outside the legal range
+     *
+     * @return Math.min(90.0, Math.max (latitude, - 90.0));
+     */
+    public static double clampLatitude(double latitude) {
+        return Math.min(90.0, Math.max(latitude, -90.0));
+    }
+
+    /**
+     * Clamps the provided longitude value to the closed range [-180,180]
+     *
+     * @param longitude A candidate longitude value that could be outside the legal range
+     *
+     * @return Math.min(180.0, Math.max (longitude, - 180.0));
+     */
+    public static double clampLongitude(double longitude) {
+        return Math.min(180, Math.max(longitude, -180.0));
+    }
+
     public double latitude() {
         return latitude;
     }
