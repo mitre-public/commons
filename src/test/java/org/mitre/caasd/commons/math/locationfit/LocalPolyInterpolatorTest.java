@@ -523,6 +523,28 @@ public class LocalPolyInterpolatorTest {
     }
 
     @Test
+    public void brokenExample_nearInternationalDateLine() {
+        // FAILURE LOGS =
+        //
+        // Longitude is out of range: -180.00084537630087
+        // Could not interpolate input data.
+        //        sampleTime= 2024-11-10T20:13:16.705Z
+        // 11/10/2024,20:13:03.584,52.3755,-179.9606
+        // 11/10/2024,20:13:07.745,52.3764,-179.9725
+        // 11/10/2024,20:13:11.805,52.3774,-179.984
+        // 11/10/2024,20:13:16.705,52.3786,-179.998
+        PositionRecord<Dummy> p1 = parseTestInput("11/10/2024,20:13:03.584,52.3755,-179.9606");
+        PositionRecord<Dummy> p2 = parseTestInput("11/10/2024,20:13:07.745,52.3764,-179.9725");
+        PositionRecord<Dummy> p3 = parseTestInput("11/10/2024,20:13:11.805,52.3774,-179.984");
+        PositionRecord<Dummy> p4 = parseTestInput("11/10/2024,20:13:16.705,52.3786,-179.998");
+        LocalPolyInterpolator interpolator = new LocalPolyInterpolator(Duration.ofSeconds(60), 3, true);
+        Optional<KineticRecord<Dummy>> result =
+                interpolator.floorInterpolate(newArrayList(p1, p2, p3, p4), Instant.parse("2024-11-10T20:13:16.705Z"));
+
+        assertThat(result.isPresent(), is(true));
+    }
+
+    @Test
     public void brokenExample_duplicate_time_and_position_2() {
 
         // FAILURE LOGS =
