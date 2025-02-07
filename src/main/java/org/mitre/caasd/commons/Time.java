@@ -19,6 +19,7 @@ package org.mitre.caasd.commons;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Maps.newTreeMap;
+import static java.util.Objects.requireNonNull;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -123,8 +124,23 @@ public class Time {
      * @return The smallest possible TimeWindow that includes all input times.
      */
     public static TimeWindow enclosingTimeWindow(Instant... times) {
-
         return TimeWindow.of(earliest(times), latest(times));
+    }
+
+    /** @return The smallest possible TimeWindow that includes every Instant with a frequency count. */
+    public static TimeWindow enclosingTimeWindow(Collection<Instant> times) {
+        requireNonNull(times);
+        checkArgument(!times.isEmpty());
+
+        Instant minTime = Instant.MAX;
+        Instant maxTime = Instant.MIN;
+
+        for (Instant time : times) {
+            minTime = Time.earliest(minTime, time);
+            maxTime = Time.latest(maxTime, time);
+        }
+
+        return new TimeWindow(minTime, maxTime);
     }
 
     /**

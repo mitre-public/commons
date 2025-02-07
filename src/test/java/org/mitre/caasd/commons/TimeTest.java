@@ -18,6 +18,7 @@ package org.mitre.caasd.commons;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static java.time.Instant.EPOCH;
+import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,6 +27,8 @@ import static org.mitre.caasd.commons.Time.*;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
@@ -182,6 +185,31 @@ public class TimeTest {
         };
         assertDoesNotThrow(() -> confirmTimeOrdering(times));
     }
+
+    @Test
+    void enclosingTimeWindow_input_requirements() {
+        Collection<Instant> times = null;
+        assertThrows(NullPointerException.class, () -> enclosingTimeWindow(times));
+
+        assertThrows(IllegalArgumentException.class, () -> enclosingTimeWindow(emptyList()));
+    }
+
+    @Test
+    void enclosingTimeWindow_finds_min_and_max() {
+
+        List<Instant> times = newArrayList(
+            EPOCH,
+            EPOCH.plusSeconds(7),
+            EPOCH.plusSeconds(5),
+            EPOCH.plusSeconds(-22)
+        );
+
+        TimeWindow span = enclosingTimeWindow(times);
+
+        assertThat(span.start(), is(EPOCH.plusSeconds(-22)));
+        assertThat(span.end(), is(EPOCH.plusSeconds(7)));
+    }
+
 
     @Test
     public void testEarliest() {
