@@ -197,19 +197,13 @@ public class TimeTest {
     @Test
     void enclosingTimeWindow_finds_min_and_max() {
 
-        List<Instant> times = newArrayList(
-            EPOCH,
-            EPOCH.plusSeconds(7),
-            EPOCH.plusSeconds(5),
-            EPOCH.plusSeconds(-22)
-        );
+        List<Instant> times = newArrayList(EPOCH, EPOCH.plusSeconds(7), EPOCH.plusSeconds(5), EPOCH.plusSeconds(-22));
 
         TimeWindow span = enclosingTimeWindow(times);
 
         assertThat(span.start(), is(EPOCH.plusSeconds(-22)));
         assertThat(span.end(), is(EPOCH.plusSeconds(7)));
     }
-
 
     @Test
     public void testEarliest() {
