@@ -56,6 +56,37 @@ class LatLong64PathTest {
 
         assertThat(path.get(0).inflate(), is(LatLong.of(0.0, 0.1)));
         assertThat(path.get(1).inflate(), is(LatLong.of(1.0, 1.1)));
+        assertThat(path.size(), is(2));
+    }
+
+    @Test
+    void basicConstructor_collectionBased() {
+
+        ArrayList<LatLong> list = new ArrayList<>();
+        list.add(LatLong.of(0.0, 0.1));
+        list.add(LatLong.of(1.0, 1.1));
+
+        LatLong64Path path = LatLong64Path.from(list);
+
+        assertThat(path.get(0).inflate(), is(LatLong.of(0.0, 0.1)));
+        assertThat(path.get(1).inflate(), is(LatLong.of(1.0, 1.1)));
+        assertThat(path.size(), is(2));
+    }
+
+    @Test
+    void constructorEquivalence() {
+
+        LatLong[] array = new LatLong[] {LatLong.of(0.0, 0.1), LatLong.of(1.0, 1.1)};
+        ArrayList<LatLong> list = new ArrayList<>();
+        list.add(LatLong.of(0.0, 0.1));
+        list.add(LatLong.of(1.0, 1.1));
+
+        LatLong64Path path1 = LatLong64Path.from(array);
+        LatLong64Path path2 = LatLong64Path.from(list);
+
+        assertThat(path1.size(), is(2));
+        assertThat(path2.size(), is(2));
+        assertThat(path1.toBase64(), is(path2.toBase64()));
     }
 
     @Test

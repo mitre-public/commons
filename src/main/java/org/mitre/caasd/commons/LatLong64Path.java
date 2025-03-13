@@ -48,7 +48,7 @@ public class LatLong64Path implements Iterable<LatLong> {
     public LatLong64Path(Collection<LatLong> locations) {
         requireNonNull(locations);
 
-        this.locationData = new long[locations.size() * 2];
+        this.locationData = new long[locations.size()];
         Iterator<LatLong> iter = locations.iterator();
 
         int i = 0;
