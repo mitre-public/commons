@@ -1,80 +1,96 @@
-/*
- *    Copyright 2022 The MITRE Corporation
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
-
 package org.mitre.caasd.commons.math;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Lists.newArrayList;
+import static java.util.Objects.requireNonNull;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.function.Consumer;
 
 /**
- * A ReservoirSampler maintains a random sample of exactly K items from a stream of N items (K is
- * known, N is unknown)
+ * A ReservoirSampler harvests a random sample of items from a stream of items it is shown via calls
+ * to "accept(T item)".
+ * <p>
+ * The sample is extracted using "reservoir sampling". The sample is kept in-memory
+ *
+ * @param <T>
  */
-public class ReservoirSampler<T> {
+public class ReservoirSampler<T> implements Consumer<T> {
 
-    private int numItemsSeen;
+    private final ArrayList<T> samples;
+    private final Random rng;
+    private final int sampleSize;
+    private int countSeen = 0;
 
-    List sample;
-
-    int k;
-
-    Random rng;
-
-    public ReservoirSampler(int k, Random rng) {
-        checkArgument(k >= 0, "k must be positive");
-        checkNotNull(rng);
-        this.numItemsSeen = 0;
-        this.sample = newArrayList();
-        this.k = k;
-        this.rng = rng;
+    /**
+     * Create a ReservoirSampler that uses a new Random seed every time.
+     *
+     * @param sampleSize The number of items to keep in memory throughout the sampling process
+     */
+    public ReservoirSampler(int sampleSize) {
+        this(sampleSize, new Random());
     }
 
-    public void observe(T item) {
+    /**
+     * Create a ReservoirSampler that uses a new Random seed every time.
+     *
+     * @param sampleSize The number of items to keep in memory throughout the sampling process
+     * @param random     The random number generator that controls the sampling process.  If you
+     *                   want reproducible samples provide an instance of Random with a known seed.
+     */
+    public ReservoirSampler(int sampleSize, Random random) {
+        requireNonNull(random);
+        checkArgument(sampleSize >= 0);
+        this.sampleSize = sampleSize;
+        this.samples = new ArrayList<>(sampleSize);
+        this.rng = random;
+        this.countSeen = 0;
+    }
 
-        numItemsSeen++;
-
-        // keep every sample until we have at least k observations...
-        if (sample.size() < k) {
-            sample.add(item);
-            return;
+    /**
+     * Retain an item with a gradually reducing probability.  After the sample size has been reached
+     * each new retention randomly evicts an item that was retained previously.
+     */
+    @Override
+    public void accept(T item) {
+        // memorize the first n examples ...
+        if (countSeen < sampleSize) {
+            samples.add(item);
+        } else {
+            // randomly overwrite prior memory with smaller and smaller probability
+            int randomIndex = rng.nextInt(countSeen + 1);
+            if (randomIndex < sampleSize) {
+                samples.set(randomIndex, item);
+            }
         }
-
-        // the chance "this" item is in the sample is k / numItemsSeen
-        int randomDraw = rng.nextInt(numItemsSeen);
-        if (randomDraw < k) {
-            sample.set(randomDraw, item);
-        }
+        countSeen++;
     }
 
-    public List<T> currentSample() {
-        // return a defensive copy of the sample.
-        return newArrayList(sample);
+    /**
+     * @return The samples extracted.  The order of the samples in this list is produced by random
+     *     chance, NOT the order of exposure.  Note: this list will be smaller than "sampleSize"
+     *     when "accept(T item)" was called fewer times than "sampleSize"
+     */
+    public ArrayList<T> currentSample() {
+        return new ArrayList<>(samples);
     }
 
-    /** @return The number of samples this ReservoirSampler is extracting. */
-    public int k() {
-        return this.k;
+    /**
+     * @return The total number of items this sampler has seen in its lifetime (i.e. num calls to
+     *     "accept") .
+     */
+    public int countSeen() {
+        return countSeen;
     }
 
-    /** @return The total number of items this ReservoirSampler has seen in its lifetime. */
-    public int numObservations() {
-        return this.numItemsSeen;
+    /** The number of items this Sampler wants to extract. */
+    public int sampleSize() {
+        return sampleSize;
+    }
+
+    /** Resets "countSeen" to zero and purges the "currentSample". */
+    public void reset() {
+        samples.clear();
+        countSeen = 0;
     }
 }

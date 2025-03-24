@@ -1,104 +1,111 @@
-/*
- *    Copyright 2022 The MITRE Corporation
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
-
 package org.mitre.caasd.commons.math;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.Math.abs;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThan;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-public class ReservoirSamplerTest {
+class ReservoirSamplerTest {
 
     @Test
-    public void constructorWorks() {
+    void demoHappyPath() {
+        ReservoirSampler<String> sampler = new ReservoirSampler<>(2);
+        sampler.accept("a");
+        sampler.accept("b");
+        sampler.accept("c");
+        sampler.accept("d");
+        sampler.accept("e");
+        sampler.accept("f");
+        sampler.accept("g");
 
-        ReservoirSampler<Integer> sampler = new ReservoirSampler(5, new Random(17L));
+        List<String> letters = newArrayList("a", "b", "c", "d", "e", "f", "g");
 
-        assertThat(sampler.k(), is(5));
-        assertThat(sampler.numObservations(), is(0));
-
-        sampler.observe(0);
-        sampler.observe(1);
-        sampler.observe(2);
-        sampler.observe(3);
-        sampler.observe(4);
-
-        assertThat(sampler.currentSample(), contains(0, 1, 2, 3, 4));
+        assertThat(sampler.countSeen(), is(7));
+        assertThat(sampler.currentSample().size(), is(2));
+        assertThat(letters.containsAll(sampler.currentSample()), is(true));
     }
 
     @Test
-    public void samplingIsCorrect() {
+    void samplesListCanBeShorterThanSampleSize() {
+        ReservoirSampler<String> sampler = new ReservoirSampler<>(7);
+        sampler.accept("a");
+        sampler.accept("b");
 
-        Random rng = new Random(17L); // use a single RNG for all 10k samples
+        List<String> samples = sampler.currentSample();
 
-        int NUM_TRIALS = 10_000;
+        assertThat(sampler.countSeen(), is(2));
+        assertThat(samples.size(), is(2));
 
-        // for each trial: create a sample of size 10 from the stream the numbers 1 through 20
-        int[] sampleCounts = new int[20];
+        assertThat(sampler.sampleSize(), is(7)); // note the subtle tension
+    }
 
+    @Test
+    void samplesHaveNoObviousFlaw() {
+        // This IS NOT a test of statistical behavior
+        // We are looking CLEARLY wrong flaws (e.g. sampling rate = zero when it should be non-zero)
+
+        // In this test we pull 2 random samples from 0-9 -- 100 different times
+
+        List<Integer> numbers = newArrayList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+
+        int NUM_TRIALS = 100;
+        int SAMPLE_SIZE = 2;
+        int[] sampleCounts = new int[10];
         for (int i = 0; i < NUM_TRIALS; i++) {
-            createSampleAndIncrementCounts(sampleCounts, rng);
+
+            // Pull a random sample
+            ReservoirSampler<Integer> sampler = new ReservoirSampler<>(SAMPLE_SIZE, new Random(i));
+            numbers.forEach(sampler::accept);
+
+            // increment your sample tracking data
+            List<Integer> samples = sampler.currentSample();
+            samples.forEach((Integer sample) -> sampleCounts[sample]++);
         }
 
-        // each number 1 through 20 should be in approximately 1/2 the samples (if the sampling is statistically
-        // correct)
+        // sum of all sample counts is correct ...
+        int sum = Arrays.stream(sampleCounts).sum();
+        assertThat(sum, is(NUM_TRIALS * SAMPLE_SIZE));
 
-        // each sampleCounts is a binomial random variable
+        // every number is sampled more than 5 times (expected sample count = 20) (leaving room for random variance)
+        Arrays.stream(sampleCounts).forEach(sample -> assertThat(sample > 5, is(true)));
+    }
+
+    @Test
+    public void samplingIsStatisticallySound() {
+
+        // In this test we pull 10 random samples from 0-19 -- 10_000 different times
+        List<Integer> numbers = newArrayList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19);
+
+        int NUM_TRIALS = 10_000;
+        int SAMPLE_SIZE = 10;
+        int[] sampleCounts = new int[20];
+        Random rng = new Random(17L); // use a single RNG for all 10k samples
+
+        for (int i = 0; i < NUM_TRIALS; i++) {
+            ReservoirSampler<Integer> sampler = new ReservoirSampler<>(SAMPLE_SIZE, rng);
+            numbers.forEach(sampler::accept);
+
+            // increment your sample tracking data
+            List<Integer> samples = sampler.currentSample();
+            samples.forEach((Integer sample) -> sampleCounts[sample]++);
+        }
+
+        // If: the sampling is statistically correct ...
+
+        // Then: each number 1 through 20 should be in approximately 1/2 the samples
+        // And each sampleCount is a binomial random variable with
         // standard deviation = sqrt(n*p*q) = sqrt(10_000 * .5 * .5) = sqrt(2500) = 50
 
         for (int sampleCount : sampleCounts) {
             // the actual sample count should be within 3 standard deviations (i.e. 150) of 5000
             assertThat(abs(sampleCount - 5000), lessThan(3 * 50));
-        }
-    }
-
-    private void createSampleAndIncrementCounts(int[] sampleCounts, Random rng) {
-
-        ReservoirSampler sampler = new ReservoirSampler(10, rng);
-
-        sampler.observe(0);
-        sampler.observe(1);
-        sampler.observe(2);
-        sampler.observe(3);
-        sampler.observe(4);
-        sampler.observe(5);
-        sampler.observe(6);
-        sampler.observe(7);
-        sampler.observe(8);
-        sampler.observe(9);
-        sampler.observe(10);
-        sampler.observe(11);
-        sampler.observe(12);
-        sampler.observe(13);
-        sampler.observe(14);
-        sampler.observe(15);
-        sampler.observe(16);
-        sampler.observe(17);
-        sampler.observe(18);
-        sampler.observe(19);
-
-        List<Integer> samples = sampler.currentSample();
-
-        for (Integer sample : samples) {
-            sampleCounts[sample]++;
         }
     }
 }
