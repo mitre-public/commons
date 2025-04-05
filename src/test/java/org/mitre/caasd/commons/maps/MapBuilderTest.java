@@ -274,27 +274,26 @@ class MapBuilderTest {
 
         LatLong home = LatLong.of(0.0, 0.0);
         LatLong64Path path = LatLong64Path.from(
-            LatLong.of(0.01, 0.01),
-            LatLong.of(0.02, 0.02),
-            LatLong.of(0.03, 0.03),
-            LatLong.of(0.04, 0.04),
-            LatLong.of(0.05, 0.05)
-        );
+                LatLong.of(0.01, 0.01),
+                LatLong.of(0.02, 0.02),
+                LatLong.of(0.03, 0.03),
+                LatLong.of(0.04, 0.04),
+                LatLong.of(0.05, 0.05));
 
         Font font = new Font("Avenir", PLAIN, 32);
         String[] lines = new String[] {"line1", "line2", "line3"};
 
         newMapBuilder()
-            .debugTiles()
-            .center(home)
-            .width(Distance.ofNauticalMiles(10))
-            .addFeature(circles(path.inflate(), Color.BLUE, 22, 11.0f))
-            .addFeature(path(path.inflate(), Color.BLUE, 11.0f))
-            .addFeature(circles(path, Color.RED, 8, 5.0f))
-            .addFeature(path(path, Color.RED, 1.0f))
-            .addFeature(MapFeatures.textLines(lines, 50, 50, Color.MAGENTA, font, 42))
-            .toFile(new File("circlesPathsText.png"));
-        }
+                .debugTiles()
+                .center(home)
+                .width(Distance.ofNauticalMiles(10))
+                .addFeature(circles(path.inflate(), Color.BLUE, 22, 11.0f))
+                .addFeature(path(path.inflate(), Color.BLUE, 11.0f))
+                .addFeature(circles(path, Color.RED, 8, 5.0f))
+                .addFeature(path(path, Color.RED, 1.0f))
+                .addFeature(MapFeatures.textLines(lines, 50, 50, Color.MAGENTA, font, 42))
+                .toFile(new File("circlesPathsText.png"));
+    }
 
     private List<LatLong> fitLatLongs(List<PositionRecord<TestLocationDatum>> rawData) {
 

@@ -294,7 +294,10 @@ public class MapFeatures {
 
     /** @return A MapFeature that draws one circle for each LatLong in the Collection. */
     public static MapFeature circles(Collection<LatLong> locs, Color c, int diameterInPixels, float strokeLineWidth) {
-        List<MapFeature> dots = locs.stream().map(loc -> circle(loc, c, diameterInPixels, strokeLineWidth)).collect(toList());;
+        List<MapFeature> dots = locs.stream()
+                .map(loc -> circle(loc, c, diameterInPixels, strokeLineWidth))
+                .collect(toList());
+        ;
         return compose(dots);
     }
 
@@ -307,7 +310,6 @@ public class MapFeatures {
     public static MapFeature circles(LatLong64Path path, Color c, int diameterInPixels, float strokeLineWidth) {
         return circles(path.toList(), c, diameterInPixels, strokeLineWidth);
     }
-
 
     public static MapFeature line(LatLong from, LatLong to, Color c, float lineWidth) {
         return new Line(from, to, c, lineWidth);
