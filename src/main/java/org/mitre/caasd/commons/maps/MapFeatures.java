@@ -21,16 +21,20 @@ import static java.awt.BasicStroke.CAP_ROUND;
 import static java.awt.BasicStroke.JOIN_ROUND;
 import static java.awt.Font.PLAIN;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.mitre.caasd.commons.LatLong;
+import org.mitre.caasd.commons.LatLong64Path;
+import org.mitre.caasd.commons.LatLongPath;
 
 /**
  * MapFeature classes are "drawn on" a Graphics2D object.  The API allows you to define MapFeature
@@ -38,7 +42,6 @@ import org.mitre.caasd.commons.LatLong;
  */
 public class MapFeatures {
 
-    // @todo -- Add Multiline text option e.g. (String[] {"line 1", "line 2", "line 3"})
     // @todo -- Add Gradient option
     // @todo -- Consider putting all "stroke/color/font" features behind a "brush" interface (which will use the
     // Composite pattern and frequently contain UnsupportedOperations)
@@ -289,6 +292,23 @@ public class MapFeatures {
         return new Circle(loc, c, diameterInPixels, false, strokeLineWidth);
     }
 
+    /** @return A MapFeature that draws one circle for each LatLong in the Collection. */
+    public static MapFeature circles(Collection<LatLong> locs, Color c, int diameterInPixels, float strokeLineWidth) {
+        List<MapFeature> dots = locs.stream().map(loc -> circle(loc, c, diameterInPixels, strokeLineWidth)).collect(toList());;
+        return compose(dots);
+    }
+
+    /** @return A MapFeature that draws one circle for each LatLong in the path. */
+    public static MapFeature circles(LatLongPath path, Color c, int diameterInPixels, float strokeLineWidth) {
+        return circles(path.toList(), c, diameterInPixels, strokeLineWidth);
+    }
+
+    /** @return A MapFeature that draws one circle for each LatLong in the path. */
+    public static MapFeature circles(LatLong64Path path, Color c, int diameterInPixels, float strokeLineWidth) {
+        return circles(path.toList(), c, diameterInPixels, strokeLineWidth);
+    }
+
+
     public static MapFeature line(LatLong from, LatLong to, Color c, float lineWidth) {
         return new Line(from, to, c, lineWidth);
     }
@@ -307,6 +327,27 @@ public class MapFeatures {
 
     public static MapFeature text(String text, int xOffset, int yOffset, Color c) {
         return new InfoText(text, xOffset, yOffset, c, new Font("Avenir", PLAIN, 32));
+    }
+
+    /**
+     * Create a MapFeature that writes one or more lines of text on the map
+     *
+     * @param textLines Multiple lines of text
+     * @param xOffset The xOffset of all lines
+     * @param yOffset The yOffset of the top line
+     * @param c The color
+     * @param font The font
+     * @param ySpacing The vertical spacing between the lines of text (will frequently be font height + desired spacing)
+     *
+     * @return One text label for each line
+     */
+    public static MapFeature textLines(String[] textLines, int xOffset, int yOffset, Color c, Font font, int ySpacing) {
+
+        ArrayList<MapFeature> lines = new ArrayList<>();
+        for (int i = 0; i < textLines.length; i++) {
+            lines.add(text(textLines[i], xOffset, yOffset + i * ySpacing, c, font));
+        }
+        return compose(lines);
     }
 
     public static MapFeature text(String text, int xOffset, int yOffset, Color c, Font font) {
@@ -328,6 +369,14 @@ public class MapFeatures {
 
     public static MapFeature path(List<LatLong> pts, Color c, float strokeWidth) {
         return new Path(pts, c, strokeWidth);
+    }
+
+    public static MapFeature path(LatLongPath path, Color c, float strokeWidth) {
+        return path(path.toList(), c, strokeWidth);
+    }
+
+    public static MapFeature path(LatLong64Path path, Color c, float strokeWidth) {
+        return path(path.inflate().toList(), c, strokeWidth);
     }
 
     /** Combines multiple MapFeatures into a single MapFeature. */
