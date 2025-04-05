@@ -188,6 +188,19 @@ class LatLong64PathTest {
         byte[] compressedBytes = path.compress().toBytes();
 
         assertThat(rawBytes.length, is(compressedBytes.length * 2));
+
+        System.out.println(path.toBase64());
+    }
+
+    @Test
+    void canParseBase64String() {
+        // This path was pulled from the MB-Tree project, where we encode track snippets as LatLong paths.
+        String pathString =
+                "E8Fg68ZiPmgTwUAoxmIXFxPBIC7GYfEPE8EBxMZhyj4TwORKxmGi8RPAw4fGYX2OE8CjLMZhV3kTwIPixmEvpxPAY6PGYQjdE8BD6cZg4MQTwCScxmC3NxPAA8_GYI0uE7_j1cZgYTsTv8TzxmA1zhO_p9bGYAvWE7-LOsZf42YTv23rxl-7shO_UDnGX5RoE78yKMZfbmQTvxVvxl9HARO--23GXxyzE77mOsZe7TwTvthVxl637hO-0irGXnuEE77VB8ZeOTsTvtg1xl392RO-3ArGXcKHE77h7sZdhw0Tvua2xl1LTxO-69fGXQ7HE77yQsZc0AcTvvqJxlyO_xO_BavGXEy9E78V5MZcCx8TvyQVxlvI5RO_MMbGW4ZpE782gcZbRfITvz24xlsEgBO_RZjGWsIcE79NVcZafrATv1Ocxlo5CA";
+
+        LatLong64Path path = LatLong64Path.fromBase64Str(pathString);
+
+        assertThat(path.size(), is(41));
     }
 
     @Test
