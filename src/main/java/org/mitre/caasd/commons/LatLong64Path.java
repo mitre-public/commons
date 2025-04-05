@@ -214,4 +214,82 @@ public class LatLong64Path implements Iterable<LatLong> {
     public int hashCode() {
         return Arrays.hashCode(locationData);
     }
+
+    /**
+     * Compute the "total distance" between the points in these two paths.
+     * <p>
+     * The distance computed here is the sum of the distances between "LatLong pairs" taken from the
+     * two paths (e.g. the distance btw the 1st LatLong from both paths PLUS the distance btw the
+     * 2nd LatLong from both paths PLUS the distance btw the 3rd LatLong from both paths ...).
+     * <p>
+     * The "distanceBtw" between identical paths will be 0. The "distanceBtw" between nearly
+     * identical paths will be small.  The "distanceBtw" between two very different paths will be
+     * large.
+     * <p>
+     * The computation requires both Paths to have the same size. This is an important requirement
+     * for making a DistanceMetric using this method.
+     *
+     * @param p1 A path
+     * @param p2 Another path
+     *
+     * @return The sum of the pair-wise distance measurements
+     */
+    public static double distanceBtw(LatLong64Path p1, LatLong64Path p2) {
+        // ACCURATE BUT SLOW
+        requireNonNull(p1);
+        requireNonNull(p2);
+        checkArgument(p1.size() == p2.size(), "Paths must have same size");
+
+        double distanceSum = 0;
+        int n = p1.size();
+
+        for (int i = 0; i < n; i += 1) {
+            LatLong mine = p1.get(i).inflate();
+            LatLong his = p2.get(i).inflate();
+            distanceSum += mine.distanceInNM(his);
+        }
+
+        // return the distance
+        return distanceSum;
+    }
+
+    /**
+     * Compute the "total distance" between the first n points of these two paths.
+     * <p>
+     * The distance computed here is the sum of the distances between "LatLong pairs" taken from the
+     * two paths (e.g. the distance btw the 1st LatLong from both paths PLUS the distance btw the
+     * 2nd LatLong from both paths PLUS the distance btw the 3rd LatLong from both paths ...).
+     * <p>
+     * The "distanceBtw" between two identical paths will be 0. The "distanceBtw" between two nearly
+     * identical paths will be small. The "distanceBtw" between two very different paths will be
+     * large.
+     * <p>
+     * This
+     * The computation requires both Paths to have the same size.  This is an important requirement
+     * for making a DistanceMetric using this method.
+     *
+     * @param p1 A path
+     * @param p2 Another path
+     * @param n  The number of points considered in the "path distance" computation
+     *
+     * @return The sum of the pair-wise distance measurements
+     */
+    public static double distanceBtw(LatLong64Path p1, LatLong64Path p2, int n) {
+        // ACCURATE BUT SLOW
+        requireNonNull(p1);
+        requireNonNull(p2);
+        checkArgument(n >= 0);
+        checkArgument(p1.size() >= n, "Path1 does not have the required length");
+        checkArgument(p2.size() >= n, "Path2 does not have the required length");
+
+        double distanceSum = 0;
+        for (int i = 0; i < n; i += 1) {
+            LatLong mine = p1.get(i).inflate();
+            LatLong his = p2.get(i).inflate();
+            distanceSum += mine.distanceInNM(his);
+        }
+
+        // return the distance
+        return distanceSum;
+    }
 }

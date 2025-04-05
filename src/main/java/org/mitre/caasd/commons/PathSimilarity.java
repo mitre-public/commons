@@ -13,6 +13,7 @@ import static org.mitre.caasd.commons.Spherical.angleDifference;
  * regular time intervals. This process converts a datafeed with irregular timing to a datafeed that
  * has a "fixed frequency" and can be chopped into snippets and searched.
  */
+@Deprecated
 public class PathSimilarity {
 
     /**
