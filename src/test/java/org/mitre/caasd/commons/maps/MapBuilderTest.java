@@ -18,6 +18,7 @@ package org.mitre.caasd.commons.maps;
 
 import static com.google.common.collect.Lists.newLinkedList;
 import static com.google.common.collect.Streams.stream;
+import static java.awt.Font.PLAIN;
 import static java.lang.System.getProperty;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -28,10 +29,10 @@ import static org.mitre.caasd.commons.Course.NORTH;
 import static org.mitre.caasd.commons.TimeWindow.enclosingWindow;
 import static org.mitre.caasd.commons.maps.FeatureSetBuilder.newFeatureSetBuilder;
 import static org.mitre.caasd.commons.maps.MapBuilder.newMapBuilder;
-import static org.mitre.caasd.commons.maps.MapFeatures.circle;
-import static org.mitre.caasd.commons.maps.MapFeatures.filledCircle;
+import static org.mitre.caasd.commons.maps.MapFeatures.*;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.time.Duration;
@@ -44,6 +45,7 @@ import javax.imageio.ImageIO;
 import org.mitre.caasd.commons.Course;
 import org.mitre.caasd.commons.Distance;
 import org.mitre.caasd.commons.LatLong;
+import org.mitre.caasd.commons.LatLong64Path;
 import org.mitre.caasd.commons.Position;
 import org.mitre.caasd.commons.PositionRecord;
 import org.mitre.caasd.commons.TimeWindow;
@@ -262,6 +264,35 @@ class MapBuilderTest {
                 .addFeatures(circles)
                 .addFeature(smoothedTrackPath)
                 .toFile(new File(tempDir, "trackWithGentleError.png"));
+    }
+
+    @Disabled
+    @Test
+    void canMakeMapWithCirclesPathsAndText() {
+
+        // These features were added in one PR:  circles, Path, Text
+
+        LatLong home = LatLong.of(0.0, 0.0);
+        LatLong64Path path = LatLong64Path.from(
+                LatLong.of(0.01, 0.01),
+                LatLong.of(0.02, 0.02),
+                LatLong.of(0.03, 0.03),
+                LatLong.of(0.04, 0.04),
+                LatLong.of(0.05, 0.05));
+
+        Font font = new Font("Avenir", PLAIN, 32);
+        String[] lines = new String[] {"line1", "line2", "line3"};
+
+        newMapBuilder()
+                .debugTiles()
+                .center(home)
+                .width(Distance.ofNauticalMiles(10))
+                .addFeature(circles(path.inflate(), Color.BLUE, 22, 11.0f))
+                .addFeature(path(path.inflate(), Color.BLUE, 11.0f))
+                .addFeature(circles(path, Color.RED, 8, 5.0f))
+                .addFeature(path(path, Color.RED, 1.0f))
+                .addFeature(MapFeatures.textLines(lines, 50, 50, Color.MAGENTA, font, 42))
+                .toFile(new File("circlesPathsText.png"));
     }
 
     private List<LatLong> fitLatLongs(List<PositionRecord<TestLocationDatum>> rawData) {
