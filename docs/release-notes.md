@@ -1,5 +1,16 @@
 # Release Notes
 
+
+### Version 0.0.58 (Released 2025-04-05)
+- Added LeftMerger utility class
+- Added `Time.enclosingTimeWindow(Collection<Instant> times)`
+- `MapBuilder` has new convenience functions for certain `MapFeatures`
+  - Multi-line Strings
+  - draw circles (Supports `Collection<LatLong>`, `LatLongPath`, and `LatLong64Path`)  
+  - draw paths (Supports `Collection<LatLong>`, `LatLongPath`, and `LatLong64Path`)
+- `ReservoirSampler` now implements the `Consumer` interface
+- Patched a flawed constructor in `LatLong64Path`
+
 ### Version 0.0.57 (Released 2025-01-13)
 - Fixed issue with interpolating LatLong data near the international date line.
 

@@ -51,13 +51,13 @@ general purpose Java utilities from the Aviation Risk Identification and Assessm
 ## Adopting!
 
 All official releases are available at [Maven Central](https://central.sonatype.com/artifact/org.mitre/commons).
-The latest official release is version: `0.0.57`
+The latest official release is version: `0.0.58`
 
 #### Gradle
 
 ```
 dependencies {
-  implementation("org.mitre:commons:0.0.57")
+  implementation("org.mitre:commons:0.0.58")
 }
 ```
 
@@ -67,7 +67,7 @@ dependencies {
 <dependency>
     <groupId>org.mitre</groupId>
     <artifactId>commons</artifactId>
-    <version>0.056/version>
+    <version>0.058</version>
 </dependency>
 ```
 
