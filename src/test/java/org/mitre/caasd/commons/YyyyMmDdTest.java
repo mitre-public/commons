@@ -152,4 +152,22 @@ public class YyyyMmDdTest {
     public void verifyYearMonthDayFormat_badMonth_high() {
         assertThrows(IllegalArgumentException.class, () -> verifyYearMonthDayFormat("2019-13-02"));
     }
+
+    @Test
+    void plusTimeAmount() {
+        YyyyMmDd date = new YyyyMmDd("2021-07-04");
+
+        assertThat(date.plus(Duration.ofSeconds(2)), is(date));
+        assertThat(date.plus(Duration.ofSeconds(24 * 60 * 60 - 1)), is(date));
+        assertThat(date.plus(Duration.ofHours(24)), is(date.tomorrow()));
+    }
+
+    @Test
+    void minusTimeAmount() {
+        YyyyMmDd date = new YyyyMmDd("2021-07-04");
+
+        assertThat(date.minus(Duration.ofSeconds(2)), is(date.yesterday()));
+        assertThat(date.minus(Duration.ofSeconds(24 * 60 * 60 - 1)), is(date.yesterday()));
+        assertThat(date.minus(Duration.ofHours(24)), is(date.yesterday()));
+    }
 }
