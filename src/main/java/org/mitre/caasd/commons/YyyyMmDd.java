@@ -24,6 +24,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.TemporalAmount;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Objects;
@@ -139,6 +140,24 @@ public class YyyyMmDd implements Comparable<YyyyMmDd> {
     public static YyyyMmDd newestOf(Collection<YyyyMmDd> dates) {
         checkNotNull(dates);
         return dates.stream().max(Comparator.naturalOrder()).orElse(null);
+    }
+
+    /**
+     * @return The YyyyMmDd corresponding to adding this time amount to a Timestamp ending with:
+     *     T00:00:00.000Z.  In other words, when amount is less than 24 hours the date will not
+     *     roll forward.  E.g. this.plus(Duration.ofSeconds(1)) returns the same YyyyMmDd;
+     */
+    public YyyyMmDd plus(TemporalAmount amount) {
+        return YyyyMmDd.from(asInstant().plus(amount));
+    }
+
+    /**
+     * @return The YyyyMmDd corresponding to subtracting this time amount from a Timestamp ending
+     *     with: T00:00:00.000Z.  In other words, when amount is positive this will always
+     *     "roll-back" the date.  E.g. this.minus(Duration.ofSeconds(1)) returns this.yesterday();
+     */
+    public YyyyMmDd minus(TemporalAmount amount) {
+        return YyyyMmDd.from(asInstant().minus(amount));
     }
 
     private static final String DATE_FORMAT_ERROR = "Date not specified as YYYY-MM-DD format";
