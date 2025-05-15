@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -212,5 +213,52 @@ public class UncheckTest {
             // rethrow as checked exception
             throw new CheckedIllegalArgumentException(e);
         }
+    }
+
+    @Test
+    void testCheckedRunnable() {
+
+        // test Uncheck.run(() -> throwCheckedException());
+        DemotedException ex1 = assertThrows(DemotedException.class, () -> Uncheck.run(() -> throwCheckedException()));
+
+        assertInstanceOf(ParseException.class, ex1.getCause());
+
+        // test Uncheck.run(() -> throwRuntimeException());
+        //
+        // RuntimeExceptions are not demoted ...
+        assertThrows(UnsupportedOperationException.class, () -> Uncheck.run(() -> throwRuntimeException()));
+    }
+
+    @Test
+    void testCheckedCallable() {
+
+        // test Uncheck.run(() -> throwCheckedException());
+        DemotedException ex1 =
+                assertThrows(DemotedException.class, () -> Uncheck.call(() -> throwCheckedException_callable()));
+
+        assertInstanceOf(ParseException.class, ex1.getCause());
+
+        // test Uncheck.call(() -> throwRuntimeException_callable());
+        //
+        // RuntimeExceptions are not demoted ...
+        assertThrows(UnsupportedOperationException.class, () -> Uncheck.call(() -> throwRuntimeException_callable()));
+    }
+
+    void throwCheckedException() throws ParseException {
+        throw new ParseException("I always fail", 0);
+    }
+
+    void throwRuntimeException() throws Exception {
+        throw new UnsupportedOperationException("I always fail");
+    }
+
+    String throwCheckedException_callable() throws ParseException {
+        throwCheckedException();
+        return "never get here";
+    }
+
+    String throwRuntimeException_callable() throws Exception {
+        throwRuntimeException();
+        return "never get here";
     }
 }
