@@ -133,7 +133,7 @@ public class TimeWindow implements Serializable {
         return end;
     }
 
-    /** @deprecated  */
+    /** Equivalent to this.duration(). */
     public Duration length() {
         return duration();
     }

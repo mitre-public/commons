@@ -12,9 +12,9 @@ import java.util.Iterator;
 import java.util.stream.Stream;
 
 /**
- * This class provides a byte-efficient way to store many latitude & longitude pairs. This class is
- * NOT (currently) intended to duplicate the convenience of {@link LatLong} or {@link LatLongPath}.
- * It simply provides a convenient transition to a more compact form:
+ * This class provides a byte-efficient way to store many latitude and longitude pairs. This class
+ * is NOT (currently) intended to duplicate the convenience of {@link LatLong} or
+ * {@link LatLongPath}. It simply provides a convenient transition to a more compact form:
  * <p>
  * The core usage idiom of this class is:
  *
@@ -264,9 +264,8 @@ public class LatLong64Path implements Iterable<LatLong> {
      * identical paths will be small. The "distanceBtw" between two very different paths will be
      * large.
      * <p>
-     * This
-     * The computation requires both Paths to have the same size.  This is an important requirement
-     * for making a DistanceMetric using this method.
+     * This The computation requires both Paths to have the same size.  This is an important
+     * requirement for making a DistanceMetric using this method.
      *
      * @param p1 A path
      * @param p2 Another path

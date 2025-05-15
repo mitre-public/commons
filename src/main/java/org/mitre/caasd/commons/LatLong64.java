@@ -13,7 +13,7 @@ import com.google.common.collect.ComparisonChain;
  * used here saves 50% of the space while maintaining numeric equivalence for the first 7 decimal
  * places. This class uses two 32-bit ints to encode latitude and longitude values (as opposed to
  * directly storing the values in two 64-bit doubles). This space savings is relevant when you store
- * many latitude & longitude pairs as seen in {@link LatLong64Path}.
+ * many latitude and longitude pairs as seen in {@link LatLong64Path}.
  * <p>
  * The goal of this class is to support a convenient transition to a more compact form for
  * {@link LatLongPath} data. It is NOT the goal of this class to provide a near-duplicate of
@@ -24,7 +24,7 @@ import com.google.common.collect.ComparisonChain;
  * LatLong64. "LatLong.of(20*PI, -10*PI)" stores the 2 double primitives: (62.83185307179586,
  * -31.41592653589793). Whereas "LatLong64.of(20*PI, -10*PI)" stores 2 ints that equate to the
  * values: (62.8318531, -31.4159265). Notice, these approximate values are perfect to the 7th
- * decimal place. Geo-Location data is difficult & expensive to measure beyond this level of
+ * decimal place. Geo-Location data is difficult and expensive to measure beyond this level of
  * accuracy.
  * <p>
  * LatLong64 purposefully does not implement java.io.Serializable. Instead, this class provides 3
