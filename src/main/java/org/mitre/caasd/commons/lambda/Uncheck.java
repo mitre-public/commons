@@ -27,10 +27,14 @@ import java.util.stream.Stream;
 import org.mitre.caasd.commons.util.DemotedException;
 
 /**
- * Collection of convenience methods to shorten the syntax when used in
- * {@link Stream} operators:
+ * Uncheck contains a batch of convenience methods to remove try/catch blocks. These methods
+ * "demote" checked exceptions into RuntimeExceptions whose cause is the original checked
+ * exception.
+ * <p>
+ * Demoting exception shortens syntax and greatly simplifies {@link Stream} operators:
  *
  * <pre>{@code
+ * // remove the "ick" from needed try/catch blocks in the filter and map stages of this pipeline.
  * stream
  *    .filter(Uncheck.pred(x -> checkedTest(x)))
  *    .map(Uncheck.func(x -> checkedFn(x)))
@@ -93,7 +97,7 @@ public class Uncheck {
      * {@link Consumer}.  This method is for simplifying stream processing pipelines.
      *
      * @param consumer A consumer that throws a checked exception
-     * @param <T>  The generic type
+     * @param <T>      The generic type
      *
      * @return A plain Consumer that may emit DemotedExceptions
      * @throws DemotedException when the original CheckedConsumer would have thrown a checked
@@ -163,7 +167,7 @@ public class Uncheck {
      * {@link Supplier}.  This method is for simplifying stream processing pipelines.
      *
      * @param checkedSupplier A supplier that throws a checked exception
-     * @param <T>  The supplied type
+     * @param <T>             The supplied type
      *
      * @return A plain Supplier that may emit DemotedExceptions
      * @throws DemotedException when the original CheckedSupplier would have thrown a checked
@@ -180,5 +184,35 @@ public class Uncheck {
                 throw DemotedException.demote(e);
             }
         };
+    }
+
+    /**
+     * Wraps this "Runnable" with a try/catch block that demotes all checked exceptions.
+     *
+     * @param checkedRunnable A Runnable that can throw a checked exception
+     */
+    public static void run(CheckedRunnable checkedRunnable) {
+        try {
+            checkedRunnable.run();
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            throw DemotedException.demote(e);
+        }
+    }
+
+    /**
+     * Wraps this "Callable" with a try/catch block that demotes all checked exceptions.
+     *
+     * @param checkedCallable A Callable that can throw a checked exception
+     */
+    public static <T> T call(CheckedCallable<T> checkedCallable) {
+        try {
+            return checkedCallable.call();
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            throw DemotedException.demote(e);
+        }
     }
 }
