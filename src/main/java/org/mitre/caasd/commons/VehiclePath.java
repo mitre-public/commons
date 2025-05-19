@@ -66,7 +66,7 @@ public record VehiclePath(LatLong64Path latLongs, AltitudePath altitudes) {
         return buffer.array();
     }
 
-    /** @return The Base64 file and url safe encoding of this AltitudePath's byte[] . */
+    /** @return The Base64 file and url safe encoding of this VehiclePath's byte[] . */
     public String toBase64() {
         return BASE_64_ENCODER.encodeToString(toBytes());
     }
