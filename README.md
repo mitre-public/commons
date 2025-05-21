@@ -41,23 +41,22 @@ general purpose Java utilities from the Aviation Risk Identification and Assessm
 ### Early Open Sourcing checklist
 
 - [ ] Add "CONTRIBUTION.md" rules
-- [ ] Add Roadmap
-    - [ ] Then pivoting to Java 17
-    - [ ] Removing pair and triple (only in Java 17+)
 - [ ] (Re)Add code coverage
 
 ---
 
 ## Adopting!
 
-All official releases are available at [Maven Central](https://central.sonatype.com/artifact/org.mitre/commons).
-The latest official release is version: `0.0.58`
+- Adopting this Java library requires your project to be on Java 17 or later.
+- The latest official release is version: `0.0.59`
+- All official releases are available at [Maven Central](https://central.sonatype.com/artifact/org.mitre/commons).
+
 
 #### Gradle
 
 ```
 dependencies {
-  implementation("org.mitre:commons:0.0.58")
+  implementation("org.mitre:commons:0.0.59")
 }
 ```
 
@@ -67,7 +66,7 @@ dependencies {
 <dependency>
     <groupId>org.mitre</groupId>
     <artifactId>commons</artifactId>
-    <version>0.058</version>
+    <version>0.059</version>
 </dependency>
 ```
 
