@@ -1,12 +1,21 @@
 # Release Notes
 
+### Version 0.0.59 (Released 2025-05-21)
+
+- **Migrated to Java 17**
+- Added `AltitudePath`, `VehiclePath`, and `PathPair`.
+  - These classes are designed to be `Key` types used in [DistanceTrees](https://github.com/mitre-public/dist-tree)
+- `YyyyMmDd` added `plus` and `minus` methods
+- Added `CheckedRunnable` and `CheckedCallable` to automatically demote checked exceptions and allow using methods that
+  throw Checked Exceptions to be used in standard java lambda places
 
 ### Version 0.0.58 (Released 2025-04-05)
+
 - Added LeftMerger utility class
 - Added `Time.enclosingTimeWindow(Collection<Instant> times)`
 - `MapBuilder` has new convenience functions for certain `MapFeatures`
   - Multi-line Strings
-  - draw circles (Supports `Collection<LatLong>`, `LatLongPath`, and `LatLong64Path`)  
+  - draw circles (Supports `Collection<LatLong>`, `LatLongPath`, and `LatLong64Path`)
   - draw paths (Supports `Collection<LatLong>`, `LatLongPath`, and `LatLong64Path`)
 - `ReservoirSampler` now implements the `Consumer` interface
 - Patched a flawed constructor in `LatLong64Path`
