@@ -97,22 +97,6 @@ class SuppliersTest {
     }
 
     @Test
-    public void canPullFromEnvironmentVars_happyPath() {
-
-        String key = UUID.randomUUID().toString();
-        String value = UUID.randomUUID().toString();
-
-        EnvironmentVariableForcer varForcer = new EnvironmentVariableForcer();
-        varForcer.set(key, value);
-
-        Supplier<String> environmentVarSup = environmentVarSupplier(key);
-
-        assertThat(environmentVarSup.get(), is(value));
-
-        varForcer.reset();
-    }
-
-    @Test
     public void canPullFromEnvironmentVars_noValueComesBackNull() {
 
         // make a random key -- it obviously won't be in the system properties...so it should come back null

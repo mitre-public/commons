@@ -24,7 +24,11 @@ import java.util.Map;
  * using reflection magic.
  * <p>
  * Use this class with care, also be sure to reset the environment variables when finished testing
+ * <p>
+ * Deprecated on 2025-09-15 since java 16+ has stricter module encapsulation and this pattern is not officially
+ * supported and may break in future java versions.
  */
+@Deprecated
 public class EnvironmentVariableForcer {
     // see:
     // https://github.com/aws/aws-sdk-java/blob/master/aws-java-sdk-core/src/test/java/utils/EnvironmentVariableHelper.java
