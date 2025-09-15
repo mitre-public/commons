@@ -1,7 +1,7 @@
 plugins {
     `java-library`
-    `maven-publish`
     id("com.diffplug.spotless") version "6.23.3"
+    id("com.vanniktech.maven.publish.base") version "0.34.0"
 }
 
 group = "org.mitre"
@@ -66,50 +66,43 @@ spotless {
     }
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            artifactId = "commons"
-            from(components["java"])
-            versionMapping {
-                usage("java-api") {
-                    fromResolutionOf("runtimeClasspath")
-                }
-                usage("java-runtime") {
-                    fromResolutionResult()
-                }
-            }
-            pom {
-                name.set(project.name)
-                description.set("MITRE Commons Library for Aviation")
-                url.set("https://github.com/mitre-public/commons")
+mavenPublishing {
+    publishToMavenCentral(automaticRelease = true)
+    signAllPublications()
 
-                licenses {
-                    license {
-                        name.set("The Apache License, Version 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("jparker")
-                        name.set("Jon Parker")
-                        email.set("jiparker@mitre.org")
-                    }
-                    developer {
-                        id.set("dbaker")
-                        name.set("David Baker")
-                        email.set("dbaker@mitre.org")
-                    }
-                }
+    val releaseVersion = System.getenv("COMMONS_RELEASE_VERSION")
+    version = if (releaseVersion.isNullOrBlank()) project.version.toString() else releaseVersion
 
-                //REQUIRED! To publish to maven central (from experience the leading "scm:git" is required too)
-                scm {
-                    connection.set("scm:git:https://github.com/mitre-public/commons.git")
-                    developerConnection.set("scm:git:ssh://git@github.com:mitre-public/commons.git")
-                    url.set("https://github.com/mitre-public/commons")
-                }
+    coordinates("org.mitre.boogie", project.name, version.toString())
+
+    pom {
+        name.set(project.name)
+        description.set("MITRE Commons Library for Aviation")
+        inceptionYear.set("2023")
+        url.set("https://github.com/mitre-public/commons")
+        licenses {
+            license {
+                name.set("The Apache License, Version 2.0")
+                url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                distribution.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
             }
+        }
+        developers {
+            developer {
+                id.set("dbaker-mitre")
+                name.set("David Baker")
+                url.set("https://github.com/dbaker-mitre")
+            }
+            developer {
+                id.set("mattpollock")
+                name.set("Matt Pollock")
+                url.set("https://github.com/mattpollock")
+            }
+        }
+        scm {
+            url.set("https://github.com/mitre-public/commons")
+            connection.set("scm:git:https://github.com/mitre-public/commons.git")
+            developerConnection.set("scm:git:ssh://git@github.com:mitre-public/commons.git")
         }
     }
 }
