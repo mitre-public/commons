@@ -67,13 +67,13 @@ spotless {
 }
 
 mavenPublishing {
-    publishToMavenCentral(automaticRelease = true)
+    publishToMavenCentral(automaticRelease = false)
     signAllPublications()
 
     val releaseVersion = System.getenv("COMMONS_RELEASE_VERSION")
     version = if (releaseVersion.isNullOrBlank()) project.version.toString() else releaseVersion
 
-    coordinates("org.mitre.boogie", project.name, version.toString())
+    coordinates("org.mitre", project.name, version.toString())
 
     pom {
         name.set(project.name)
