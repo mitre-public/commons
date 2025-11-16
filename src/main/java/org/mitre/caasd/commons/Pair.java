@@ -33,11 +33,7 @@ import java.util.Objects;
  * Similarly, it is also a mistake to serialize an {@literal ArrayList<T>} when T is
  * non-serializable. Despite this vulnerability it is useful for ArrayList, and Pair, to be
  * Serializable.
- * <p>
- * This class is Deprecated to encourage usage of Java Record classes. This class may or may not be
- * removed in the future.
  */
-@Deprecated
 public class Pair<L, R> implements Serializable {
 
     private static final long serialVersionUID = 1L;

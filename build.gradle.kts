@@ -115,6 +115,11 @@ mavenPublishing {
                 name.set("Matt Pollock")
                 url.set("https://github.com/mattpollock")
             }
+            developer {
+                id.set("politeRaccoon")
+                name.set("Jon Parker")
+                url.set("https://github.com/politeRaccoon")
+            }
         }
         scm {
             url.set("https://github.com/mitre-public/commons")
