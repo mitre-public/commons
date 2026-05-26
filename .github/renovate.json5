@@ -1,0 +1,9 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "github>cre-security/renovate-controller",
+    "github>mitre-tdp/tdp-renovate:gradle.json5",
+    "github>mitre-tdp/tdp-renovate:github-actions.json5",
+    "schedule:monthly"
+  ]
+}
