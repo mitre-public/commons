@@ -3,7 +3,6 @@
   "extends": [
     "github>cre-security/renovate-controller",
     "github>mitre-tdp/tdp-renovate:gradle.json5",
-    "github>mitre-tdp/tdp-renovate:github-actions.json5",
-    "schedule:monthly"
+    "github>mitre-tdp/tdp-renovate:github-actions.json5"
   ]
 }
