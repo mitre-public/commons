@@ -8,7 +8,7 @@ jobs:
   unit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           lfs: true
@@ -21,7 +21,7 @@ jobs:
     outputs:
       version: ${{ steps.version.outputs.nextStrict }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           lfs: true
