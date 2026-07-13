@@ -184,7 +184,7 @@ public class KineticPosition implements HasTime, HasPosition {
 
         // Find the time required to travel in a circle, i.e. while moving "straight" but gradually turning left or
         // right
-        double secToTurn360 = 360.0 / Math.abs(turnRateInDegreesPerSecond);
+        double secToTurn360 = 360.0 / StrictMath.abs(turnRateInDegreesPerSecond);
         long asMilliSec = (long) secToTurn360 * 1000;
 
         // Find distance traveled while "moving in a circle"

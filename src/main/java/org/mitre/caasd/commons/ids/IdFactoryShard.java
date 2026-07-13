@@ -112,7 +112,7 @@ public class IdFactoryShard implements IdFactory<SmallTimeId> {
 
         this.numBitsForShardNumber = numBitsRequiredFor(totalShardCount);
         this.numBitsForItemDistinction = NUM_BITS_FOR_DISTINGUISHING_ITEMS - numBitsForShardNumber;
-        this.limitTimeIdsPerEpochMills = (int) Math.pow(2.0, numBitsForItemDistinction());
+        this.limitTimeIdsPerEpochMills = (int) StrictMath.pow(2.0, numBitsForItemDistinction());
         this.timeCounts = countKeeper;
     }
 
@@ -196,7 +196,7 @@ public class IdFactoryShard implements IdFactory<SmallTimeId> {
     public static int numBitsRequiredFor(int numShards) {
         checkArgument(numShards > 0);
 
-        return (int) Math.ceil(log2(numShards));
+        return (int) StrictMath.ceil(log2(numShards));
     }
 
     /**

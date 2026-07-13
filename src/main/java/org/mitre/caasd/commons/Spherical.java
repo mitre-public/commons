@@ -20,8 +20,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static java.lang.Double.max;
 import static java.lang.Double.min;
 import static java.lang.Math.PI;
-import static java.lang.Math.abs;
-import static java.lang.Math.toRadians;
+import static java.lang.StrictMath.abs;
+import static java.lang.StrictMath.toRadians;
 import static org.apache.commons.math3.util.FastMath.acos;
 import static org.apache.commons.math3.util.FastMath.asin;
 import static org.apache.commons.math3.util.FastMath.atan;
@@ -238,16 +238,18 @@ public class Spherical {
     public static LatLong projectOut(
             Double latDeg, Double lonDeg, double headingDegree, double distNM, double curvature) {
         double rMax = EARTH_RADIUS_NM * Math.PI / 2.0;
-        double radiusNM = Math.max(-rMax, Math.min(rMax, 1.0 / curvature));
+        double radiusNM = StrictMath.max(-rMax, StrictMath.min(rMax, 1.0 / curvature));
         LatLong pair = Spherical.projectOut(latDeg, lonDeg, mod(headingDegree + 90.0, 360.0), radiusNM);
         double latCen = pair.latitude();
         double lonCen = pair.longitude();
-        double crsDelta = Math.copySign(
-                Math.toDegrees(distNM
-                        / (EARTH_RADIUS_NM * Math.sin(Math.min(Math.PI / 2, Math.abs(radiusNM) / EARTH_RADIUS_NM)))),
+        double crsDelta = StrictMath.copySign(
+                StrictMath.toDegrees(distNM
+                        / (EARTH_RADIUS_NM
+                                * StrictMath.sin(
+                                        StrictMath.min(Math.PI / 2, StrictMath.abs(radiusNM) / EARTH_RADIUS_NM)))),
                 radiusNM);
         double crsCen = mod(courseInDegrees(latCen, lonCen, latDeg, lonDeg) + crsDelta, 360.0);
-        return Spherical.projectOut(latCen, lonCen, crsCen, Math.abs(radiusNM));
+        return Spherical.projectOut(latCen, lonCen, crsCen, StrictMath.abs(radiusNM));
     }
 
     /**
@@ -271,7 +273,7 @@ public class Spherical {
         double d = distanceInNM(latDeg1, lonDeg1, latDeg2, lonDeg2) / EARTH_RADIUS_NM;
         double dTheta = angleDifference(courseInDegrees(latDeg1, lonDeg1, latDeg2, lonDeg2), hdg1);
         double phi = toRadians(abs(dTheta));
-        return 1.0 / Math.copySign(atan((1 - cos(d)) / (sin(d) * sin(phi))) * EARTH_RADIUS_NM, dTheta);
+        return 1.0 / StrictMath.copySign(atan((1 - cos(d)) / (sin(d) * sin(phi))) * EARTH_RADIUS_NM, dTheta);
     }
 
     /**
@@ -409,7 +411,7 @@ public class Spherical {
         }
 
         // clamp ratio down from the "tolerant range" to the "valid input to acos range"
-        ratio = Math.min(Math.max(ratio, -1.0), 1.0);
+        ratio = StrictMath.min(StrictMath.max(ratio, -1.0), 1.0);
         // @todo: Replace line with `ratio = constrainToRange(ratio, -1.0, 1.0);` when Guava is shaded from exported
         // library
 

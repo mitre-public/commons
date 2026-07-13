@@ -93,7 +93,7 @@ public class CenterPointSelectors {
         @Override
         public Pair<K, K> selectNewCenterPoints(List<K> keys, DistanceMetric<K> metric) {
 
-            int numPairsToDraw = (int) Math.sqrt(keys.size()); // sqrt strikes a good balance
+            int numPairsToDraw = (int) StrictMath.sqrt(keys.size()); // sqrt strikes a good balance
 
             Pair<K, K> bestPair = selectRandomPairOfKeys(keys, rng);
             double biggestDistance = metric.distanceBtw(bestPair.first(), bestPair.second());

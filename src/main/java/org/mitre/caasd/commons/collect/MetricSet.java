@@ -425,7 +425,7 @@ public class MetricSet<K> implements Serializable {
             }
 
             // update radius if necessary
-            this.radius = Math.max(radius, verifiedDistance(this.centerPoint, key));
+            this.radius = StrictMath.max(radius, verifiedDistance(this.centerPoint, key));
 
             if (isSphereOfPoints()) {
                 globalHashMap.put(key, this);

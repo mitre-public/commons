@@ -108,6 +108,6 @@ public record PathPair(VehiclePath path0, VehiclePath path1) {
         // a0-to-b1 + a1-to-b0
         double opt2 = VehiclePath.distanceBtw(a.path0, b.path1, n) + VehiclePath.distanceBtw(a.path1, b.path0);
 
-        return Math.min(opt1, opt2);
+        return StrictMath.min(opt1, opt2);
     }
 }

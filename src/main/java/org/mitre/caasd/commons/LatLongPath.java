@@ -1,7 +1,7 @@
 package org.mitre.caasd.commons;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static java.lang.Math.abs;
+import static java.lang.StrictMath.abs;
 import static java.util.Objects.requireNonNull;
 import static org.mitre.caasd.commons.LatLong.checkLatitude;
 import static org.mitre.caasd.commons.LatLong.checkLongitude;

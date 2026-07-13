@@ -90,8 +90,8 @@ public class Histogram {
         for (double score : dataInput) {
             double fraction = (score - min) / (max - min);
             int bucket = (int) (numColumns * fraction);
-            bucket = Math.min(numColumns - 1, bucket); // correct data that is above the max
-            bucket = Math.max(0, bucket); // correct data that is below the min
+            bucket = StrictMath.min(numColumns - 1, bucket); // correct data that is above the max
+            bucket = StrictMath.max(0, bucket); // correct data that is below the min
             columnCounts[bucket]++;
         }
 
@@ -134,7 +134,7 @@ public class Histogram {
 
         for (int i = 0; i < numColumns; i++) {
             currentExcessOrDearth += percentages1[i] - percentages2[i];
-            totalEarthMoved += Math.abs(currentExcessOrDearth);
+            totalEarthMoved += StrictMath.abs(currentExcessOrDearth);
         }
         // use remaining excessOrDeath to check if the input arrays had equal sums
         checkArgument(

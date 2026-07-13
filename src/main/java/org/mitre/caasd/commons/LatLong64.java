@@ -60,7 +60,7 @@ public class LatLong64 implements Comparable<LatLong64> {
         double shifted = latOrLong * 10_000_000.0;
         // Do not simply cast, Round!.
         // This prevents input latOrLong values like "1.001" becoming "10_009_999" (e.g., 1.0009999)
-        return (int) Math.round(shifted);
+        return (int) StrictMath.round(shifted);
     }
 
     static double decodeInt(int latOrLongAsInt) {

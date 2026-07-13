@@ -168,7 +168,7 @@ public class Distance implements Serializable, Comparable<Distance> {
     }
 
     public Distance abs() {
-        return Distance.of(Math.abs(amount), unit);
+        return Distance.of(StrictMath.abs(amount), unit);
     }
 
     public boolean isPositive() {

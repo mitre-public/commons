@@ -147,7 +147,7 @@ public class Course implements Comparable<Course> {
     }
 
     public Course abs() {
-        return Course.of(Math.abs(angle), unit);
+        return Course.of(StrictMath.abs(angle), unit);
     }
 
     public boolean isPositive() {

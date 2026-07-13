@@ -192,7 +192,7 @@ public record AltitudePath(int[] altitudesInFeet) {
             // if either altitude is missing use 0 as the "stand in" altitude value
             int mine = p1.altitudesInFeet[i] == NULL_ALTITUDE ? 0 : p1.altitudesInFeet[i];
             int his = p2.altitudesInFeet[i] == NULL_ALTITUDE ? 0 : p2.altitudesInFeet[i];
-            distanceSum += Math.abs(mine - his);
+            distanceSum += StrictMath.abs(mine - his);
         }
 
         return Distance.ofFeet(distanceSum);

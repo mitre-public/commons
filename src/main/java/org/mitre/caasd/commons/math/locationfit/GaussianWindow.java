@@ -16,7 +16,7 @@
 
 package org.mitre.caasd.commons.math.locationfit;
 
-import static java.lang.Math.abs;
+import static java.lang.StrictMath.abs;
 import static java.util.Objects.requireNonNull;
 
 import java.time.Duration;
@@ -63,7 +63,7 @@ public class GaussianWindow {
         long diff = abs(queryTime.toEpochMilli() - centerOfWindow.toEpochMilli());
         double zScore = ((double) diff / sigmaInMilli);
 
-        return Math.exp(-(zScore * zScore) / 2.0);
+        return StrictMath.exp(-(zScore * zScore) / 2.0);
     }
 
     /**
