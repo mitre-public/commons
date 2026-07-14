@@ -1,8 +1,8 @@
 package org.mitre.caasd.commons;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static java.lang.StrictMath.abs;
 import static java.util.Objects.requireNonNull;
+import static org.apache.commons.math3.util.FastMath.abs;
 import static org.mitre.caasd.commons.Spherical.angleDifference;
 
 /**

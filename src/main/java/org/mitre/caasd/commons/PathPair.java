@@ -3,6 +3,7 @@ package org.mitre.caasd.commons;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
+import static org.apache.commons.math3.util.FastMath.min;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -108,6 +109,6 @@ public record PathPair(VehiclePath path0, VehiclePath path1) {
         // a0-to-b1 + a1-to-b0
         double opt2 = VehiclePath.distanceBtw(a.path0, b.path1, n) + VehiclePath.distanceBtw(a.path1, b.path0);
 
-        return StrictMath.min(opt1, opt2);
+        return min(opt1, opt2);
     }
 }

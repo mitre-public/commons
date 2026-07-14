@@ -2,6 +2,7 @@ package org.mitre.caasd.commons;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
+import static org.apache.commons.math3.util.FastMath.round;
 
 import java.nio.ByteBuffer;
 import java.util.Base64;
@@ -60,7 +61,7 @@ public class LatLong64 implements Comparable<LatLong64> {
         double shifted = latOrLong * 10_000_000.0;
         // Do not simply cast, Round!.
         // This prevents input latOrLong values like "1.001" becoming "10_009_999" (e.g., 1.0009999)
-        return (int) StrictMath.round(shifted);
+        return (int) round(shifted);
     }
 
     static double decodeInt(int latOrLongAsInt) {

@@ -36,14 +36,14 @@ public final class Rhumb {
 
         double dLat = lat2 - lat1;
         double dLon = lon2 - lon1;
-        double dPhi = log(tan(lat2 / 2.0 + Math.PI / 4.0) / tan(lat1 / 2.0 + Math.PI / 4.0));
+        double dPhi = log(tan(lat2 / 2.0 + PI / 4.0) / tan(lat1 / 2.0 + PI / 4.0));
         double q = dLat / dPhi;
         if (Double.isNaN(dPhi) || Double.isNaN(q)) {
             q = FastMath.cos(lat1);
         }
 
-        if (FastMath.abs(dLon) > Math.PI) {
-            dLon = dLon > 0 ? -(2 * Math.PI - dLon) : (2 * Math.PI + dLon);
+        if (FastMath.abs(dLon) > PI) {
+            dLon = dLon > 0 ? -(2 * PI - dLon) : (2 * PI + dLon);
         }
 
         double distanceRadians = sqrt(dLat * dLat + q * q * dLon * dLon);
@@ -81,10 +81,10 @@ public final class Rhumb {
         if (lat1 == lat2 && lon1 == lon2) return 0;
 
         double dLon = lon2 - lon1;
-        double dPhi = log(tan(lat2 / 2.0 + Math.PI / 4.0) / tan(lat1 / 2.0 + Math.PI / 4.0));
+        double dPhi = log(tan(lat2 / 2.0 + PI / 4.0) / tan(lat1 / 2.0 + PI / 4.0));
         // If lonChange over 180 take shorter rhumb across 180 meridian.
-        if (FastMath.abs(dLon) > Math.PI) {
-            dLon = dLon > 0 ? -(2 * Math.PI - dLon) : (2 * Math.PI + dLon);
+        if (FastMath.abs(dLon) > PI) {
+            dLon = dLon > 0 ? -(2 * PI - dLon) : (2 * PI + dLon);
         }
         double azimuthRadians = FastMath.atan2(dLon, dPhi);
 
@@ -123,17 +123,17 @@ public final class Rhumb {
         if (pathLength == 0) return LatLong.of(lat1, lon1);
 
         double lat2 = lat1 + pathLength * FastMath.cos(rhumbAzimuth);
-        double dPhi = log(tan(lat2 / 2.0 + Math.PI / 4.0) / tan(lat1 / 2.0 + Math.PI / 4.0));
+        double dPhi = log(tan(lat2 / 2.0 + PI / 4.0) / tan(lat1 / 2.0 + PI / 4.0));
         double q = (lat2 - lat1) / dPhi;
         if (Double.isNaN(dPhi) || Double.isNaN(q) || Double.isInfinite(q)) {
             q = FastMath.cos(lat1);
         }
         double dLon = pathLength * FastMath.sin(rhumbAzimuth) / q;
 
-        if (FastMath.abs(lat2) > Math.PI / 2.0) {
-            lat2 = lat2 > 0 ? Math.PI - lat2 : -Math.PI - lat2;
+        if (FastMath.abs(lat2) > PI / 2.0) {
+            lat2 = lat2 > 0 ? PI - lat2 : -PI - lat2;
         }
-        double lon2 = (lon1 + dLon + Math.PI) % (2 * Math.PI) - Math.PI;
+        double lon2 = (lon1 + dLon + PI) % (2 * PI) - PI;
 
         if (Double.isNaN(lat2) || Double.isNaN(lon2)) return LatLong.of(lat1, lon1);
 

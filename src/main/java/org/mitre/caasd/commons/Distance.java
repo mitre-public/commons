@@ -26,6 +26,8 @@ import java.time.Duration;
 import java.util.Iterator;
 import java.util.Objects;
 
+import org.apache.commons.math3.util.FastMath;
+
 import com.google.common.collect.EnumMultiset;
 import com.google.common.collect.Iterators;
 
@@ -168,7 +170,7 @@ public class Distance implements Serializable, Comparable<Distance> {
     }
 
     public Distance abs() {
-        return Distance.of(StrictMath.abs(amount), unit);
+        return Distance.of(FastMath.abs(amount), unit);
     }
 
     public boolean isPositive() {

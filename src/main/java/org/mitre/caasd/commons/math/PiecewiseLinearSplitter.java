@@ -18,7 +18,7 @@ package org.mitre.caasd.commons.math;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.collect.Sets.newTreeSet;
-import static java.lang.StrictMath.abs;
+import static org.apache.commons.math3.util.FastMath.abs;
 import static org.mitre.caasd.commons.math.DataSplitter.checkInputData;
 
 import java.util.List;

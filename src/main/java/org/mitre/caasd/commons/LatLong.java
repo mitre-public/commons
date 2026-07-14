@@ -18,14 +18,14 @@ package org.mitre.caasd.commons;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static java.lang.StrictMath.abs;
-import static java.lang.StrictMath.toDegrees;
-import static java.lang.StrictMath.toRadians;
 import static java.util.Objects.requireNonNull;
+import static org.apache.commons.math3.util.FastMath.abs;
 import static org.apache.commons.math3.util.FastMath.atan2;
 import static org.apache.commons.math3.util.FastMath.cos;
 import static org.apache.commons.math3.util.FastMath.hypot;
 import static org.apache.commons.math3.util.FastMath.sin;
+import static org.apache.commons.math3.util.FastMath.toDegrees;
+import static org.apache.commons.math3.util.FastMath.toRadians;
 
 import java.io.Serializable;
 import java.nio.ByteBuffer;
@@ -33,6 +33,8 @@ import java.util.Base64;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;
+
+import org.apache.commons.math3.util.FastMath;
 
 import com.google.common.collect.ComparisonChain;
 
@@ -161,10 +163,10 @@ public class LatLong implements Comparable<LatLong>, Serializable {
      *
      * @param latitude A candidate latitude value that could be outside the legal range
      *
-     * @return StrictMath.min(90.0, StrictMath.max (latitude, - 90.0));
+     * @return FastMath.min(90.0, FastMath.max(latitude, -90.0));
      */
     public static double clampLatitude(double latitude) {
-        return StrictMath.min(90.0, StrictMath.max(latitude, -90.0));
+        return FastMath.min(90.0, FastMath.max(latitude, -90.0));
     }
 
     /**
@@ -172,10 +174,10 @@ public class LatLong implements Comparable<LatLong>, Serializable {
      *
      * @param longitude A candidate longitude value that could be outside the legal range
      *
-     * @return StrictMath.min(180.0, StrictMath.max (longitude, - 180.0));
+     * @return FastMath.min(180.0, FastMath.max(longitude, -180.0));
      */
     public static double clampLongitude(double longitude) {
-        return StrictMath.min(180, StrictMath.max(longitude, -180.0));
+        return FastMath.min(180, FastMath.max(longitude, -180.0));
     }
 
     public double latitude() {

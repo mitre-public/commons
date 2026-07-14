@@ -17,9 +17,8 @@
 package org.mitre.caasd.commons.maps;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static java.lang.Math.PI;
-import static java.lang.StrictMath.*;
 import static java.util.Objects.requireNonNull;
+import static org.apache.commons.math3.util.FastMath.*;
 
 import org.mitre.caasd.commons.LatLong;
 
@@ -64,8 +63,8 @@ public class PixelLatLong {
         this.tileSize = tileSize;
 
         double x = (position.longitude() + 180) / 360;
-        double sinLatitude = sin(position.latitude() * Math.PI / 180);
-        double y = 0.5 - log((1 + sinLatitude) / (1 - sinLatitude)) / (4 * Math.PI);
+        double sinLatitude = sin(position.latitude() * PI / 180);
+        double y = 0.5 - log((1 + sinLatitude) / (1 - sinLatitude)) / (4 * PI);
 
         double mapSize = mapSize(zoom, tileSize);
 
@@ -98,8 +97,8 @@ public class PixelLatLong {
 
         // now use the LatLong to (re)find the pixel coordinate...?
         double x2 = (location.longitude() + 180) / 360;
-        double sinLatitude = sin(location.latitude() * Math.PI / 180);
-        double y2 = 0.5 - log((1 + sinLatitude) / (1 - sinLatitude)) / (4 * Math.PI);
+        double sinLatitude = sin(location.latitude() * PI / 180);
+        double y2 = 0.5 - log((1 + sinLatitude) / (1 - sinLatitude)) / (4 * PI);
 
         this.pixelX = clip(x2 * mapSize + 0.5, 0, mapSize - 1);
         this.pixelY = clip(y2 * mapSize + 0.5, 0, mapSize - 1);

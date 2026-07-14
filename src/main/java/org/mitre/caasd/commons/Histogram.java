@@ -29,6 +29,8 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
+import org.apache.commons.math3.util.FastMath;
+
 import com.google.common.primitives.Doubles;
 
 /**
@@ -90,8 +92,8 @@ public class Histogram {
         for (double score : dataInput) {
             double fraction = (score - min) / (max - min);
             int bucket = (int) (numColumns * fraction);
-            bucket = StrictMath.min(numColumns - 1, bucket); // correct data that is above the max
-            bucket = StrictMath.max(0, bucket); // correct data that is below the min
+            bucket = FastMath.min(numColumns - 1, bucket); // correct data that is above the max
+            bucket = FastMath.max(0, bucket); // correct data that is below the min
             columnCounts[bucket]++;
         }
 
@@ -134,7 +136,7 @@ public class Histogram {
 
         for (int i = 0; i < numColumns; i++) {
             currentExcessOrDearth += percentages1[i] - percentages2[i];
-            totalEarthMoved += StrictMath.abs(currentExcessOrDearth);
+            totalEarthMoved += FastMath.abs(currentExcessOrDearth);
         }
         // use remaining excessOrDeath to check if the input arrays had equal sums
         checkArgument(

@@ -18,7 +18,7 @@ package org.mitre.caasd.commons;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static java.lang.Math.PI;
+import static org.apache.commons.math3.util.FastMath.PI;
 import static org.mitre.caasd.commons.Course.Unit.DEGREES;
 import static org.mitre.caasd.commons.Course.Unit.RADIANS;
 
@@ -147,7 +147,7 @@ public class Course implements Comparable<Course> {
     }
 
     public Course abs() {
-        return Course.of(StrictMath.abs(angle), unit);
+        return Course.of(FastMath.abs(angle), unit);
     }
 
     public boolean isPositive() {

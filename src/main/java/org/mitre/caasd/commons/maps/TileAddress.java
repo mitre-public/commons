@@ -18,8 +18,7 @@ package org.mitre.caasd.commons.maps;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.collect.Lists.newArrayList;
-import static java.lang.Math.PI;
-import static java.lang.StrictMath.*;
+import static org.apache.commons.math3.util.FastMath.*;
 
 import java.util.Comparator;
 import java.util.List;

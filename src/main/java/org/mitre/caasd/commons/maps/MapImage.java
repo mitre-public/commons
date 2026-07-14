@@ -17,8 +17,8 @@
 package org.mitre.caasd.commons.maps;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static java.lang.Math.PI;
 import static java.util.Objects.requireNonNull;
+import static org.apache.commons.math3.util.FastMath.PI;
 import static org.mitre.caasd.commons.Course.*;
 import static org.mitre.caasd.commons.Spherical.EARTH_RADIUS_NM;
 import static org.mitre.caasd.commons.maps.FeatureSet.noMapFeatures;

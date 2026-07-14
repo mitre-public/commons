@@ -3,6 +3,7 @@ package org.mitre.caasd.commons;
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
+import static org.apache.commons.math3.util.FastMath.abs;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -192,7 +193,7 @@ public record AltitudePath(int[] altitudesInFeet) {
             // if either altitude is missing use 0 as the "stand in" altitude value
             int mine = p1.altitudesInFeet[i] == NULL_ALTITUDE ? 0 : p1.altitudesInFeet[i];
             int his = p2.altitudesInFeet[i] == NULL_ALTITUDE ? 0 : p2.altitudesInFeet[i];
-            distanceSum += StrictMath.abs(mine - his);
+            distanceSum += abs(mine - his);
         }
 
         return Distance.ofFeet(distanceSum);
