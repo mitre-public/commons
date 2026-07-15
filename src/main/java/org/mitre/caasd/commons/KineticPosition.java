@@ -20,6 +20,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
+import static org.apache.commons.math3.util.FastMath.PI;
+import static org.apache.commons.math3.util.FastMath.abs;
 import static org.mitre.caasd.commons.LatLong.checkLatitude;
 import static org.mitre.caasd.commons.LatLong.checkLongitude;
 import static org.mitre.caasd.commons.Speed.Unit.FEET_PER_MINUTE;
@@ -184,14 +186,14 @@ public class KineticPosition implements HasTime, HasPosition {
 
         // Find the time required to travel in a circle, i.e. while moving "straight" but gradually turning left or
         // right
-        double secToTurn360 = 360.0 / Math.abs(turnRateInDegreesPerSecond);
+        double secToTurn360 = 360.0 / abs(turnRateInDegreesPerSecond);
         long asMilliSec = (long) secToTurn360 * 1000;
 
         // Find distance traveled while "moving in a circle"
         Distance distTraveled = speed.times(Duration.ofMillis(asMilliSec));
 
         // convert circle circumference to a radius
-        Distance radius = distTraveled.times(1.0 / (2.0 * Math.PI));
+        Distance radius = distTraveled.times(1.0 / (2.0 * PI));
 
         return (turnRateInDegreesPerSecond > 0)
                 ? radius // clockwise = positive radius

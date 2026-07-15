@@ -28,6 +28,7 @@ import java.util.Objects;
 
 import com.google.common.collect.EnumMultiset;
 import com.google.common.collect.Iterators;
+import org.apache.commons.math3.util.FastMath;
 
 /**
  * This Distance class is intended to make working with Distances less error prone because (1) all
@@ -168,7 +169,7 @@ public class Distance implements Serializable, Comparable<Distance> {
     }
 
     public Distance abs() {
-        return Distance.of(Math.abs(amount), unit);
+        return Distance.of(FastMath.abs(amount), unit);
     }
 
     public boolean isPositive() {

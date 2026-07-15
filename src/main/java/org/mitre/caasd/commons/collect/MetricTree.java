@@ -19,6 +19,7 @@ package org.mitre.caasd.commons.collect;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Objects.nonNull;
+import static org.apache.commons.math3.util.FastMath.max;
 import static org.mitre.caasd.commons.collect.CenterPointSelectors.maxOfRandomSamples;
 
 import java.io.Serializable;
@@ -474,7 +475,7 @@ public class MetricTree<K, V> implements Serializable {
             }
 
             // update radius if necessary
-            this.radius = Math.max(radius, verifiedDistance(this.centerPoint, key));
+            this.radius = max(radius, verifiedDistance(this.centerPoint, key));
 
             if (isSphereOfPoints()) {
                 globalHashMap.put(key, new SphereAssignment<>(this, value));
