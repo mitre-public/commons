@@ -1,0 +1,38 @@
+# Forbidden APIs: java.lang.Math transcendentals in production numerics.
+#
+# This library commits to bit-for-bit reproducible floating-point results across JVMs,
+# operating systems, and CPU architectures (see GeodesyRawBitVectorsTest). java.lang.Math
+# transcendentals are only specified to within 1 ulp and may dispatch to platform-specific
+# intrinsics, so the same input can produce different bits on different machines. The library
+# standardizes on org.apache.commons.math3.util.FastMath, a pure-Java implementation that
+# produces identical bits everywhere for a pinned Commons Math version.
+#
+# Note toRadians/toDegrees are included: FastMath.toRadians/toDegrees use a compensated
+# (extended-precision) product that differs from java.lang.Math by ~1 ulp on a large fraction
+# of inputs, so mixing them silently perturbs the geodesy hot paths.
+#
+# The exactly-specified ops (abs, min, max, round, ceil, floor, rint, signum, copySign, sqrt,
+# floorDiv, floorMod, ...) are bit-identical across Math/StrictMath/FastMath and are NOT banned.
+
+@defaultMessage Use org.apache.commons.math3.util.FastMath instead of java.lang.Math for cross-platform bit-reproducible transcendentals
+
+java.lang.Math#sin(double)
+java.lang.Math#cos(double)
+java.lang.Math#tan(double)
+java.lang.Math#asin(double)
+java.lang.Math#acos(double)
+java.lang.Math#atan(double)
+java.lang.Math#atan2(double,double)
+java.lang.Math#sinh(double)
+java.lang.Math#cosh(double)
+java.lang.Math#tanh(double)
+java.lang.Math#exp(double)
+java.lang.Math#expm1(double)
+java.lang.Math#log(double)
+java.lang.Math#log10(double)
+java.lang.Math#log1p(double)
+java.lang.Math#pow(double,double)
+java.lang.Math#cbrt(double)
+java.lang.Math#hypot(double,double)
+java.lang.Math#toRadians(double)
+java.lang.Math#toDegrees(double)

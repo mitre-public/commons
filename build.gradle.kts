@@ -1,7 +1,10 @@
+import de.thetaphi.forbiddenapis.gradle.CheckForbiddenApis
+
 plugins {
     `java-library`
     id("com.diffplug.spotless") version "6.23.3"
     id("com.vanniktech.maven.publish.base") version "0.34.0"
+    id("de.thetaphi.forbiddenapis") version "3.7"
 }
 
 group = "org.mitre"
@@ -32,6 +35,20 @@ tasks {
     }
 }
 
+
+// Guard the bit-reproducibility contract: production code must not call java.lang.Math
+// transcendentals (they may use platform intrinsics and differ by ~1 ulp across machines).
+// The library standardizes on org.apache.commons.math3.util.FastMath. See the signatures file
+// and GeodesyRawBitVectorsTest. `check` depends on the forbiddenApis* tasks automatically.
+tasks.named<CheckForbiddenApis>("forbiddenApisMain") {
+    signaturesFiles = files("config/forbidden-apis/no-java-math-transcendentals.txt")
+    // We are only listing signatures to forbid; do not require the JDK-bundled signature sets.
+    ignoreSignaturesOfMissingClasses = true
+}
+// Tests are free to use java.lang.Math directly (e.g. to assert FastMath-vs-Math divergence).
+tasks.named<CheckForbiddenApis>("forbiddenApisTest") {
+    enabled = false
+}
 
 tasks.named<Test>("test") {
     useJUnitPlatform()
