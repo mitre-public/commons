@@ -34,9 +34,8 @@ import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
-import org.apache.commons.math3.util.FastMath;
-
 import com.google.common.collect.ComparisonChain;
+import org.apache.commons.math3.util.FastMath;
 
 /**
  * A LatLong is an immutable Latitude Longitude pair. A LatLong object is always checked to ensure

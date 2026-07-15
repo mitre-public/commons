@@ -26,10 +26,9 @@ import java.time.Duration;
 import java.util.Iterator;
 import java.util.Objects;
 
-import org.apache.commons.math3.util.FastMath;
-
 import com.google.common.collect.EnumMultiset;
 import com.google.common.collect.Iterators;
+import org.apache.commons.math3.util.FastMath;
 
 /**
  * This Distance class is intended to make working with Distances less error prone because (1) all

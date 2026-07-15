@@ -23,8 +23,8 @@ import static org.apache.commons.math3.util.FastMath.acos;
 import static org.apache.commons.math3.util.FastMath.asin;
 import static org.apache.commons.math3.util.FastMath.atan;
 import static org.apache.commons.math3.util.FastMath.atan2;
-import static org.apache.commons.math3.util.FastMath.cos;
 import static org.apache.commons.math3.util.FastMath.copySign;
+import static org.apache.commons.math3.util.FastMath.cos;
 import static org.apache.commons.math3.util.FastMath.max;
 import static org.apache.commons.math3.util.FastMath.min;
 import static org.apache.commons.math3.util.FastMath.sin;
@@ -244,8 +244,7 @@ public class Spherical {
         double latCen = pair.latitude();
         double lonCen = pair.longitude();
         double crsDelta = copySign(
-                toDegrees(distNM / (EARTH_RADIUS_NM * sin(min(PI / 2, abs(radiusNM) / EARTH_RADIUS_NM)))),
-                radiusNM);
+                toDegrees(distNM / (EARTH_RADIUS_NM * sin(min(PI / 2, abs(radiusNM) / EARTH_RADIUS_NM)))), radiusNM);
         double crsCen = mod(courseInDegrees(latCen, lonCen, latDeg, lonDeg) + crsDelta, 360.0);
         return Spherical.projectOut(latCen, lonCen, crsCen, abs(radiusNM));
     }

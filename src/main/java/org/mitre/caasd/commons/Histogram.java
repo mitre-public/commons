@@ -29,9 +29,8 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
-import org.apache.commons.math3.util.FastMath;
-
 import com.google.common.primitives.Doubles;
+import org.apache.commons.math3.util.FastMath;
 
 /**
  * This Histogram class is built to support two main use cases. The first use case is to summerize a
